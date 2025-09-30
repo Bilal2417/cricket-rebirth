@@ -1,13 +1,3 @@
-import pak from "../assets/img/pak.png";
-import aus from "../assets/img/aus.png";
-import ind from "../assets/img/ind.png";
-import eng from "../assets/img/eng.png";
-import sa from "../assets/img/sa.png";
-import sri from "../assets/img/sri.png";
-import ban from "../assets/img/ban.png";
-import wi from "../assets/img/wi.png";
-import afg from "../assets/img/afg.png";
-import nz from "../assets/img/nz.png";
 
 const Data = [
   {
