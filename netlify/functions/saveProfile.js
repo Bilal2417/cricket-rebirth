@@ -22,7 +22,7 @@ export async function handler(event) {
     // Ensure table exists
     await client.query(`
       CREATE TABLE IF NOT EXISTS profiles (
-        id SERIAL PRIMARY KEY,
+        id TEXT PRIMARY KEY,
         name TEXT,
         streak INT,
         trophies INT,
