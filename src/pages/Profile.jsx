@@ -24,6 +24,7 @@ export default function Profile() {
   const fileInputRef = useRef(null);
 
   const [profile, setProfile] = useState(null);
+  const [profileId, setProfileId] = useState();
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
   const [tempName, setTempName] = useState("");
@@ -41,6 +42,7 @@ export default function Profile() {
           };
           setProfile(profileData);
           setName(profileData.name);
+          setProfileId(profileData.id);
         }
       })
       .catch((err) => console.error("Error fetching profile:", err));
@@ -67,6 +69,7 @@ export default function Profile() {
 
     const updatedProfile = {
       ...profile,
+      id : profileId,
       name: tempName,
       img: newImg || profile.img, // Base64 or default URL
       winStreak: profile.win_streak,
