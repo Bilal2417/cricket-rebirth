@@ -89,7 +89,7 @@ export default function Profile() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        id: localStorage.getItem("MyId"),
+        id: profileId,
         name: tempName,
         trophies: profile.trophies,
         victories: profile.victories,
