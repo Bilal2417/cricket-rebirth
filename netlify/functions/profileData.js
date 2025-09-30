@@ -1,5 +1,5 @@
 
-import photo from "../../src/assets/img/pak.png";
+
 
 const ProfileData = {
     name : "dummy",
@@ -8,7 +8,7 @@ const ProfileData = {
         trophies : 0,
         victories : 0
     },
-    img : photo
+    img : "../../src/assets/img/pak.png"
 }
 
 export default ProfileData
