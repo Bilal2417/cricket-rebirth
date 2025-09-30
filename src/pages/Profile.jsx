@@ -75,7 +75,7 @@ export default function Profile() {
 
     const updatedProfile = {
       ...profile,
-      id,
+      id : profileId,
       name: tempName,
       img: newImg || profile.img,
       streak: profile.streak,
@@ -86,7 +86,8 @@ export default function Profile() {
     setProfile(updatedProfile);
     setName(tempName);
     setOpen(false);
-
+    console.log(updatedProfile,"pppp")
+    console.log(profileId,"oooo")
     // Update in database
     fetch("/.netlify/functions/updateProfile", {
       method: "POST",
