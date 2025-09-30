@@ -72,10 +72,10 @@ export default function Profile() {
 
     const updatedProfile = {
       ...profile,
-      id: profileId,
+      id: localStorage.getItem("MyId"),
       name: tempName,
       img: newImg || profile.img,
-      winStreak: profile.win_streak,
+      win_streak: profile.win_streak,
       trophies: profile.trophies,
       victories: profile.victories,
     };
