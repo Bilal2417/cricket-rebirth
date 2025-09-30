@@ -26,17 +26,20 @@ export default function Profile() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // const [profile, setProfile] = useState(ProfileData);
-  const [profile, setProfile] = useState(async()=>{
-    const data = await localforage.getItem("profileData");
-    if (data) {
-      setProfile(data);
-      setName(data.name)
-    }else{
-      setProfile(ProfileData)
-    }
+  
+  const [profile, setProfile] = useState(ProfileData);
+  const [name, setName] = useState(ProfileData?.name);
 
-  });
+  useEffect(() => {
+    fetch("/.netlify/functions/saveProfile")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setProfile(data.profile);
+          setName(data.profile.name);
+        }
+      });
+  }, []);
 
   useEffect(() => {
     if (location.pathname === "/profile") {
@@ -55,7 +58,6 @@ export default function Profile() {
   }, []);
 
   const fileInputRef = useRef(null);
-
 
   const handleImageClick = () => {
     fileInputRef.current.click();
@@ -77,26 +79,24 @@ export default function Profile() {
       reader.readAsDataURL(file);
     }
   };
-  
+
   const [open, setOpen] = useState(false);
   const [tempName, setTempName] = useState(profile?.name);
-  const [name, setName] = useState(profile?.name);
-  
+
   const handleOpen = () => {
-    setTempName(name); 
+    setTempName(name);
     setOpen(true);
   };
-  
+
   const handleClose = () => setOpen(false);
-  
+
   const handleSave = () => {
     setName(tempName);
     setOpen(false);
-    
-    
+
     const updatedProfile = { ...profile, name: tempName };
     localforage.setItem("profileData", updatedProfile);
-    
+
     console.log("Saved name:", tempName);
   };
 
