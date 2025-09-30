@@ -31,7 +31,7 @@ export async function handler(event, context) {
       RETURNING *
       `,
       [
-        ProfileData?.name || "Dummy",
+        ProfileData?.name || "Dummyy",
         ProfileData?.records?.winStreak || 0,
         ProfileData?.records?.trophies || 0,
         ProfileData?.records?.victories|| 0,
