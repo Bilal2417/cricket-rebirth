@@ -15,26 +15,37 @@ export default function ScoreCard24() {
   const [userTeam, setUserTeam] = useState(null);
   const [aiTeam, setAiTeam] = useState(null);
 
+  // const choice = [
+  //   {
+  //     value: 0,
+  //   },
+  //   {
+  //     value: 1,
+  //   },
+  //   {
+  //     value: 2,
+  //   },
+  //   {
+  //     value: 3,
+  //   },
+  //   {
+  //     value: 4,
+  //   },
+  //   {
+  //     value: 6,
+  //   },
+  // ];
+
+
   const choice = [
-    {
-      value: 0,
-    },
-    {
-      value: 1,
-    },
-    {
-      value: 2,
-    },
-    {
-      value: 3,
-    },
-    {
-      value: 4,
-    },
-    {
-      value: 6,
-    },
-  ];
+  { value: 0, weight: 0.10 },
+  { value: 1, weight: 0.21 },
+  { value: 2, weight: 0.20 },
+  { value: 3, weight: 0.12 },
+  { value: 4, weight: 0.20 },
+  { value: 6, weight: 0.17 },
+];
+
 
   const [over, setOver] = useState(0);
   const [totalOvers, setTotalOvers] = useState(() => {
@@ -187,17 +198,31 @@ export default function ScoreCard24() {
     }
   };
 
-  const scoreDecision = (userRun) => {
-    const aiChoice = choice[Math.floor(Math.random() * choice.length)];
+  function weightedRandom(arr) {
+    let sum = arr.reduce((acc, obj) => acc + obj.weight, 0);
+    let rand = Math.random() * sum;
+    let cumulative = 0;
 
-    const isWicket = userRun == aiChoice.value;
+    for (let obj of arr) {
+      cumulative += obj.weight;
+      if (rand < cumulative) {
+        return obj.value;
+      }
+    }
+  }
+
+  const scoreDecision = (userRun) => {
+    const aiChoice = weightedRandom(choice);
+    // const aiChoice = choice[Math.floor(Math.random() * choice.length)].value;
+    console.log(aiChoice)
+    const isWicket = userRun == aiChoice;
 
     if (!isWicket) {
-      setPartnership((prev) => prev + (batting ? userRun : aiChoice.value));
+      setPartnership((prev) => prev + (batting ? userRun : aiChoice));
       setPartnershipBalls((prev) => prev + 1);
     }
 
-    handleBall(userRun, isWicket, aiChoice.value);
+    handleBall(userRun, isWicket, aiChoice);
   };
 
   // const updateTeam = (
@@ -782,8 +807,8 @@ export default function ScoreCard24() {
                   textTransform: "uppercase",
                   fontWeight: 600,
                   fontSize: "0.9em",
-                  width : "30px",
-                  textAlign : "center"
+                  width: "30px",
+                  textAlign: "center",
                 }}
                 variant="body1"
               >
@@ -791,15 +816,15 @@ export default function ScoreCard24() {
                 {batting ? userTeam?.Over : aiTeam?.Over}.
                 {batting ? userTeam?.Ball : aiTeam?.Ball}
               </Typography>
-                <Box
-                  sx={{
-                    transform: "scale(0.7)",
-                    fontWeight: 400,
-                  }}
-                  component="span"
-                >
-                  overs ({totalOvers == 100 ? "∞" : totalOvers})
-                </Box>
+              <Box
+                sx={{
+                  transform: "scale(0.7)",
+                  fontWeight: 400,
+                }}
+                component="span"
+              >
+                overs ({totalOvers == 100 ? "∞" : totalOvers})
+              </Box>
             </Box>
           </Box>
           <Box
@@ -860,11 +885,13 @@ export default function ScoreCard24() {
               >
                 {firstInnings == 2
                   ? `Target : ${target}`
-                  : totalOvers !== 100 ? (`Projected Score : ${(
+                  : totalOvers !== 100
+                  ? `Projected Score : ${(
                       ((batting ? userTeam?.score : aiTeam?.score) /
                         (over + balls / 6)) *
                       totalOvers
-                    ).toFixed(0)}`) : null}
+                    ).toFixed(0)}`
+                  : null}
               </Typography>
             </Fade>
           </Box>
