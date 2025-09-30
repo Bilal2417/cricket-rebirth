@@ -17,6 +17,7 @@ import {
 } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { nanoid } from "nanoid";
 
 export default function Profile() {
   const location = useLocation();
@@ -24,7 +25,8 @@ export default function Profile() {
   const fileInputRef = useRef(null);
 
   const [profile, setProfile] = useState(null);
-  const [profileId, setProfileId] = useState();
+  const profileId = nanoid()
+  localStorage.setItem("MyId",profileId)
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
   const [tempName, setTempName] = useState("");
@@ -42,7 +44,6 @@ export default function Profile() {
           };
           setProfile(profileData);
           setName(profileData.name);
-          setProfileId(profileData.id);
         }
       })
       .catch((err) => console.error("Error fetching profile:", err));
@@ -71,7 +72,7 @@ export default function Profile() {
       ...profile,
       id : profileId,
       name: tempName,
-      img: newImg || profile.img, // Base64 or default URL
+      img: newImg || profile.img, 
       winStreak: profile.win_streak,
       trophies: profile.trophies,
       victories: profile.victories,

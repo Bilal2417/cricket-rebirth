@@ -13,6 +13,8 @@ export default function Home() {
 
   const [profiles, setProfiles] = useState([]);
 
+  const profileId = localStorage.getItem("MyId")
+
   useEffect(() => {
     const keysToClear = ["q1", "q2", "q3", "q4", "s1", "s2", "f", "Teams"];
     keysToClear.forEach((key) => sessionStorage.removeItem(key));
@@ -128,7 +130,7 @@ export default function Home() {
                   <Box
                     key={index}
                     sx={{
-                      backgroundColor: profile?.name == name ? "#f6c401" : "#343c53",
+                      backgroundColor: profile?.id == profileId ? "#f6c401" : "#343c53",
                       minWidth: "300px",
                       padding: "5px 20px",
                       display: "flex",
@@ -138,7 +140,7 @@ export default function Home() {
                       borderRadius: "4px",
                       boxShadow: profile?.name == name ? "inset 0px -8px 8px -4px #b7560f" : "inset 0px -8px 8px -4px #2a3043",
                       clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                      color: profile?.name == name ? "#000000" :"#ffffff",
+                      color: profile?.id == profileId ? "#000000" :"#ffffff",
                       transition: "all 0.3s",
                       ":hover": {
                         cursor: "pointer",
