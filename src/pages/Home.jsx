@@ -216,7 +216,7 @@ export default function Home() {
                   </Box>
                 );
               })}
-              <Box
+              {/* <Box
                 // key={index}
                 sx={{
                   backgroundColor:
@@ -301,7 +301,8 @@ export default function Home() {
                   />
                   34030
                 </Typography>
-              </Box>
+              </Box> */}
+
             </Box>
           </Box>
           <Box>
