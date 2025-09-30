@@ -8,7 +8,7 @@ const ProfileData = {
         trophies : 0,
         victories : 0
     },
-    img : "../../src/assets/img/pak.png"
+    img : "public/img/pak.png"
 }
 
 export default ProfileData

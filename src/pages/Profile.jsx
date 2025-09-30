@@ -24,27 +24,29 @@ export default function Profile() {
   const fileInputRef = useRef(null);
 
   const [profile, setProfile] = useState(null);
-  const [profileId, setProfileId] = useState();
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
   const [tempName, setTempName] = useState("");
 
-
-    useEffect(() => {
+  // Fetch profile on page load
+  useEffect(() => {
     fetch("/.netlify/functions/saveProfile")
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          setProfile(data.profile);
-          setName(data.profile.name);
-          setProfileId(data.profile.id);
-          console.log(data.profile)
+          // Use Base64 if it exists, otherwise default to public image
+          const profileData = {
+            ...data.profile,
+            img: data.profile.img || "/assets/img/pak.png",
+          };
+          setProfile(profileData);
+          setName(profileData.name);
         }
       })
       .catch((err) => console.error("Error fetching profile:", err));
   }, []);
 
-
+  // Background styling
   useEffect(() => {
     if (location.pathname === "/profile") {
       document.body.style.background =
@@ -52,28 +54,31 @@ export default function Profile() {
     }
   }, [location]);
 
-  
+  // Dialog handlers
   const handleOpen = () => {
     setTempName(name);
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
 
-  
+  // Save updated profile (name or image)
   const handleSave = async (newImg) => {
+    if (!profile) return;
+
     const updatedProfile = {
       ...profile,
-      id : profileId,
-    name: tempName,
-    img: newImg || profile.img,
-    winStreak: profile.winStreak,
-    trophies: profile.trophies,
-    victories: profile.victories,
+      name: tempName,
+      img: newImg || profile.img, // Base64 or default URL
+      win_streak: profile.win_streak,
+      trophies: profile.trophies,
+      victories: profile.victories,
     };
+
     setProfile(updatedProfile);
     setName(tempName);
     setOpen(false);
 
+    // Update in database
     fetch("/.netlify/functions/updateProfile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -81,13 +86,12 @@ export default function Profile() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) {
-          console.log("Profile updated:", data.profile);
-          setProfile(data.profile);
-        }
-      });
+        if (data.success) setProfile(data.profile);
+      })
+      .catch((err) => console.error("Error updating profile:", err));
   };
 
+  // Image upload handlers
   const handleImageClick = () => fileInputRef.current.click();
 
   const handleFileChange = (event) => {
@@ -96,7 +100,7 @@ export default function Profile() {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      handleSave(reader.result);
+      handleSave(reader.result); // Base64 string
     };
     reader.readAsDataURL(file);
   };
@@ -149,7 +153,6 @@ export default function Profile() {
           onChange={handleFileChange}
           style={{ display: "none" }}
         />
-
         <TextField
           value={name}
           onClick={handleOpen}
@@ -190,55 +193,15 @@ export default function Profile() {
       {/* Stats */}
       <Grid container sx={{ margin: "20px 0" }}>
         {[
-          {
-            label: "Trophies",
-            icon: <EmojiEventsTwoTone />,
-            value: profile.trophies,
-          },
-          {
-            label: "Victories",
-            icon: <StarTwoTone />,
-            value: profile.victories,
-          },
-          {
-            label: "Win Streak",
-            icon: <WhatshotTwoTone />,
-            value: profile.win_streak,
-          },
+          { label: "Trophies", icon: <EmojiEventsTwoTone />, value: profile.trophies },
+          { label: "Victories", icon: <StarTwoTone />, value: profile.victories },
+          { label: "Win Streak", icon: <WhatshotTwoTone />, value: profile.win_streak },
         ].map((stat) => (
-          <Box
-            key={stat.label}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 1,
-              m: 1,
-            }}
-          >
-            <Typography
-              sx={{
-                color: "#fff",
-                WebkitTextStroke: "1px black",
-                fontSize: "1.4em",
-                fontWeight: 900,
-                textTransform: "uppercase",
-              }}
-            >
+          <Box key={stat.label} sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1, m: 1 }}>
+            <Typography sx={{ color: "#fff", WebkitTextStroke: "1px black", fontSize: "1.4em", fontWeight: 900, textTransform: "uppercase" }}>
               {stat.label}
             </Typography>
-            <Typography
-              sx={{
-                padding: "10px 70px",
-                backgroundColor: "#073575",
-                textAlign: "center",
-                borderRadius: 2,
-                fontWeight: 600,
-                color: "#fff",
-                display: "flex",
-                gap: 1,
-              }}
-            >
+            <Typography sx={{ padding: "10px 70px", backgroundColor: "#073575", textAlign: "center", borderRadius: 2, fontWeight: 600, color: "#fff", display: "flex", gap: 1 }}>
               {stat.icon} {stat.value}
             </Typography>
           </Box>
