@@ -138,7 +138,7 @@ export default function Home() {
                       justifyContent: "space-between",
                       border: "2px solid #000000",
                       borderRadius: "4px",
-                      boxShadow: profile?.name == name ? "inset 0px -8px 8px -4px #b7560f" : "inset 0px -8px 8px -4px #2a3043",
+                      boxShadow: profile?.id == profileId ? "inset 0px -8px 8px -4px #b7560f" : "inset 0px -8px 8px -4px #2a3043",
                       clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
                       color: profile?.id == profileId ? "#000000" :"#ffffff",
                       transition: "all 0.3s",
@@ -167,8 +167,8 @@ export default function Home() {
                           "& .MuiSvgIcon-root": {
                             fill: "none",
                           },
-                          "& path:first-of-type": { fill: profile?.name == name ? "#000000" : "#FFD700" },
-                          "& path:last-of-type": { fill: profile?.name == name ? "#FFFFFF" : "#DAA520" },
+                          "& path:first-of-type": { fill: profile?.id == profileId ? "#000000" : "#FFD700" },
+                          "& path:last-of-type": { fill: profile?.id == profileId ? "#FFFFFF" : "#DAA520" },
                         }}
                       />
                       {profile?.trophies}
