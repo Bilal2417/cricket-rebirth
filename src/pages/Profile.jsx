@@ -33,7 +33,7 @@ useEffect(() => {
   fetch("/.netlify/functions/saveProfile")
     .then((res) => res.json())
     .then((data) => {
-      if (data.success) {
+      if (data?.success && data.profile) {
         setProfile(data.profile);
         setName(data.profile.name);
         setTempName(data.profile.name);
@@ -62,7 +62,7 @@ useEffect(() => {
       ...profile,
     name: tempName,
     img: newImg || profile.img,
-    win_streak: profile.win_streak,
+    winStreak: profile.winStreak,
     trophies: profile.trophies,
     victories: profile.victories,
     };
