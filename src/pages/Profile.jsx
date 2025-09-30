@@ -9,10 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import photo from "../assets/img/pak.png";
-import localforage from "localforage";
 import {
-  ArrowBack,
   ArrowBackIosNew,
   EmojiEventsTwoTone,
   StarTwoTone,
@@ -20,364 +17,230 @@ import {
 } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ProfileData from "../../netlify/functions/profileData";
 
 export default function Profile() {
   const location = useLocation();
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
-  
-  const [profile, setProfile] = useState(ProfileData);
-  const [name, setName] = useState(ProfileData?.name);
+  const [profile, setProfile] = useState(null);
+  const [profileId, setProfileId] = useState();
+  const [name, setName] = useState("");
+  const [open, setOpen] = useState(false);
+  const [tempName, setTempName] = useState("");
 
   useEffect(() => {
     fetch("/.netlify/functions/saveProfile")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setProfile(data.profile);
-          setName(data.profile.name);
+      .then((res) => res.text()) 
+      .then((text) => {
+        try {
+          const data = JSON.parse(text);
+          if (data.success) {
+            setProfile(data.profile);
+            setName(data.profile.name);
+          }
+        } catch (err) {
+          console.error("Invalid JSON:", err); 
         }
       });
   }, []);
 
+  // Background for /profile page
   useEffect(() => {
     if (location.pathname === "/profile") {
       document.body.style.background =
         "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
     }
+  }, [location]);
 
-    const loadProfile = async () => {
-      const data = await localforage.getItem("profileData");
-      if (data) {
-        setProfile(data);
-      }
-    };
-
-    loadProfile();
-  }, []);
-
-  const fileInputRef = useRef(null);
-
-  const handleImageClick = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64Img = reader.result;
-
-        const updatedProfile = { ...profile, img: base64Img };
-
-        setProfile(updatedProfile);
-
-        localforage.setItem("profileData", updatedProfile);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const [open, setOpen] = useState(false);
-  const [tempName, setTempName] = useState(profile?.name);
-
+  // Open dialog
   const handleOpen = () => {
     setTempName(name);
     setOpen(true);
   };
-
   const handleClose = () => setOpen(false);
 
-  const handleSave = () => {
+  // Save name or image to DB
+  const handleSave = async (newImg) => {
+    const updatedProfile = {
+      ...profile,
+      name: tempName,
+      img: newImg || profile.img,
+    };
+    setProfile(updatedProfile);
     setName(tempName);
     setOpen(false);
 
-    const updatedProfile = { ...profile, name: tempName };
-    localforage.setItem("profileData", updatedProfile);
-
-    console.log("Saved name:", tempName);
+    fetch("/.netlify/functions/updateProfile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedProfile),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          console.log("Profile updated:", data.profile);
+          setProfile(data.profile);
+        }
+      });
   };
 
+  const handleImageClick = () => fileInputRef.current.click();
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      handleSave(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  if (!profile) return null; // loading
+
   return (
-    <>
+    <Box sx={{ width: "fit-content", margin: "auto" }}>
+      {/* Back Button */}
       <Box
         sx={{
+          backgroundColor: "#343c53",
           width: "fit-content",
-          margin: "auto",
+          padding: "5px 20px",
+          display: "flex",
+          alignContent: "center",
+          border: "2px solid #000000",
+          borderRadius: "4px",
+          boxShadow: "inset 0px -8px 8px -4px #2a3043",
+          clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+          m: "50px 0",
+          color: "#ffffff",
+          ":hover": { cursor: "pointer" },
         }}
+        onClick={() => navigate("/")}
       >
-        <Box
-          sx={{
-            backgroundColor: "#343c53",
-            width: "fit-content",
-            padding: "5px 20px",
-            display: "flex",
-            alignContent: "center",
-            border: "2px solid #000000",
-            borderRadius: "4px",
-            boxShadow: "inset 0px -8px 8px -4px #2a3043",
-            clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-            m: "50px 0",
-            color: "#ffffff",
-            ":hover": {
-              cursor: "pointer",
-            },
-          }}
-          onClick={() => navigate("/")}
-        >
-          <ArrowBackIosNew sx={{ color: "#FFFFFF" }} />
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: "20px",
-          }}
-        >
-          <Box
-            component="img"
-            sx={{
-              width: "120px",
-              height: "120px",
-              border: "4px solid #000000",
-              borderRadius: "8px",
-              objectFit: "cover",
-              objectPosition: "center",
-              "&:hover": {
-                cursor: "pointer",
-              },
-            }}
-            src={profile?.img}
-            alt="profile-photo"
-            onClick={handleImageClick}
-          />
-
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            style={{ display: "none" }}
-          />
-          <TextField
-            sx={{
-              padding: "10px 60px",
-              backgroundColor: "#313c64",
-              textAlign: "center",
-              width: "fit-content",
-              borderRadius: "4px",
-              clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-              fontWeight: 600,
-              color: "#ffffff",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              "& .MuiOutlinedInput-notchedOutline": {
-                border: "none",
-              },
-              "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                {
-                  border: "none",
-                },
-              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                {
-                  border: "none",
-                },
-              "& input": {
-                color: "#ffffff",
-                fontWeight: 600,
-                textAlign: "center",
-                textTransform: "uppercase",
-                cursor: "pointer",
-              },
-            }}
-            readOnly
-            value={name}
-            onClick={handleOpen}
-            variant="outlined"
-          />
-
-          <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Change Name</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="New Name"
-                fullWidth
-                value={tempName}
-                onChange={(e) => setTempName(e.target.value)}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleSave} variant="contained">
-                Save
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </Box>
-
-        <Grid
-          container
-          sx={{
-            margin: "20px 0",
-          }}
-          xs={6}
-          sm={4}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "5px",
-            }}
-          >
-            <Typography
-              sx={{
-                color: "#c8c8d5",
-                WebkitTextStroke: "1px black",
-                WebkitTextFillColor: "white",
-                fontSize: "1.4em",
-                fontWeight: 900,
-                fontFamily: "Rubik",
-                textTransform: "uppercase",
-              }}
-              variant="body1"
-            >
-              Trophies
-            </Typography>
-            <Typography
-              sx={{
-                padding: "10px 70px",
-                backgroundColor: "#073575",
-                textAlign: "center",
-                width: "fit-content",
-                borderRadius: "4px",
-                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                fontWeight: 600,
-                color: "#FFFFFF",
-                display: "flex",
-                gap: "10px",
-                fontFamily: "Rubik",
-              }}
-              variant="body1"
-            >
-              <EmojiEventsTwoTone
-                sx={{
-                  "& .MuiSvgIcon-root": {
-                    fill: "none",
-                  },
-                  "& path:first-of-type": { fill: "#FFD700" },
-                  "& path:last-of-type": { fill: "#DAA520" },
-                }}
-              />
-              {profile?.records?.trophies}{" "}
-            </Typography>
-          </Box>
-
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "5px",
-            }}
-          >
-            <Typography
-              sx={{
-                color: "#FFFFFF",
-                WebkitTextStroke: "1px black",
-                WebkitTextFillColor: "white",
-                fontSize: "1.4em",
-                fontWeight: 900,
-                fontFamily: "Rubik",
-                textTransform: "uppercase",
-              }}
-              variant="body1"
-            >
-              Victories
-            </Typography>
-            <Typography
-              sx={{
-                padding: "10px 70px",
-                backgroundColor: "#073575",
-                textAlign: "center",
-                width: "fit-content",
-                borderRadius: "4px",
-                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                fontWeight: 600,
-                color: "#FFFFFF",
-                fontFamily: "Rubik",
-                display: "flex",
-                gap: "10px",
-              }}
-              variant="body1"
-            >
-              <StarTwoTone
-                sx={{
-                  "& path:first-of-type": { fill: "#FFD700" },
-                  "& path:last-of-type": { fill: "#DAA520" },
-                }}
-              />
-              {profile?.records?.victories}{" "}
-            </Typography>
-          </Box>
-
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "5px",
-            }}
-          >
-            <Typography
-              sx={{
-                color: "#FFFFFF",
-                WebkitTextStroke: "1px black",
-                WebkitTextFillColor: "white",
-                fontSize: "1.4em",
-                fontWeight: 900,
-                fontFamily: "Rubik",
-                textTransform: "uppercase",
-              }}
-              variant="body1"
-            >
-              Win Streak
-            </Typography>
-            <Typography
-              sx={{
-                padding: "10px 70px",
-                backgroundColor: "#073575",
-                textAlign: "center",
-                width: "fit-content",
-                fontFamily: "Rubik",
-                borderRadius: "4px",
-                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                fontWeight: 600,
-                color: "#FFFFFF",
-                display: "flex",
-                gap: "10px",
-              }}
-              variant="body1"
-            >
-              {" "}
-              <WhatshotTwoTone
-                sx={{
-                  "& .MuiSvgIcon-root": { color: "#fc3927" },
-                  "& path:first-of-type": { fill: "#dffe00" },
-                  "& path:last-of-type": { fill: "#fc3927" },
-                }}
-              />
-              {profile?.records?.winStreak}{" "}
-            </Typography>
-          </Box>
-        </Grid>
+        <ArrowBackIosNew sx={{ color: "#FFFFFF" }} />
       </Box>
-    </>
+
+      {/* Profile Image & Name */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
+        <Box
+          component="img"
+          src={profile.img}
+          alt="profile"
+          sx={{
+            width: 120,
+            height: 120,
+            border: "4px solid #000",
+            borderRadius: 2,
+            objectFit: "cover",
+            "&:hover": { cursor: "pointer" },
+          }}
+          onClick={handleImageClick}
+        />
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          style={{ display: "none" }}
+        />
+
+        <TextField
+          value={name}
+          onClick={handleOpen}
+          readOnly
+          sx={{
+            padding: "10px 60px",
+            backgroundColor: "#313c64",
+            fontWeight: 600,
+            textTransform: "uppercase",
+            color: "#fff",
+            cursor: "pointer",
+            "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+          }}
+        />
+      </Box>
+
+      {/* Change Name Dialog */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Change Name</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="New Name"
+            fullWidth
+            value={tempName}
+            onChange={(e) => setTempName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={() => handleSave()} variant="contained">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Stats */}
+      <Grid container sx={{ margin: "20px 0" }}>
+        {[
+          {
+            label: "Trophies",
+            icon: <EmojiEventsTwoTone />,
+            value: profile.trophies,
+          },
+          {
+            label: "Victories",
+            icon: <StarTwoTone />,
+            value: profile.victories,
+          },
+          {
+            label: "Win Streak",
+            icon: <WhatshotTwoTone />,
+            value: profile.win_streak,
+          },
+        ].map((stat) => (
+          <Box
+            key={stat.label}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 1,
+              m: 1,
+            }}
+          >
+            <Typography
+              sx={{
+                color: "#fff",
+                WebkitTextStroke: "1px black",
+                fontSize: "1.4em",
+                fontWeight: 900,
+                textTransform: "uppercase",
+              }}
+            >
+              {stat.label}
+            </Typography>
+            <Typography
+              sx={{
+                padding: "10px 70px",
+                backgroundColor: "#073575",
+                textAlign: "center",
+                borderRadius: 2,
+                fontWeight: 600,
+                color: "#fff",
+                display: "flex",
+                gap: 1,
+              }}
+            >
+              {stat.icon} {stat.value}
+            </Typography>
+          </Box>
+        ))}
+      </Grid>
+    </Box>
   );
 }
