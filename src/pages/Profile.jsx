@@ -36,6 +36,8 @@ export default function Profile() {
       .then((data) => {
         if (data.success) {
           setProfile(data.profile);
+          setName(data.profile.name);
+          setProfileId(data.profile.id);
           console.log(data.profile)
         }
       })
@@ -61,6 +63,7 @@ export default function Profile() {
   const handleSave = async (newImg) => {
     const updatedProfile = {
       ...profile,
+      id : profileId,
     name: tempName,
     img: newImg || profile.img,
     winStreak: profile.winStreak,

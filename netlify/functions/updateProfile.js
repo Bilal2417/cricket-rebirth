@@ -1,7 +1,7 @@
 import { Client } from "pg";
 
 export async function handler(event) {
-  const { id, name, img, win_streak, trophies, victories } = JSON.parse(
+  const { id, name, img, winStreak, trophies, victories } = JSON.parse(
     event.body
   );
 
@@ -22,7 +22,7 @@ export async function handler(event) {
      SET name=$1, img=$2, win_streak=$3, trophies=$4, victories=$5
      WHERE id=$6
      RETURNING *`,
-    [name, img, win_streak, trophies, victories, id]
+    [name, img, winStreak, trophies, victories, id]
   );
 
   await client.end();

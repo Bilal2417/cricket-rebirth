@@ -28,7 +28,7 @@ export async function handler(event) {
     if (existing.rows.length === 0) {
       // No profile exists → create a default one
       const result = await client.query(
-        `INSERT INTO profiles (name, win_streak, trophies, victories, img)
+        `INSERT INTO profiles (name, winStreak, trophies, victories, img)
          VALUES ($1, $2, $3, $4, $5)
          RETURNING *`,
         ["Dummy", 0, 0, 0, "/assets/img/pak.png"]
