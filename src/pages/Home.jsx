@@ -5,11 +5,13 @@ import {
   Person,
 } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
+
+  const [profiles, setProfiles] = useState([]);
 
   useEffect(() => {
     const keysToClear = ["q1", "q2", "q3", "q4", "s1", "s2", "f", "Teams"];
@@ -26,6 +28,16 @@ export default function Home() {
     ];
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
   }, []);
+
+  useEffect(() => {
+    fetch("/.netlify/functions/getProfiles")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) setProfiles(data.profiles);
+      })
+      .catch((err) => console.error("Error fetching profiles:", err));
+  }, []);
+
   const mode = sessionStorage.getItem("mode");
   return (
     <>
@@ -69,73 +81,83 @@ export default function Home() {
             alignItems: "center",
             justifyContent: "space-between",
           }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+              gap: "10px",
+            }}
           >
-          <Box sx={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection : "column",
-          gap : "10px"
-          }}>
-            <Typography sx={{
-              color : "#FFFFFF",
-              fontWeight : 600,
-              fontFamily : "Rubik"
-            }} variant="h5">LeaderBoard</Typography>
-
-            <Box sx={{
-              maxHeight : "500px",
-            }}>
+            <Typography
+              sx={{
+                color: "#FFFFFF",
+                fontWeight: 600,
+                fontFamily: "Rubik",
+              }}
+              variant="h5"
+            >
+              LeaderBoard
+            </Typography>
 
             <Box
               sx={{
-                backgroundColor: "#343c53",
-                minWidth: "300px",
-                padding: "5px 20px",
-                display: "flex",
-                alignContent: "center",
-                justifyContent : "space-between",
-                border: "2px solid #000000",
-                borderRadius: "4px",
-                boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                color: "#ffffff",
-                transition: "all 0.3s",
-                ":hover": {
-                  cursor: "pointer",
-                  transform: "scale(1.1)",
-                },
-                ":active": {
-                  transform: "scale(1)",
-                },
+                maxHeight: "500px",
               }}
             >
-              {/* <Person sx={{ color: "#FFFFFF" }} /> */}
-              <Box>
-                <Typography variant="body1">Bilal</Typography>
-              </Box>
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "5px",
-                }}
-                variant="body1"
-              >
-                <EmojiEventsTwoTone
-                  sx={{
-                    "& .MuiSvgIcon-root": {
-                      fill: "none",
-                    },
-                    "& path:first-of-type": { fill: "#FFD700" },
-                    "& path:last-of-type": { fill: "#DAA520" },
-                  }}
-                />
-                43000
-              </Typography>
+              {profiles?.map((profile, index) => {
+                return (
+                  <Box
+                    key={index}
+                    sx={{
+                      backgroundColor: "#343c53",
+                      minWidth: "300px",
+                      padding: "5px 20px",
+                      display: "flex",
+                      alignContent: "center",
+                      justifyContent: "space-between",
+                      border: "2px solid #000000",
+                      borderRadius: "4px",
+                      boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                      clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                      color: "#ffffff",
+                      transition: "all 0.3s",
+                      ":hover": {
+                        cursor: "pointer",
+                        transform: "scale(1.1)",
+                      },
+                      ":active": {
+                        transform: "scale(1)",
+                      },
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="body1">{profile?.name}</Typography>
+                    </Box>
+                    <Typography
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                      variant="body1"
+                    >
+                      <EmojiEventsTwoTone
+                        sx={{
+                          "& .MuiSvgIcon-root": {
+                            fill: "none",
+                          },
+                          "& path:first-of-type": { fill: "#FFD700" },
+                          "& path:last-of-type": { fill: "#DAA520" },
+                        }}
+                      />
+                      {profile?.trophies}
+                    </Typography>
+                  </Box>
+                );
+              })}
             </Box>
-
-            </Box>
-
           </Box>
           <Box>
             <Button
