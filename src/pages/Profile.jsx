@@ -20,7 +20,7 @@ import {
 } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ProfileData from "../components/profileData";
+import ProfileData from "../../netlify/functions/profileData";
 
 export default function Profile() {
   const location = useLocation();

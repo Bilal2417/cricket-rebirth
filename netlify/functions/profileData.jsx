@@ -1,5 +1,5 @@
 
-import photo from "../assets/img/pak.png";
+import photo from "../../src/assets/img/pak.png";
 
 const ProfileData = {
     name : "dummy",

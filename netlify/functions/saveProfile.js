@@ -1,5 +1,5 @@
 import { Client } from "pg";
-import ProfileData from "../../src/components/profileData";
+import ProfileData from "./profileData";
 
 export async function handler(event, context) {
   const client = new Client({
