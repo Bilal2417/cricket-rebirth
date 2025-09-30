@@ -29,17 +29,17 @@ export default function Profile() {
   const [open, setOpen] = useState(false);
   const [tempName, setTempName] = useState("");
 
-useEffect(() => {
-  fetch("/.netlify/functions/saveProfile")
-    .then((res) => res.json())
-    .then((data) => {
-      if (data?.success && data.profile) {
-        setProfile(data.profile);
-        setName(data.profile.name);
-        setTempName(data.profile.name);
-      }
-    });
-}, []);
+
+    useEffect(() => {
+    fetch("/.netlify/functions/saveProfile")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setProfile(data.profile);
+        }
+      })
+      .catch((err) => console.error("Error fetching profile:", err));
+  }, []);
 
 
   useEffect(() => {

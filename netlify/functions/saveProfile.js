@@ -1,7 +1,6 @@
 import { Client } from "pg";
-import ProfileData from "./profileData";
 
-export async function handler(event, context) {
+export async function handler(event) {
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
@@ -10,11 +9,11 @@ export async function handler(event, context) {
   try {
     await client.connect();
 
-    // Ensure table exists with UNIQUE name
+    // Ensure table exists
     await client.query(`
       CREATE TABLE IF NOT EXISTS profiles (
         id SERIAL PRIMARY KEY,
-        name TEXT UNIQUE,
+        name TEXT,
         win_streak INT,
         trophies INT,
         victories INT,
@@ -22,33 +21,22 @@ export async function handler(event, context) {
       )
     `);
 
-    // Insert default profile if it doesn't exist
-    const result = await client.query(
-      `
-      INSERT INTO profiles (name, win_streak, trophies, victories, img)
-      VALUES ($1, $2, $3, $4, $5)
-      ON CONFLICT (name) DO NOTHING
-      RETURNING *
-      `,
-      [
-        ProfileData?.name ?? "Dummy",
-        ProfileData?.records?.winStreak ?? 0,
-        ProfileData?.records?.trophies ?? 0,
-        ProfileData?.records?.victories ?? 0,
-        ProfileData?.img ?? "/assets/img/pak.png",
-      ]
-    );
+    // Check if any profile exists (you could also filter by some unique identifier if needed)
+    const existing = await client.query(`SELECT * FROM profiles LIMIT 1`);
 
-    // If INSERT did nothing (profile exists), fetch the existing one
     let profile;
-    if (result.rows.length === 0) {
-      const existing = await client.query(
-        `SELECT * FROM profiles WHERE name = $1`,
-        [ProfileData.name]
+    if (existing.rows.length === 0) {
+      // No profile exists → create a default one
+      const result = await client.query(
+        `INSERT INTO profiles (name, win_streak, trophies, victories, img)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING *`,
+        ["Dummy", 0, 0, 0, "/assets/img/pak.png"]
       );
-      profile = existing.rows[0];
-    } else {
       profile = result.rows[0];
+    } else {
+      // Profile already exists → return it
+      profile = existing.rows[0];
     }
 
     await client.end();

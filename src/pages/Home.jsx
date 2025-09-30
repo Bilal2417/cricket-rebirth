@@ -85,7 +85,7 @@ export default function Home() {
           <Box
             sx={{
               display: "flex",
-              alignItems: "center",
+              alignItems: "baseline",
               flexDirection: "column",
               gap: "10px",
             }}
