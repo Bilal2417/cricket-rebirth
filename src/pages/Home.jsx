@@ -97,14 +97,14 @@ export default function Home() {
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-end",
             justifyContent: "space-between",
           }}
         >
           <Box
             sx={{
               display: "flex",
-              alignItems: "baseline",
+              alignItems: "center",
               flexDirection: "column",
               gap: "10px",
             }}
