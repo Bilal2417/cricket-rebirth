@@ -2,7 +2,7 @@ import { Client } from "pg";
 
 export async function handler(event) {
   try {
-    // Parse body safely
+    console.log("updateProfile body:", event.body);
     const body = event.body ? JSON.parse(event.body) : {};
     const { id, name, img, streak, trophies, victories } = body;
 
