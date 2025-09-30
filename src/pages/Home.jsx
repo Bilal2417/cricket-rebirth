@@ -128,7 +128,7 @@ export default function Home() {
                   <Box
                     key={index}
                     sx={{
-                      backgroundColor: profile?.name == name ? "yellow" : "#343c53",
+                      backgroundColor: profile?.name == name ? "#f6c401" : "#343c53",
                       minWidth: "300px",
                       padding: "5px 20px",
                       display: "flex",
@@ -136,9 +136,9 @@ export default function Home() {
                       justifyContent: "space-between",
                       border: "2px solid #000000",
                       borderRadius: "4px",
-                      boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                      boxShadow: profile?.name == name ? "inset 0px -8px 8px -4px #b7560f" : "inset 0px -8px 8px -4px #2a3043",
                       clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                      color: "#ffffff",
+                      color: profile?.name == name ? "#000000" :"#ffffff",
                       transition: "all 0.3s",
                       ":hover": {
                         cursor: "pointer",
@@ -165,8 +165,8 @@ export default function Home() {
                           "& .MuiSvgIcon-root": {
                             fill: "none",
                           },
-                          "& path:first-of-type": { fill: "#FFD700" },
-                          "& path:last-of-type": { fill: "#DAA520" },
+                          "& path:first-of-type": { fill: profile?.name == name ? "#000000" : "#FFD700" },
+                          "& path:last-of-type": { fill: profile?.name == name ? "#FFFFFF" : "#DAA520" },
                         }}
                       />
                       {profile?.trophies}
