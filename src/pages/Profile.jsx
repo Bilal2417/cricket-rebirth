@@ -70,9 +70,12 @@ export default function Profile() {
   const handleSave = async (newImg) => {
     if (!profile) return;
 
+    const id = localStorage.getItem("MyId"); 
+    if (!id) return console.error("No profile ID found");
+
     const updatedProfile = {
       ...profile,
-      id: localStorage.getItem("MyId"),
+      id,
       name: tempName,
       img: newImg || profile.img,
       streak: profile.streak,
@@ -88,14 +91,7 @@ export default function Profile() {
     fetch("/.netlify/functions/updateProfile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: profileId,
-        name: tempName,
-        trophies: profile.trophies,
-        victories: profile.victories,
-        streak: profile.streak,
-        img: profile.img,
-      }),
+      body: JSON.stringify(updatedProfile),
     })
       .then((res) => res.json())
       .then((data) => {
