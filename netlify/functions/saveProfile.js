@@ -9,6 +9,7 @@ export async function handler(event) {
   try {
     await client.connect();
 
+    console.log("updateProfile body:", event.body);
     // Ensure table exists
     await client.query(`
       CREATE TABLE IF NOT EXISTS profiles (
