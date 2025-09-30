@@ -24,6 +24,40 @@ export default function Result() {
     storedData ? JSON.parse(storedData) : Data
   );
 
+  const storedProfile = sessionStorage.getItem("Profile");
+  const [Profile, setProfile] = useState(
+    storedProfile ? JSON.parse(storedProfile) : ""
+  );
+
+  const incrementTrophies = async () => {
+    if (!Profile) return;
+
+    const updatedProfile = {
+      ...Profile,
+      trophies: Profile.trophies + 8,
+    };
+
+    setProfile(updatedProfile); 
+
+    try {
+      const res = await fetch("/.netlify/functions/updateProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProfile),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setProfile(data.profile); 
+        console.log(data.profile); 
+        sessionStorage.setItem("Profile", JSON.stringify(data.profile)); 
+      } else {
+        console.error("Failed to update trophies in database");
+      }
+    } catch (err) {
+      console.error("Error updating trophies:", err);
+    }
+  };
   const [userTeam, setUserTeam] = useState(null);
   const [aiTeam, setAiTeam] = useState(null);
 
@@ -49,6 +83,7 @@ export default function Result() {
 
     if (foundUserTeam && foundAiTeam) {
       if (foundUserTeam.score > foundAiTeam.score) {
+        incrementTrophies()
         setWinner(foundUserTeam.name);
       } else if (foundAiTeam.score > foundUserTeam.score) {
         setWinner(foundAiTeam.name);
@@ -128,7 +163,7 @@ export default function Result() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding : "0px 100px"
+                padding: "0px 100px",
               }}
             >
               <Typography
@@ -177,7 +212,7 @@ export default function Result() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding : "0px 100px"
+                padding: "0px 100px",
               }}
             >
               <img
@@ -739,17 +774,17 @@ export default function Result() {
                   },
                 }}
                 onClick={() => {
-                  const isTournament = sessionStorage.getItem("mode")
-                  if(isTournament == "KNOCKOUT"){
-                    const id = sessionStorage.getItem("lastMatchId")
-                    if(winner == "Match Tied"){
-                      sessionStorage.setItem(id,aiTeam?.name)
-                    }else{
-                      sessionStorage.setItem(id,winner)
+                  const isTournament = sessionStorage.getItem("mode");
+                  if (isTournament == "KNOCKOUT") {
+                    const id = sessionStorage.getItem("lastMatchId");
+                    if (winner == "Match Tied") {
+                      sessionStorage.setItem(id, aiTeam?.name);
+                    } else {
+                      sessionStorage.setItem(id, winner);
                     }
-                    navigate("/fixtures")
-                  }else{
-                    navigate("/")                    
+                    navigate("/fixtures");
+                  } else {
+                    navigate("/");
                   }
                 }}
               >
@@ -801,16 +836,20 @@ export default function Result() {
                   }}
                   variant="h5"
                 >
-                  {totalWkts == 100 ? null : (batting ? totalWkts - userTeam?.wicket : totalWkts - aiTeam?.wicket)}{" "}
+                  {totalWkts == 100
+                    ? null
+                    : batting
+                    ? totalWkts - userTeam?.wicket
+                    : totalWkts - aiTeam?.wicket}{" "}
                   {totalWkts == 100
                     ? "1 wicket"
-                    : (batting
+                    : batting
                     ? totalWkts - userTeam?.wicket == 1
                       ? "wicket"
                       : "wickets"
                     : totalWkts - aiTeam?.wicket == 1
                     ? "wicket"
-                    : "wickets")}
+                    : "wickets"}
                 </Typography>
               )}
             </Box>

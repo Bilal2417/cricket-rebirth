@@ -86,7 +86,10 @@ export default function Profile() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) setProfile(data.profile);
+        if (data.success) {
+          setProfile(data.profile);
+          sessionStorage.setItem("Profile",JSON.stringify(data.profile))
+        }
       })
       .catch((err) => console.error("Error updating profile:", err));
   };
