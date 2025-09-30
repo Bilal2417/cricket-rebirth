@@ -13,7 +13,7 @@ export default function Home() {
 
   const [profiles, setProfiles] = useState([]);
 
-  const profileId = localStorage.getItem("MyId")
+  const profileId = localStorage.getItem("MyId");
 
   useEffect(() => {
     const keysToClear = ["q1", "q2", "q3", "q4", "s1", "s2", "f", "Teams"];
@@ -31,22 +31,20 @@ export default function Home() {
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
   }, []);
 
+  // const [name, setName] = useState("");
 
-    // const [name, setName] = useState("");
-  
-    // Fetch profile on page load
-    // useEffect(() => {
-    //   fetch("/.netlify/functions/saveProfile")
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       if (data.success) {
-    //         console.log(data.profile.name)
-    //         setName(data.profile.name);
-    //       }
-    //     })
-    //     .catch((err) => console.error("Error fetching profile:", err));
-    // }, []);
-
+  // Fetch profile on page load
+  // useEffect(() => {
+  //   fetch("/.netlify/functions/saveProfile")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.success) {
+  //         console.log(data.profile.name)
+  //         setName(data.profile.name);
+  //       }
+  //     })
+  //     .catch((err) => console.error("Error fetching profile:", err));
+  // }, []);
 
   useEffect(() => {
     fetch("/.netlify/functions/getProfile")
@@ -130,17 +128,21 @@ export default function Home() {
                   <Box
                     key={index}
                     sx={{
-                      backgroundColor: profile?.id == profileId ? "#f6c401" : "#343c53",
-                      minWidth: "300px",
-                      padding: "5px 20px",
+                      backgroundColor:
+                        profile?.id == profileId ? "#f6c401" : "#897689",
+                      minWidth: "400px",
+                      paddingLeft: "15px",
                       display: "flex",
                       alignContent: "center",
                       justifyContent: "space-between",
                       border: "2px solid #000000",
                       borderRadius: "4px",
-                      boxShadow: profile?.id == profileId ? "inset 0px -8px 8px -4px #b7560f" : "inset 0px -8px 8px -4px #2a3043",
+                      boxShadow:
+                        profile?.id == profileId
+                          ? "inset 0px -8px 8px -4px #b7560f"
+                          : "inset 0px -8px 8px -4px #655b67",
                       clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                      color: profile?.id == profileId ? "#000000" :"#ffffff",
+                      color: profile?.id == profileId ? "#000000" : "#ffffff",
                       transition: "all 0.3s",
                       ":hover": {
                         cursor: "pointer",
@@ -151,14 +153,46 @@ export default function Home() {
                       },
                     }}
                   >
-                    <Box>
-                      <Typography variant="body1">{profile?.name}</Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontFamily: "Rubik",
+                          backgroundColor: "#6e606d",
+                          color: "#aa9ca9",
+                          padding: "4px 12px",
+                          fontWeight: 600,
+                        }}
+                        variant="body1"
+                      >
+                        {index + 1}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          fontFamily: "Rubik",
+                          textTransform: "uppercase",
+                        }}
+                        variant="body1"
+                      >
+                        {profile?.name}
+                      </Typography>
                     </Box>
                     <Typography
                       sx={{
                         display: "flex",
                         alignItems: "center",
                         gap: "5px",
+                        fontFamily: "Rubik",
+                        fontWeight: 600,
+                        backgroundColor: "#665963",
+                        padding: "10px 20px",
+                        clipPath: "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
                       }}
                       variant="body1"
                     >
@@ -167,8 +201,14 @@ export default function Home() {
                           "& .MuiSvgIcon-root": {
                             fill: "none",
                           },
-                          "& path:first-of-type": { fill: profile?.id == profileId ? "#FFFFFF" : "#FFD700" },
-                          "& path:last-of-type": { fill: profile?.id == profileId ? "#000000" : "#DAA520" },
+                          "& path:first-of-type": {
+                            fill:
+                              profile?.id == profileId ? "#FFFFFF" : "#FFD700",
+                          },
+                          "& path:last-of-type": {
+                            fill:
+                              profile?.id == profileId ? "#000000" : "#DAA520",
+                          },
                         }}
                       />
                       {profile?.trophies}
@@ -176,8 +216,93 @@ export default function Home() {
                   </Box>
                 );
               })}
+              <Box
+                // key={index}
+                sx={{
+                  backgroundColor:
+                    profiles?.id == profileId ? "#f6c401" : "#897689",
+                  minWidth: "350px",
+                  paddingLeft: "10px",
+                  display: "flex",
+                  alignContent: "center",
+                  justifyContent: "space-between",
+                  border: "2px solid #000000",
+                  borderRadius: "4px",
+                  boxShadow:
+                    profiles?.id == profileId
+                      ? "inset 0px -8px 8px -4px #b7560f"
+                      : "inset 0px -8px 8px -4px #655b67",
+                  // clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                  color: profiles?.id == profileId ? "#000000" : "#ffffff",
+                  transition: "all 0.3s",
+                  ":hover": {
+                    cursor: "pointer",
+                    transform: "scale(1.1)",
+                  },
+                  ":active": {
+                    transform: "scale(1)",
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "Rubik",
+                      backgroundColor: "#6e606d",
+                      color: "#aa9ca9",
+                      padding: "4px 12px",
+                      fontWeight: 600,
+                    }}
+                    variant="body1"
+                  >
+                    1
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily: "Rubik",
+                      fontWeight: 600,
+                    }}
+                    variant="body1"
+                  >
+                    profiles?.name
+                  </Typography>
+                </Box>
+                <Typography
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    fontFamily: "Rubik",
+                    fontWeight: 600,
+                    backgroundColor: "#665963",
+                    padding: "10px 20px",
+                    clipPath: "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
+                  }}
+                  variant="body1"
+                >
+                  <EmojiEventsTwoTone
+                    sx={{
+                      "& .MuiSvgIcon-root": {
+                        fill: "none",
+                      },
+                      "& path:first-of-type": {
+                        fill: profiles?.id == profileId ? "#FFFFFF" : "#FFD700",
+                      },
+                      "& path:last-of-type": {
+                        fill: profiles?.id == profileId ? "#000000" : "#DAA520",
+                      },
+                    }}
+                  />
+                  34030
+                </Typography>
+              </Box>
             </Box>
-
           </Box>
           <Box>
             <Button

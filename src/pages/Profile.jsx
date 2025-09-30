@@ -76,7 +76,7 @@ export default function Profile() {
     const updatedProfile = {
       ...profile,
       id : profileId,
-      name: tempName,
+      name: tempName || profile.name,
       img: newImg || profile.img,
       streak: profile.streak,
       trophies: profile.trophies,

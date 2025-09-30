@@ -34,7 +34,7 @@ export default function Result() {
 
     const updatedProfile = {
       ...Profile,
-      trophies: Profile.trophies + 8,
+      trophies: Profile.trophies + (totalWkts !== 100 ? (Math.ceil(totalWkts/2)) : 5),
     };
 
     setProfile(updatedProfile);
