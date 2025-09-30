@@ -69,7 +69,7 @@ export default function Profile() {
       ...profile,
       name: tempName,
       img: newImg || profile.img, // Base64 or default URL
-      win_streak: profile.win_streak,
+      winStreak: profile.win_streak,
       trophies: profile.trophies,
       victories: profile.victories,
     };
@@ -160,10 +160,16 @@ export default function Profile() {
           sx={{
             padding: "10px 60px",
             backgroundColor: "#313c64",
-            fontWeight: 600,
+            fontWeight: "bold",
+            color: "#fff", 
+            textAlign: "center",
             textTransform: "uppercase",
-            color: "#fff",
             cursor: "pointer",
+            "& .MuiOutlinedInput-input": {
+              textAlign: "center", 
+              fontWeight: "bold",
+              color: "#fff",
+            },
             "& .MuiOutlinedInput-notchedOutline": { border: "none" },
           }}
         />
@@ -193,15 +199,55 @@ export default function Profile() {
       {/* Stats */}
       <Grid container sx={{ margin: "20px 0" }}>
         {[
-          { label: "Trophies", icon: <EmojiEventsTwoTone />, value: profile.trophies },
-          { label: "Victories", icon: <StarTwoTone />, value: profile.victories },
-          { label: "Win Streak", icon: <WhatshotTwoTone />, value: profile.win_streak },
+          {
+            label: "Trophies",
+            icon: <EmojiEventsTwoTone />,
+            value: profile.trophies,
+          },
+          {
+            label: "Victories",
+            icon: <StarTwoTone />,
+            value: profile.victories,
+          },
+          {
+            label: "Win Streak",
+            icon: <WhatshotTwoTone />,
+            value: profile.win_streak,
+          },
         ].map((stat) => (
-          <Box key={stat.label} sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1, m: 1 }}>
-            <Typography sx={{ color: "#fff", WebkitTextStroke: "1px black", fontSize: "1.4em", fontWeight: 900, textTransform: "uppercase" }}>
+          <Box
+            key={stat.label}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 1,
+              m: 1,
+            }}
+          >
+            <Typography
+              sx={{
+                color: "#fff",
+                WebkitTextStroke: "1px black",
+                fontSize: "1.4em",
+                fontWeight: 900,
+                textTransform: "uppercase",
+              }}
+            >
               {stat.label}
             </Typography>
-            <Typography sx={{ padding: "10px 70px", backgroundColor: "#073575", textAlign: "center", borderRadius: 2, fontWeight: 600, color: "#fff", display: "flex", gap: 1 }}>
+            <Typography
+              sx={{
+                padding: "10px 70px",
+                backgroundColor: "#073575",
+                textAlign: "center",
+                borderRadius: 2,
+                fontWeight: 600,
+                color: "#fff",
+                display: "flex",
+                gap: 1,
+              }}
+            >
               {stat.icon} {stat.value}
             </Typography>
           </Box>
