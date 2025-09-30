@@ -29,23 +29,19 @@ export default function Profile() {
   const [open, setOpen] = useState(false);
   const [tempName, setTempName] = useState("");
 
-  useEffect(() => {
-    fetch("/.netlify/functions/saveProfile")
-      .then((res) => res.text()) 
-      .then((text) => {
-        try {
-          const data = JSON.parse(text);
-          if (data.success) {
-            setProfile(data.profile);
-            setName(data.profile.name);
-          }
-        } catch (err) {
-          console.error("Invalid JSON:", err); 
-        }
-      });
-  }, []);
+useEffect(() => {
+  fetch("/.netlify/functions/saveProfile")
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        setProfile(data.profile);
+        setName(data.profile.name);
+        setTempName(data.profile.name);
+      }
+    });
+}, []);
 
-  // Background for /profile page
+
   useEffect(() => {
     if (location.pathname === "/profile") {
       document.body.style.background =
@@ -53,14 +49,14 @@ export default function Profile() {
     }
   }, [location]);
 
-  // Open dialog
+  
   const handleOpen = () => {
     setTempName(name);
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
 
-  // Save name or image to DB
+  
   const handleSave = async (newImg) => {
     const updatedProfile = {
       ...profile,
