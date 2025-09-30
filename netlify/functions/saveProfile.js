@@ -1,6 +1,15 @@
 import { Client } from "pg";
 
 export async function handler(event) {
+  const profileId = event.queryStringParameters?.profileId;
+
+  if (!profileId) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ success: false, error: "Missing profileId" }),
+    };
+  }
+
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
@@ -22,17 +31,17 @@ export async function handler(event) {
       )
     `);
 
-    // Check if any profile exists (you could also filter by some unique identifier if needed)
-    const existing = await client.query(`SELECT * FROM profiles LIMIT 10`);
+    
+    let existing = await client.query(`SELECT * FROM profiles WHERE id=$1`, [profileId]);
 
     let profile;
     if (existing.rows.length === 0) {
-      // No profile exists → create a default one
+        
       const result = await client.query(
-        `INSERT INTO profiles (name, streak, trophies, victories, img)
-         VALUES ($1, $2, $3, $4, $5)
+        `INSERT INTO profiles (id,name, streak, trophies, victories, img)
+         VALUES ($1, $2, $3, $4, $5 , $6)
          RETURNING *`,
-        ["Dummy", 0, 0, 0, "/assets/img/pak.png"]
+        [profileId,"Dummy", 0, 0, 0, "/assets/img/pak.png"]
       );
       profile = result.rows[0];
     } else {

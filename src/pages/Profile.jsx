@@ -36,7 +36,7 @@ export default function Profile() {
 
   // Fetch profile on page load
   useEffect(() => {
-    fetch("/.netlify/functions/saveProfile")
+    fetch(`/.netlify/functions/saveProfile?profileId=${profileId}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
