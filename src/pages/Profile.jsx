@@ -60,8 +60,11 @@ useEffect(() => {
   const handleSave = async (newImg) => {
     const updatedProfile = {
       ...profile,
-      name: tempName,
-      img: newImg || profile.img,
+    name: tempName,
+    img: newImg || profile.img,
+    win_streak: profile.win_streak,
+    trophies: profile.trophies,
+    victories: profile.victories,
     };
     setProfile(updatedProfile);
     setName(tempName);

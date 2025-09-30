@@ -1,3 +1,5 @@
+import { Client } from "pg";
+
 export async function handler(event) {
   const { id, name, img, win_streak, trophies, victories } = JSON.parse(
     event.body
