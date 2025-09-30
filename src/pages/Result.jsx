@@ -37,7 +37,7 @@ export default function Result() {
       trophies: Profile.trophies + 8,
     };
 
-    setProfile(updatedProfile); 
+    setProfile(updatedProfile);
 
     try {
       const res = await fetch("/.netlify/functions/updateProfile", {
@@ -48,9 +48,9 @@ export default function Result() {
 
       const data = await res.json();
       if (data.success) {
-        setProfile(data.profile); 
-        console.log(data.profile); 
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile)); 
+        setProfile(data.profile);
+        console.log(data.profile);
+        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
       } else {
         console.error("Failed to update trophies in database");
       }
@@ -83,7 +83,10 @@ export default function Result() {
 
     if (foundUserTeam && foundAiTeam) {
       if (foundUserTeam.score > foundAiTeam.score) {
-        incrementTrophies()
+        const isTournament = sessionStorage.getItem("mode");
+        if (isTournament !== "KNOCKOUT") {
+          incrementTrophies();
+        }
         setWinner(foundUserTeam.name);
       } else if (foundAiTeam.score > foundUserTeam.score) {
         setWinner(foundAiTeam.name);

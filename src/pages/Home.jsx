@@ -167,8 +167,8 @@ export default function Home() {
                           "& .MuiSvgIcon-root": {
                             fill: "none",
                           },
-                          "& path:first-of-type": { fill: profile?.id == profileId ? "#000000" : "#FFD700" },
-                          "& path:last-of-type": { fill: profile?.id == profileId ? "#FFFFFF" : "#DAA520" },
+                          "& path:first-of-type": { fill: profile?.id == profileId ? "#FFFFFF" : "#FFD700" },
+                          "& path:last-of-type": { fill: profile?.id == profileId ? "#000000" : "#DAA520" },
                         }}
                       />
                       {profile?.trophies}
