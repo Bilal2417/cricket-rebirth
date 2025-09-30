@@ -14,7 +14,7 @@ export async function handler(event) {
       CREATE TABLE IF NOT EXISTS profiles (
         id SERIAL PRIMARY KEY,
         name TEXT,
-        win_streak INT,
+        winStreak INT,
         trophies INT,
         victories INT,
         img TEXT
