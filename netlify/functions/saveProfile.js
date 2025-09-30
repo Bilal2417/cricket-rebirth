@@ -22,7 +22,7 @@ export async function handler(event) {
     `);
 
     // Check if any profile exists (you could also filter by some unique identifier if needed)
-    const existing = await client.query(`SELECT * FROM profiles LIMIT 1`);
+    const existing = await client.query(`SELECT * FROM profiles LIMIT 10`);
 
     let profile;
     if (existing.rows.length === 0) {

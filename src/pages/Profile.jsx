@@ -25,8 +25,11 @@ export default function Profile() {
   const fileInputRef = useRef(null);
 
   const [profile, setProfile] = useState(null);
-  const profileId = nanoid()
-  localStorage.setItem("MyId",profileId)
+  let profileId = localStorage.getItem("MyId");
+  if (!profileId) {
+    profileId = nanoid();
+    localStorage.setItem("MyId", profileId);
+  }
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
   const [tempName, setTempName] = useState("");
@@ -37,7 +40,6 @@ export default function Profile() {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          
           const profileData = {
             ...data.profile,
             img: data.profile.img || "/assets/img/pak.png",
@@ -70,9 +72,9 @@ export default function Profile() {
 
     const updatedProfile = {
       ...profile,
-      id : profileId,
+      id: profileId,
       name: tempName,
-      img: newImg || profile.img, 
+      img: newImg || profile.img,
       winStreak: profile.win_streak,
       trophies: profile.trophies,
       victories: profile.victories,
@@ -92,7 +94,7 @@ export default function Profile() {
       .then((data) => {
         if (data.success) {
           setProfile(data.profile);
-          sessionStorage.setItem("Profile",JSON.stringify(data.profile))
+          sessionStorage.setItem("Profile", JSON.stringify(data.profile));
         }
       })
       .catch((err) => console.error("Error updating profile:", err));
@@ -168,12 +170,12 @@ export default function Profile() {
             padding: "10px 60px",
             backgroundColor: "#313c64",
             fontWeight: "bold",
-            color: "#fff", 
+            color: "#fff",
             textAlign: "center",
             textTransform: "uppercase",
             cursor: "pointer",
             "& .MuiOutlinedInput-input": {
-              textAlign: "center", 
+              textAlign: "center",
               fontWeight: "bold",
               color: "#fff",
             },
