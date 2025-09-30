@@ -34,7 +34,7 @@ export default function Profile() {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          // Use Base64 if it exists, otherwise default to public image
+          
           const profileData = {
             ...data.profile,
             img: data.profile.img || "/assets/img/pak.png",

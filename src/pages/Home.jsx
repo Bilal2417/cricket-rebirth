@@ -29,6 +29,23 @@ export default function Home() {
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
   }, []);
 
+
+    const [name, setName] = useState("");
+  
+    // Fetch profile on page load
+    useEffect(() => {
+      fetch("/.netlify/functions/saveProfile")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            console.log(data.profile.name)
+            setName(data.profile.name);
+          }
+        })
+        .catch((err) => console.error("Error fetching profile:", err));
+    }, []);
+
+
   useEffect(() => {
     fetch("/.netlify/functions/getProfile")
       .then((res) => res.json())
@@ -111,7 +128,7 @@ export default function Home() {
                   <Box
                     key={index}
                     sx={{
-                      backgroundColor: "#343c53",
+                      backgroundColor: profile?.name == name ? "yellow" : "#343c53",
                       minWidth: "300px",
                       padding: "5px 20px",
                       display: "flex",
@@ -158,6 +175,7 @@ export default function Home() {
                 );
               })}
             </Box>
+
           </Box>
           <Box>
             <Button
