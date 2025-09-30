@@ -129,8 +129,8 @@ export default function Home() {
                     key={index}
                     sx={{
                       backgroundColor:
-                        profile?.id == profileId ? "#f6c401" : "#897689",
-                      minWidth: "400px",
+                        profile?.id == profileId ? "#ef7627" : "#897689",
+                      width: "400px",
                       paddingLeft: "15px",
                       display: "flex",
                       alignContent: "center",
@@ -139,10 +139,10 @@ export default function Home() {
                       borderRadius: "4px",
                       boxShadow:
                         profile?.id == profileId
-                          ? "inset 0px -8px 8px -4px #b7560f"
+                          ? "inset 0px -8px 8px -4px #c16a2f"
                           : "inset 0px -8px 8px -4px #655b67",
                       clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                      color: profile?.id == profileId ? "#000000" : "#ffffff",
+                      // color: profile?.id == profileId ? "#000000" : "#ffffff",
                       transition: "all 0.3s",
                       ":hover": {
                         cursor: "pointer",
@@ -163,8 +163,8 @@ export default function Home() {
                       <Typography
                         sx={{
                           fontFamily: "Rubik",
-                          backgroundColor: "#6e606d",
-                          color: "#aa9ca9",
+                          backgroundColor: profile?.id == profileId ? "#ffa800" : "#6e606d",
+                          color: profile?.id == profileId ? "#ffc73e" : "#aa9ca9",
                           padding: "4px 12px",
                           fontWeight: 600,
                         }}
@@ -177,6 +177,7 @@ export default function Home() {
                           fontWeight: 600,
                           fontFamily: "Rubik",
                           textTransform: "uppercase",
+                          color : "#f7bb1e"
                         }}
                         variant="body1"
                       >
@@ -190,9 +191,12 @@ export default function Home() {
                         gap: "5px",
                         fontFamily: "Rubik",
                         fontWeight: 600,
-                        backgroundColor: "#665963",
+                        backgroundColor: profile?.id == profileId ? "#dc5425" : "#665963",
                         padding: "10px 20px",
                         clipPath: "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
+                        width : "60px",
+                        justifyContent : "center",
+                        color : "#f7bb1e"
                       }}
                       variant="body1"
                     >
@@ -216,11 +220,11 @@ export default function Home() {
                   </Box>
                 );
               })}
-              {/* <Box
+              <Box
                 // key={index}
                 sx={{
                   backgroundColor:
-                    profiles?.id == profileId ? "#f6c401" : "#897689",
+                    profiles?.id == profileId ? "#ef7627" : "#ef7627",
                   minWidth: "350px",
                   paddingLeft: "10px",
                   display: "flex",
@@ -231,9 +235,9 @@ export default function Home() {
                   boxShadow:
                     profiles?.id == profileId
                       ? "inset 0px -8px 8px -4px #b7560f"
-                      : "inset 0px -8px 8px -4px #655b67",
+                      : "inset 0px -8px 8px -4px #b7560f",
                   // clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                  color: profiles?.id == profileId ? "#000000" : "#ffffff",
+                  color: profiles?.id == profileId ? "#000000" : "#000000",
                   transition: "all 0.3s",
                   ":hover": {
                     cursor: "pointer",
@@ -292,16 +296,16 @@ export default function Home() {
                         fill: "none",
                       },
                       "& path:first-of-type": {
-                        fill: profiles?.id == profileId ? "#FFFFFF" : "#FFD700",
+                        fill: profiles?.id == profileId ? "#FFFFFF" : "#FFFFFF",
                       },
                       "& path:last-of-type": {
-                        fill: profiles?.id == profileId ? "#000000" : "#DAA520",
+                        fill: profiles?.id == profileId ? "#000000" : "#000000",
                       },
                     }}
                   />
                   34030
                 </Typography>
-              </Box> */}
+              </Box>
 
             </Box>
           </Box>

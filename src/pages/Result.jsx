@@ -29,12 +29,12 @@ export default function Result() {
     storedProfile ? JSON.parse(storedProfile) : ""
   );
 
-  const incrementTrophies = async () => {
+  const incrementTrophies = async ( inc = true) => {
     if (!Profile) return;
 
     const updatedProfile = {
       ...Profile,
-      trophies: Profile.trophies + (totalWkts !== 100 ? (Math.ceil(totalWkts/2)) : 5),
+      trophies: inc ? (Profile.trophies + (totalWkts !== 100 ? (Math.ceil(totalWkts/2)) : 5)) : (Profile.trophies - (totalWkts !== 100 ? (Math.ceil(totalWkts/2)) : 5)),
     };
 
     setProfile(updatedProfile);
@@ -85,10 +85,14 @@ export default function Result() {
       if (foundUserTeam.score > foundAiTeam.score) {
         const isTournament = sessionStorage.getItem("mode");
         if (isTournament !== "KNOCKOUT") {
-          incrementTrophies();
+          incrementTrophies(true);
         }
         setWinner(foundUserTeam.name);
       } else if (foundAiTeam.score > foundUserTeam.score) {
+        const isTournament = sessionStorage.getItem("mode");
+        if (isTournament !== "KNOCKOUT") {
+          incrementTrophies(false);
+        }
         setWinner(foundAiTeam.name);
       } else {
         setWinner("Match Tied");
