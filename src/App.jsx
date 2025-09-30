@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ScoreCard24 from "./components/scr24";
 import Scorecard from "./pages/Scorecard";
 import { Box, Container } from "@mui/material";
-import Selection from "./pages/selection";
+import Selection from "./pages/Selection";
 import Toss from "./pages/Toss";
 import Result from "./pages/Result";
 import Home from "./pages/Home";
