@@ -10,11 +10,11 @@ export async function handler(event, context) {
   try {
     await client.connect();
 
-    // Make sure table exists
+    // Ensure table exists with UNIQUE name
     await client.query(`
       CREATE TABLE IF NOT EXISTS profiles (
         id SERIAL PRIMARY KEY,
-        name TEXT,
+        name TEXT UNIQUE,
         win_streak INT,
         trophies INT,
         victories INT,
@@ -22,11 +22,14 @@ export async function handler(event, context) {
       )
     `);
 
-    // Insert default profile
+    // Insert default profile if it doesn't exist
     const result = await client.query(
-      `INSERT INTO profiles (name, win_streak, trophies, victories, img)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING *`,
+      `
+      INSERT INTO profiles (name, win_streak, trophies, victories, img)
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT (name) DO NOTHING
+      RETURNING *
+      `,
       [
         ProfileData.name,
         ProfileData.records.winStreak,
@@ -36,11 +39,23 @@ export async function handler(event, context) {
       ]
     );
 
+    // If INSERT did nothing (profile exists), fetch the existing one
+    let profile;
+    if (result.rows.length === 0) {
+      const existing = await client.query(
+        `SELECT * FROM profiles WHERE name = $1`,
+        [ProfileData.name]
+      );
+      profile = existing.rows[0];
+    } else {
+      profile = result.rows[0];
+    }
+
     await client.end();
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, profile: result.rows[0] }),
+      body: JSON.stringify({ success: true, profile }),
     };
   } catch (err) {
     return {
