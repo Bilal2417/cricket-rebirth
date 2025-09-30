@@ -32,20 +32,20 @@ export default function Home() {
   }, []);
 
 
-    const [name, setName] = useState("");
+    // const [name, setName] = useState("");
   
     // Fetch profile on page load
-    useEffect(() => {
-      fetch("/.netlify/functions/saveProfile")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            console.log(data.profile.name)
-            setName(data.profile.name);
-          }
-        })
-        .catch((err) => console.error("Error fetching profile:", err));
-    }, []);
+    // useEffect(() => {
+    //   fetch("/.netlify/functions/saveProfile")
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       if (data.success) {
+    //         console.log(data.profile.name)
+    //         setName(data.profile.name);
+    //       }
+    //     })
+    //     .catch((err) => console.error("Error fetching profile:", err));
+    // }, []);
 
 
   useEffect(() => {
