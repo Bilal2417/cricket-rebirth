@@ -30,10 +30,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetch("/.netlify/functions/getProfiles")
+    fetch("/.netlify/functions/getProfile")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) setProfiles(data.profiles);
+        if (data?.success && data.profiles) setProfiles(data.profiles);
       })
       .catch((err) => console.error("Error fetching profiles:", err));
   }, []);
