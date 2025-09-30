@@ -36,6 +36,7 @@ export default function Profile() {
       .then((data) => {
         if (data.success) {
           setProfile(data.profile);
+          console.log(data.profile)
         }
       })
       .catch((err) => console.error("Error fetching profile:", err));
