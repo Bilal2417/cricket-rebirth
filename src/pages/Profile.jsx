@@ -75,7 +75,7 @@ export default function Profile() {
       id: localStorage.getItem("MyId"),
       name: tempName,
       img: newImg || profile.img,
-      win_streak: profile.win_streak,
+      streak: profile.streak,
       trophies: profile.trophies,
       victories: profile.victories,
     };
@@ -88,7 +88,14 @@ export default function Profile() {
     fetch("/.netlify/functions/updateProfile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedProfile),
+      body: JSON.stringify({
+        id: localStorage.getItem("MyId"),
+        name: tempName,
+        trophies: profile.trophies,
+        victories: profile.victories,
+        streak: profile.streak,
+        img: profile.img,
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -221,7 +228,7 @@ export default function Profile() {
           {
             label: "Win Streak",
             icon: <WhatshotTwoTone />,
-            value: profile.win_streak,
+            value: profile.streak,
           },
         ].map((stat) => (
           <Box

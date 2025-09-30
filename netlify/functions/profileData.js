@@ -4,7 +4,7 @@
 const ProfileData = {
     name : "dummy",
     records : {
-        winStreak : 0,
+        streak : 0,
         trophies : 0,
         victories : 0
     },
