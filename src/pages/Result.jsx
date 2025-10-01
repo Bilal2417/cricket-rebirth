@@ -32,7 +32,7 @@ export default function Result() {
 
   useEffect(() => {
     const overs = localStorage.getItem("Overs");
-    setTotalWkts(overs);
+    setTotalWkts(overs ? Number(overs) : 0);
   }, []);
 
   const incrementTrophies = async (inc = true) => {

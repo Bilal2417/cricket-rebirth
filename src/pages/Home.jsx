@@ -261,7 +261,7 @@ export default function Home() {
                         }}
                       />
                       <Box sx={{ minWidth: "30px" , textAlign : "center" }} component="span">
-                        {profile?.trophies}
+                        {profile?.trophies < 0 ? 0 : profile?.trophies}
                       </Box>
                     </Typography>
                   </Box>

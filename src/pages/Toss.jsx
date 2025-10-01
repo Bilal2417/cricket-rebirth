@@ -46,7 +46,7 @@ export default function Toss() {
 
   useEffect(() => {
     const overs = localStorage.getItem("Overs");
-    setTotalWkts(overs);
+    setTotalWkts(overs ? Number(overs) : 0); 
   }, []);
 
   const decrementTrophies = async () => {
