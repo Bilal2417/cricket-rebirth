@@ -12,6 +12,8 @@ export default function Toss() {
     const coinFlip = Math.random() < 0.5 ? "Heads" : "Tails";
     const winner = coinFlip === choice ? "user" : "ai";
 
+    decrementTrophies()
+
     setResult(winner);
     console.log(`Coin: ${coinFlip}, Winner: ${winner}`);
 
@@ -31,6 +33,45 @@ export default function Toss() {
     localStorage.setItem("FirstInnings", "1");
     navigate("/gamePlay");
     window.location.reload();
+  };
+
+
+  
+  const totalWkts = localStorage.getItem("Overs");
+
+  const storedProfile = sessionStorage.getItem("Profile");
+  const [Profile, setProfile] = useState(
+    storedProfile ? JSON.parse(storedProfile) : ""
+  );
+
+  const decrementTrophies = async () => {
+    if (!Profile) return;
+
+    const updatedProfile = {
+      ...Profile,
+      trophies: Profile.trophies - (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5),
+    };
+
+    setProfile(updatedProfile);
+
+    try {
+      const res = await fetch("/.netlify/functions/updateProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProfile),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setProfile(data.profile);
+        console.log(data.profile);
+        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+      } else {
+        console.error("Failed to update trophies in database");
+      }
+    } catch (err) {
+      console.error("Error updating trophies:", err);
+    }
   };
 
   return (

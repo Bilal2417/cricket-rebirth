@@ -68,10 +68,7 @@ export default function ScoreCard24() {
   const [show, setShow] = useState(0);
 
   const [batting, setBatting] = useState(null);
-  // const [userChoice, setUserChoice] = useState();
-  // const [compChoice, setCompChoice] = useState();
-  // const [bowlingScore, setBowlingScore] = useState(0);
-  // const [bowlingWicket, setBowlingWicket] = useState(0);
+  
   const [battingWicket, setBattingWicket] = useState(0);
   const [firstInnings, setFirstInnings] = useState(() => {
     return Number(localStorage.getItem("FirstInnings")) || 1;
@@ -96,8 +93,8 @@ export default function ScoreCard24() {
           batting ? userTeam.name : aiTeam.name,
           randomBowler,
           Wkt ? 0 : batting ? run : aiRun,
-          nextOver, // ✅ pass updated over
-          nextBalls, // ✅ pass updated balls
+          nextOver, //  pass updated over
+          nextBalls, //  pass updated balls
           isOverComplete,
           Wkt
         );
@@ -121,7 +118,7 @@ export default function ScoreCard24() {
           bowlerSelect();
           if (nextOver >= totalOvers) {
             const Inning = localStorage.getItem("Innings");
-            const newInning = Inning == "Bat" ? "Ball" : "Bat";
+            // const newInning = Inning == "Bat" ? "Ball" : "Bat";
             // localStorage.setItem("Innings", newInning);
 
             const latestBattingTeam = batting ? userTeam : aiTeam;
@@ -225,63 +222,6 @@ export default function ScoreCard24() {
     handleBall(userRun, isWicket, aiChoice);
   };
 
-  // const updateTeam = (
-  //   bowlingTeam,
-  //   battingTeam,
-  //   randomBowler,
-  //   run,
-  //   isOverComplete = false
-  // ) => {
-  //   const updatedTeams = Teams.map((team) => {
-  //     if (team.name === bowlingTeam) {
-  //       return {
-  //         ...team,
-  //         players: team.players.map((player) => {
-  //           if (player.name === randomBowler?.name) {
-  //             return {
-  //               ...player,
-  //               conceded: player.conceded + run,
-  //               overs: isOverComplete ? player.overs + 1 : player.overs,
-  //             };
-  //           }
-  //           return player;
-  //         }),
-  //       };
-  //     }
-
-  //     if (team.name === battingTeam) {
-  //       return {
-  //         ...team,
-  //         score: team.score + run,
-  //         players: team.players.map((player) => {
-  //           if (player.name === striker.name) {
-  //             return {
-  //               ...player,
-  //               score: player.score + run,
-  //               balls: player.balls + 1,
-  //             };
-  //           }
-  //           return player;
-  //         }),
-  //       };
-  //     }
-  //     return team;
-  //   });
-
-  //   setTeams(updatedTeams);
-
-  //   localStorage.setItem("cricketData", JSON.stringify(updatedTeams));
-
-  //   setUserTeam(updatedTeams.find((t) => t.name === user) || null);
-  //   setAiTeam(updatedTeams.find((t) => t.name === ai) || null);
-
-  //   const updatedBowler =
-  //     updatedTeams
-  //       .find((t) => t.name === bowlingTeam)
-  //       ?.players.find((p) => p.name === randomBowler.name) || null;
-  //   setRandomBowler(updatedBowler);
-  // };
-
   const updateTeam = (
     bowlingTeam,
     battingTeam,
@@ -359,26 +299,25 @@ export default function ScoreCard24() {
           }),
         };
       }
-      // console.log("ballso", balls);
-      // console.log("overo", over);
+      
       return team;
     });
 
     setTeams(updatedTeams);
     localStorage.setItem("cricketData", JSON.stringify(updatedTeams));
 
-    // Update userTeam / aiTeam
+    
     const newUserTeam = updatedTeams.find((t) => t.name === user) || null;
     const newAiTeam = updatedTeams.find((t) => t.name === ai) || null;
     setUserTeam(newUserTeam);
     setAiTeam(newAiTeam);
 
-    // **Update striker and non-striker objects** from the updated team
+    
     const teamBatting = batting ? newUserTeam : newAiTeam;
     setStriker(teamBatting.players.find((p) => p.name === striker.name));
     setNonStriker(teamBatting.players.find((p) => p.name === nonStriker.name));
 
-    // Update bowler
+
     const updatedBowler =
       updatedTeams
         .find((t) => t.name === bowlingTeam)
@@ -388,34 +327,34 @@ export default function ScoreCard24() {
 
     if (Wicket) {
       const teamBatting = updatedTeams.find((t) => t.name === battingTeam);
-      const nextBatterIndex = teamBatting.wicket + 1; // openers = 0 & 1
+      const nextBatterIndex = teamBatting.wicket + 1; 
 
       setPartnership(0);
       setPartnershipBalls(0);
 
-      // if (teamBatting.players[nextBatterIndex])
+      
       if (
         teamBatting?.wicket + (Wicket ? 1 : 0) <=
         (totalOvers == 100 ? 1 : totalOvers == 20 ? 10 : totalOvers) //used as total wickets
       ) {
         const nextBatter = teamBatting.players[nextBatterIndex];
 
-        // Update striker flags
+        
         const updatedPlayers = teamBatting.players.map((p, i) => ({
           ...p,
-          striker: i === nextBatterIndex, // new batter is striker
+          striker: i === nextBatterIndex, 
           notout: i === nextBatterIndex ? true : p.notout && !p.out,
         }));
 
         setStriker(nextBatter);
 
-        // Save back to teamBatting
+        
         teamBatting.players = updatedPlayers;
       } else {
         const latestBattingTeam = batting ? userTeam : aiTeam;
         const updatedScore = latestBattingTeam?.score + (Wicket ? 0 : run);
 
-        endInnings(updatedScore); // ✅ all out
+        endInnings(updatedScore); // all out
       }
     }
   };
@@ -427,7 +366,7 @@ export default function ScoreCard24() {
       ? userTeam.players.filter((player) => player.isBowler)
       : aiTeam.players.filter((player) => player.isBowler);
 
-    if (!bowlersList.length) return; // safeguard
+    if (!bowlersList.length) return;
 
     let chosen = null;
     let attempts = 0;
@@ -436,7 +375,7 @@ export default function ScoreCard24() {
       const candidate =
         bowlersList[Math.floor(Math.random() * bowlersList.length)];
 
-      // ensure not same bowler and overs quota not exceeded
+        
       if (
         candidate.name !== randomBowler?.name &&
         candidate.overs < totalOvers / 5

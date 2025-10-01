@@ -29,12 +29,14 @@ export default function Result() {
     storedProfile ? JSON.parse(storedProfile) : ""
   );
 
-  const incrementTrophies = async ( inc = true) => {
+  const incrementTrophies = async (inc = true) => {
     if (!Profile) return;
 
     const updatedProfile = {
       ...Profile,
-      trophies: inc ? (Profile.trophies + (totalWkts !== 100 ? (Math.ceil(totalWkts/2)) : 5)) : (Profile.trophies - (totalWkts !== 100 ? (Math.ceil(totalWkts/2)) : 5)),
+      trophies: inc
+        ? Profile.trophies + (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5)*2
+        : Profile.trophies ,
     };
 
     setProfile(updatedProfile);
@@ -58,6 +60,8 @@ export default function Result() {
       console.error("Error updating trophies:", err);
     }
   };
+
+
   const [userTeam, setUserTeam] = useState(null);
   const [aiTeam, setAiTeam] = useState(null);
 
