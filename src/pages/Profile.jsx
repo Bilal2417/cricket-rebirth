@@ -99,7 +99,7 @@ export default function Profile() {
     };
 
     setProfile(updatedProfile);
-    setName(tempName);
+    setName(tempName || name);
     setOpen(false);
     console.log(updatedProfile, "pppp");
     console.log(profileId, "oooo");
