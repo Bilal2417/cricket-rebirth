@@ -71,26 +71,57 @@ export default function Home() {
 
   const profileId = localStorage.getItem("MyId");
 
+  // useEffect(() => {
+  //   fetch("/.netlify/functions/getProfile")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data?.success && data.profiles) {
+  //         setProfiles(data.profiles);
+
+  //         const matchedProfile = data.profiles.find(
+  //           (profile) => profile.id === profileId
+  //         );
+
+  //         if (matchedProfile) {
+  //           setUserProfile(matchedProfile);
+  //           sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => console.error("Error fetching profiles:", err))
+  //     .finally(() => setLoading(false));
+  // }, []);
+
   useEffect(() => {
-    fetch("/.netlify/functions/getProfile")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.success && data.profiles) {
-          setProfiles(data.profiles);
+    const fetchProfiles = () => {
+      fetch("/.netlify/functions/getProfile")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.success && data.profiles) {
+            setProfiles(data.profiles);
 
-          const matchedProfile = data.profiles.find(
-            (profile) => profile.id === profileId
-          );
+            const matchedProfile = data.profiles.find(
+              (profile) => profile.id === profileId
+            );
 
-          if (matchedProfile) {
-            setUserProfile(matchedProfile);
-            sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+            if (matchedProfile) {
+              setUserProfile(matchedProfile);
+              sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+            }
           }
-        }
-      })
-      .catch((err) => console.error("Error fetching profiles:", err))
-      .finally(() => setLoading(false));
-  }, []);
+        })
+        .catch((err) => console.error("Error fetching profiles:", err))
+        .finally(() => setLoading(false));
+    };
+
+    
+    fetchProfiles();
+
+    
+    const interval = setInterval(fetchProfiles, 10000);
+
+    return () => clearInterval(interval);
+  }, [profileId]);
 
   const [mode, setMode] = useState(null);
 
@@ -200,7 +231,7 @@ export default function Home() {
                         display: "flex",
                         alignItems: "center",
                         gap: "10px",
-                        position : "relative"
+                        position: "relative",
                       }}
                     >
                       <Typography
@@ -212,7 +243,7 @@ export default function Home() {
                             profile?.id == profileId ? "#ffc73e" : "#aa9ca9",
                           padding: "4px 12px",
                           fontWeight: 600,
-                          width : "11px"
+                          width: "11px",
                         }}
                         variant="body1"
                       >
@@ -238,9 +269,9 @@ export default function Home() {
                             ? "green"
                             : "#514e4e",
                           borderRadius: "50%",
-                          position : "absolute",
-                          top : 2,
-                          left : 30
+                          position: "absolute",
+                          top: 2,
+                          left: 30,
                         }}
                       />
                     </Box>
