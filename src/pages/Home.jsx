@@ -12,9 +12,9 @@ export default function Home() {
   const navigate = useNavigate();
 
   const [profiles, setProfiles] = useState([]);
+  const [userProfile, setUserProfile] = useState();
 
-  const profileId = localStorage.getItem("MyId");
-
+  
   useEffect(() => {
     const keysToClear = ["q1", "q2", "q3", "q4", "s1", "s2", "f", "Teams"];
     keysToClear.forEach((key) => sessionStorage.removeItem(key));
@@ -30,9 +30,9 @@ export default function Home() {
     ];
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
   }, []);
-
+  
   // const [name, setName] = useState("");
-
+  
   // Fetch profile on page load
   // useEffect(() => {
   //   fetch("/.netlify/functions/saveProfile")
@@ -45,12 +45,24 @@ export default function Home() {
   //     })
   //     .catch((err) => console.error("Error fetching profile:", err));
   // }, []);
-
+  
+  const profileId = localStorage.getItem("MyId");
   useEffect(() => {
     fetch("/.netlify/functions/getProfile")
       .then((res) => res.json())
       .then((data) => {
-        if (data?.success && data.profiles) setProfiles(data.profiles);
+        if (data?.success && data.profiles) {
+          setProfiles(data.profiles);
+
+          const matchedProfile = data.profiles.find(
+            (profile) => profile.id === profileId
+          );
+
+          if (matchedProfile) {
+            setUserProfile(matchedProfile);
+          sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+          }
+        }
       })
       .catch((err) => console.error("Error fetching profiles:", err));
   }, []);
@@ -163,8 +175,10 @@ export default function Home() {
                       <Typography
                         sx={{
                           fontFamily: "Rubik",
-                          backgroundColor: profile?.id == profileId ? "#ffa800" : "#6e606d",
-                          color: profile?.id == profileId ? "#ffc73e" : "#aa9ca9",
+                          backgroundColor:
+                            profile?.id == profileId ? "#ffa800" : "#6e606d",
+                          color:
+                            profile?.id == profileId ? "#ffc73e" : "#aa9ca9",
                           padding: "4px 12px",
                           fontWeight: 600,
                         }}
@@ -177,7 +191,7 @@ export default function Home() {
                           fontWeight: 600,
                           fontFamily: "Rubik",
                           textTransform: "uppercase",
-                          color : "#f7bb1e"
+                          color: "#f7bb1e",
                         }}
                         variant="body1"
                       >
@@ -191,12 +205,13 @@ export default function Home() {
                         gap: "5px",
                         fontFamily: "Rubik",
                         fontWeight: 600,
-                        backgroundColor: profile?.id == profileId ? "#dc5425" : "#665963",
+                        backgroundColor:
+                          profile?.id == profileId ? "#dc5425" : "#665963",
                         padding: "10px 20px",
                         clipPath: "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
-                        width : "60px",
-                        justifyContent : "center",
-                        color : "#f7bb1e"
+                        width: "60px",
+                        justifyContent: "center",
+                        color: "#f7bb1e",
                       }}
                       variant="body1"
                     >
@@ -306,7 +321,6 @@ export default function Home() {
                   34030
                 </Typography>
               </Box> */}
-
             </Box>
           </Box>
           <Box>

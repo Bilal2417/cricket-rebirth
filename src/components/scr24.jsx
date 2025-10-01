@@ -820,6 +820,7 @@ export default function ScoreCard24() {
                 sx={{
                   transform: "scale(0.7)",
                   fontWeight: 400,
+                  color: "#0e0a20",
                 }}
                 component="span"
               >
