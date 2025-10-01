@@ -57,6 +57,8 @@ export default function Result() {
       } else {
         console.error("Failed to update trophies in database");
       }
+
+      navigate("/");
     } catch (err) {
       console.error("Error updating trophies:", err);
     }
@@ -795,16 +797,11 @@ export default function Result() {
                     }
                     navigate("/fixtures");
                   } else {
-
-                    if (userTeam && aiTeam) {
-                      if (userTeam?.score > aiTeam?.score) {
-                        incrementTrophies(true);
-                      } else if (aiTeam?.score > userTeam?.score) {
-                          incrementTrophies(false);
-                      }
+                    if (userTeam?.score > aiTeam?.score) {
+                      incrementTrophies(true);
+                    } else if (aiTeam?.score > userTeam?.score) {
+                      incrementTrophies(false);
                     }
-
-                    navigate("/");
                   }
                 }}
               >
