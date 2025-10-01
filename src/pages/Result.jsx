@@ -34,6 +34,7 @@ export default function Result() {
     const overs = localStorage.getItem("Overs");
     setTotalWkts(overs ? Number(overs) : 0);
   }, []);
+  const [draw, setDraw] = useState(2);
 
   const incrementTrophies = async (inc = true) => {
     if (!Profile) return;
@@ -42,7 +43,7 @@ export default function Result() {
       ...Profile,
       trophies: inc
         ? Profile.trophies +
-          (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5) * 2
+          (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5) * draw
         : Profile.trophies,
     };
 
@@ -163,7 +164,7 @@ export default function Result() {
             width: "100%",
             height: "100%",
             overflow: "hidden",
-            alignContent : "center"
+            alignContent: "center",
           }}
         >
           <Box
@@ -759,122 +760,126 @@ export default function Result() {
             </Box>
           </Box>
 
+          <Box
+            sx={{
+              backgroundColor: "#0f0648",
+              borderRadius: "0 0 12px 12px",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              overflow: "hidden",
+              padding: "10px 20px",
+              position: "relative",
+            }}
+          >
             <Box
               sx={{
-                backgroundColor: "#0f0648",
-                borderRadius: "0 0 12px 12px",
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                overflow: "hidden",
-                padding: "10px 20px",
-                position: "relative",
+                fontFamily: "Rubik",
+                color: "#FFFFFF",
+                backgroundColor: "#fa208e",
+                padding: "8px 16px",
+                borderRadius: "8px",
+                position: "absolute",
+                top: 7,
+                right: 50,
+                textTransform: "uppercase",
+                ":hover": {
+                  cursor: "pointer",
+                  backgroundColor: "#db1d7d",
+                  transition: "all 0.3s",
+                },
+              }}
+              onClick={() => {
+                const isTournament = sessionStorage.getItem("mode");
+                if (isTournament == "KNOCKOUT") {
+                  const id = sessionStorage.getItem("lastMatchId");
+                  if (winner == "Match Tied") {
+                    const tieBreaker =
+                      Math.random() < 0.5 ? userTeam?.name : aiTeam?.name;
+                    sessionStorage.setItem(id, tieBreaker);
+                    
+                  } else {
+                    sessionStorage.setItem(id, winner);
+                  }
+                  navigate("/fixtures");
+                } else {
+                  if (userTeam?.score > aiTeam?.score) {
+                    setDraw(2);
+                    incrementTrophies(true);
+                  } else if (aiTeam?.score > userTeam?.score) {
+                    incrementTrophies(false);
+                  } else {
+                    setDraw(1);
+                    incrementTrophies(true);
+                  }
+                }
               }}
             >
+              next
+            </Box>
+            <Typography
+              sx={{
+                fontFamily: "Rubik",
+                color: "#dece43",
+                textTransform: "uppercase",
+              }}
+              variant="h5"
+            >
+              {winner}
               <Box
                 sx={{
-                  fontFamily: "Rubik",
-                  color: "#FFFFFF",
-                  backgroundColor: "#fa208e",
-                  padding: "8px 16px",
-                  borderRadius: "8px",
-                  position: "absolute",
-                  top: 7,
-                  right: 50,
-                  textTransform: "uppercase",
-                  ":hover": {
-                    cursor: "pointer",
-                    backgroundColor: "#db1d7d",
-                    transition: "all 0.3s",
-                  },
+                  display: winner == "Match Tied" ? "none" : "",
                 }}
-                onClick={() => {
-                  const isTournament = sessionStorage.getItem("mode");
-                  if (isTournament == "KNOCKOUT") {
-                    const id = sessionStorage.getItem("lastMatchId");
-                    if (winner == "Match Tied") {
-                      sessionStorage.setItem(id, aiTeam?.name);
-                    } else {
-                      sessionStorage.setItem(id, winner);
-                    }
-                    navigate("/fixtures");
-                  } else {
-                    if (userTeam?.score > aiTeam?.score) {
-                      incrementTrophies(true);
-                    } else if (aiTeam?.score > userTeam?.score) {
-                      incrementTrophies(false);
-                    } else {
-                      navigate("/");
-                    }
-                  }
-                }}
+                component="span"
               >
-                next
+                {" "}
+                Won by
               </Box>
+            </Typography>
+            {winnerFirst ? (
               <Typography
                 sx={{
                   fontFamily: "Rubik",
                   color: "#dece43",
                   textTransform: "uppercase",
+                  ml: "5px",
+                  display: winner == "Match Tied" ? "none" : "",
                 }}
                 variant="h5"
               >
-                {winner}
-                <Box
-                  sx={{
-                    display: winner == "Match Tied" ? "none" : "",
-                  }}
-                  component="span"
-                >
-                  {" "}
-                  Won by
-                </Box>
+                {batting
+                  ? aiTeam?.score - userTeam?.score
+                  : userTeam?.score - aiTeam?.score}{" "}
+                runs
               </Typography>
-              {winnerFirst ? (
-                <Typography
-                  sx={{
-                    fontFamily: "Rubik",
-                    color: "#dece43",
-                    textTransform: "uppercase",
-                    ml: "5px",
-                    display: winner == "Match Tied" ? "none" : "",
-                  }}
-                  variant="h5"
-                >
-                  {batting
-                    ? aiTeam?.score - userTeam?.score
-                    : userTeam?.score - aiTeam?.score}{" "}
-                  runs
-                </Typography>
-              ) : (
-                <Typography
-                  sx={{
-                    fontFamily: "Rubik",
-                    color: "#dece43",
-                    textTransform: "uppercase",
-                    ml: "5px",
-                    display: winner == "Match Tied" ? "none" : "",
-                  }}
-                  variant="h5"
-                >
-                  {totalWkts == 100
-                    ? null
-                    : batting
-                    ? (totalWkts == 20 ? 10 : totalWkts) - userTeam?.wicket
-                    : (totalWkts == 20 ? 10 : totalWkts) - aiTeam?.wicket}{" "}
-                  {totalWkts == 100
-                    ? "1 wicket"
-                    : batting
-                    ? (totalWkts == 20 ? 10 : totalWkts) - userTeam?.wicket == 1
-                      ? "wicket"
-                      : "wickets"
-                    : (totalWkts == 20 ? 10 : totalWkts) - aiTeam?.wicket == 1
+            ) : (
+              <Typography
+                sx={{
+                  fontFamily: "Rubik",
+                  color: "#dece43",
+                  textTransform: "uppercase",
+                  ml: "5px",
+                  display: winner == "Match Tied" ? "none" : "",
+                }}
+                variant="h5"
+              >
+                {totalWkts == 100
+                  ? null
+                  : batting
+                  ? (totalWkts == 20 ? 10 : totalWkts) - userTeam?.wicket
+                  : (totalWkts == 20 ? 10 : totalWkts) - aiTeam?.wicket}{" "}
+                {totalWkts == 100
+                  ? "1 wicket"
+                  : batting
+                  ? (totalWkts == 20 ? 10 : totalWkts) - userTeam?.wicket == 1
                     ? "wicket"
-                    : "wickets"}
-                </Typography>
-              )}
-            </Box>
-            
+                    : "wickets"
+                  : (totalWkts == 20 ? 10 : totalWkts) - aiTeam?.wicket == 1
+                  ? "wicket"
+                  : "wickets"}
+              </Typography>
+            )}
+          </Box>
         </Box>
       </Box>
     </>
