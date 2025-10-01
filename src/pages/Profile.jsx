@@ -70,12 +70,12 @@ export default function Profile() {
   const handleSave = async (newImg) => {
     if (!profile) return;
 
-    const id = localStorage.getItem("MyId"); 
+    const id = localStorage.getItem("MyId");
     if (!id) return console.error("No profile ID found");
 
     const updatedProfile = {
       ...profile,
-      id : profileId,
+      id: profileId,
       name: tempName || profile.name,
       img: newImg || profile.img,
       streak: profile.streak,
@@ -86,8 +86,8 @@ export default function Profile() {
     setProfile(updatedProfile);
     setName(tempName);
     setOpen(false);
-    console.log(updatedProfile,"pppp")
-    console.log(profileId,"oooo")
+    console.log(updatedProfile, "pppp");
+    console.log(profileId, "oooo");
     // Update in database
     fetch("/.netlify/functions/updateProfile", {
       method: "POST",
@@ -173,15 +173,17 @@ export default function Profile() {
           sx={{
             padding: "10px 60px",
             backgroundColor: "#313c64",
-            fontWeight: "bold",
             color: "#fff",
             textAlign: "center",
             textTransform: "uppercase",
             cursor: "pointer",
+            fontFamily : "Rubik",
+            clipPath: "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
             "& .MuiOutlinedInput-input": {
               textAlign: "center",
-              fontWeight: "bold",
+              fontWeight: 600,
               color: "#fff",
+              fontSize : "1.2em"
             },
             "& .MuiOutlinedInput-notchedOutline": { border: "none" },
           }}
@@ -214,17 +216,59 @@ export default function Profile() {
         {[
           {
             label: "Trophies",
-            icon: <EmojiEventsTwoTone />,
+            icon: (
+              <EmojiEventsTwoTone
+                sx={{
+                  "& .MuiSvgIcon-root": {
+                    fill: "none",
+                  },
+                  "& path:first-of-type": {
+                    fill: profile?.id == profileId ? "#FFFFFF" : "#FFD700",
+                  },
+                  "& path:last-of-type": {
+                    fill: profile?.id == profileId ? "#000000" : "#DAA520",
+                  },
+                }}
+              />
+            ),
             value: profile.trophies,
           },
           {
             label: "Victories",
-            icon: <StarTwoTone />,
+            icon: (
+              <StarTwoTone
+                sx={{
+                  "& .MuiSvgIcon-root": {
+                    fill: "none",
+                  },
+                  "& path:first-of-type": {
+                    fill: profile?.id == profileId ? "#FFFFFF" : "#FFD700",
+                  },
+                  "& path:last-of-type": {
+                    fill: profile?.id == profileId ? "#000000" : "#DAA520",
+                  },
+                }}
+              />
+            ),
             value: profile.victories,
           },
           {
             label: "Win Streak",
-            icon: <WhatshotTwoTone />,
+            icon: (
+              <WhatshotTwoTone
+                sx={{
+                  "& .MuiSvgIcon-root": {
+                    fill: "none",
+                  },
+                  "& path:first-of-type": {
+                    fill: profile?.id == profileId ? "#FFFFFF" : "#FFD700",
+                  },
+                  "& path:last-of-type": {
+                    fill: profile?.id == profileId ? "#000000" : "#DAA520",
+                  },
+                }}
+              />
+            ),
             value: profile.streak,
           },
         ].map((stat) => (
@@ -245,12 +289,14 @@ export default function Profile() {
                 fontSize: "1.4em",
                 fontWeight: 900,
                 textTransform: "uppercase",
+                fontFamily: "Rubik",
               }}
             >
               {stat.label}
             </Typography>
             <Typography
               sx={{
+                fontFamily: "Rubik",
                 padding: "10px 70px",
                 backgroundColor: "#073575",
                 textAlign: "center",
@@ -259,6 +305,7 @@ export default function Profile() {
                 color: "#fff",
                 display: "flex",
                 gap: 1,
+                clipPath: "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
               }}
             >
               {stat.icon} {stat.value}
