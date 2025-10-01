@@ -1,9 +1,9 @@
 import { Client } from "pg";
 
-export async function handler() {
+export async function handler( event) {
     
   const profileId = event.queryStringParameters?.profileId;
-  
+
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
