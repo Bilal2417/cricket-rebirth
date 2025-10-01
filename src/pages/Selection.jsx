@@ -9,18 +9,16 @@ export default function Selection() {
 
   // Function to select AI team
   function AiTeamSelection(selectedTeam) {
-    // setUserTeam(selectedTeam);
-
     const availableTeams = teams.filter((t) => t.name !== selectedTeam);
     const aiTeam =
       availableTeams[Math.floor(Math.random() * availableTeams.length)];
     localStorage.setItem("User", selectedTeam);
     localStorage.setItem("Ai", aiTeam.name);
-    const page = sessionStorage.getItem("mode")
-    if(page == "KNOCKOUT"){
-      navigate("/knockout");
 
-    }else{
+    const page = sessionStorage.getItem("mode");
+    if (page === "KNOCKOUT") {
+      navigate("/knockout");
+    } else {
       navigate("/toss");
     }
   }
@@ -30,15 +28,16 @@ export default function Selection() {
   }, []);
 
   return (
-    <>
+    <Box sx={{ p: 2 }}>
       <Grid container spacing={2} justifyContent="center">
         {teams.map((team, index) => (
           <Grid
             item
-            // xs={6}
-            // sm={3}
-            // md={12}
             key={index}
+            xs={6}   // 2 per row on extra small screens
+            sm={4}   // 3 per row on small screens
+            md={3}   // 4 per row on medium screens
+            lg={2}   // 6 per row on large screens
             sx={{
               ":hover": {
                 cursor: "pointer",
@@ -56,14 +55,16 @@ export default function Selection() {
               src={team.flag}
               alt={team.name}
               style={{
-                width: "90px",
-                height: "60px",
+                width: "100%",      // responsive scaling
+                maxWidth: "120px",  // prevent oversized
+                height: "auto",
+                borderRadius: "6px",
                 boxShadow: "3px 3px 8px -2px #000000",
               }}
             />
           </Grid>
         ))}
       </Grid>
-    </>
+    </Box>
   );
 }

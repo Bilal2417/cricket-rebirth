@@ -505,6 +505,7 @@ export default function ScoreCard24() {
 
   return (
     <>
+    
       <Box
         sx={{
           width: "100%",
@@ -512,6 +513,7 @@ export default function ScoreCard24() {
           minHeight: "50px",
           display: "flex",
           justifyContent: "center",
+          padding : { xs : "0 300px" , md : "0"}
         }}
       >
         <Box
@@ -988,6 +990,7 @@ export default function ScoreCard24() {
           gap: "10px",
           justifyContent: "center",
           margin: "50px",
+          padding : { xs : "0 600px" , md : "0"}
         }}
       >
         {choice.map((opt, index) => {

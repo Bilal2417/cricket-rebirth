@@ -12,7 +12,7 @@ export default function Toss() {
     const coinFlip = Math.random() < 0.5 ? "Heads" : "Tails";
     const winner = coinFlip === choice ? "user" : "ai";
 
-    decrementTrophies()
+    decrementTrophies();
 
     setResult(winner);
     console.log(`Coin: ${coinFlip}, Winner: ${winner}`);
@@ -35,8 +35,6 @@ export default function Toss() {
     window.location.reload();
   };
 
-
-  
   const totalWkts = localStorage.getItem("Overs");
 
   const storedProfile = sessionStorage.getItem("Profile");
@@ -49,7 +47,9 @@ export default function Toss() {
 
     const updatedProfile = {
       ...Profile,
-      trophies: Profile.trophies - (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5),
+      trophies:
+        Profile.trophies -
+        (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5),
     };
 
     setProfile(updatedProfile);
@@ -77,51 +77,71 @@ export default function Toss() {
   return (
     <>
       {!tossWin ? (
-        <Grid container xs={6} gap={10} justifyContent="center">
+        <Grid
+          container
+          spacing={2}
+          justifyContent="center"
+          alignItems="center"
+          sx={{ mt: 4 }}
+        >
           {["Heads", "Tails"].map((choice, index) => (
-            <Button
-              key={index}
-              sx={{
-                color: "#FFFFFF",
-                backgroundColor: "#0f0648",
-                borderBottom: "2px solid #fa208e",
-                borderRight: "2px solid #fa208e",
-                borderRadius: "12px",
-                fontFamily: "Rubik",
-                fontWeight: 600,
-                padding: "8px 16px",
-                width: "150px",
-                transform: "scale(1.1)",
-                ":hover": { transform: "scale(1.2)", transition: "all 0.3s" },
-              }}
-              onClick={() => handleToss(choice)}
-            >
-              {choice}
-            </Button>
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Button
+                fullWidth
+                sx={{
+                  color: "#FFFFFF",
+                  backgroundColor: "#0f0648",
+                  borderBottom: "2px solid #fa208e",
+                  borderRight: "2px solid #fa208e",
+                  borderRadius: "12px",
+                  fontFamily: "Rubik",
+                  fontWeight: 600,
+                  padding: "12px 16px",
+                  fontSize: { xs: "14px", sm: "16px", md: "18px" },
+                  ":hover": {
+                    transform: "scale(1.05)",
+                    transition: "all 0.3s",
+                  },
+                }}
+                onClick={() => handleToss(choice)}
+              >
+                {choice}
+              </Button>
+            </Grid>
           ))}
         </Grid>
       ) : (
-        <Grid container xs={6} gap={10} justifyContent="center">
+        <Grid
+          container
+          spacing={2}
+          justifyContent="center"
+          alignItems="center"
+          sx={{ mt: 4 }}
+        >
           {["Bat", "Ball"].map((choice, index) => (
-            <Button
-              key={index}
-              sx={{
-                color: "#FFFFFF",
-                backgroundColor: "#0f0648",
-                borderBottom: "2px solid #fa208e",
-                borderRight: "2px solid #fa208e",
-                borderRadius: "12px",
-                fontFamily: "Rubik",
-                fontWeight: 600,
-                padding: "8px 16px",
-                width: "150px",
-                transform: "scale(1.1)",
-                ":hover": { transform: "scale(1.2)", transition: "all 0.3s" },
-              }}
-              onClick={() => handleInnings(choice)}
-            >
-              {choice}
-            </Button>
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Button
+                fullWidth
+                sx={{
+                  color: "#FFFFFF",
+                  backgroundColor: "#0f0648",
+                  borderBottom: "2px solid #fa208e",
+                  borderRight: "2px solid #fa208e",
+                  borderRadius: "12px",
+                  fontFamily: "Rubik",
+                  fontWeight: 600,
+                  padding: "12px 16px",
+                  fontSize: { xs: "14px", sm: "16px", md: "18px" },
+                  ":hover": {
+                    transform: "scale(1.05)",
+                    transition: "all 0.3s",
+                  },
+                }}
+                onClick={() => handleInnings(choice)}
+              >
+                {choice}
+              </Button>
+            </Grid>
           ))}
         </Grid>
       )}

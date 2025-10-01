@@ -55,30 +55,8 @@ export default function Scorecard() {
           flexDirection: "column",
           width: { xs: "800px", sm: "1150px", md: "auto" },
           margin: "auto",
-          position: "relative",
         }}
       >
-        <Box
-          sx={{
-            fontFamily: "Rubik",
-            color: "#FFFFFF",
-            backgroundColor: "#fa208e",
-            padding: "8px 16px",
-            borderRadius: "8px",
-            position: "absolute",
-            bottom: 15,
-            right: -90,
-            textTransform: "uppercase",
-            ":hover": {
-              cursor: "pointer",
-              backgroundColor: "#db1d7d",
-              transition: "all 0.3s",
-            },
-          }}
-          onClick={() => navigate("/result")}
-        >
-          next
-        </Box>
         <Box
           sx={{
             borderRadius: "12px",
@@ -330,6 +308,7 @@ export default function Scorecard() {
                   justifyContent: "space-between",
                   padding: "8px 16px",
                   width: "85%",
+                  position  :"relative"
                 }}
               >
                 <Typography
@@ -343,6 +322,27 @@ export default function Scorecard() {
                 >
                   #T20WORLDCUP
                 </Typography>
+                <Box
+                  sx={{
+                    fontFamily: "Rubik",
+                    color: "#FFFFFF",
+                    backgroundColor: "#fa208e",
+                    padding: "8px 32px",
+                    borderRadius: "8px",
+                    position: "absolute",
+                    bottom: 5,
+                    right: "38%",
+                    textTransform: "uppercase",
+                    ":hover": {
+                      cursor: "pointer",
+                      backgroundColor: "#db1d7d",
+                      transition: "all 0.3s",
+                    },
+                  }}
+                  onClick={() => navigate("/result")}
+                >
+                  next
+                </Box>
                 <Box>
                   <Typography
                     sx={{

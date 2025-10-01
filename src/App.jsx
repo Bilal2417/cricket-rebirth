@@ -13,33 +13,38 @@ import Fixtures from "./pages/Fixtures";
 
 function App() {
   return (
-    <Container sx={{
-      height : "100vh",
-      alignContent : "center"
-    }}>
-
-    <Router>
-
-        <Box sx={{
-          transform : { xs : "rotate(90deg)" , md : "none"},
-          padding : { xs : "150px" , md : "0px"},
-          width : "1150px"
-        }}>
-      <Routes>
-
-        <Route path="/" element={<Home/>} />
-        <Route path="/profile" element={<Profile/>} />
-        <Route path="/modes" element={<Modes/>} />
-        <Route path="/knockout" element={<Knockout/>} />
-        <Route path="/fixtures" element={<Fixtures/>} />
-        <Route path="/team" element={<Selection/>} />
-        <Route path="/gamePlay" element={<ScoreCard24 />} />
-        <Route path="/toss" element={<Toss />} />
-        <Route path="/score" element={<Scorecard />} />
-        <Route path="/result" element={<Result />} />
-      </Routes>
+    <Container
+      sx={{
+        height: "100vh",
+        alignContent: "center",
+      }}
+    >
+      <Router>
+        <Box
+          sx={{
+            transform: { xs: "rotate(90deg)", md: "none" },
+            
+            
+            overflowX: { xs : "auto" , md : "unset"}, 
+            overflowY: { xs : "auto" , md : "unset"}, 
+            maxWidth: "100vw", 
+            maxHeight: "100vh",
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/modes" element={<Modes />} />
+            <Route path="/knockout" element={<Knockout />} />
+            <Route path="/fixtures" element={<Fixtures />} />
+            <Route path="/team" element={<Selection />} />
+            <Route  path="/gamePlay" element={<ScoreCard24 />} />
+            <Route path="/toss" element={<Toss />} />
+            <Route path="/score" element={<Scorecard />} />
+            <Route path="/result" element={<Result />} />
+          </Routes>
         </Box>
-    </Router>
+      </Router>
     </Container>
   );
 }
