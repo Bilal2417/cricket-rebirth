@@ -11,8 +11,10 @@ export default function Toss() {
   const handleToss = (choice) => {
     const coinFlip = Math.random() < 0.5 ? "Heads" : "Tails";
     const winner = coinFlip === choice ? "user" : "ai";
-
-    decrementTrophies();
+    const isTournament = sessionStorage.getItem("mode")
+    if(isTournament !== "KNOCKOUT"){
+      decrementTrophies();
+    }
 
     setResult(winner);
     console.log(`Coin: ${coinFlip}, Winner: ${winner}`);
