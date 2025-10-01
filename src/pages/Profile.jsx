@@ -18,6 +18,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
+import { toast } from "react-toastify";
 
 export default function Profile() {
   const location = useLocation();
@@ -59,20 +60,34 @@ export default function Profile() {
     }
   }, [location]);
 
-  // Dialog handlers
+  
   const handleOpen = () => {
     setTempName(name);
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
 
-  // Save updated profile (name or image)
+  
+    const showDescToast = (desc) => {
+      toast.success(desc, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    };
+
+
   const handleSave = async (newImg) => {
     if (!profile) return;
 
     const id = localStorage.getItem("MyId");
     if (!id) return console.error("No profile ID found");
 
+    showDescToast("Profile Created Successfully !!")
+    
     const updatedProfile = {
       ...profile,
       id: profileId,
