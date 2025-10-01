@@ -92,36 +92,70 @@ export default function Home() {
   //     .finally(() => setLoading(false));
   // }, []);
 
-  useEffect(() => {
-    const fetchProfiles = () => {
-      fetch("/.netlify/functions/getProfile")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.success && data.profiles) {
-            setProfiles(data.profiles);
+  // useEffect(() => {
+  //   const fetchProfiles = async() => {
+  //     fetch("/.netlify/functions/getProfile")
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data?.success && data.profiles) {
+  //           setProfiles(data.profiles);
 
-            const matchedProfile = data.profiles.find(
-              (profile) => profile.id === profileId
-            );
+  //           const matchedProfile = data.profiles.find(
+  //             (profile) => profile.id === profileId
+  //           );
 
-            if (matchedProfile) {
-              setUserProfile(matchedProfile);
-              sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
-            }
-          }
-        })
-        .catch((err) => console.error("Error fetching profiles:", err))
-        .finally(() => setLoading(false));
-    };
-
-    
-    fetchProfiles();
+  //           if (matchedProfile) {
+  //             setUserProfile(matchedProfile);
+  //             sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+  //           }
+  //         }
+  //       })
+  //       .catch((err) => console.error("Error fetching profiles:", err))
+  //       .finally(() => setLoading(false));
+  //   };
 
     
-    const interval = setInterval(fetchProfiles, 10000);
+  //   fetchProfiles();
 
-    return () => clearInterval(interval);
-  }, [profileId]);
+    
+  //   const interval = setInterval(fetchProfiles, 10000);
+
+  //   return () => clearInterval(interval);
+  // }, [profileId]);
+
+
+useEffect(() => {
+  const fetchProfiles = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/.netlify/functions/getProfile");
+      const data = await res.json();
+
+      if (data?.success && data.profiles) {
+        setProfiles(data.profiles);
+
+        const matchedProfile = data.profiles.find(
+          (profile) => profile.id === profileId
+        );
+
+        if (matchedProfile) {
+          setUserProfile(matchedProfile);
+          sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching profiles:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProfiles();
+  const interval = setInterval(fetchProfiles, 10000);
+  return () => clearInterval(interval);
+}, [profileId]);
+
+
 
   const [mode, setMode] = useState(null);
 
