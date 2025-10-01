@@ -239,7 +239,7 @@ export default function Home() {
                           borderRadius: "50%",
                           position : "absolute",
                           top : 2,
-                          left : 15
+                          left : 30
                         }}
                       />
                     </Box>
