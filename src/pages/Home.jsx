@@ -70,6 +70,7 @@ export default function Home() {
   };
 
   const profileId = localStorage.getItem("MyId");
+  
   useEffect(() => {
     fetch("/.netlify/functions/getProfile")
       .then((res) => res.json())
@@ -94,7 +95,7 @@ export default function Home() {
   const [mode, setMode] = useState(null);
 
   useEffect(() => {
-    const selectMode = localStorage.getItem("mode");
+    const selectMode = sessionStorage.getItem("mode");
     setMode(selectMode);
   }, []);
 
@@ -396,7 +397,7 @@ export default function Home() {
               }}
             >
               {/* <HighlightOff /> */}
-              {mode || "SELECT"}
+              {mode ||"Select"}
             </Button>
 
             <Button
@@ -436,7 +437,7 @@ export default function Home() {
                 if (!profileId) {
                   showDescToast("Create Profile first!");
                 } else if (!mode) {
-                  showDescToast("Select Mode first!");
+                  showDescToast("Select Game Mode first!");
                 } else {
                   navigate("/team");
                 }
