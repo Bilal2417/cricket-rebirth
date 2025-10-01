@@ -11,8 +11,32 @@ import Modes from "./pages/Modes";
 import Knockout from "./pages/Knockout";
 import Fixtures from "./pages/Fixtures";
 import { ToastContainer } from "react-toastify";
+import { useEffect } from "react";
 
 function App() {
+
+    useEffect(() => {
+    const profileId = localStorage.getItem("MyId"); 
+    if (!profileId) return;
+
+    
+    const updateActivity = async () => {
+      try {
+        await fetch(`/.netlify/functions/updateLastActive?profileId=${profileId}`);
+      } catch (err) {
+        console.error("Failed to update activity:", err);
+      }
+    };
+
+    updateActivity();
+
+    
+    const interval = setInterval(updateActivity, 2 * 60 * 1000);
+
+    
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Container
       sx={{

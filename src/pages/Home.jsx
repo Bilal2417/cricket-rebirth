@@ -70,7 +70,7 @@ export default function Home() {
   };
 
   const profileId = localStorage.getItem("MyId");
-  
+
   useEffect(() => {
     fetch("/.netlify/functions/getProfile")
       .then((res) => res.json())
@@ -260,10 +260,24 @@ export default function Home() {
                           },
                         }}
                       />
-                      <Box sx={{ minWidth: "30px" , textAlign : "center" }} component="span">
+                      <Box
+                        sx={{ minWidth: "30px", textAlign: "center" }}
+                        component="span"
+                      >
                         {profile?.trophies < 0 ? 0 : profile?.trophies}
                       </Box>
                     </Typography>
+                    {profile.is_active && (
+                      <span
+                        style={{
+                          display: "inline-block",
+                          width: "10px",
+                          height: "10px",
+                          backgroundColor: "green",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    )}
                   </Box>
                 );
               })}
@@ -397,7 +411,7 @@ export default function Home() {
               }}
             >
               {/* <HighlightOff /> */}
-              {mode ||"Select"}
+              {mode || "Select"}
             </Button>
 
             <Button

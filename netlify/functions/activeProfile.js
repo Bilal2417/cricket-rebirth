@@ -1,6 +1,9 @@
 import { Client } from "pg";
 
 export async function handler() {
+    
+  const profileId = event.queryStringParameters?.profileId;
+  
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
@@ -9,12 +12,10 @@ export async function handler() {
   try {
     await client.connect();
 
-    const result = await client.query(`
-  SELECT id, name, trophies,
-         (NOW() - last_active) < interval '5 minutes' AS is_active
-  FROM profiles
-  ORDER BY trophies DESC
-`);
+    const result = await client.query(
+      "UPDATE profiles SET last_active = NOW() WHERE id = $1",
+      [profileId]
+    );
 
     await client.end();
 
@@ -28,7 +29,4 @@ export async function handler() {
       body: JSON.stringify({ success: false, error: err.message }),
     };
   }
-  finally {
-  await client.end();
-}
 }
