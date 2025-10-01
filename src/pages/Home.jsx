@@ -200,6 +200,7 @@ export default function Home() {
                         display: "flex",
                         alignItems: "center",
                         gap: "10px",
+                        position : "relative"
                       }}
                     >
                       <Typography
@@ -227,6 +228,20 @@ export default function Home() {
                       >
                         {profile?.name}
                       </Typography>
+                      <span
+                        style={{
+                          display: "inline-block",
+                          width: "10px",
+                          height: "10px",
+                          backgroundColor: profile?.is_active
+                            ? "green"
+                            : "gray",
+                          borderRadius: "50%",
+                          position : "absolute",
+                          top : 2,
+                          left : 15
+                        }}
+                      />
                     </Box>
                     <Typography
                       sx={{
@@ -267,17 +282,6 @@ export default function Home() {
                         {profile?.trophies < 0 ? 0 : profile?.trophies}
                       </Box>
                     </Typography>
-                    {profile.is_active && (
-                      <span
-                        style={{
-                          display: "inline-block",
-                          width: "10px",
-                          height: "10px",
-                          backgroundColor: "green",
-                          borderRadius: "50%",
-                        }}
-                      />
-                    )}
                   </Box>
                 );
               })}
