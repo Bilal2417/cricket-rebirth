@@ -801,6 +801,8 @@ export default function Result() {
                       incrementTrophies(true);
                     } else if (aiTeam?.score > userTeam?.score) {
                       incrementTrophies(false);
+                    } else {
+                      navigate("/");
                     }
                   }
                 }}
