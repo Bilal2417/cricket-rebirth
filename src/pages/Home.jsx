@@ -235,7 +235,7 @@ export default function Home() {
                           height: "10px",
                           backgroundColor: profile?.is_active
                             ? "green"
-                            : "gray",
+                            : "#514e4e",
                           borderRadius: "50%",
                           position : "absolute",
                           top : 2,
