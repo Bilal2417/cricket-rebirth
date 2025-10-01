@@ -35,8 +35,9 @@ export default function Result() {
     const updatedProfile = {
       ...Profile,
       trophies: inc
-        ? Profile.trophies + (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5)*2
-        : Profile.trophies ,
+        ? Profile.trophies +
+          (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5) * 2
+        : Profile.trophies,
     };
 
     setProfile(updatedProfile);
@@ -60,7 +61,6 @@ export default function Result() {
       console.error("Error updating trophies:", err);
     }
   };
-
 
   const [userTeam, setUserTeam] = useState(null);
   const [aiTeam, setAiTeam] = useState(null);
@@ -87,16 +87,16 @@ export default function Result() {
 
     if (foundUserTeam && foundAiTeam) {
       if (foundUserTeam.score > foundAiTeam.score) {
-        const isTournament = sessionStorage.getItem("mode");
-        if (isTournament !== "KNOCKOUT") {
-          incrementTrophies(true);
-        }
+        // const isTournament = sessionStorage.getItem("mode");
+        // if (isTournament !== "KNOCKOUT") {
+        //   incrementTrophies(true);
+        // }
         setWinner(foundUserTeam.name);
       } else if (foundAiTeam.score > foundUserTeam.score) {
-        const isTournament = sessionStorage.getItem("mode");
-        if (isTournament !== "KNOCKOUT") {
-          incrementTrophies(false);
-        }
+        // const isTournament = sessionStorage.getItem("mode");
+        // if (isTournament !== "KNOCKOUT") {
+        //   incrementTrophies(false);
+        // }
         setWinner(foundAiTeam.name);
       } else {
         setWinner("Match Tied");
@@ -795,6 +795,15 @@ export default function Result() {
                     }
                     navigate("/fixtures");
                   } else {
+
+                    if (userTeam && aiTeam) {
+                      if (userTeam?.score > aiTeam?.score) {
+                        incrementTrophies(true);
+                      } else if (aiTeam?.score > userTeam?.score) {
+                          incrementTrophies(false);
+                      }
+                    }
+
                     navigate("/");
                   }
                 }}
