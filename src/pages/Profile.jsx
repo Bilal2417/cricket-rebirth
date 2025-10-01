@@ -177,13 +177,13 @@ export default function Profile() {
             textAlign: "center",
             textTransform: "uppercase",
             cursor: "pointer",
-            fontFamily : "Rubik",
-            clipPath: "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
+            fontFamily: "Rubik , Poppins , sans-serif",
+            clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
             "& .MuiOutlinedInput-input": {
               textAlign: "center",
               fontWeight: 600,
               color: "#fff",
-              fontSize : "1.2em"
+              fontSize: "1.2em",
             },
             "& .MuiOutlinedInput-notchedOutline": { border: "none" },
           }}
@@ -223,10 +223,10 @@ export default function Profile() {
                     fill: "none",
                   },
                   "& path:first-of-type": {
-                    fill: profile?.id == profileId ? "#FFFFFF" : "#FFD700",
+                    fill: "#FFD700",
                   },
                   "& path:last-of-type": {
-                    fill: profile?.id == profileId ? "#000000" : "#DAA520",
+                    fill: "#DAA520",
                   },
                 }}
               />
@@ -242,10 +242,10 @@ export default function Profile() {
                     fill: "none",
                   },
                   "& path:first-of-type": {
-                    fill: profile?.id == profileId ? "#FFFFFF" : "#FFD700",
+                    fill: "#FFD700",
                   },
                   "& path:last-of-type": {
-                    fill: profile?.id == profileId ? "#000000" : "#DAA520",
+                    fill: "#DAA520",
                   },
                 }}
               />
@@ -261,10 +261,10 @@ export default function Profile() {
                     fill: "none",
                   },
                   "& path:first-of-type": {
-                    fill: profile?.id == profileId ? "#FFFFFF" : "#FFD700",
+                    fill: "#FFD700",
                   },
                   "& path:last-of-type": {
-                    fill: profile?.id == profileId ? "#000000" : "#DAA520",
+                    fill: "#DAA520",
                   },
                 }}
               />
@@ -289,14 +289,14 @@ export default function Profile() {
                 fontSize: "1.4em",
                 fontWeight: 900,
                 textTransform: "uppercase",
-                fontFamily: "Rubik",
+                fontFamily: "Rubik , Poppins , sans-serif",
               }}
             >
               {stat.label}
             </Typography>
             <Typography
               sx={{
-                fontFamily: "Rubik",
+                fontFamily: "Rubik , Poppins , sans-serif",
                 padding: "10px 70px",
                 backgroundColor: "#073575",
                 textAlign: "center",
@@ -305,7 +305,7 @@ export default function Profile() {
                 color: "#fff",
                 display: "flex",
                 gap: 1,
-                clipPath: "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
+                clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
               }}
             >
               {stat.icon} {stat.value}
