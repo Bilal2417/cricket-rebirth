@@ -7,6 +7,7 @@ import {
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -16,7 +17,17 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const keysToClear = ["q1", "q2", "q3", "q4", "s1", "s2", "f", "Teams","Boundary"];
+    const keysToClear = [
+      "q1",
+      "q2",
+      "q3",
+      "q4",
+      "s1",
+      "s2",
+      "f",
+      "Teams",
+      "Boundary",
+    ];
     keysToClear.forEach((key) => sessionStorage.removeItem(key));
 
     const keysToClearLocally = [
@@ -30,6 +41,7 @@ export default function Home() {
     ];
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
   }, []);
+  const Overs = localStorage.getItem("Overs");
 
   // const [name, setName] = useState("");
 
@@ -45,6 +57,17 @@ export default function Home() {
   //     })
   //     .catch((err) => console.error("Error fetching profile:", err));
   // }, []);
+
+  const showDescToast = (desc) => {
+    toast.error(desc, {
+      position: "top-right",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
 
   const profileId = localStorage.getItem("MyId");
   useEffect(() => {
@@ -70,11 +93,6 @@ export default function Home() {
 
   const mode = sessionStorage.getItem("mode");
 
-
-
-
-
-  
   return (
     <>
       <Box
@@ -242,93 +260,94 @@ export default function Home() {
                 );
               })}
 
-              {loading ? ["1", "2", "3"].map((show) => {
-                return (
-                  <Box
-                    sx={{
-                      backgroundColor: "#897689",
-                      width: "400px",
-                      paddingLeft: "15px",
-                      display: "flex",
-                      alignContent: "center",
-                      justifyContent: "space-between",
-                      border: "2px solid #000000",
-                      borderRadius: "4px",
-                      boxShadow: "inset 0px -8px 8px -4px #655b67",
-                      clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                      transition: "all 0.3s",
-                      ":hover": {
-                        cursor: "pointer",
-                        transform: "scale(1.1)",
-                      },
-                      ":active": {
-                        transform: "scale(1)",
-                      },
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontFamily: "Rubik",
-                          backgroundColor: "#6e606d",
-                          color: "#aa9ca9",
-                          padding: "4px 12px",
-                          fontWeight: 600,
-                          minWidth: "6px",
-                          minHeight: "17px",
-                        }}
-                        variant="body1"
-                      ></Typography>
-                      <Typography
-                        sx={{
-                          backgroundColor: "#6e606d",
-                          fontWeight: 600,
-                          fontFamily: "Rubik",
-                          textTransform: "uppercase",
-                          color: "#f7bb1e",
-                          minWidth: "200px",
-                          minHeight: "25px",
-                        }}
-                        variant="body1"
-                      ></Typography>
-                    </Box>
-                    <Typography
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        fontFamily: "Rubik",
-                        fontWeight: 600,
-                        backgroundColor: "#665963",
-                        padding: "10px 30px",
-                        clipPath: "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
-                        width: "60px",
-                        justifyContent: "center",
-                        color: "#897689",
-                      }}
-                      variant="body1"
-                    >
-                      <EmojiEventsTwoTone />
+              {loading
+                ? ["1", "2", "3"].map((show) => {
+                    return (
                       <Box
                         sx={{
-                          minHeight: "25px",
-                          minWidth: "50px",
                           backgroundColor: "#897689",
+                          width: "400px",
+                          paddingLeft: "15px",
+                          display: "flex",
+                          alignContent: "center",
+                          justifyContent: "space-between",
+                          border: "2px solid #000000",
+                          borderRadius: "4px",
+                          boxShadow: "inset 0px -8px 8px -4px #655b67",
+                          clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                          transition: "all 0.3s",
+                          ":hover": {
+                            cursor: "pointer",
+                            transform: "scale(1.1)",
+                          },
+                          ":active": {
+                            transform: "scale(1)",
+                          },
                         }}
-                        component="span"
-                      ></Box>
-                    </Typography>
-                  </Box>
-                );
-              }) : null}
-
-
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontFamily: "Rubik",
+                              backgroundColor: "#6e606d",
+                              color: "#aa9ca9",
+                              padding: "4px 12px",
+                              fontWeight: 600,
+                              minWidth: "6px",
+                              minHeight: "17px",
+                            }}
+                            variant="body1"
+                          ></Typography>
+                          <Typography
+                            sx={{
+                              backgroundColor: "#6e606d",
+                              fontWeight: 600,
+                              fontFamily: "Rubik",
+                              textTransform: "uppercase",
+                              color: "#f7bb1e",
+                              minWidth: "200px",
+                              minHeight: "25px",
+                            }}
+                            variant="body1"
+                          ></Typography>
+                        </Box>
+                        <Typography
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px",
+                            fontFamily: "Rubik",
+                            fontWeight: 600,
+                            backgroundColor: "#665963",
+                            padding: "10px 30px",
+                            clipPath:
+                              "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
+                            width: "60px",
+                            justifyContent: "center",
+                            color: "#897689",
+                          }}
+                          variant="body1"
+                        >
+                          <EmojiEventsTwoTone />
+                          <Box
+                            sx={{
+                              minHeight: "25px",
+                              minWidth: "50px",
+                              backgroundColor: "#897689",
+                            }}
+                            component="span"
+                          ></Box>
+                        </Typography>
+                      </Box>
+                    );
+                  })
+                : null}
             </Box>
           </Box>
           <Box>
@@ -407,7 +426,13 @@ export default function Home() {
                 },
               }}
               onClick={() => {
-                navigate("/team");
+                if (!profileId) {
+                  showDescToast("Create Profile first!");
+                } else if (!Overs) {
+                  showDescToast("Select Mode first!");
+                } else {
+                  navigate("/team");
+                }
               }}
             >
               Play

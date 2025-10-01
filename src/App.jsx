@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import Modes from "./pages/Modes";
 import Knockout from "./pages/Knockout";
 import Fixtures from "./pages/Fixtures";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           </Routes>
         </Box>
       </Router>
+      <ToastContainer/>
     </Container>
   );
 }
