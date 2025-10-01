@@ -41,7 +41,7 @@ export default function Home() {
     ];
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
   }, []);
-  const Overs = localStorage.getItem("Overs");
+  const Overs = Number(localStorage.getItem("Overs")) || 1;
 
   // const [name, setName] = useState("");
 
@@ -522,12 +522,15 @@ export default function Home() {
                   showDescToast("Create Profile first!");
                 } else if (!mode) {
                   showDescToast("Select Game Mode first!");
-                } else {
+                }else if ( userProfile?.trophies < (Overs == 100 ? 5 : Overs)){
+                  showDescToast("Not enough trophies to play this mode!");
+                } 
+                else {
                   navigate("/team");
                 }
               }}
             >
-              Play
+              Play{Overs}
             </Button>
           </Box>
         </Box>
