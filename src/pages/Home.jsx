@@ -522,7 +522,7 @@ export default function Home() {
                   showDescToast("Create Profile first!");
                 } else if (!mode) {
                   showDescToast("Select Game Mode first!");
-                }else if ( userProfile?.trophies < (Overs == 100 ? 5 : Overs)){
+                }else if ((userProfile?.trophies < (Overs == 100 ? 5 : Overs)) && mode !== "KNOCKOUT"){
                   showDescToast("Not enough trophies to play this mode!");
                 } 
                 else {
@@ -530,7 +530,7 @@ export default function Home() {
                 }
               }}
             >
-              Play{Overs}
+              Play
             </Button>
           </Box>
         </Box>
