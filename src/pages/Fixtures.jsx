@@ -61,6 +61,49 @@ export default function Fixtures() {
     // }
   }, []);
 
+  const storedProfile = sessionStorage.getItem("Profile");
+  const [Profile, setProfile] = useState(
+    storedProfile ? JSON.parse(storedProfile) : ""
+  );
+
+  const [totalWkts, setTotalWkts] = useState(null);
+
+  useEffect(() => {
+    const overs = localStorage.getItem("Overs");
+    setTotalWkts(overs ? Number(overs) : 0);
+  }, []);
+
+  const manageTournaments = async () => {
+    if (!Profile) return;
+
+    const updatedProfile = {
+      ...Profile,      
+        tournaments : Profile.tournaments + 1
+    };
+
+    setProfile(updatedProfile);
+
+    try {
+      const res = await fetch("/.netlify/functions/updateProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProfile),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setProfile(data.profile);
+        console.log(data.profile);
+        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+      } else {
+        console.error("Failed to update trophies in database");
+      }
+      navigate("/")
+    } catch (err) {
+      console.error("Error updating trophies:", err);
+    }
+  };
+
   const matchWinner = (teamA, teamB, e) => {
     const matchId = e.currentTarget.value;
     if (teamA !== userTeam?.name && teamB !== userTeam?.name) {
@@ -99,7 +142,7 @@ export default function Fixtures() {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          width : "1150px"
+          width: "1150px",
         }}
       >
         <Box
@@ -436,9 +479,9 @@ export default function Fixtures() {
             />
           </Box>
 
-          
           <Button
             sx={{
+              display: final ? "block" : "none",
               fontFamily: "Rubik",
               backgroundColor: "#f6c401",
               color: "#FFFFFF",
@@ -470,13 +513,10 @@ export default function Fixtures() {
                 transform: "scale(1.02)",
               },
             }}
-            onClick={() => {
-              navigate("/");
-            }}
+            onClick={() => final && final == semi1 ?  manageTournaments() : navigate("/")}
           >
             Finish
           </Button>
-
         </Button>
 
         <Box

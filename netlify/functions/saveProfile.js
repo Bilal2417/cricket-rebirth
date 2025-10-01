@@ -24,7 +24,7 @@ export async function handler(event) {
       CREATE TABLE IF NOT EXISTS profiles (
         id TEXT PRIMARY KEY,
         name TEXT,
-        streak INT,
+        tournaments INT,
         trophies INT,
         victories INT,
         img TEXT
@@ -38,7 +38,7 @@ export async function handler(event) {
     if (existing.rows.length === 0) {
         
       const result = await client.query(
-        `INSERT INTO profiles (id,name, streak, trophies, victories, img)
+        `INSERT INTO profiles (id,name, tournaments, trophies, victories, img)
          VALUES ($1, $2, $3, $4, $5 , $6)
          RETURNING *`,
         [profileId,"Dummy", 0, 0, 0, "/assets/img/pak.png"]

@@ -93,7 +93,7 @@ export default function Profile() {
       id: profileId,
       name: tempName || profile.name,
       img: newImg || profile.img,
-      streak: profile.streak,
+      tournaments: profile.tournaments,
       trophies: profile.trophies,
       victories: profile.victories,
     };
@@ -317,7 +317,7 @@ export default function Profile() {
             value: profile.victories,
           },
           {
-            label: "Win Streak",
+            label: "Tounaments",
             icon: (
               <WhatshotTwoTone
                 sx={{
@@ -333,7 +333,7 @@ export default function Profile() {
                 }}
               />
             ),
-            value: profile.streak,
+            value: profile.tournaments,
           },
         ].map((stat) => (
           <Box

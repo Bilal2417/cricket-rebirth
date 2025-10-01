@@ -4,7 +4,7 @@ export async function handler(event) {
   try {
     console.log("updateProfile body:", event.body);
     const body = event.body ? JSON.parse(event.body) : {};
-    const { id, name, img, streak, trophies, victories } = body;
+    const { id, name, img, tournaments, trophies, victories } = body;
 
     if (!id) {
       return {
@@ -22,10 +22,10 @@ export async function handler(event) {
 
     const result = await client.query(
       `UPDATE profiles
-       SET name=$1, img=$2, streak=$3, trophies=$4, victories=$5
+       SET name=$1, img=$2, tournaments=$3, trophies=$4, victories=$5
        WHERE id=$6
        RETURNING *`,
-      [name, img, streak, trophies, victories, id]
+      [name, img, tournaments, trophies, victories, id]
     );
 
     await client.end();
