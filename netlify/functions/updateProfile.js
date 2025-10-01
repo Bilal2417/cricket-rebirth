@@ -22,9 +22,13 @@ export async function handler(event) {
 
     const result = await client.query(
       `UPDATE profiles
-       SET name=$1, img=$2, tournaments=$3, trophies=$4, victories=$5
-       WHERE id=$6
-       RETURNING *`,
+   SET name = COALESCE($1, name),
+       img = COALESCE($2, img),
+       tournaments = COALESCE($3, tournaments),
+       trophies = COALESCE($4, trophies),
+       victories = COALESCE($5, victories)
+   WHERE id = $6
+   RETURNING *`,
       [name, img, tournaments, trophies, victories, id]
     );
 
@@ -49,5 +53,4 @@ export async function handler(event) {
       body: JSON.stringify({ success: false, error: err.message }),
     };
   }
-  
 }

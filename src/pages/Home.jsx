@@ -539,7 +539,7 @@ export default function Home() {
                 }
               }}
             >
-              Play {userProfile?.trophies}
+              Play 
             </Button>
           </Box>
         </Box>
