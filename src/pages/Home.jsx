@@ -188,7 +188,7 @@ export default function Home() {
                       transition: "all 0.3s",
                       ":hover": {
                         cursor: "pointer",
-                        transform: "scale(1.1)",
+                        transform: "scale(1.025)",
                       },
                       ":active": {
                         transform: "scale(1)",

@@ -161,7 +161,9 @@ export default function Result() {
           sx={{
             borderRadius: "12px",
             width: "100%",
+            height: "100%",
             overflow: "hidden",
+            alignContent : "center"
           }}
         >
           <Box
@@ -223,7 +225,7 @@ export default function Result() {
                 left: "47%",
               }}
             >
-              t20
+              vs
             </Typography>
             <Box
               sx={{
@@ -757,12 +759,6 @@ export default function Result() {
             </Box>
           </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              backgroundColor: "#FFFFFF",
-            }}
-          >
             <Box
               sx={{
                 backgroundColor: "#0f0648",
@@ -784,7 +780,7 @@ export default function Result() {
                   borderRadius: "8px",
                   position: "absolute",
                   top: 7,
-                  right: 10,
+                  right: 50,
                   textTransform: "uppercase",
                   ":hover": {
                     cursor: "pointer",
@@ -878,7 +874,7 @@ export default function Result() {
                 </Typography>
               )}
             </Box>
-          </Box>
+            
         </Box>
       </Box>
     </>
