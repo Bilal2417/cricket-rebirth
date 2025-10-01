@@ -1,7 +1,8 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, IconButton, Popover, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import OversThreeIcon from "../components/overIcon";
-import { EmojiEventsSharp, Security } from "@mui/icons-material";
+import { EmojiEventsSharp, Help, Security } from "@mui/icons-material";
+import { useState } from "react";
 
 export default function Modes() {
   const navigate = useNavigate();
@@ -9,20 +10,50 @@ export default function Modes() {
   const overs = [
     {
       value: 1,
+      wkt: 1,
     },
     {
       value: 3,
+      wkt: 3,
     },
     {
       value: 5,
+      wkt: 5,
     },
     {
       value: 10,
+      wkt: 10,
     },
     {
       value: 20,
+      wkt: 10,
     },
-  ];
+  ].map((over) => ({
+    ...over,
+    desc: (
+      <span>
+        This mode allows <strong>{over.wkt}</strong> wicket(s) in{" "}
+        <strong>{over.value}</strong> over(s), with{" "}
+        <strong>{Math.ceil(over.value / 2)}</strong> trophies gained or lost per
+        game.
+      </span>
+    ),
+  }));
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [popoverDesc, setPopoverDesc] = useState("");
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const handlePopoverOpen = (event, desc) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+    setPopoverDesc(desc);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setPopoverDesc("");
+  };
 
   return (
     <>
@@ -91,6 +122,33 @@ export default function Modes() {
             >
               <EmojiEventsSharp />
               Knockout
+              <IconButton
+                type="button"
+                onClick={(e) =>
+                  handlePopoverOpen(
+                    e,
+                    <span>
+                      In Tournament mode, each match is <strong>10</strong>{" "}
+                      overs with <strong>10</strong>{" "}
+                      wickets. All <strong>8</strong> teams face each other, and
+                      the <strong>undefeated team</strong> wins the tournament.
+                    </span>
+                  )
+                }
+                sx={{
+                  position: "absolute",
+                  top: -4,
+                  right: -4,
+                  width: 32,
+                  height: 32,
+                  backgroundColor: "#fa208e",
+                  color: "#fff",
+                  "&:hover": { backgroundColor: "#ff4eb0" },
+                  boxShadow: "0px 2px 5px rgba(0,0,0,0.3)",
+                }}
+              >
+                <Help sx={{ fontSize: "18px", color: "#FFFFFF" }} />
+              </IconButton>
             </Typography>
             <Typography
               sx={{
@@ -160,9 +218,39 @@ export default function Modes() {
               >
                 <OversThreeIcon value={over.value} />
                 Overs
+                <IconButton
+                  type="button"
+                  onClick={(e) => handlePopoverOpen(e, overs[index].desc)}
+                  sx={{
+                    position: "absolute",
+                    top: -4,
+                    right: -4,
+                    width: 32,
+                    height: 32,
+                    backgroundColor: "#fa208e",
+                    color: "#fff",
+                    "&:hover": { backgroundColor: "#ff4eb0" },
+                    boxShadow: "0px 2px 5px rgba(0,0,0,0.3)",
+                  }}
+                >
+                  <Help sx={{ fontSize: "18px", color: "#FFFFFF" }} />
+                </IconButton>
               </Button>
             );
           })}
+          <Popover
+            open={Boolean(anchorEl)}
+            anchorEl={anchorEl}
+            onClose={handlePopoverClose}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            transformOrigin={{ vertical: "top", horizontal: "right" }}
+            disableRestoreFocus
+          >
+            <Typography sx={{ p: 1, fontSize: "0.85em", width: "200px" }}>
+              {popoverDesc}
+            </Typography>
+          </Popover>
+
           <Button
             sx={{
               fontFamily: "Rubik",
@@ -210,6 +298,32 @@ export default function Modes() {
           >
             <Security />
             Survival
+            <IconButton
+              type="button"
+              onClick={(e) =>
+                handlePopoverOpen(
+                  e,
+                  <span>
+                    This mode allows only<strong>1</strong> wicket in{" "}
+                    <strong>unlimited</strong> overs, with <strong>5</strong>{" "}
+                    trophies gained or lost per game.
+                  </span>
+                )
+              }
+              sx={{
+                position: "absolute",
+                top: -4,
+                right: -4,
+                width: 32,
+                height: 32,
+                backgroundColor: "#fa208e",
+                color: "#fff",
+                "&:hover": { backgroundColor: "#ff4eb0" },
+                boxShadow: "0px 2px 5px rgba(0,0,0,0.3)",
+              }}
+            >
+              <Help sx={{ fontSize: "18px", color: "#FFFFFF" }} />
+            </IconButton>
           </Button>
         </Box>
       </Box>
