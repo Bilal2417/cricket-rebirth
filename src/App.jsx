@@ -22,7 +22,7 @@ function App() {
     
     const updateActivity = async () => {
       try {
-        await fetch(`/.netlify/functions/updateLastActive?profileId=${profileId}`);
+        await fetch(`/.netlify/functions/activeProfile?profileId=${profileId}`);
       } catch (err) {
         console.error("Failed to update activity:", err);
       }
