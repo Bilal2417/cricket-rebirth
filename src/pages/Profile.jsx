@@ -317,7 +317,7 @@ export default function Profile() {
             value: profile.victories,
           },
           {
-            label: "Tounaments",
+            label: "Tournaments",
             icon: (
               <WhatshotTwoTone
                 sx={{
