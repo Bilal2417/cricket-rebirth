@@ -860,15 +860,15 @@ export default function Result() {
                   {totalWkts == 100
                     ? null
                     : batting
-                    ? totalWkts - userTeam?.wicket
-                    : totalWkts - aiTeam?.wicket}{" "}
+                    ? (totalWkts == 20 ? 10 : totalWkts) - userTeam?.wicket
+                    : (totalWkts == 20 ? 10 : totalWkts) - aiTeam?.wicket}{" "}
                   {totalWkts == 100
                     ? "1 wicket"
                     : batting
-                    ? totalWkts - userTeam?.wicket == 1
+                    ? (totalWkts == 20 ? 10 : totalWkts) - userTeam?.wicket == 1
                       ? "wicket"
                       : "wickets"
-                    : totalWkts - aiTeam?.wicket == 1
+                    : (totalWkts == 20 ? 10 : totalWkts) - aiTeam?.wicket == 1
                     ? "wicket"
                     : "wickets"}
                 </Typography>
