@@ -16,7 +16,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const keysToClear = ["q1", "q2", "q3", "q4", "s1", "s2", "f", "Teams"];
+    const keysToClear = ["q1", "q2", "q3", "q4", "s1", "s2", "f", "Teams","Boundary"];
     keysToClear.forEach((key) => sessionStorage.removeItem(key));
 
     const keysToClearLocally = [

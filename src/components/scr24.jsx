@@ -36,16 +36,14 @@ export default function ScoreCard24() {
   //   },
   // ];
 
-
   const choice = [
-  { value: 0, weight: 0.10 },
-  { value: 1, weight: 0.21 },
-  { value: 2, weight: 0.20 },
-  { value: 3, weight: 0.12 },
-  { value: 4, weight: 0.20 },
-  { value: 6, weight: 0.17 },
-];
-
+    { value: 0, weight: 0.1 },
+    { value: 1, weight: 0.21 },
+    { value: 2, weight: 0.2 },
+    { value: 3, weight: 0.12 },
+    { value: 4, weight: 0.2 },
+    { value: 6, weight: 0.17 },
+  ];
 
   const [over, setOver] = useState(0);
   const [totalOvers, setTotalOvers] = useState(() => {
@@ -68,7 +66,7 @@ export default function ScoreCard24() {
   const [show, setShow] = useState(0);
 
   const [batting, setBatting] = useState(null);
-  
+
   const [battingWicket, setBattingWicket] = useState(0);
   const [firstInnings, setFirstInnings] = useState(() => {
     return Number(localStorage.getItem("FirstInnings")) || 1;
@@ -208,11 +206,40 @@ export default function ScoreCard24() {
     }
   }
 
+  const [isSix, setIsSix] = useState(() => {
+    return Number(localStorage.getItem("Boundary")) || 0;
+  });
+
   const scoreDecision = (userRun) => {
-    const aiChoice = weightedRandom(choice);
-    // const aiChoice = choice[Math.floor(Math.random() * choice.length)].value;
-    console.log(aiChoice)
-    const isWicket = userRun == aiChoice;
+    if (balls == 5) {
+      setIsSix(0);
+      sessionStorage.setItem("Boundary", 0);
+    }
+    
+    console.log(balls);
+    let aiChoice;
+    let isWicket = false;
+
+    if (batting) {
+      for (let i = 0; i <= isSix; i++) {
+        aiChoice = weightedRandom(choice);
+        if (aiChoice === userRun) {
+          isWicket = true;
+          break;
+        }
+        console.log(aiChoice, "aiChoice");
+      }
+      if ((userRun == 6 || userRun == "6") && !isWicket) {
+        setIsSix((prev) => prev + 1);
+        sessionStorage.setItem("Boundary", isSix + 1);
+      }
+    } else {
+      setIsSix(0);
+      sessionStorage.setItem("Boundary", 0);
+      aiChoice = weightedRandom(choice);
+      console.log(aiChoice, "aiBatting");
+      isWicket = userRun == aiChoice;
+    }
 
     if (!isWicket) {
       setPartnership((prev) => prev + (batting ? userRun : aiChoice));
@@ -299,24 +326,21 @@ export default function ScoreCard24() {
           }),
         };
       }
-      
+
       return team;
     });
 
     setTeams(updatedTeams);
     localStorage.setItem("cricketData", JSON.stringify(updatedTeams));
 
-    
     const newUserTeam = updatedTeams.find((t) => t.name === user) || null;
     const newAiTeam = updatedTeams.find((t) => t.name === ai) || null;
     setUserTeam(newUserTeam);
     setAiTeam(newAiTeam);
 
-    
     const teamBatting = batting ? newUserTeam : newAiTeam;
     setStriker(teamBatting.players.find((p) => p.name === striker.name));
     setNonStriker(teamBatting.players.find((p) => p.name === nonStriker.name));
-
 
     const updatedBowler =
       updatedTeams
@@ -327,28 +351,25 @@ export default function ScoreCard24() {
 
     if (Wicket) {
       const teamBatting = updatedTeams.find((t) => t.name === battingTeam);
-      const nextBatterIndex = teamBatting.wicket + 1; 
+      const nextBatterIndex = teamBatting.wicket + 1;
 
       setPartnership(0);
       setPartnershipBalls(0);
 
-      
       if (
         teamBatting?.wicket + (Wicket ? 1 : 0) <=
         (totalOvers == 100 ? 1 : totalOvers == 20 ? 10 : totalOvers) //used as total wickets
       ) {
         const nextBatter = teamBatting.players[nextBatterIndex];
 
-        
         const updatedPlayers = teamBatting.players.map((p, i) => ({
           ...p,
-          striker: i === nextBatterIndex, 
+          striker: i === nextBatterIndex,
           notout: i === nextBatterIndex ? true : p.notout && !p.out,
         }));
 
         setStriker(nextBatter);
 
-        
         teamBatting.players = updatedPlayers;
       } else {
         const latestBattingTeam = batting ? userTeam : aiTeam;
@@ -375,7 +396,6 @@ export default function ScoreCard24() {
       const candidate =
         bowlersList[Math.floor(Math.random() * bowlersList.length)];
 
-        
       if (
         candidate.name !== randomBowler?.name &&
         candidate.overs < totalOvers / 5
@@ -503,9 +523,27 @@ export default function ScoreCard24() {
     );
   }
 
+  const displayValue = (isSix) => {
+    switch (isSix) {
+      case 0:
+        return "Normal";
+      case 1:
+        return "High";
+      case 2:
+        return "Very High";
+      case 3:
+        return "Extreme";
+      case 4:
+        return "Massive";
+      case 5:
+        return "Legendary";
+      default:
+        return "";
+    }
+  };
+
   return (
     <>
-    
       <Box
         sx={{
           width: "100%",
@@ -513,7 +551,7 @@ export default function ScoreCard24() {
           minHeight: "50px",
           display: "flex",
           justifyContent: "center",
-          padding : { xs : "0 300px" , md : "0"}
+          padding: { xs: "0 300px", md: "0" },
         }}
       >
         <Box
@@ -847,8 +885,32 @@ export default function ScoreCard24() {
             width: "220px",
             minHeight: "40px",
             padding: "10px 15px",
+            position : "relative"
           }}
         >
+          <Typography variant="body1" sx={{
+            color : "#e7d58d",
+            textTransform : "uppercase",
+            fontFamily : "Poppins ,sans-serif , Rubik",
+            position : "absolute",
+            top : "-50px",
+            left : 0,
+            fontSize : "0.8em",
+            backgroundColor : "#0f0648",
+            padding : "10px 20px",
+            borderRadius : "12px"
+          }}>
+            wkt % : {" "}
+            {{
+              0: "Normal",
+              1: "High",
+              2: "Higher",
+              3: "Extreme",
+              4: "Massive",
+              5: "Legendary",
+            }[isSix] || ""}
+          </Typography>
+
           <Box
             sx={{
               display: "flex",
@@ -966,6 +1028,7 @@ export default function ScoreCard24() {
             ))}
           </Box>
         </Box>
+
         <Box
           sx={{
             alignContent: "center",
@@ -990,7 +1053,7 @@ export default function ScoreCard24() {
           gap: "10px",
           justifyContent: "center",
           margin: "50px",
-          padding : { xs : "0 600px" , md : "0"}
+          padding: { xs: "0 600px", md: "0" },
         }}
       >
         {choice.map((opt, index) => {
