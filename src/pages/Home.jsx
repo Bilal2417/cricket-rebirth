@@ -212,6 +212,7 @@ export default function Home() {
                             profile?.id == profileId ? "#ffc73e" : "#aa9ca9",
                           padding: "4px 12px",
                           fontWeight: 600,
+                          width : "11px"
                         }}
                         variant="body1"
                       >
