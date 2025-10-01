@@ -11,7 +11,7 @@ export async function handler() {
 
     const result = await client.query(`
   SELECT id, name, trophies,
-         (NOW() - last_active) < interval '5 minutes' AS is_active
+         (NOW() - last_active) < interval '1 minutes' AS is_active
   FROM profiles
   ORDER BY trophies DESC
 `);
