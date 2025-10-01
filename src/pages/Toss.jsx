@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Toss() {
@@ -11,8 +11,8 @@ export default function Toss() {
   const handleToss = (choice) => {
     const coinFlip = Math.random() < 0.5 ? "Heads" : "Tails";
     const winner = coinFlip === choice ? "user" : "ai";
-    const isTournament = sessionStorage.getItem("mode")
-    if(isTournament !== "KNOCKOUT"){
+    const isTournament = sessionStorage.getItem("mode");
+    if (isTournament !== "KNOCKOUT") {
       decrementTrophies();
     }
 
@@ -37,12 +37,17 @@ export default function Toss() {
     window.location.reload();
   };
 
-  const totalWkts = localStorage.getItem("Overs");
-
   const storedProfile = sessionStorage.getItem("Profile");
   const [Profile, setProfile] = useState(
     storedProfile ? JSON.parse(storedProfile) : ""
   );
+
+  const [totalWkts, setTotalWkts] = useState(null);
+
+  useEffect(() => {
+    const overs = localStorage.getItem("Overs");
+    setTotalWkts(overs);
+  }, []);
 
   const decrementTrophies = async () => {
     if (!Profile) return;
@@ -50,8 +55,7 @@ export default function Toss() {
     const updatedProfile = {
       ...Profile,
       trophies:
-        Profile.trophies -
-        (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5),
+        Profile.trophies - (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5),
     };
 
     setProfile(updatedProfile);

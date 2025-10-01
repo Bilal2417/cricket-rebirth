@@ -91,7 +91,12 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, []);
 
-  const mode = sessionStorage.getItem("mode");
+  const [mode, setMode] = useState(null);
+
+  useEffect(() => {
+    const selectMode = localStorage.getItem("mode");
+    setMode(selectMode);
+  }, []);
 
   return (
     <>
@@ -236,7 +241,6 @@ export default function Home() {
                         width: "60px",
                         justifyContent: "center",
                         color: "#f7bb1e",
-                        minWidth : "100px"
                       }}
                       variant="body1"
                     >
@@ -255,14 +259,16 @@ export default function Home() {
                           },
                         }}
                       />
-                      {profile?.trophies}
+                      <Box sx={{ minWidth: "30px" , textAlign : "center" }} component="span">
+                        {profile?.trophies}
+                      </Box>
                     </Typography>
                   </Box>
                 );
               })}
 
               {loading
-                ? ["1", "2", "3"].map((show) => {
+                ? ["1", "2", "3"].map(() => {
                     return (
                       <Box
                         sx={{
@@ -429,7 +435,7 @@ export default function Home() {
               onClick={() => {
                 if (!profileId) {
                   showDescToast("Create Profile first!");
-                } else if (!Overs) {
+                } else if (!mode) {
                   showDescToast("Select Mode first!");
                 } else {
                   navigate("/team");

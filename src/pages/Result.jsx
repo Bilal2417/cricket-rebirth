@@ -15,7 +15,6 @@ export default function Result() {
       return false;
     }
   });
-  const totalWkts = localStorage.getItem("Overs");
 
   const navigate = useNavigate();
   const storedData = localStorage.getItem("cricketData");
@@ -28,6 +27,13 @@ export default function Result() {
   const [Profile, setProfile] = useState(
     storedProfile ? JSON.parse(storedProfile) : ""
   );
+
+  const [totalWkts, setTotalWkts] = useState(null);
+
+  useEffect(() => {
+    const overs = localStorage.getItem("Overs");
+    setTotalWkts(overs);
+  }, []);
 
   const incrementTrophies = async (inc = true) => {
     if (!Profile) return;
