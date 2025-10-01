@@ -239,7 +239,7 @@ export default function Profile() {
             label="New Name"
             fullWidth
             value={tempName}
-            inputProps={{ maxLength: 10 }}
+            inputProps={{ maxLength: 12 }}
             onChange={(e) => setTempName(e.target.value)}
             error={
               tempName.length > 0 &&

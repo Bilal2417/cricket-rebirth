@@ -41,7 +41,19 @@ export default function Home() {
     ];
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
   }, []);
-  const Overs = Number(localStorage.getItem("Overs")) || 1;
+
+  const [overs, setOvers] = useState(() =>
+    Number(localStorage.getItem("Overs"))
+  );
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setOvers(Number(localStorage.getItem("Overs")));
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   // const [name, setName] = useState("");
 
@@ -93,7 +105,7 @@ export default function Home() {
   // }, []);
 
   useEffect(() => {
-    const fetchProfiles = async() => {
+    const fetchProfiles = async () => {
       fetch("/.netlify/functions/getProfile")
         .then((res) => res.json())
         .then((data) => {
@@ -114,48 +126,43 @@ export default function Home() {
         .finally(() => setLoading(false));
     };
 
-    
     fetchProfiles();
 
-    
     const interval = setInterval(fetchProfiles, 10000);
 
     return () => clearInterval(interval);
   }, [profileId]);
 
+  // useEffect(() => {
+  //   const fetchProfiles = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const res = await fetch("/.netlify/functions/getProfile");
+  //       const data = await res.json();
 
-// useEffect(() => {
-//   const fetchProfiles = async () => {
-//     try {
-//       setLoading(true);
-//       const res = await fetch("/.netlify/functions/getProfile");
-//       const data = await res.json();
+  //       if (data?.success && data.profiles) {
+  //         setProfiles(data.profiles);
 
-//       if (data?.success && data.profiles) {
-//         setProfiles(data.profiles);
+  //         const matchedProfile = data.profiles.find(
+  //           (profile) => profile.id === profileId
+  //         );
 
-//         const matchedProfile = data.profiles.find(
-//           (profile) => profile.id === profileId
-//         );
+  //         if (matchedProfile) {
+  //           setUserProfile(matchedProfile);
+  //           sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+  //         }
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching profiles:", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-//         if (matchedProfile) {
-//           setUserProfile(matchedProfile);
-//           sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
-//         }
-//       }
-//     } catch (err) {
-//       console.error("Error fetching profiles:", err);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   fetchProfiles();
-//   const interval = setInterval(fetchProfiles, 10000);
-//   return () => clearInterval(interval);
-// }, [profileId]);
-
-
+  //   fetchProfiles();
+  //   const interval = setInterval(fetchProfiles, 10000);
+  //   return () => clearInterval(interval);
+  // }, [profileId]);
 
   const [mode, setMode] = useState(null);
 
@@ -522,15 +529,17 @@ export default function Home() {
                   showDescToast("Create Profile first!");
                 } else if (!mode) {
                   showDescToast("Select Game Mode first!");
-                }else if ((userProfile?.trophies < (Overs == 100 ? 5 : Overs)) && mode !== "KNOCKOUT"){
+                } else if (
+                  userProfile?.trophies < (overs == 100 ? 5 : Math.ceil(overs/2)) &&
+                  mode !== "KNOCKOUT"
+                ) {
                   showDescToast("Not enough trophies to play this mode!");
-                } 
-                else {
+                } else {
                   navigate("/team");
                 }
               }}
             >
-              Play
+              Play {userProfile?.trophies}
             </Button>
           </Box>
         </Box>
