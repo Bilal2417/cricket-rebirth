@@ -236,6 +236,7 @@ export default function Home() {
                         width: "60px",
                         justifyContent: "center",
                         color: "#f7bb1e",
+                        minWidth : "150px"
                       }}
                       variant="body1"
                     >
