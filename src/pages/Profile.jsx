@@ -178,7 +178,7 @@ export default function Profile() {
             textTransform: "uppercase",
             cursor: "pointer",
             fontFamily: "Rubik , Poppins , sans-serif",
-            clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
+            clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
             "& .MuiOutlinedInput-input": {
               textAlign: "center",
               fontWeight: 600,
@@ -191,21 +191,70 @@ export default function Profile() {
       </Box>
 
       {/* Change Name Dialog */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Change Name</DialogTitle>
+      <Dialog
+        PaperProps={{
+          sx: {
+            backgroundColor: "transparent",
+            boxShadow: "none",
+          },
+        }}
+        BackdropProps={{
+          sx: { backgroundColor: "rgba(0,0,0,0.5)" },
+        }}
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle
+          sx={{ color: "#FFFFFF", textAlign: "center", fontWeight: 600 }}
+        >
+          Change Name
+        </DialogTitle>
         <DialogContent>
           <TextField
+            sx={{
+              boxShadow: `
+      inset 0px -8px 8px -4px #ffffff,   
+      inset 0px 8px 8px -4px #c6cbda       
+    `,
+              backgroundColor: "#FFFFFF",
+              borderRadius: "8px",
+            }}
             autoFocus
             margin="dense"
             label="New Name"
             fullWidth
             value={tempName}
+            inputProps={{ maxLength: 10 }}
             onChange={(e) => setTempName(e.target.value)}
+            error={
+              tempName.length > 0 &&
+              (tempName.length < 3 || tempName.length > 10)
+            }
+            helperText={
+              tempName.length > 0 && tempName.length < 3
+                ? "Name must be at least 3 characters"
+                : tempName.length > 10
+                ? "Name cannot exceed 10 characters"
+                : ""
+            }
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={() => handleSave()} variant="contained">
+          <Button
+            onClick={() => handleSave()}
+            sx={{
+              backgroundColor: "#0174fe",
+              color: "#FFFFFF",
+              fontFamily: "sans-serif",
+              width: "100%",
+              clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+              boxShadow: `
+      inset 0px -8px 8px -4px #0248df,   
+      inset 0px 8px 8px -4px #009aff       
+    `,
+            }}
+            disabled={tempName.length < 3 || tempName.length > 10}
+          >
             Save
           </Button>
         </DialogActions>
@@ -305,7 +354,7 @@ export default function Profile() {
                 color: "#fff",
                 display: "flex",
                 gap: 1,
-                clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
+                clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
               }}
             >
               {stat.icon} {stat.value}

@@ -69,6 +69,12 @@ export default function Home() {
   }, []);
 
   const mode = sessionStorage.getItem("mode");
+
+
+
+
+
+  
   return (
     <>
       <Box
