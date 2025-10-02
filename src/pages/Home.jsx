@@ -339,8 +339,8 @@ export default function Home() {
                         fontWeight: 600,
                         backgroundColor:
                           profile?.id == profileId ? "#dc5425" : "#665963",
-                        padding: "40px 30px",
-                        clipPath: "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
+                        padding: "20px 30px",
+                        clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)",
                         width: "60px",
                         justifyContent: "center",
                         color: "#f7bb1e",
