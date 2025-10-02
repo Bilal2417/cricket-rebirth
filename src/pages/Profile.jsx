@@ -58,7 +58,7 @@ export default function Profile() {
         }
       })
       .catch((err) => console.error("Error fetching profile:", err))
-      .finally(() => setLoading(false));
+      // .finally(() => setLoading(false));
   }, []);
 
   const handleOpen = () => {
