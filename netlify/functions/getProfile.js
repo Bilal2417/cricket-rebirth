@@ -11,7 +11,8 @@ export async function handler() {
 
     const result = await client.query(`
   SELECT id, name, trophies,
-         (NOW() - last_active) < interval '1 minutes' AS is_active
+         (NOW() - last_active) < interval '1 minutes' AS is_active,
+         COALESCE(img, '/assets/img/pak.png') AS img
   FROM profiles
   ORDER BY trophies DESC
 `);
@@ -27,8 +28,7 @@ export async function handler() {
       statusCode: 500,
       body: JSON.stringify({ success: false, error: err.message }),
     };
+  } finally {
+    await client.end();
   }
-  finally {
-  await client.end();
-}
 }

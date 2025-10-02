@@ -105,7 +105,7 @@ export default function Home() {
   // }, []);
 
   useEffect(() => {
-    const fetchProfiles = async () => {
+    const fetchProfiles =  () => {
       fetch("/.netlify/functions/getProfile")
         .then((res) => res.json())
         .then((data) => {
