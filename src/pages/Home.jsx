@@ -204,21 +204,7 @@ export default function Home() {
           }}
           onClick={() => navigate("/profile")}
         >
-                  <Box
-                    component="img"
-                    src={profiles[0]?.img}
-                    alt={profiles[0]?.name}
-                    sx={{
-                      width: 120,
-                      height: 120,
-                      border: "4px solid #000",
-                      borderRadius: 2,
-                      objectFit: "cover",
-                      "&:hover": { cursor: "pointer" },
-                    }}
-                    // onClick={handleImageClick}
-                  />
-          {/* <Person sx={{ color: "#FFFFFF" }} /> */}
+          <Person sx={{ color: "#FFFFFF" }} />
         </Box>
 
         <Box
@@ -304,6 +290,20 @@ export default function Home() {
                       >
                         {index + 1}
                       </Typography>
+                      <Box
+                        component="img"
+                        src={profile?.img}
+                        alt={profile?.name}
+                        sx={{
+                          width: 120,
+                          height: 120,
+                          border: "4px solid #000",
+                          borderRadius: 2,
+                          objectFit: "cover",
+                          "&:hover": { cursor: "pointer" },
+                        }}
+                        // onClick={handleImageClick}
+                      />
                       <Typography
                         sx={{
                           fontWeight: 600,
@@ -544,7 +544,8 @@ export default function Home() {
                 } else if (!mode) {
                   showDescToast("Select Game Mode first!");
                 } else if (
-                  userProfile?.trophies < (overs == 100 ? 5 : Math.ceil(overs/2)) &&
+                  userProfile?.trophies <
+                    (overs == 100 ? 5 : Math.ceil(overs / 2)) &&
                   mode !== "KNOCKOUT"
                 ) {
                   showDescToast("Not enough trophies to play this mode!");
@@ -553,7 +554,7 @@ export default function Home() {
                 }
               }}
             >
-              Play 
+              Play
             </Button>
           </Box>
         </Box>
