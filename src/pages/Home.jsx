@@ -335,7 +335,7 @@ export default function Home() {
                             : "#514e4e",
                           borderRadius: "50%",
                           position: "absolute",
-                          top: 12,
+                          top: 5,
                           left: 30,
                         }}
                       />

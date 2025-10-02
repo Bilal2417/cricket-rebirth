@@ -48,15 +48,15 @@ export default function Selection() {
               textAlign: "center",
             }}
             onClick={() => {
-              AiTeamSelection(team.name);
+              AiTeamSelection(team?.name);
             }}
           >
             <img
-              src={team.flag}
-              alt={team.name}
+              src={team?.flag}
+              alt={team?.name}
               style={{
-                width: "100%",      // responsive scaling
-                maxWidth: "120px",  // prevent oversized
+                width: "100%",      
+                maxWidth: "120px",  
                 height: "auto",
                 borderRadius: "6px",
                 boxShadow: "3px 3px 8px -2px #000000",
