@@ -352,7 +352,7 @@ export default function Home() {
                         fontWeight: 600,
                         backgroundColor:
                           profile?.id == profileId ? "#dc5425" : "#665963",
-                        padding: "20px 30px",
+                        padding: "15px 30px",
                         clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)",
                         width: "60px",
                         justifyContent: "center",
@@ -386,7 +386,7 @@ export default function Home() {
                 );
               })}
 
-              {loading
+              {!loading
                 ? ["1", "2", "3"].map((index) => {
                     return (
                       <Box
