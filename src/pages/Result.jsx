@@ -37,9 +37,9 @@ export default function Result() {
     const overs = localStorage.getItem("Overs");
     setTotalWkts(overs ? Number(overs) : 0);
   }, []);
-  const [draw, setDraw] = useState(2);
+  // const [draw, setDraw] = useState(2);
 
-  const incrementTrophies = async (inc = true) => {
+  const incrementTrophies = async (inc = true , draw) => {
     if (!Profile) return;
 
     const updatedProfile = {
@@ -814,13 +814,11 @@ export default function Result() {
                   navigate("/fixtures");
                 } else {
                   if (userTeam?.score > aiTeam?.score) {
-                    setDraw(2);
-                    await incrementTrophies(true);
+                    await incrementTrophies(true  ,2);
                   } else if (aiTeam?.score > userTeam?.score) {
-                    await incrementTrophies(false);
-                  } else {
-                    setDraw(1);
-                    await incrementTrophies(true);
+                    await incrementTrophies(false , 0);
+                  } else {                    
+                    await incrementTrophies(true , 1);
                   }
                 }
 

@@ -30,7 +30,7 @@ export default function Selection() {
   return (
     <Box sx={{ p: 2 }}>
       <Grid container spacing={2} justifyContent="center">
-        {teams.map((team, index) => (
+        {teams?.map((team, index) => (
           <Grid
             item
             key={index}
