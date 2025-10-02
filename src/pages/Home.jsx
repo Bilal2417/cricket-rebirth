@@ -8,8 +8,21 @@ import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { keyframes } from "@emotion/react"
 
 export default function Home() {
+
+
+
+  const shimmer = keyframes`
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+`;
+
   const navigate = useNavigate();
 
   const [profiles, setProfiles] = useState([]);
@@ -105,7 +118,7 @@ export default function Home() {
   // }, []);
 
   useEffect(() => {
-    const fetchProfiles =  () => {
+    const fetchProfiles = () => {
       fetch("/.netlify/functions/getProfile")
         .then((res) => res.json())
         .then((data) => {
@@ -374,9 +387,10 @@ export default function Home() {
               })}
 
               {loading
-                ? ["1", "2", "3"].map(() => {
+                ? ["1", "2", "3"].map((index) => {
                     return (
                       <Box
+                        key={index}
                         sx={{
                           backgroundColor: "#897689",
                           width: "400px",
@@ -388,13 +402,18 @@ export default function Home() {
                           borderRadius: "4px",
                           boxShadow: "inset 0px -8px 8px -4px #655b67",
                           clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                          transition: "all 0.3s",
-                          ":hover": {
-                            cursor: "pointer",
-                            transform: "scale(1.1)",
-                          },
-                          ":active": {
-                            transform: "scale(1)",
+                          position: "relative",
+                          overflow: "hidden",
+                          "&::after": {
+                            content: '""',
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            height: "100%",
+                            width: "100%",
+                            background:
+                              "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%)",
+                            animation: `${shimmer} 1.5s infinite`,
                           },
                         }}
                       >
