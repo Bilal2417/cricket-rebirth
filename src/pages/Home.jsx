@@ -204,7 +204,21 @@ export default function Home() {
           }}
           onClick={() => navigate("/profile")}
         >
-          <Person sx={{ color: "#FFFFFF" }} />
+                  <Box
+                    component="img"
+                    src={profiles[0]?.img}
+                    alt="profile"
+                    sx={{
+                      width: 120,
+                      height: 120,
+                      border: "4px solid #000",
+                      borderRadius: 2,
+                      objectFit: "cover",
+                      "&:hover": { cursor: "pointer" },
+                    }}
+                    // onClick={handleImageClick}
+                  />
+          {/* <Person sx={{ color: "#FFFFFF" }} /> */}
         </Box>
 
         <Box
