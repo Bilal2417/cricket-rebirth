@@ -207,7 +207,7 @@ export default function Home() {
                   <Box
                     component="img"
                     src={profiles[0]?.img}
-                    alt="profile"
+                    alt={profiles[0]?.name}
                     sx={{
                       width: 120,
                       height: 120,
