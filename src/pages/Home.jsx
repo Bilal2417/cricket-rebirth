@@ -295,10 +295,10 @@ export default function Home() {
                         src={profile?.img}
                         alt={profile?.name}
                         sx={{
-                          width: 120,
-                          height: 120,
-                          border: "4px solid #000",
-                          borderRadius: 2,
+                          width: 45,
+                          height: 45,
+                          border: "2px solid #000",
+                          borderRadius: "4px",
                           objectFit: "cover",
                           "&:hover": { cursor: "pointer" },
                         }}
@@ -325,7 +325,7 @@ export default function Home() {
                             : "#514e4e",
                           borderRadius: "50%",
                           position: "absolute",
-                          top: 2,
+                          top: 12,
                           left: 30,
                         }}
                       />
@@ -339,7 +339,7 @@ export default function Home() {
                         fontWeight: 600,
                         backgroundColor:
                           profile?.id == profileId ? "#dc5425" : "#665963",
-                        padding: "10px 20px",
+                        padding: "40px 30px",
                         clipPath: "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
                         width: "60px",
                         justifyContent: "center",
