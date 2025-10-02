@@ -353,7 +353,7 @@ export default function Home() {
                         clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)",
                         width: "60px",
                         justifyContent: "center",
-                        color: "#f7bb1e",
+                        color: "rgb(255 196 107)",
                       }}
                       variant="body1"
                     >
@@ -368,7 +368,7 @@ export default function Home() {
                           },
                           "& path:last-of-type": {
                             fill:
-                              profile?.id == profileId ? "#000000" : "#DAA520",
+                              profile?.id == profileId ? "rgb(255 196 107)" : "#DAA520",
                           },
                         }}
                       />
