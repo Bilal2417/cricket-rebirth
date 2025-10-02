@@ -19,6 +19,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { toast } from "react-toastify";
+import LoadingPage from "../components/loading";
 
 export default function Profile() {
   const location = useLocation();
@@ -35,7 +36,8 @@ export default function Profile() {
   const [open, setOpen] = useState(false);
   const [tempName, setTempName] = useState("");
 
-  // Fetch profile on page load
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetch(`/.netlify/functions/saveProfile?profileId=${profileId}`)
       .then((res) => res.json())
@@ -47,9 +49,12 @@ export default function Profile() {
           };
           setProfile(profileData);
           setName(profileData.name);
+
+          showDescToast("Profile Created Successfully !!");
         }
       })
-      .catch((err) => console.error("Error fetching profile:", err));
+      .catch((err) => console.error("Error fetching profile:", err))
+      .finally(() => setLoading(false));
   }, []);
 
   // Background styling
@@ -60,25 +65,22 @@ export default function Profile() {
     }
   }, [location]);
 
-  
   const handleOpen = () => {
     setTempName(name);
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
 
-  
-    const showDescToast = (desc) => {
-      toast.success(desc, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-    };
-
+  const showDescToast = (desc) => {
+    toast.success(desc, {
+      position: "top-right",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
 
   const handleSave = async (newImg) => {
     if (!profile) return;
@@ -86,8 +88,8 @@ export default function Profile() {
     const id = localStorage.getItem("MyId");
     if (!id) return console.error("No profile ID found");
 
-    showDescToast("Profile Created Successfully !!")
-    
+    showDescToast("Profile Updated Successfully !!");
+
     const updatedProfile = {
       ...profile,
       id: profileId,
@@ -133,7 +135,7 @@ export default function Profile() {
     reader.readAsDataURL(file);
   };
 
-  if (!profile) return null; // loading
+  if (!profile) return <LoadingPage loading={loading} />;
 
   return (
     <Box sx={{ width: "fit-content", margin: "auto" }}>
