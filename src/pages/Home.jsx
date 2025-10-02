@@ -289,9 +289,9 @@ export default function Home() {
                         sx={{
                           fontFamily: "Rubik",
                           backgroundColor:
-                            profile?.id == profileId ? "#ffa800" : "#6e606d",
+                            profile?.id == profileId ? "rgb(255 168 0)" : "#6e606d",
                           color:
-                            profile?.id == profileId ? "#ffc73e" : "#aa9ca9",
+                            profile?.id == profileId ? "rgb(255 196 107)" : "#aa9ca9",
                           padding: "4px 12px",
                           fontWeight: 600,
                           width: "11px",
@@ -319,7 +319,7 @@ export default function Home() {
                           fontWeight: 600,
                           fontFamily: "Rubik",
                           textTransform: "uppercase",
-                          color: "#f7bb1e",
+                          color: "rgb(255 196 107)",
                         }}
                         variant="body1"
                       >
