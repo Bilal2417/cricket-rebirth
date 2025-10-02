@@ -2,6 +2,7 @@ import { Box, Button, CircularProgress, Fade, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Data from "./data";
 import { useNavigate } from "react-router-dom";
+import LoadingPage from "./loading";
 
 export default function ScoreCard24() {
   const storedData = localStorage.getItem("cricketData");
@@ -506,41 +507,9 @@ export default function ScoreCard24() {
 
   if (loading) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress sx={{ color: "#FFFFFF" }} />
-        <Typography sx={{ mt: 2, color: "#FFFFFF", fontFamily: "Rubik" }}>
-          Loading page...
-        </Typography>
-      </Box>
+      <LoadingPage loading={loading}/>
     );
   }
-
-  const displayValue = (isSix) => {
-    switch (isSix) {
-      case 0:
-        return "Normal";
-      case 1:
-        return "High";
-      case 2:
-        return "Very High";
-      case 3:
-        return "Extreme";
-      case 4:
-        return "Massive";
-      case 5:
-        return "Legendary";
-      default:
-        return "";
-    }
-  };
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { Box, Grow, Typography } from "@mui/material";
+import { Box, Button, Grow, Typography } from "@mui/material";
 import Data from "../components/data";
 import { useEffect, useState } from "react";
 import Batting from "../components/batting";
@@ -18,6 +18,9 @@ export default function Result() {
 
   const navigate = useNavigate();
   const storedData = localStorage.getItem("cricketData");
+
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [Teams, setTeams] = useState(
     storedData ? JSON.parse(storedData) : Data
@@ -772,7 +775,7 @@ export default function Result() {
               position: "relative",
             }}
           >
-            <Box
+            <Button
               sx={{
                 fontFamily: "Rubik",
                 color: "#FFFFFF",
@@ -783,21 +786,28 @@ export default function Result() {
                 top: 7,
                 right: 50,
                 textTransform: "uppercase",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 ":hover": {
-                  cursor: "pointer",
-                  backgroundColor: "#db1d7d",
+                  cursor: buttonDisabled ? "not-allowed" : "pointer",
+                  backgroundColor: buttonDisabled ? "#fa208e" : "#db1d7d",
                   transition: "all 0.3s",
                 },
               }}
-              onClick={() => {
+              disabled={buttonDisabled}
+              onClick={async () => {
+                setButtonDisabled(true); // disable immediately
+                setLoading(true); // show loading
+
                 const isTournament = sessionStorage.getItem("mode");
-                if (isTournament == "KNOCKOUT") {
+
+                if (isTournament === "KNOCKOUT") {
                   const id = sessionStorage.getItem("lastMatchId");
-                  if (winner == "Match Tied") {
+                  if (winner === "Match Tied") {
                     const tieBreaker =
                       Math.random() < 0.5 ? userTeam?.name : aiTeam?.name;
                     sessionStorage.setItem(id, tieBreaker);
-                    
                   } else {
                     sessionStorage.setItem(id, winner);
                   }
@@ -805,18 +815,25 @@ export default function Result() {
                 } else {
                   if (userTeam?.score > aiTeam?.score) {
                     setDraw(2);
-                    incrementTrophies(true);
+                    await incrementTrophies(true);
                   } else if (aiTeam?.score > userTeam?.score) {
-                    incrementTrophies(false);
+                    await incrementTrophies(false);
                   } else {
                     setDraw(1);
-                    incrementTrophies(true);
+                    await incrementTrophies(true);
                   }
                 }
+
+                setLoading(false); // done loading
               }}
             >
-              next
-            </Box>
+              {loading ? (
+                <CircularProgress size={20} sx={{ color: "#fff" }} />
+              ) : (
+                "Next"
+              )}
+            </Button>
+
             <Typography
               sx={{
                 fontFamily: "Rubik",

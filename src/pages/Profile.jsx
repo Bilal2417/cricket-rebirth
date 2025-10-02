@@ -39,6 +39,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const isFirstVisit = !localStorage.getItem("ProfileVisited");
     fetch(`/.netlify/functions/saveProfile?profileId=${profileId}`)
       .then((res) => res.json())
       .then((data) => {
@@ -49,21 +50,16 @@ export default function Profile() {
           };
           setProfile(profileData);
           setName(profileData.name);
-
-          showDescToast("Profile Created Successfully !!");
+          if (isFirstVisit) {
+            showDescToast("Profile Created Successfully !!");
+            localStorage.setItem("ProfileVisited", "true");
+          }
         }
       })
       .catch((err) => console.error("Error fetching profile:", err))
       .finally(() => setLoading(false));
   }, []);
 
-  // Background styling
-  useEffect(() => {
-    if (location.pathname === "/profile") {
-      document.body.style.background =
-        "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
-    }
-  }, [location]);
 
   const handleOpen = () => {
     setTempName(name);
