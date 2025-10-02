@@ -4,16 +4,13 @@ import {
   HighlightOff,
   Person,
 } from "@mui/icons-material";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { keyframes } from "@emotion/react"
+import { keyframes } from "@emotion/react";
 
 export default function Home() {
-
-
-
   const shimmer = keyframes`
   0% {
     background-position: -400px 0;
@@ -530,11 +527,11 @@ export default function Home() {
                 backgroundColor: "#f6c401",
                 color: "#FFFFFF",
                 textShadow: `
-          -1px -1px 0 #000,  
-           1px -1px 0 #000,
-          -1px  1px 0 #000,
-           2px  1.5px 0 #000
-        `,
+      -1px -1px 0 #000,  
+       1px -1px 0 #000,
+      -1px  1px 0 #000,
+       2px  1.5px 0 #000
+    `,
                 padding: "10px 40px",
                 fontSize: "1.4em",
                 position: "relative",
@@ -554,26 +551,37 @@ export default function Home() {
                   pointerEvents: "none",
                 },
                 ":hover": {
-                  transform: "scale(1.02)",
+                  transform: loading ? "none" : "scale(1.02)",
+                  cursor: loading ? "not-allowed" : "pointer",
                 },
               }}
+              disabled={loading}
               onClick={() => {
                 if (!profileId) {
                   showDescToast("Create Profile first!");
-                } else if (!mode) {
+                  return;
+                }
+                if (!mode) {
                   showDescToast("Select Game Mode first!");
-                } else if (
+                  return;
+                }
+                if (
                   userProfile?.trophies <
-                    (overs == 100 ? 5 : Math.ceil(overs / 2)) &&
+                    (overs === 100 ? 5 : Math.ceil(overs / 2)) &&
                   mode !== "KNOCKOUT"
                 ) {
                   showDescToast("Not enough trophies to play this mode!");
-                } else {
-                  navigate("/team");
+                  return;
                 }
+
+                navigate("/team");
               }}
             >
-              Play
+              {loading ? (
+                <CircularProgress size={24} sx={{ color: "#fff" }} />
+              ) : (
+                "Play"
+              )}
             </Button>
           </Box>
         </Box>
