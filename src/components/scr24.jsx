@@ -216,7 +216,7 @@ export default function ScoreCard24() {
       setIsSix(0);
       sessionStorage.setItem("Boundary", 0);
     }
-    
+
     console.log(balls);
     let aiChoice;
     let isWicket = false;
@@ -497,6 +497,7 @@ export default function ScoreCard24() {
   const [nonStriker, setNonStriker] = useState(null);
 
   const [loading, setLoading] = useState(true);
+  const [showLoadingPage, setShowLoadingPage] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -505,560 +506,568 @@ export default function ScoreCard24() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (loading) {
-    return (
-      <LoadingPage loading={loading}/>
-    );
-  }
-
   return (
     <>
-      <Box
-        sx={{
-          width: "100%",
-          backgroundColor: "#faf8fb",
-          minHeight: "50px",
-          display: "flex",
-          justifyContent: "center",
-          padding: { xs: "0 300px", md: "0" },
-        }}
-      >
-        <Box
-          sx={{
-            alignContent: "center",
-            padding: "0px 20px",
-          }}
-        >
-          <img
-            style={{
-              width: "60px",
-              height: "40px",
-              boxShadow: "3px 3px 8px -2px #000000",
-            }}
-            src={!batting ? aiTeam?.flag : userTeam?.flag}
-            alt={!batting ? aiTeam?.name : userTeam?.name}
-          />
-        </Box>
+      {showLoadingPage && (
+        <LoadingPage
+          loading={loading}
+          onFinish={() => setShowLoadingPage(false)}
+        />
+      )}
 
-        <Box
-          sx={{
-            backgroundColor: "#0f0648",
-            borderLeft: "10px solid #bd2f7f",
-            borderRight: "10px solid #bd2f7f",
-            width: "220px",
-            minHeight: "40px",
-            padding: "10px 15px",
-          }}
-        >
+      {!showLoadingPage && (
+        <Box>
           <Box
             sx={{
+              width: "100%",
+              backgroundColor: "#faf8fb",
+              minHeight: "50px",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Box
-              sx={{
-                textTransform: "uppercase",
-                color: "#e4dff9",
-                fontSize: "0.9em",
-                fontFamily: "Rubik",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                width: "80px",
-              }}
-              variant="body1"
-            >
-              <Box
-                sx={{
-                  width: "5px",
-                  height: "5px",
-                  backgroundColor: "#e7d58d",
-                  borderRadius: "50%",
-                  marginLeft: "-10px",
-                }}
-              ></Box>
-              {striker?.name}
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "baseline",
-                gap: "10px",
-                width: "50px",
-                justifyContent: "center",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "#e7d58d",
-                }}
-                variant="body1"
-              >
-                {striker?.score}
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#e7d58d",
-                  transform: "scale(0.75)",
-                }}
-                variant="body1"
-              >
-                {striker?.balls}
-              </Typography>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography
-              sx={{
-                textTransform: "uppercase",
-                color: "#e4dff9",
-                fontSize: "0.9em",
-                fontFamily: "Rubik",
-                width: "80px",
-              }}
-              variant="body1"
-            >
-              {nonStriker?.name}
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "baseline",
-                gap: "10px",
-                width: "50px",
-                justifyContent: "center",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "#e7d58d",
-                }}
-                variant="body1"
-              >
-                {nonStriker?.score}
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#e7d58d",
-                  transform: "scale(0.75)",
-                }}
-                variant="body1"
-              >
-                {nonStriker?.balls}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            backgroundColor: "#f2f0f6",
-            padding: " 4px 8px",
-            minWidth: "300px",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
               justifyContent: "center",
-              gap: "10px",
+              padding: { xs: "0 300px", md: "0" },
             }}
           >
             <Box
               sx={{
-                display: "flex",
-                alignItems: "baseline",
-                gap: "3px",
+                alignContent: "center",
+                padding: "0px 20px",
+              }}
+            >
+              <img
+                style={{
+                  width: "60px",
+                  height: "40px",
+                  boxShadow: "3px 3px 8px -2px #000000",
+                }}
+                src={!batting ? aiTeam?.flag : userTeam?.flag}
+                alt={!batting ? aiTeam?.name : userTeam?.name}
+              />
+            </Box>
+
+            <Box
+              sx={{
+                backgroundColor: "#0f0648",
+                borderLeft: "10px solid #bd2f7f",
+                borderRight: "10px solid #bd2f7f",
+                width: "220px",
+                minHeight: "40px",
+                padding: "10px 15px",
               }}
             >
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "baseline",
-                  gap: "5px",
-                  color: "#0e0a20",
-                  fontFamily: "Rubik",
-                  textTransform: "uppercase",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
-                variant="body1"
               >
-                {!batting
-                  ? getInitials(userTeam?.name)
-                  : getInitials(aiTeam?.name)}{" "}
                 <Box
                   sx={{
-                    transform: "scale(0.7)",
+                    textTransform: "uppercase",
+                    color: "#e4dff9",
+                    fontSize: "0.9em",
+                    fontFamily: "Rubik",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    width: "80px",
                   }}
-                  variant="span"
+                  variant="body1"
                 >
-                  v
+                  <Box
+                    sx={{
+                      width: "5px",
+                      height: "5px",
+                      backgroundColor: "#e7d58d",
+                      borderRadius: "50%",
+                      marginLeft: "-10px",
+                    }}
+                  ></Box>
+                  {striker?.name}
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: "10px",
+                    width: "50px",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: "#e7d58d",
+                    }}
+                    variant="body1"
+                  >
+                    {striker?.score}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#e7d58d",
+                      transform: "scale(0.75)",
+                    }}
+                    variant="body1"
+                  >
+                    {striker?.balls}
+                  </Typography>
                 </Box>
               </Box>
-              <Typography
-                sx={{
-                  color: "#0e0a20",
-                  fontFamily: "Rubik",
-                  textTransform: "uppercase",
-                  transform: "scale(1.1)",
-                  fontWeight: 600,
-                }}
-                variant="h6"
-              >
-                {!batting
-                  ? getInitials(aiTeam?.name)
-                  : getInitials(userTeam?.name)}{" "}
-              </Typography>
-            </Box>
-
-            <Box
-              sx={{
-                backgroundColor: "#fa208e",
-                borderRadius: "8px",
-                padding: "2px 0px",
-                width: "100px",
-              }}
-            >
-              <Typography
-                variant="h6"
-                sx={{
-                  color: "#FFFFFF",
-                  transform: "scale(0.9)",
-                  fontWeight: "600",
-                  fontFamily: "Rubik",
-                  textAlign: "center",
-                }}
-              >
-                {batting ? userTeam?.score : aiTeam?.score} -{" "}
-                {batting ? userTeam?.wicket : aiTeam?.wicket}
-              </Typography>
-            </Box>
-
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "baseline",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "#0e0a20",
-                  fontFamily: "Rubik",
-                  textTransform: "uppercase",
-                  fontWeight: 600,
-                  fontSize: "0.9em",
-                  width: "30px",
-                  textAlign: "center",
-                }}
-                variant="body1"
-              >
-                {/* {over}.{balls}{" "} */}
-                {batting ? userTeam?.Over : aiTeam?.Over}.
-                {batting ? userTeam?.Ball : aiTeam?.Ball}
-              </Typography>
               <Box
                 sx={{
-                  transform: "scale(0.7)",
-                  fontWeight: 400,
-                  color: "#0e0a20",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
-                component="span"
               >
-                overs ({totalOvers == 100 ? "∞" : totalOvers})
+                <Typography
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "#e4dff9",
+                    fontSize: "0.9em",
+                    fontFamily: "Rubik",
+                    width: "80px",
+                  }}
+                  variant="body1"
+                >
+                  {nonStriker?.name}
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: "10px",
+                    width: "50px",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: "#e7d58d",
+                    }}
+                    variant="body1"
+                  >
+                    {nonStriker?.score}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#e7d58d",
+                      transform: "scale(0.75)",
+                    }}
+                    variant="body1"
+                  >
+                    {nonStriker?.balls}
+                  </Typography>
+                </Box>
               </Box>
             </Box>
-          </Box>
-          <Box
-            sx={{
-              position: "relative",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight: "24px",
-            }}
-          >
-            <Fade in={show == 0} timeout={500}>
-              <Typography
-                sx={{
-                  color: "#0e0a20",
-                  fontFamily: "Rubik",
-                  textTransform: "uppercase",
-                  fontWeight: 600,
-                  position: "absolute",
-                }}
-                variant="body1"
-              >
-                run rate{" "}
-                {over === 0 && balls === 0
-                  ? "0.00"
-                  : (
-                      (batting ? userTeam?.score : aiTeam?.score) /
-                      (over + balls / 6)
-                    ).toFixed(2)}
-              </Typography>
-            </Fade>
 
-            <Fade in={show == 1} timeout={500}>
-              <Typography
-                sx={{
-                  color: "#0e0a20",
-                  fontFamily: "Rubik",
-                  textTransform: "uppercase",
-                  fontWeight: 600,
-                  position: "absolute",
-                }}
-                variant="body1"
-              >
-                partnership {partnership}({partnershipBalls})
-              </Typography>
-            </Fade>
-
-            <Fade in={show == 2} timeout={500}>
-              <Typography
-                sx={{
-                  color: "#0e0a20",
-                  fontFamily: "Rubik",
-                  textTransform: "uppercase",
-                  fontWeight: 600,
-                  position: "absolute",
-                }}
-                variant="body1"
-              >
-                {firstInnings == 2
-                  ? `Target : ${target}`
-                  : totalOvers !== 100
-                  ? `Projected Score : ${(
-                      ((batting ? userTeam?.score : aiTeam?.score) /
-                        (over + balls / 6)) *
-                      totalOvers
-                    ).toFixed(0)}`
-                  : null}
-              </Typography>
-            </Fade>
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            backgroundColor: "#0f0648",
-            borderLeft: "10px solid #bd2f7f",
-            borderRight: "10px solid #bd2f7f",
-            width: "220px",
-            minHeight: "40px",
-            padding: "10px 15px",
-            position : "relative"
-          }}
-        >
-          <Typography variant="body1" sx={{
-            color : "#e7d58d",
-            textTransform : "uppercase",
-            fontFamily : "Poppins ,sans-serif , Rubik",
-            position : "absolute",
-            top : "-50px",
-            left : 0,
-            fontSize : "0.8em",
-            backgroundColor : "#0f0648",
-            padding : "10px 20px",
-            borderRadius : "12px"
-          }}>
-            wkt % : {" "}
-            {{
-              0: "Normal",
-              1: "High",
-              2: "Higher",
-              3: "Extreme",
-              4: "Massive",
-              5: "Legendary",
-            }[isSix] || ""}
-          </Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: "5px",
-            }}
-          >
-            <Typography
-              sx={{
-                textTransform: "uppercase",
-                color: "#e4dff9",
-                fontSize: "0.9em",
-                fontFamily: "Rubik",
-              }}
-              variant="body1"
-            >
-              {randomBowler?.name}
-            </Typography>
             <Box
               sx={{
-                display: "flex",
-                alignItems: "baseline",
-                gap: "10px",
+                backgroundColor: "#f2f0f6",
+                padding: " 4px 8px",
+                minWidth: "300px",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10px",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: "3px",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      gap: "5px",
+                      color: "#0e0a20",
+                      fontFamily: "Rubik",
+                      textTransform: "uppercase",
+                    }}
+                    variant="body1"
+                  >
+                    {!batting
+                      ? getInitials(userTeam?.name)
+                      : getInitials(aiTeam?.name)}{" "}
+                    <Box
+                      sx={{
+                        transform: "scale(0.7)",
+                      }}
+                      variant="span"
+                    >
+                      v
+                    </Box>
+                  </Box>
+                  <Typography
+                    sx={{
+                      color: "#0e0a20",
+                      fontFamily: "Rubik",
+                      textTransform: "uppercase",
+                      transform: "scale(1.1)",
+                      fontWeight: 600,
+                    }}
+                    variant="h6"
+                  >
+                    {!batting
+                      ? getInitials(aiTeam?.name)
+                      : getInitials(userTeam?.name)}{" "}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    backgroundColor: "#fa208e",
+                    borderRadius: "8px",
+                    padding: "2px 0px",
+                    width: "100px",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: "#FFFFFF",
+                      transform: "scale(0.9)",
+                      fontWeight: "600",
+                      fontFamily: "Rubik",
+                      textAlign: "center",
+                    }}
+                  >
+                    {batting ? userTeam?.score : aiTeam?.score} -{" "}
+                    {batting ? userTeam?.wicket : aiTeam?.wicket}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "baseline",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: "#0e0a20",
+                      fontFamily: "Rubik",
+                      textTransform: "uppercase",
+                      fontWeight: 600,
+                      fontSize: "0.9em",
+                      width: "30px",
+                      textAlign: "center",
+                    }}
+                    variant="body1"
+                  >
+                    {/* {over}.{balls}{" "} */}
+                    {batting ? userTeam?.Over : aiTeam?.Over}.
+                    {batting ? userTeam?.Ball : aiTeam?.Ball}
+                  </Typography>
+                  <Box
+                    sx={{
+                      transform: "scale(0.7)",
+                      fontWeight: 400,
+                      color: "#0e0a20",
+                    }}
+                    component="span"
+                  >
+                    overs ({totalOvers == 100 ? "∞" : totalOvers})
+                  </Box>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minHeight: "24px",
+                }}
+              >
+                <Fade in={show == 0} timeout={500}>
+                  <Typography
+                    sx={{
+                      color: "#0e0a20",
+                      fontFamily: "Rubik",
+                      textTransform: "uppercase",
+                      fontWeight: 600,
+                      position: "absolute",
+                    }}
+                    variant="body1"
+                  >
+                    run rate{" "}
+                    {over === 0 && balls === 0
+                      ? "0.00"
+                      : (
+                          (batting ? userTeam?.score : aiTeam?.score) /
+                          (over + balls / 6)
+                        ).toFixed(2)}
+                  </Typography>
+                </Fade>
+
+                <Fade in={show == 1} timeout={500}>
+                  <Typography
+                    sx={{
+                      color: "#0e0a20",
+                      fontFamily: "Rubik",
+                      textTransform: "uppercase",
+                      fontWeight: 600,
+                      position: "absolute",
+                    }}
+                    variant="body1"
+                  >
+                    partnership {partnership}({partnershipBalls})
+                  </Typography>
+                </Fade>
+
+                <Fade in={show == 2} timeout={500}>
+                  <Typography
+                    sx={{
+                      color: "#0e0a20",
+                      fontFamily: "Rubik",
+                      textTransform: "uppercase",
+                      fontWeight: 600,
+                      position: "absolute",
+                    }}
+                    variant="body1"
+                  >
+                    {firstInnings == 2
+                      ? `Target : ${target}`
+                      : totalOvers !== 100
+                      ? `Projected Score : ${(
+                          ((batting ? userTeam?.score : aiTeam?.score) /
+                            (over + balls / 6)) *
+                          totalOvers
+                        ).toFixed(0)}`
+                      : null}
+                  </Typography>
+                </Fade>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                backgroundColor: "#0f0648",
+                borderLeft: "10px solid #bd2f7f",
+                borderRight: "10px solid #bd2f7f",
+                width: "220px",
+                minHeight: "40px",
+                padding: "10px 15px",
+                position: "relative",
               }}
             >
               <Typography
+                variant="body1"
                 sx={{
                   color: "#e7d58d",
-                  fontFamily: "Rubik",
-                  width: "50px",
-                  textAlign: "center",
+                  textTransform: "uppercase",
+                  fontFamily: "Poppins ,sans-serif , Rubik",
+                  position: "absolute",
+                  top: "-50px",
+                  left: 0,
+                  fontSize: "0.8em",
+                  backgroundColor: "#0f0648",
+                  padding: "10px 20px",
+                  borderRadius: "12px",
                 }}
-                variant="body1"
               >
-                {randomBowler?.wickets}-{randomBowler?.conceded}
+                wkt % :{" "}
+                {{
+                  0: "Normal",
+                  1: "High",
+                  2: "Higher",
+                  3: "Extreme",
+                  4: "Massive",
+                  5: "Legendary",
+                }[isSix] || ""}
               </Typography>
-              <Typography
-                sx={{
-                  color: "#e7d58d",
-                  transform: "scale(0.75)",
-                  fontFamily: "Rubik",
-                }}
-                variant="body1"
-              >
-                {randomBowler?.overs}.{randomBowler?.bowled}
-              </Typography>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            {Array.from({ length: 6 }).map((_, index) => (
+
               <Box
-                key={index}
                 sx={{
-                  width: "15px",
-                  height: "15px",
-                  outline: batting
-                    ? userTeam?.ballHistory[index] > 3 ||
-                      userTeam?.ballHistory[index] == "W"
-                      ? `2px solid ${
-                          colors[
-                            batting
-                              ? userTeam?.ballHistory[index]
-                              : aiTeam?.ballHistory[index]
-                          ]
-                        }`
-                      : "2px solid #FFFFFF"
-                    : aiTeam?.ballHistory[index] > 3 ||
-                      aiTeam?.ballHistory[index] == "W"
-                    ? `2px solid ${
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: "5px",
+                }}
+              >
+                <Typography
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "#e4dff9",
+                    fontSize: "0.9em",
+                    fontFamily: "Rubik",
+                  }}
+                  variant="body1"
+                >
+                  {randomBowler?.name}
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: "10px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: "#e7d58d",
+                      fontFamily: "Rubik",
+                      width: "50px",
+                      textAlign: "center",
+                    }}
+                    variant="body1"
+                  >
+                    {randomBowler?.wickets}-{randomBowler?.conceded}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#e7d58d",
+                      transform: "scale(0.75)",
+                      fontFamily: "Rubik",
+                    }}
+                    variant="body1"
+                  >
+                    {randomBowler?.overs}.{randomBowler?.bowled}
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      width: "15px",
+                      height: "15px",
+                      outline: batting
+                        ? userTeam?.ballHistory[index] > 3 ||
+                          userTeam?.ballHistory[index] == "W"
+                          ? `2px solid ${
+                              colors[
+                                batting
+                                  ? userTeam?.ballHistory[index]
+                                  : aiTeam?.ballHistory[index]
+                              ]
+                            }`
+                          : "2px solid #FFFFFF"
+                        : aiTeam?.ballHistory[index] > 3 ||
+                          aiTeam?.ballHistory[index] == "W"
+                        ? `2px solid ${
+                            colors[
+                              batting
+                                ? userTeam?.ballHistory[index]
+                                : aiTeam?.ballHistory[index]
+                            ]
+                          }`
+                        : "2px solid #FFFFFF",
+
+                      color: batting
+                        ? userTeam?.ballHistory[index] > 3 ||
+                          userTeam?.ballHistory[index] == "W"
+                          ? "#0f0648"
+                          : "#FFFFFF"
+                        : aiTeam?.ballHistory[index] > 3 ||
+                          aiTeam?.ballHistory[index] == "W"
+                        ? "#0f0648"
+                        : "#FFFFFF",
+
+                      borderRadius: "50%",
+                      padding: "2px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.9em",
+                      fontWeight: 900,
+                      backgroundColor:
                         colors[
                           batting
                             ? userTeam?.ballHistory[index]
                             : aiTeam?.ballHistory[index]
-                        ]
-                      }`
-                    : "2px solid #FFFFFF",
-
-                  color: batting
-                    ? userTeam?.ballHistory[index] > 3 ||
-                      userTeam?.ballHistory[index] == "W"
-                      ? "#0f0648"
-                      : "#FFFFFF"
-                    : aiTeam?.ballHistory[index] > 3 ||
-                      aiTeam?.ballHistory[index] == "W"
-                    ? "#0f0648"
-                    : "#FFFFFF",
-
-                  borderRadius: "50%",
-                  padding: "2px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "0.9em",
-                  fontWeight: 900,
-                  backgroundColor:
-                    colors[
-                      batting
-                        ? userTeam?.ballHistory[index]
-                        : aiTeam?.ballHistory[index]
-                    ] || "#0f0648",
-                }}
-              >
-                {/* {ballHistory[index] ?? ""} */}
-                {batting
-                  ? userTeam?.ballHistory[index]
-                  : aiTeam?.ballHistory[index]}
+                        ] || "#0f0648",
+                    }}
+                  >
+                    {/* {ballHistory[index] ?? ""} */}
+                    {batting
+                      ? userTeam?.ballHistory[index]
+                      : aiTeam?.ballHistory[index]}
+                  </Box>
+                ))}
               </Box>
-            ))}
+            </Box>
+
+            <Box
+              sx={{
+                alignContent: "center",
+                padding: "0px 20px",
+              }}
+            >
+              <img
+                style={{
+                  width: "60px",
+                  height: "40px",
+                  boxShadow: "3px 3px 8px -2px #000000",
+                }}
+                src={batting ? aiTeam?.flag : userTeam?.flag}
+              />
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              justifyContent: "center",
+              margin: "50px",
+              padding: { xs: "0 600px", md: "0" },
+            }}
+          >
+            {choice.map((opt, index) => {
+              return (
+                <Button
+                  sx={{
+                    backgroundColor: "#0f0648",
+                    color: "#FFFFFF",
+                    width: "60px",
+                    height: "60px",
+                    padding: "4px 8px",
+                    borderRadius: "50%",
+                    fontWeight: 600,
+                    fontSize: "1em",
+                    fontFamily: "Rubik",
+                    borderBottom: " 4px solid #53489a",
+                    borderRight: "3px solid #53489a",
+                    ":hover": {
+                      backgroundColor: "#0f0648cc",
+                      transform: "scale(1.05)",
+                      borderBottom: " 4px solid #53489a",
+                      borderRight: "3px solid #53489a",
+                      transition: "all 0.3s",
+                    },
+                    ":focus": {
+                      outline: "none",
+                    },
+                  }}
+                  key={index}
+                  onClick={() => scoreDecision(opt.value)}
+                >
+                  {opt.value}
+                </Button>
+              );
+            })}
           </Box>
         </Box>
-
-        <Box
-          sx={{
-            alignContent: "center",
-            padding: "0px 20px",
-          }}
-        >
-          <img
-            style={{
-              width: "60px",
-              height: "40px",
-              boxShadow: "3px 3px 8px -2px #000000",
-            }}
-            src={batting ? aiTeam?.flag : userTeam?.flag}
-          />
-        </Box>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: "10px",
-          justifyContent: "center",
-          margin: "50px",
-          padding: { xs: "0 600px", md: "0" },
-        }}
-      >
-        {choice.map((opt, index) => {
-          return (
-            <Button
-              sx={{
-                backgroundColor: "#0f0648",
-                color: "#FFFFFF",
-                width: "60px",
-                height: "60px",
-                padding: "4px 8px",
-                borderRadius: "50%",
-                fontWeight: 600,
-                fontSize: "1em",
-                fontFamily: "Rubik",
-                borderBottom: " 4px solid #53489a",
-                borderRight: "3px solid #53489a",
-                ":hover": {
-                  backgroundColor: "#0f0648cc",
-                  transform: "scale(1.05)",
-                  borderBottom: " 4px solid #53489a",
-                  borderRight: "3px solid #53489a",
-                  transition: "all 0.3s",
-                },
-                ":focus": {
-                  outline: "none",
-                },
-              }}
-              key={index}
-              onClick={() => scoreDecision(opt.value)}
-            >
-              {opt.value}
-            </Button>
-          );
-        })}
-      </Box>
+      )}
     </>
   );
 }
