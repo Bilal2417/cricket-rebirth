@@ -78,6 +78,17 @@ export default function Profile() {
     });
   };
 
+  const showErrToast = (desc) => {
+    toast.success(desc, {
+      position: "top-right",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
+
   const handleSave = async (newImg) => {
     if (!profile) return;
 
@@ -112,6 +123,8 @@ export default function Profile() {
         if (data.success) {
           setProfile(data.profile);
           sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        } else {
+          showErrToast("Name already exist");
         }
       })
       .catch((err) => console.error("Error updating profile:", err));

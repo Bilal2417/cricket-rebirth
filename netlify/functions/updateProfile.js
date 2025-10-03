@@ -13,6 +13,17 @@ export async function handler(event) {
       };
     }
 
+    if (name) {
+      const check = await client.query(
+        "SELECT id FROM profiles WHERE name = $1 AND id <> $2",
+        [name, id]
+      );
+
+      if (check.rows.length > 0) {
+        throw new Error("Name already exists. Please choose another.");
+      }
+    }
+
     const client = new Client({
       connectionString: process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false },
@@ -47,6 +58,9 @@ export async function handler(event) {
       body: JSON.stringify({ success: true, profile: result.rows[0] }),
     };
   } catch (err) {
+    if (err.code === "23505") {
+      throw new Error("Name already exists. Please choose another.");
+    }
     console.error("Error in updateProfile:", err.message);
     return {
       statusCode: 500,
