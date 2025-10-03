@@ -107,30 +107,30 @@ export default function Profile() {
     };
 
     setProfile(updatedProfile);
-    setName(tempName || name);
     setOpen(false);
-    console.log(updatedProfile, "pppp");
-    console.log(profileId, "oooo");
-    // Update in database
+    
+    
     fetch("/.netlify/functions/updateProfile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedProfile),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setProfile(data.profile);
-          sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-          showDescToast("Profile Updated Successfully !!");
-        } else {
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        setName(tempName || name);
+        setProfile(data.profile);
+        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        showDescToast("Profile Updated Successfully !!");
+      } else {
+          setName(profile.name);
           showErrToast("Name already exist");
         }
       })
       .catch((err) => console.error("Error updating profile:", err));
   };
 
-  // Image upload handlers
+  
   const handleImageClick = () => fileInputRef.current.click();
 
   const handleFileChange = (event) => {
@@ -139,12 +139,12 @@ export default function Profile() {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      handleSave(reader.result); // Base64 string
+      handleSave(reader.result); 
     };
     reader.readAsDataURL(file);
   };
 
-  // if (!profile) return <LoadingPage loading={loading} />;
+  
 
   return (
     <>

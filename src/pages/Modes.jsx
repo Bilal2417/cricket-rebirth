@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import OversThreeIcon from "../components/overIcon";
 import { EmojiEventsSharp, Help, Security } from "@mui/icons-material";
 import { useState } from "react";
+import { FaSkull } from "react-icons/fa";        
+import { GiSkullCrossedBones } from "react-icons/gi"; 
 
 export default function Modes() {
   const navigate = useNavigate();
@@ -296,7 +298,7 @@ export default function Modes() {
               sessionStorage.setItem("mode", `SURVIVAL`);
             }}
           >
-            <Security />
+            <GiSkullCrossedBones size={30} color="white" />
             Survival
             <IconButton
               type="button"
