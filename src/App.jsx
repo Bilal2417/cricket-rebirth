@@ -41,7 +41,6 @@ function App() {
   return (
     <Container
       sx={{
-        height: "100vh",
         alignContent: "center",
       }}
     >
@@ -54,7 +53,6 @@ function App() {
             overflowX: { xs : "auto" , md : "unset"}, 
             overflowY: { xs : "auto" , md : "unset"}, 
             maxWidth: "100vw", 
-            maxHeight: "100vh",
           }}
         >
           <Routes>

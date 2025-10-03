@@ -55,8 +55,12 @@ const CardPack = ({ title, description, colors, icon, price }) => {
             color: "#000",
             fontWeight: "bold",
             boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+            transition:
+              "transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease",
             "&:hover": {
-              background: `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`,
+              transform: "scale(1.05)",
+              boxShadow: "0 8px 18px rgba(0,0,0,0.45)",
+              filter: "brightness(1.03)",
             },
           }}
           onClick={() => alert(`Opening ${title} (dummy)`)}

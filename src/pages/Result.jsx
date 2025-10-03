@@ -39,19 +39,19 @@ export default function Result() {
     console.log("hehe", overs);
   }, []);
 
-  const incrementTrophies = async (inc = true, draw) => {
+  const incrementTrophies = async (win, value) => {
     if (!Profile) return;
+
+    const wkts = Number(totalWkts);
+
+    
+    const trophyIncrement =
+      wkts === 100 ? 5 * value : Math.ceil(wkts / 2) * value;
 
     const updatedProfile = {
       ...Profile,
-      victories: inc && draw == 2 ? Profile.victories + 1 : Profile.victories,
-      trophies: inc
-        ? Profile.trophies +
-          (totalWkts !== 100 && totalWkts !== "100"
-            ? Math.ceil(totalWkts / 2)
-            : 5) *
-            draw
-        : Profile.trophies,
+      victories: win && value === 2 ? Profile.victories + 1 : Profile.victories,
+      trophies: win ? Profile.trophies + trophyIncrement : Profile.trophies,
     };
 
     setProfile(updatedProfile);
@@ -822,7 +822,7 @@ export default function Result() {
                   }
                 }
 
-                setLoading(false); // done loading
+                setLoading(false);
               }}
             >
               {loading ? (

@@ -53,8 +53,7 @@ export default function Toss() {
   const decrementTrophies = async () => {
     if (!Profile) return;
 
-    const penalty =
-      totalWkts !== 100 && totalWkts !== "100" ? Math.ceil(totalWkts / 2) : 5;
+    const penalty = Number(totalWkts) === 100 ? 5 : Math.ceil(totalWkts / 2);
 
     const updatedProfile = {
       ...Profile,
