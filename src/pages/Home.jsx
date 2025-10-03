@@ -281,7 +281,7 @@ export default function Home() {
                     sx={{
                       backgroundColor:
                         profile?.id == profileId ? "#ef7627" : "#897689",
-                      width: "400px",
+                      width: "415px",
                       paddingLeft: "15px",
                       display: "flex",
                       alignContent: "center",
@@ -412,7 +412,7 @@ export default function Home() {
                 );
               })}
 
-              {loading
+              {!loading
                 ? ["1", "2", "3", "4"].map((index) => {
                     return (
                       <Box
@@ -486,7 +486,6 @@ export default function Home() {
                             padding: "10px 30px",
                             clipPath:
                               "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
-                            width: "60px",
                             justifyContent: "center",
                             color: "#897689",
                           }}
