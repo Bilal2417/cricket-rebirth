@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -84,75 +84,87 @@ export default function Toss() {
 
   return (
     <>
-      {!tossWin ? (
-        <Grid
-          container
-          spacing={2}
-          justifyContent="center"
-          alignItems="center"
-          sx={{ mt: 4 }}
-        >
-          {["Heads", "Tails"].map((choice, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Button
-                fullWidth
-                sx={{
-                  color: "#FFFFFF",
-                  backgroundColor: "#0f0648",
-                  borderBottom: "2px solid #fa208e",
-                  borderRight: "2px solid #fa208e",
-                  borderRadius: "12px",
-                  fontFamily: "Rubik",
-                  fontWeight: 600,
-                  padding: "12px 16px",
-                  fontSize: { xs: "14px", sm: "16px", md: "18px" },
-                  ":hover": {
-                    transform: "scale(1.05)",
-                    transition: "all 0.3s",
-                  },
-                }}
-                onClick={() => handleToss(choice)}
-              >
-                {choice}
-              </Button>
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Grid
-          container
-          spacing={2}
-          justifyContent="center"
-          alignItems="center"
-          sx={{ mt: 4 }}
-        >
-          {["Bat", "Ball"].map((choice, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Button
-                fullWidth
-                sx={{
-                  color: "#FFFFFF",
-                  backgroundColor: "#0f0648",
-                  borderBottom: "2px solid #fa208e",
-                  borderRight: "2px solid #fa208e",
-                  borderRadius: "12px",
-                  fontFamily: "Rubik",
-                  fontWeight: 600,
-                  padding: "12px 16px",
-                  fontSize: { xs: "14px", sm: "16px", md: "18px" },
-                  ":hover": {
-                    transform: "scale(1.05)",
-                    transition: "all 0.3s",
-                  },
-                }}
-                onClick={() => handleInnings(choice)}
-              >
-                {choice}
-              </Button>
-            </Grid>
-          ))}
-        </Grid>
-      )}
+      <Box
+        sx={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        {!tossWin ? (
+          <Grid
+            container
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
+            sx={{ mt: 4 }}
+          >
+            {["Heads", "Tails"].map((choice, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Button
+                  fullWidth
+                  sx={{
+                    color: "#FFFFFF",
+                    backgroundColor: "#0f0648",
+                    borderBottom: "2px solid #fa208e",
+                    borderRight: "2px solid #fa208e",
+                    borderRadius: "12px",
+                    fontFamily: "Rubik",
+                    fontWeight: 600,
+                    padding: "12px 16px",
+                    fontSize: { xs: "14px", sm: "16px", md: "18px" },
+                    ":hover": {
+                      transform: "scale(1.05)",
+                      transition: "all 0.3s",
+                    },
+                  }}
+                  onClick={() => handleToss(choice)}
+                >
+                  {choice}
+                </Button>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Grid
+            container
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
+            sx={{ mt: 4 }}
+          >
+            {["Bat", "Ball"].map((choice, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Button
+                  fullWidth
+                  sx={{
+                    color: "#FFFFFF",
+                    backgroundColor: "#0f0648",
+                    borderBottom: "2px solid #fa208e",
+                    borderRight: "2px solid #fa208e",
+                    borderRadius: "12px",
+                    fontFamily: "Rubik",
+                    fontWeight: 600,
+                    padding: "12px 16px",
+                    fontSize: { xs: "14px", sm: "16px", md: "18px" },
+                    ":hover": {
+                      transform: "scale(1.05)",
+                      transition: "all 0.3s",
+                    },
+                  }}
+                  onClick={() => handleInnings(choice)}
+                >
+                  {choice}
+                </Button>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+      </Box>
     </>
   );
 }

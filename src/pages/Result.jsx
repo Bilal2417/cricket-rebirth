@@ -44,7 +44,6 @@ export default function Result() {
 
     const wkts = Number(totalWkts);
 
-    
     const trophyIncrement =
       wkts === 100 ? 5 * value : Math.ceil(wkts / 2) * value;
 
@@ -172,7 +171,7 @@ export default function Result() {
             borderRadius: "12px",
             width: "100%",
             height: "100%",
-            overflow: "hidden",
+            // overflow: "hidden",
             alignContent: "center",
           }}
         >
@@ -181,7 +180,7 @@ export default function Result() {
               // width: "100%",
               display: "flex",
               alignItems: "center",
-              padding: "8px 16px",
+              padding: { xs: "2px 16px", md: "8px 16px" },
               backgroundColor: "#FFFFFF",
               borderRadius: "12px 12px 0 0",
               overflow: "hidden",
@@ -212,10 +211,11 @@ export default function Result() {
               >
                 {!batting ? userTeam?.name : aiTeam?.name}
               </Typography>
-              <img
-                style={{
-                  width: "60px",
-                  height: "40px",
+              <Box
+              component="img"
+                sx={{
+                  width: { xs : "45px" , md : "60px"},
+                  height: { xs : "30px" , md : "40px"},
                   boxShadow: "3px 3px 8px -2px #000000",
                 }}
                 src={batting ? aiTeam?.flag : userTeam?.flag}
@@ -244,10 +244,11 @@ export default function Result() {
                 padding: "0px 50px",
               }}
             >
-              <img
-                style={{
-                  width: "60px",
-                  height: "40px",
+              <Box
+              component="img"
+                sx={{
+                  width: { xs : "45px" , md : "60px"},
+                  height: { xs : "30px" , md : "40px"},
                   boxShadow: "3px 3px 8px -2px #000000",
                 }}
                 src={!batting ? aiTeam?.flag : userTeam?.flag}
@@ -273,7 +274,7 @@ export default function Result() {
 
           <Box
             sx={{
-              padding: "5px 0px",
+              padding: { xs: "1px 0px", md: "5px 0px" },
               backgroundColor: "#0f0648",
             }}
           >
@@ -304,7 +305,7 @@ export default function Result() {
               <Box
                 sx={{
                   //   width: "100%",
-                  padding: "10px 0px",
+                  padding: { xs: "5px 0px", md: "10px 0px" },
                   backgroundColor: "#fa208e",
                   boxShadow: "inset -4px 0 6px -2px rgba(0,0,0,0.1)",
                   display: "flex",
@@ -351,6 +352,7 @@ export default function Result() {
                         boxShadow: "0px 0px 9px -7px #000000",
                         borderRadius: "0px",
                         width: "100%",
+                        // padding : "8px 0"
                       }}
                     >
                       <Box
@@ -366,7 +368,7 @@ export default function Result() {
                             fontWeight: 600,
                             fontFamily: "Rubik",
                             textTransform: "uppercase",
-                            padding: "8px 16px",
+                            padding: "0px 16px",
                           }}
                           variant="h6"
                         >
@@ -384,9 +386,9 @@ export default function Result() {
                             fontWeight: 600,
                             fontFamily: "Rubik",
                             textTransform: "uppercase",
-                            padding: "8px 16px",
+                            padding: { xs: "2px 16px", md: "8px 16px" },
                             boxShadow: "4px -4px 5px -3px #0003",
-                            width: "25px",
+                            width: "50px",
                             textAlign: "center",
                           }}
                           variant="h6"
@@ -398,8 +400,8 @@ export default function Result() {
                           sx={{
                             fontFamily: "Rubik",
                             textTransform: "uppercase",
-                            padding: "10px 20px",
-                            width: "25px",
+                            padding: "0px 20px",
+                            width: "50px",
                             textAlign: "center",
                           }}
                           variant="body1"
@@ -422,7 +424,7 @@ export default function Result() {
               <Box
                 sx={{
                   width: "100%",
-                  padding: "10px 0px",
+                  padding: { xs: "5px 0px", md: "10px 0px" },
                   backgroundColor: "#fa208e",
                   display: "flex",
                   justifyContent: "center",
@@ -468,6 +470,7 @@ export default function Result() {
                         boxShadow: "0px 0px 9px -7px #000000",
                         borderRadius: "0px",
                         width: "100%",
+                        // padding : "8px 0"
                       }}
                     >
                       <Box
@@ -483,7 +486,7 @@ export default function Result() {
                             fontWeight: 600,
                             fontFamily: "Rubik",
                             textTransform: "uppercase",
-                            padding: "8px 16px",
+                            padding: "0px 16px",
                           }}
                           variant="h6"
                         >
@@ -501,9 +504,9 @@ export default function Result() {
                             fontWeight: 600,
                             fontFamily: "Rubik",
                             textTransform: "uppercase",
-                            padding: "8px 16px",
+                            padding: { xs: "2px 16px", md: "8px 16px" },
                             boxShadow: "4px -4px 5px -3px #0003",
-                            width: "25px",
+                            width: "50px",
                             textAlign: "center",
                           }}
                           variant="h6"
@@ -515,8 +518,8 @@ export default function Result() {
                           sx={{
                             fontFamily: "Rubik",
                             textTransform: "uppercase",
-                            padding: "10px 20px",
-                            width: "25px",
+                            padding: "0px 20px",
+                            width: "50px",
                             textAlign: "center",
                           }}
                           variant="body1"
@@ -545,7 +548,7 @@ export default function Result() {
               <Box
                 sx={{
                   width: "100%",
-                  padding: "10px 0px",
+                  padding: { xs: "5px 0px", md: "10px 0px" },
                   backgroundColor: "#fa208e",
                   boxShadow: "inset -4px 0 6px -2px rgba(0,0,0,0.1)",
                   display: "flex",
@@ -590,6 +593,7 @@ export default function Result() {
                         boxShadow: "0px 0px 9px -7px #000000",
                         borderRadius: "0px",
                         width: "100%",
+                        padding: { xs: "2px 0px", md: "8px 0px" },
                       }}
                     >
                       <Box
@@ -605,7 +609,7 @@ export default function Result() {
                             fontWeight: 600,
                             fontFamily: "Rubik",
                             textTransform: "uppercase",
-                            padding: "8px 16px",
+                            padding: "0px 16px",
                           }}
                           variant="h6"
                         >
@@ -637,7 +641,7 @@ export default function Result() {
                             fontFamily: "Rubik",
                             textTransform: "uppercase",
                             padding: "0px 16px",
-                            width: "25px",
+                            width: "50px",
                             textAlign: "center",
                           }}
                           variant="body1"
@@ -659,7 +663,7 @@ export default function Result() {
               <Box
                 sx={{
                   width: "100%",
-                  padding: "10px 0px",
+                  padding: { xs: "5px 0px", md: "10px 0px" },
                   backgroundColor: "#fa208e",
                   display: "flex",
                   justifyContent: "center",
@@ -703,6 +707,7 @@ export default function Result() {
                         boxShadow: "0px 0px 9px -7px #000000",
                         borderRadius: "0px",
                         width: "100%",
+                        padding: { xs: "2px 0px", md: "8px 0px" },
                       }}
                     >
                       <Box
@@ -718,7 +723,7 @@ export default function Result() {
                             fontWeight: 600,
                             fontFamily: "Rubik",
                             textTransform: "uppercase",
-                            padding: "8px 16px",
+                            padding: "0px 16px",
                           }}
                           variant="h6"
                         >
@@ -750,7 +755,7 @@ export default function Result() {
                             fontFamily: "Rubik",
                             textTransform: "uppercase",
                             padding: "0px 16px",
-                            width: "25px",
+                            width: "50px",
                             textAlign: "center",
                           }}
                           variant="body1"
@@ -773,7 +778,7 @@ export default function Result() {
               display: "flex",
               justifyContent: "center",
               overflow: "hidden",
-              padding: "10px 20px",
+              padding: "10px 0px",
               position: "relative",
             }}
           >
@@ -785,8 +790,8 @@ export default function Result() {
                 padding: "8px 16px",
                 borderRadius: "8px",
                 position: "absolute",
-                top: 7,
-                right: 50,
+                top: 4,
+                right: 10,
                 textTransform: "uppercase",
                 display: "flex",
                 alignItems: "center",

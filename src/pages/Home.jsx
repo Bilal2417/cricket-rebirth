@@ -185,10 +185,14 @@ export default function Home() {
     <>
       <Box
         sx={{
+          minHeight: "100vh", 
+          width: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          minHeight: "50vh",
+          justifyContent: "space-between", 
+          py: 8, 
+          px: 2, 
+          boxSizing: "border-box",
         }}
       >
         <Box
@@ -248,7 +252,7 @@ export default function Home() {
                 maxHeight: "230px",
                 overflowY: "auto",
                 overflowX: "hidden",
-                paddingRight : "10px",
+                paddingRight: "10px",
                 "&::-webkit-scrollbar": {
                   width: "8px",
                 },
@@ -343,7 +347,7 @@ export default function Home() {
                       <Typography
                         sx={{
                           fontWeight: 600,
-                          fontFamily: "Rubik",                          
+                          fontFamily: "Rubik",
                           color: "rgb(255 196 107)",
                         }}
                         variant="body1"
@@ -411,7 +415,7 @@ export default function Home() {
               })}
 
               {loading
-                ? ["1", "2", "3","4"].map((index) => {
+                ? ["1", "2", "3", "4"].map((index) => {
                     return (
                       <Box
                         key={index}

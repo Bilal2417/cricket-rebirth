@@ -13,6 +13,7 @@ import Fixtures from "./pages/Fixtures";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
 import CardPacksShop from "./components/card";
+import MovingBallsBackground from "./components/background";
 
 function App() {
 
@@ -47,7 +48,7 @@ function App() {
       <Router>
         <Box
           sx={{
-            transform: { xs: "rotate(90deg)", md: "none" },
+            // transform: { xs: "rotate(90deg)", md: "none" },
             
             
             overflowX: { xs : "auto" , md : "unset"}, 
@@ -55,6 +56,7 @@ function App() {
             maxWidth: "100vw", 
           }}
         >
+          <MovingBallsBackground/>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/card" element={<CardPacksShop />} />

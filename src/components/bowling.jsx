@@ -19,7 +19,7 @@ export default function Bowling(squad) {
               display: "flex",
               alignItems: "baseline",
               paddingRight: "35px",
-              gap: "15px",
+              gap: "20px",
               justifyContent: "flex-end",
               borderBottom: "2px solid #fa208e",
             }}
@@ -30,7 +30,7 @@ export default function Bowling(squad) {
                 fontFamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "8px 16px",
-                width: "60px",
+                width: "75px",
                 textAlign: "center",
               }}
               variant="body1"
@@ -44,7 +44,7 @@ export default function Bowling(squad) {
                 fontFamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
-                width: "60px",
+                width: "75px",
                 textAlign: "center",
               }}
               variant="body1"
@@ -57,7 +57,7 @@ export default function Bowling(squad) {
                 fontFamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
-                width: "60px",
+                width: "75px",
                 textAlign: "center",
               }}
               variant="body1"
@@ -70,7 +70,7 @@ export default function Bowling(squad) {
                 fontFamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
-                width: "60px",
+                width: "75px",
                 textAlign: "center",
               }}
               variant="body1"
@@ -83,7 +83,7 @@ export default function Bowling(squad) {
                 fontFamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
-                width: "60px",
+                width: "75px",
                 textAlign: "center",
               }}
               variant="body1"
@@ -94,7 +94,10 @@ export default function Bowling(squad) {
         </Box>
         <Box>
           {bowling.players
-            .filter((player) => player.isBowler && (player.overs !==0 || player.bowled !== 0))
+            .filter(
+              (player) =>
+                player.isBowler && (player.overs !== 0 || player.bowled !== 0)
+            )
             .map((player, index) => (
               <Box
                 key={index}
@@ -124,8 +127,8 @@ export default function Bowling(squad) {
                   sx={{
                     display: "flex",
                     alignItems: "baseline",
-                    gap: "15px",
-                    paddingRight: "40px",
+                    gap: "18px",
+                    paddingRight: "35px",
                   }}
                 >
                   <Typography
@@ -133,8 +136,8 @@ export default function Bowling(squad) {
                       fontWeight: 600,
                       fontFamily: "Rubik",
                       textTransform: "uppercase",
-                      padding: "10px 20px",
-                      width: "60px",
+                      padding: { xs: "4px 16px", md: "8px 16px" },
+                      width: "75px",
                       textAlign: "center",
                     }}
                     variant="h6"
@@ -146,8 +149,8 @@ export default function Bowling(squad) {
                       fontWeight: 600,
                       fontFamily: "Rubik",
                       textTransform: "uppercase",
-                      padding: "10px 20px",
-                      width: "60px",
+                  padding: { xs: "4px 16px", md: "8px 16px" },
+                      width: "75px",
                       textAlign: "center",
                     }}
                     variant="h6"
@@ -159,8 +162,8 @@ export default function Bowling(squad) {
                       fontWeight: 600,
                       fontFamily: "Rubik",
                       textTransform: "uppercase",
-                      padding: "10px 20px",
-                      width: "60px",
+                  padding: { xs: "4px 16px", md: "8px 16px" },
+                      width: "75px",
                       textAlign: "center",
                     }}
                     variant="h6"
@@ -172,8 +175,8 @@ export default function Bowling(squad) {
                       fontWeight: 600,
                       fontFamily: "Rubik",
                       textTransform: "uppercase",
-                      padding: "8px 16px",
-                      width: "60px",
+                  padding: { xs: "4px 16px", md: "8px 16px" },
+                      width: "75px",
                       textAlign: "center",
                     }}
                     variant="h6"
@@ -185,8 +188,8 @@ export default function Bowling(squad) {
                       fontWeight: 600,
                       fontFamily: "Rubik",
                       textTransform: "uppercase",
-                      padding: "10px 20px",
-                      width: "60px",
+                  padding: { xs: "4px 16px", md: "8px 16px" },
+                      width: "75px",
                       textAlign: "center",
                     }}
                     variant="h6"
@@ -229,10 +232,9 @@ export default function Bowling(squad) {
               display: "flex",
               alignItems: "center",
               gap: "50px",
-              padding: "5px",
-              ml: "-5px",
+              padding: "5px 0px",
               width: "100%",
-              borderRadius: "12px",
+              // borderRadius: "12px",
             }}
           >
             <Typography
@@ -242,7 +244,7 @@ export default function Bowling(squad) {
                 fontWeight: 600,
                 fontFamily: "Rubik",
                 padding: "0px 15px",
-                width: "200px",
+                width: "220px",
               }}
               variant="h6"
             >
@@ -291,11 +293,11 @@ export default function Bowling(squad) {
                 fontWeight: 600,
                 fontFamily: "Rubik",
                 padding: "4px 15px",
-                width: "200px",
-                color : '#000000'
+                width: "220px",
+                color: "#000000",
               }}
               variant="h6"
-              >
+            >
               score
             </Typography>
             <Box
@@ -304,7 +306,7 @@ export default function Bowling(squad) {
                 alignItems: "center",
                 gap: "40px",
               }}
-              >
+            >
               {bowling?.fow?.map((wicket, index) => {
                 return (
                   <>
@@ -315,7 +317,7 @@ export default function Bowling(squad) {
                         fontWeight: 600,
                         width: "40px",
                         textAlign: "center",
-                        color : '#000000'
+                        color: "#000000",
                       }}
                       variant="h6"
                     >

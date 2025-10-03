@@ -21,10 +21,10 @@ export default function Batting(squad) {
             color: data.notout ? "#FFFFFF" : "#0f0648",
             backgroundColor: data.notout ? "#fa208e" : "#FFFFFF",
             boxShadow: "0px 0px 9px -7px #000000",
-            borderRadius: data.notout ? "12px" : "0px",
-            padding: data.notout ? "0 5px" : "0px",
+            // borderRadius: data.notout ? "12px" : "0px",
+            // padding: data.notout ? "0 5px" : "0px",
+            // marginLeft: data.notout ? "-5px" : "0px",
             width: "100%",
-            marginLeft: data.notout ? "-5px" : "0px",
           }}
         >
           <Box
@@ -40,7 +40,7 @@ export default function Batting(squad) {
                 fontWeight: 600,
                 fontFamily: "Rubik",
                 textTransform: "uppercase",
-                padding: "8px 16px",
+                padding: "0px 16px",
               }}
               variant="h6"
             >
@@ -81,9 +81,9 @@ export default function Batting(squad) {
                 fontWeight: 600,
                 fontFamily: "Rubik",
                 textTransform: "uppercase",
-                padding: "8px 16px",
+                padding: { xs : "2px 16px" , md : "6px 16px"},
                 boxShadow: "4px -4px 5px -3px #0003",
-                width : "25px",
+                width : "50px",
                 textAlign : "center",
               }}
               variant="h6"
@@ -94,8 +94,8 @@ export default function Batting(squad) {
               sx={{
                 fontFamily: "Rubik",
                 textTransform: "uppercase",
-                padding: "10px 20px",
-                width : "25px",
+                padding: "0px 20px",
+                width : "50px",
                 textAlign : "center",
               }}
               variant="body1"

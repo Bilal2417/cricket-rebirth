@@ -69,7 +69,7 @@ export default function Scorecard() {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              padding: "8px 16px",
+              padding: { xs: "4px 16px", md: "8px 16px" },
               backgroundColor: "#FFFFFF",
               borderRadius: "12px 12px 0 0",
               // overflow: "hidden",
@@ -213,8 +213,7 @@ export default function Scorecard() {
 
           <Box
             sx={{
-              width: "100%",
-              padding: "10px 0px",
+              padding: { xs: "1px 0px", md: "5px 0px" },
               backgroundColor: "#0f0648",
               position: "relative",
             }}
@@ -237,7 +236,7 @@ export default function Scorecard() {
                 textAlign: "center",
                 color: "#dece43",
                 position: "absolute",
-                top: 10,
+                top: 5,
                 ...(Innings % 2 === 1 ? { left: 16 } : { right: 16 }),
               }}
               variant="h6"
@@ -306,9 +305,9 @@ export default function Scorecard() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  padding: "8px 16px",
+                  padding: { xs: "4px 16px", md: "8px 16px" },
                   width: "85%",
-                  position  :"relative"
+                  position: "relative",
                 }}
               >
                 <Typography
@@ -389,7 +388,7 @@ export default function Scorecard() {
                 sx={{
                   backgroundColor: "#fa208e",
                   color: "#FFFFFF",
-                  padding: "8px 16px",
+                  padding: { xs: "4px 16px", md: "8px 16px" },
                   width: "100px",
                 }}
               >
@@ -403,7 +402,7 @@ export default function Scorecard() {
                     justifyContent: "center",
                     gap: "5px",
                   }}
-                  variant="h5"
+                  variant="h6"
                 >
                   {Innings == 1 || Innings == 4
                     ? !batting

@@ -28,16 +28,26 @@ export default function Selection() {
   }, []);
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box
+      sx={{
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 2,
+      }}
+    >
       <Grid container spacing={2} justifyContent="center">
         {teams?.map((team, index) => (
           <Grid
             item
             key={index}
-            xs={6}   // 2 per row on extra small screens
-            sm={4}   // 3 per row on small screens
-            md={3}   // 4 per row on medium screens
-            lg={2}   // 6 per row on large screens
+            xs={6} // 2 per row on extra small screens
+            sm={4} // 3 per row on small screens
+            md={3} // 4 per row on medium screens
+            lg={2} // 6 per row on large screens
             sx={{
               ":hover": {
                 cursor: "pointer",
@@ -55,8 +65,8 @@ export default function Selection() {
               src={team?.flag}
               alt={team?.name}
               style={{
-                width: "100%",      
-                maxWidth: "120px",  
+                width: "100%",
+                maxWidth: "120px",
                 height: "auto",
                 borderRadius: "6px",
                 boxShadow: "3px 3px 8px -2px #000000",
