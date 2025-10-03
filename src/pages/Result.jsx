@@ -38,21 +38,64 @@ export default function Result() {
     setTotalWkts(Number(overs));
     console.log("hehe", overs);
   }, []);
-  
-  const incrementTrophies = async (win, matchType) => {
+
+  // const incrementTrophies = async (win, matchType) => {
+  //   if (!Profile) return;
+
+  //   const overs = localStorage.getItem("Overs");
+  //   const wkts = Number(totalWkts) || Number(overs);
+
+  //   let trophyIncrement = 0;
+
+  //   if (win) {
+  //     // Always calculate trophies for the winner
+  //     trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
+
+  //     if (matchType === 2) trophyIncrement *= 2; // bonus for full win
+  //     if (matchType === 1) trophyIncrement = Math.ceil(trophyIncrement / 2); // tie
+  //   }
+
+  //   const updatedProfile = {
+  //     ...Profile,
+  //     victories: win ? Profile.victories + 1 : Profile.victories,
+  //     trophies: Profile.trophies + trophyIncrement,
+  //   };
+
+  //   setProfile(updatedProfile);
+
+  //   try {
+  //     const res = await fetch("/.netlify/functions/updateProfile", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(updatedProfile),
+  //     });
+
+  //     const data = await res.json();
+  //     if (data.success) {
+  //       setProfile(data.profile);
+  //       sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+  //     } else {
+  //       console.error("Failed to update trophies in database");
+  //     }
+
+  //     navigate("/");
+  //   } catch (err) {
+  //     console.error("Error updating trophies:", err);
+  //   }
+  // };
+
+  const incrementTrophies = async (win, matchType, isTournament = false) => {
     if (!Profile) return;
-    
+
     const overs = localStorage.getItem("Overs");
-    const wkts = Number(totalWkts) || Number(overs); 
+    const wkts = Number(totalWkts) || Number(overs);
 
     let trophyIncrement = 0;
 
-    if (win) {
-      // Always calculate trophies for the winner
+    if (win && !isTournament) {
       trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
-
-      if (matchType === 2) trophyIncrement *= 2; // bonus for full win
-      if (matchType === 1) trophyIncrement = Math.ceil(trophyIncrement / 2); // tie
+      if (matchType === 2) trophyIncrement *= 2;
+      if (matchType === 1) trophyIncrement = Math.ceil(trophyIncrement / 2);
     }
 
     const updatedProfile = {
@@ -77,8 +120,6 @@ export default function Result() {
       } else {
         console.error("Failed to update trophies in database");
       }
-
-      navigate("/");
     } catch (err) {
       console.error("Error updating trophies:", err);
     }
@@ -810,28 +851,64 @@ export default function Result() {
                 },
               }}
               disabled={buttonDisabled}
+              // onClick={async () => {
+              //   setButtonDisabled(true);
+              //   setLoading(true);
+
+              //   if (isTournament === "KNOCKOUT") {
+              //     const id = sessionStorage.getItem("lastMatchId");
+              //     if (winner === "Match Tied") {
+              //       const tieBreaker =
+              //         Math.random() < 0.5 ? userTeam?.name : aiTeam?.name;
+              //       sessionStorage.setItem(id, tieBreaker);
+              //     } else {
+              //       sessionStorage.setItem(id, winner);
+              //     }
+              //     navigate("/fixtures");
+              //   } else {
+              //     if (userTeam.score > aiTeam.score) {
+              //       await incrementTrophies(true, 2);
+              //     } else if (aiTeam.score > userTeam.score) {
+              //       await incrementTrophies(false, 0);
+              //     } else {
+              //       await incrementTrophies(true, 1);
+              //     }
+              //   }
+
+              //   setLoading(false);
+              // }}
               onClick={async () => {
                 setButtonDisabled(true);
                 setLoading(true);
 
-                if (isTournament === "KNOCKOUT") {
+                const isTournament =
+                  sessionStorage.getItem("mode") === "KNOCKOUT";
+
+                const userWon = userTeam.score > aiTeam.score;
+                const tie = userTeam.score === aiTeam.score;
+
+                if (isTournament) {
+                  // Store winner/tie for tournament fixtures
                   const id = sessionStorage.getItem("lastMatchId");
-                  if (winner === "Match Tied") {
+                  if (tie) {
                     const tieBreaker =
                       Math.random() < 0.5 ? userTeam?.name : aiTeam?.name;
                     sessionStorage.setItem(id, tieBreaker);
                   } else {
-                    sessionStorage.setItem(id, winner);
+                    sessionStorage.setItem(
+                      id,
+                      userWon ? userTeam?.name : aiTeam?.name
+                    );
                   }
+
+                  // Call incrementTrophies but only increment victories
+                  await incrementTrophies(userWon, 0, true); // pass "true" for isTournament
                   navigate("/fixtures");
                 } else {
-                  if (userTeam.score > aiTeam.score) {
-                    await incrementTrophies(true, 2);
-                  } else if (aiTeam.score > userTeam.score) {
-                    await incrementTrophies(false, 0);
-                  } else {
-                    await incrementTrophies(true, 1);
-                  }
+                  if (userWon) await incrementTrophies(true, 2, false);
+                  else if (aiTeam.score > userTeam.score)
+                    await incrementTrophies(false, 0, false);
+                  else await incrementTrophies(true, 1, false);
                 }
 
                 setLoading(false);
