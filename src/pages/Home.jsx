@@ -245,7 +245,7 @@ export default function Home() {
 
             <Box
               sx={{
-                maxHeight: "250px",
+                maxHeight: "230px",
                 overflowY: "auto",
                 overflowX: "hidden",
 
