@@ -412,7 +412,7 @@ export default function Home() {
                 );
               })}
 
-              {!loading
+              {loading
                 ? ["1", "2", "3", "4"].map((index) => {
                     return (
                       <Box
