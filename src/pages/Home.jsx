@@ -245,7 +245,30 @@ export default function Home() {
 
             <Box
               sx={{
-                maxHeight: "500px",
+                maxHeight: "250px",
+                overflowY: "auto",
+                overflowX: "hidden",
+
+                /* Chrome, Safari, Edge */
+                "&::-webkit-scrollbar": {
+                  width: "8px",
+                },
+                "&::-webkit-scrollbar-track": {
+                  background: "#f1f1f1",
+                  borderRadius: "10px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#888",
+                  borderRadius: "10px",
+                  border: "2px solid #f1f1f1",
+                },
+                "&::-webkit-scrollbar-thumb:hover": {
+                  backgroundColor: "#555",
+                },
+
+                /* Firefox */
+                scrollbarWidth: "thin",
+                scrollbarColor: "#888 #f1f1f1",
               }}
             >
               {profiles?.map((profile, index) => {
@@ -289,9 +312,13 @@ export default function Home() {
                         sx={{
                           fontFamily: "Rubik",
                           backgroundColor:
-                            profile?.id == profileId ? "rgb(255 168 0)" : "#6e606d",
+                            profile?.id == profileId
+                              ? "rgb(255 168 0)"
+                              : "#6e606d",
                           color:
-                            profile?.id == profileId ? "rgb(255 196 107)" : "#aa9ca9",
+                            profile?.id == profileId
+                              ? "rgb(255 196 107)"
+                              : "#aa9ca9",
                           padding: "4px 12px",
                           fontWeight: 600,
                           width: "11px",
@@ -368,7 +395,9 @@ export default function Home() {
                           },
                           "& path:last-of-type": {
                             fill:
-                              profile?.id == profileId ? "rgb(255 196 107)" : "#DAA520",
+                              profile?.id == profileId
+                                ? "rgb(255 196 107)"
+                                : "#DAA520",
                           },
                         }}
                       />
