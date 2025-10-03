@@ -12,6 +12,7 @@ import Knockout from "./pages/Knockout";
 import Fixtures from "./pages/Fixtures";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
+import CardPacksShop from "./components/card";
 
 function App() {
 
@@ -58,7 +59,7 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/" element={<Card />} />
+            <Route path="/card" element={<CardPacksShop />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/modes" element={<Modes />} />
             <Route path="/knockout" element={<Knockout />} />
