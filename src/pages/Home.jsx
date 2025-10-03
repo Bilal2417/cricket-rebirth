@@ -248,7 +248,7 @@ export default function Home() {
                 maxHeight: "230px",
                 overflowY: "auto",
                 overflowX: "hidden",
-                
+                marginRight : "10px",
                 "&::-webkit-scrollbar": {
                   width: "8px",
                 },

@@ -35,18 +35,19 @@ export default function Result() {
 
   useEffect(() => {
     const overs = localStorage.getItem("Overs");
-    setTotalWkts(overs ? Number(overs) : 0);
+    setTotalWkts(Number(overs));
+    console.log("hehe",overs)
   }, []);
-  // const [draw, setDraw] = useState(2);
+  
 
-  const incrementTrophies = async (inc = true , draw) => {
+  const incrementTrophies = async (inc = true, draw) => {
     if (!Profile) return;
 
     const updatedProfile = {
       ...Profile,
       trophies: inc
         ? Profile.trophies +
-          (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5) * draw
+          ((totalWkts !== 100 || totalWkts !== "100" ? Math.ceil(totalWkts / 2) : 5) * draw)
         : Profile.trophies,
     };
 
@@ -147,6 +148,9 @@ export default function Result() {
     .slice(0, 4);
 
   console.log(topScorerFirst, "oopppo");
+
+  
+                const isTournament = sessionStorage.getItem("mode");
 
   return (
     <>
@@ -797,10 +801,9 @@ export default function Result() {
               }}
               disabled={buttonDisabled}
               onClick={async () => {
-                setButtonDisabled(true); // disable immediately
-                setLoading(true); // show loading
+                setButtonDisabled(true); 
+                setLoading(true); 
 
-                const isTournament = sessionStorage.getItem("mode");
 
                 if (isTournament === "KNOCKOUT") {
                   const id = sessionStorage.getItem("lastMatchId");
@@ -813,12 +816,12 @@ export default function Result() {
                   }
                   navigate("/fixtures");
                 } else {
-                  if (userTeam?.score > aiTeam?.score) {
-                    await incrementTrophies(true  ,2);
-                  } else if (aiTeam?.score > userTeam?.score) {
-                    await incrementTrophies(false , 0);
-                  } else {                    
-                    await incrementTrophies(true , 1);
+                  if (userTeam.score > aiTeam.score) {
+                    await incrementTrophies(true, 2);
+                  } else if (aiTeam.score > userTeam.score) {
+                    await incrementTrophies(false, 0);
+                  } else {
+                    await incrementTrophies(true, 1);
                   }
                 }
 

@@ -4,13 +4,13 @@
   padding: 2rem;
   text-align: center;
 }
-.MuiTypography-root {
+/* .MuiTypography-root {
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-touch-callout: none;
-}
+} */
 
 .logo {
   height: 6em;

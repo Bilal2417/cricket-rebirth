@@ -7,11 +7,12 @@ export default function Toss() {
   const [tossWin, setTossWin] = useState(false);
   const [inningsChoice, setInningsChoice] = useState(null);
   const navigate = useNavigate();
+  const isTournament = sessionStorage.getItem("mode");
 
   const handleToss = (choice) => {
     const coinFlip = Math.random() < 0.5 ? "Heads" : "Tails";
     const winner = coinFlip === choice ? "user" : "ai";
-    const isTournament = sessionStorage.getItem("mode");
+
     if (isTournament !== "KNOCKOUT") {
       decrementTrophies();
     }
@@ -52,7 +53,7 @@ export default function Toss() {
   const decrementTrophies = async () => {
     if (!Profile) return;
 
-    const penalty = totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5;
+    const penalty = totalWkts !== 100 || totalWkts !== "100" ? Math.ceil(totalWkts / 2) : 5;
 
     const updatedProfile = {
       ...Profile,
