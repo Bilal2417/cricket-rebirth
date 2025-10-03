@@ -38,19 +38,27 @@ export default function Result() {
     setTotalWkts(Number(overs));
     console.log("hehe", overs);
   }, []);
-
-  const incrementTrophies = async (win, value) => {
+  
+  const incrementTrophies = async (win, matchType) => {
     if (!Profile) return;
+    
+    const overs = localStorage.getItem("Overs");
+    const wkts = Number(totalWkts) || Number(overs); 
 
-    const wkts = Number(totalWkts);
+    let trophyIncrement = 0;
 
-    const trophyIncrement =
-      wkts === 100 ? 5 * value : Math.ceil(wkts / 2) * value;
+    if (win) {
+      // Always calculate trophies for the winner
+      trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
+
+      if (matchType === 2) trophyIncrement *= 2; // bonus for full win
+      if (matchType === 1) trophyIncrement = Math.ceil(trophyIncrement / 2); // tie
+    }
 
     const updatedProfile = {
       ...Profile,
-      victories: win && value === 2 ? Profile.victories + 1 : Profile.victories,
-      trophies: win ? Profile.trophies + trophyIncrement : Profile.trophies,
+      victories: win ? Profile.victories + 1 : Profile.victories,
+      trophies: Profile.trophies + trophyIncrement,
     };
 
     setProfile(updatedProfile);
@@ -65,7 +73,6 @@ export default function Result() {
       const data = await res.json();
       if (data.success) {
         setProfile(data.profile);
-        console.log(data.profile);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
       } else {
         console.error("Failed to update trophies in database");
@@ -212,10 +219,10 @@ export default function Result() {
                 {!batting ? userTeam?.name : aiTeam?.name}
               </Typography>
               <Box
-              component="img"
+                component="img"
                 sx={{
-                  width: { xs : "45px" , md : "60px"},
-                  height: { xs : "30px" , md : "40px"},
+                  width: { xs: "45px", md: "60px" },
+                  height: { xs: "30px", md: "40px" },
                   boxShadow: "3px 3px 8px -2px #000000",
                 }}
                 src={batting ? aiTeam?.flag : userTeam?.flag}
@@ -245,10 +252,10 @@ export default function Result() {
               }}
             >
               <Box
-              component="img"
+                component="img"
                 sx={{
-                  width: { xs : "45px" , md : "60px"},
-                  height: { xs : "30px" , md : "40px"},
+                  width: { xs: "45px", md: "60px" },
+                  height: { xs: "30px", md: "40px" },
                   boxShadow: "3px 3px 8px -2px #000000",
                 }}
                 src={!batting ? aiTeam?.flag : userTeam?.flag}
