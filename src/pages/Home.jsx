@@ -565,14 +565,14 @@ export default function Home() {
                   showDescToast("Select Game Mode first!");
                   return;
                 }
-                if (
-                  userProfile?.trophies <
-                    (overs === 100 ? 5 : Math.ceil(overs / 2)) &&
-                  mode !== "KNOCKOUT"
-                ) {
-                  showDescToast("Not enough trophies to play this mode!");
-                  return;
-                }
+                // if (
+                //   userProfile?.trophies <
+                //     (overs === 100 ? 5 : Math.ceil(overs / 2)) &&
+                //   mode !== "KNOCKOUT"
+                // ) {
+                //   showDescToast("Not enough trophies to play this mode!");
+                //   return;
+                // }
 
                 navigate("/team");
               }}

@@ -46,16 +46,17 @@ export default function Toss() {
 
   useEffect(() => {
     const overs = localStorage.getItem("Overs");
-    setTotalWkts(overs ? Number(overs) : 0); 
+    setTotalWkts(overs ? Number(overs) : 0);
   }, []);
 
   const decrementTrophies = async () => {
     if (!Profile) return;
 
+    const penalty = totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5;
+
     const updatedProfile = {
       ...Profile,
-      trophies:
-        Profile.trophies - (totalWkts !== 100 ? Math.ceil(totalWkts / 2) : 5),
+      trophies: Math.max(Profile.trophies - penalty, 0),
     };
 
     setProfile(updatedProfile);
