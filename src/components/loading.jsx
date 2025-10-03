@@ -16,6 +16,7 @@ export default function LoadingPage({ loading, onFinish }) {
       timer = setInterval(() => {
         setProgress((old) => {
           if (old >= 100) {
+            old = 100
             clearInterval(timer);
             onFinish(); 
             return 100;

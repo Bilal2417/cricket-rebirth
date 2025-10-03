@@ -13,7 +13,7 @@ export async function handler(event) {
       };
     }
 
-    if (name) {
+    if (event.path === "/profile" && name) {
       const check = await client.query(
         "SELECT id FROM profiles WHERE name = $1 AND id <> $2",
         [name, id]
