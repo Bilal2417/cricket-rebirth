@@ -17,37 +17,40 @@ export default function Result() {
   });
 
   const navigate = useNavigate();
-  const storedData = localStorage.getItem("cricketData");
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [Teams, setTeams] = useState(
-    storedData ? JSON.parse(storedData) : Data
-  );
+  const [Teams, setTeams] = useState(() => {
+    const storedData = localStorage.getItem("cricketData");
+    return storedData ? JSON.parse(storedData) : Data;
+  });
 
-  const storedProfile = sessionStorage.getItem("Profile");
-  const [Profile, setProfile] = useState(
-    storedProfile ? JSON.parse(storedProfile) : ""
-  );
+  const [Profile, setProfile] = useState(() => {
+    const storedProfile = sessionStorage.getItem("Profile");
+    return storedProfile ? JSON.parse(storedProfile) : "";
+  });
 
   const [totalWkts, setTotalWkts] = useState(null);
 
   useEffect(() => {
     const overs = localStorage.getItem("Overs");
     setTotalWkts(Number(overs));
-    console.log("hehe",overs)
+    console.log("hehe", overs);
   }, []);
-  
 
   const incrementTrophies = async (inc = true, draw) => {
     if (!Profile) return;
 
     const updatedProfile = {
       ...Profile,
+      victories: inc && draw == 2 ? Profile.victories + 1 : Profile.victories,
       trophies: inc
         ? Profile.trophies +
-          ((totalWkts !== 100 || totalWkts !== "100" ? Math.ceil(totalWkts / 2) : 5) * draw)
+          (totalWkts !== 100 || totalWkts !== "100"
+            ? Math.ceil(totalWkts / 2)
+            : 5) *
+            draw
         : Profile.trophies,
     };
 
@@ -149,8 +152,7 @@ export default function Result() {
 
   console.log(topScorerFirst, "oopppo");
 
-  
-                const isTournament = sessionStorage.getItem("mode");
+  const isTournament = sessionStorage.getItem("mode");
 
   return (
     <>
@@ -797,9 +799,8 @@ export default function Result() {
               }}
               disabled={buttonDisabled}
               onClick={async () => {
-                setButtonDisabled(true); 
-                setLoading(true); 
-
+                setButtonDisabled(true);
+                setLoading(true);
 
                 if (isTournament === "KNOCKOUT") {
                   const id = sessionStorage.getItem("lastMatchId");

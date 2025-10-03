@@ -248,7 +248,7 @@ export default function Home() {
                 maxHeight: "230px",
                 overflowY: "auto",
                 overflowX: "hidden",
-                marginRight : "10px",
+                paddingRight : "10px",
                 "&::-webkit-scrollbar": {
                   width: "8px",
                 },
@@ -411,7 +411,7 @@ export default function Home() {
               })}
 
               {loading
-                ? ["1", "2", "3"].map((index) => {
+                ? ["1", "2", "3","4"].map((index) => {
                     return (
                       <Box
                         key={index}
