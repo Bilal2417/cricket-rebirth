@@ -192,7 +192,7 @@ export default function Result() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "0px 100px",
+                padding: "0px 50px",
               }}
             >
               <Typography
@@ -229,8 +229,6 @@ export default function Result() {
                 fontWeight: 900,
                 fontFamily: "Rubik",
                 textTransform: "uppercase",
-                position: "absolute",
-                left: "47%",
               }}
             >
               vs
@@ -241,7 +239,7 @@ export default function Result() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "0px 100px",
+                padding: "0px 50px",
               }}
             >
               <img
@@ -273,10 +271,8 @@ export default function Result() {
 
           <Box
             sx={{
-              width: "100%",
-              padding: "10px 0px",
+              padding: "5px 0px",
               backgroundColor: "#0f0648",
-              position: "relative",
             }}
           >
             <Typography
