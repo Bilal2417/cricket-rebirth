@@ -79,7 +79,7 @@ export default function Profile() {
   };
 
   const showErrToast = (desc) => {
-    toast.success(desc, {
+    toast.error(desc, {
       position: "top-right",
       autoClose: 4000,
       hideProgressBar: false,
@@ -95,8 +95,7 @@ export default function Profile() {
     const id = localStorage.getItem("MyId");
     if (!id) return console.error("No profile ID found");
 
-    showDescToast("Profile Updated Successfully !!");
-
+    
     const updatedProfile = {
       ...profile,
       id: profileId,
@@ -123,6 +122,7 @@ export default function Profile() {
         if (data.success) {
           setProfile(data.profile);
           sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+          showDescToast("Profile Updated Successfully !!");
         } else {
           showErrToast("Name already exist");
         }

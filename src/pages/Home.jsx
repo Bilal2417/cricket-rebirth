@@ -248,8 +248,7 @@ export default function Home() {
                 maxHeight: "230px",
                 overflowY: "auto",
                 overflowX: "hidden",
-
-                /* Chrome, Safari, Edge */
+                
                 "&::-webkit-scrollbar": {
                   width: "8px",
                 },
@@ -344,8 +343,7 @@ export default function Home() {
                       <Typography
                         sx={{
                           fontWeight: 600,
-                          fontFamily: "Rubik",
-                          textTransform: "uppercase",
+                          fontFamily: "Rubik",                          
                           color: "rgb(255 196 107)",
                         }}
                         variant="body1"
