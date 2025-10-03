@@ -47,7 +47,7 @@ export default function Result() {
       victories: inc && draw == 2 ? Profile.victories + 1 : Profile.victories,
       trophies: inc
         ? Profile.trophies +
-          (totalWkts !== 100 || totalWkts !== "100"
+          (totalWkts !== 100 && totalWkts !== "100"
             ? Math.ceil(totalWkts / 2)
             : 5) *
             draw

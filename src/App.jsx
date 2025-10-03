@@ -58,6 +58,7 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/" element={<Card />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/modes" element={<Modes />} />
             <Route path="/knockout" element={<Knockout />} />
