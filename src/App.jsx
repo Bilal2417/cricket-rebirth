@@ -14,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
 import CardPacksShop from "./components/card";
 import MovingBallsBackground from "./components/background";
+import DisablePullToRefresh from "./components/disable";
 
 function App() {
 
@@ -57,6 +58,7 @@ function App() {
           }}
         >
           <MovingBallsBackground/>
+          <DisablePullToRefresh/>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/card" element={<CardPacksShop />} />

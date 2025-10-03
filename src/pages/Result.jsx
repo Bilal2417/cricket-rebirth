@@ -162,7 +162,7 @@ export default function Result() {
           alignItems: "center",
           height: "100vh",
           flexDirection: "column",
-          width: { xs: "800px", sm: "1150px", md: "auto" },
+          // width: { xs: "800px", sm: "1150px", md: "auto" },
           margin: "auto",
         }}
       >
