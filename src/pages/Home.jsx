@@ -185,13 +185,13 @@ export default function Home() {
     <>
       <Box
         sx={{
-          minHeight: "100vh", 
+          minHeight: "100vh",
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between", 
-          py: 8, 
-          px: 2, 
+          justifyContent: "space-between",
+          py: 8,
+          px: 2,
           boxSizing: "border-box",
         }}
       >
@@ -324,7 +324,6 @@ export default function Home() {
                               : "#aa9ca9",
                           padding: "4px 12px",
                           fontWeight: 600,
-                          width: "11px",
                         }}
                         variant="body1"
                       >
@@ -364,8 +363,8 @@ export default function Home() {
                             : "#514e4e",
                           borderRadius: "50%",
                           position: "absolute",
-                          top: 5,
-                          left: 30,
+                          top: 7,
+                          left: 25,
                         }}
                       />
                     </Box>
@@ -380,7 +379,6 @@ export default function Home() {
                           profile?.id == profileId ? "#dc5425" : "#665963",
                         padding: "15px 30px",
                         clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)",
-                        width: "60px",
                         justifyContent: "center",
                         color: "rgb(255 196 107)",
                       }}
@@ -421,7 +419,7 @@ export default function Home() {
                         key={index}
                         sx={{
                           backgroundColor: "#897689",
-                          width: "400px",
+                          width: "415px",
                           paddingLeft: "15px",
                           display: "flex",
                           alignContent: "center",
