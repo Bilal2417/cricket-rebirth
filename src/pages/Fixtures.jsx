@@ -139,10 +139,13 @@ export default function Fixtures() {
   return (
     <>
       <Box
-        sx={{
+        sx={{          
+          minHeight: "100vh",
+          width: "100%",
           display: "flex",
           justifyContent: "space-between",
-          width: "1150px",
+          py: 8,
+          px: 2,
         }}
       >
         <Box
@@ -421,6 +424,7 @@ export default function Fixtures() {
             position: "relative",
             px: 4,
             py: 1.5,
+            minWidth : "200px",
             overflow: "hidden",
             clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
             boxShadow: "inset 0px -8px 8px -4px #262e40",

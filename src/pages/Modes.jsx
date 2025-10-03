@@ -61,9 +61,13 @@ export default function Modes() {
     <>
       <Box
         sx={{
+          minHeight: "100vh",
+          width: "100%",
           display: "flex",
-          justifyContent: "center",
-          gap: "20px",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          py: 8,
+          px: 2,
         }}
       >
         <Button
@@ -166,7 +170,7 @@ export default function Modes() {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "repeat(3,1fr)",
+            gridTemplateColumns: { xs : "repeat(2,1fr)" , md : "repeat(3,1fr)"},
             gap: "20px",
           }}
         >
