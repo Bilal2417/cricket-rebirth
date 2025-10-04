@@ -52,7 +52,7 @@ export default function Profile() {
             ...data.profile,
             img: data.profile.img || "/assets/img/pak.png",
           };
-          console.log(profileData)
+          console.log(profileData);
           setProfile(profileData);
           setName(profileData.name);
           setTitles(profileData.titles);
@@ -95,41 +95,39 @@ export default function Profile() {
   };
 
   const handleSave = async (newImg = null) => {
-  if (!profile) return;
+    if (!profile) return;
 
-  const id = localStorage.getItem("MyId");
-  if (!id) return console.error("No profile ID found");
+    const id = localStorage.getItem("MyId");
+    if (!id) return console.error("No profile ID found");
 
-  const updatedProfile = {
-    ...profile,
-    id,
-    name: tempName || profile.name,   
-    img: newImg || profile.img,       
-  };
+    const updatedProfile = {
+      ...profile,
+      id,
+      name: tempName || profile.name,
+      img: newImg || profile.img,
+    };
 
-  setProfile(updatedProfile);
-  setOpen(false);
+    setProfile(updatedProfile);
+    setOpen(false);
 
-  fetch("/.netlify/functions/updateProfile", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updatedProfile),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success) {
-        setName(tempName || profile.name);
-        setProfile(data.profile);
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-        showDescToast("Profile Updated Successfully !!");
-      } else {
-        showErrToast("Name already exists");
-      }
+    fetch("/.netlify/functions/updateProfile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedProfile),
     })
-    .catch((err) => console.error("Error updating profile:", err));
-};
-
-
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setName(tempName || profile.name);
+          setProfile(data.profile);
+          sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+          showDescToast("Profile Updated Successfully !!");
+        } else {
+          showErrToast("Name already exists");
+        }
+      })
+      .catch((err) => console.error("Error updating profile:", err));
+  };
 
   const handleImageClick = () => fileInputRef.current.click();
 
@@ -144,31 +142,37 @@ export default function Profile() {
     reader.readAsDataURL(file);
   };
 
-
   const updateTitle = async (newTitle) => {
-  if (!profile) return;
+    if (!profile) return;
 
-  const id = localStorage.getItem("MyId");
-  if (!id) return console.error("No profile ID found");
+    const id = localStorage.getItem("MyId");
+    if (!id) return console.error("No profile ID found");
 
-  const updatedProfile = {...profile, name : null ,id, selected_title: newTitle || profile.selected_title };
+    console.log(newTitle,"ppppa")
+    const updatedProfile = {
+      ...profile,
+      name: null,
+      id,
+      selected_title: newTitle || profile.selected_title,
+    };
 
-  fetch("/.netlify/functions/updateProfile", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updatedProfile),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success) {
-        setProfile(data.profile);
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-        showDescToast("Title Updated Successfully !!");
-      }
+    fetch("/.netlify/functions/updateProfile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedProfile),
     })
-    .catch((err) => console.error("Error updating title:", err));
-};
-
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setProfile(data.profile);
+          sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+          showDescToast("Title Updated Successfully !!");
+        }
+      })
+      .catch((err) => {
+        showErrToast("Title Updated Successfully !!");        
+        console.error("Error updating title:", err)});
+  };
 
   return (
     <>
@@ -203,7 +207,14 @@ export default function Profile() {
           </Box>
 
           {/* Profile Image & Name */}
-          <Box sx={{ display: "flex", alignItems : "flex-start", gap: "20px" , position : "relative" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "20px",
+              position: "relative",
+            }}
+          >
             <Box
               component="img"
               src={profile.img}
@@ -248,66 +259,69 @@ export default function Profile() {
               }}
             />
 
-
-              <Box
+            <Box
+              sx={{
+                position: "absolute",
+                left: "100%",
+                top: 0,
+                backgroundColor: "#073575",
+                width: "200px",
+                padding: "5px 20px",
+                display: "flex",
+                flexDirection: "column",
+                alignContent: "center",
+                border: "2px solid #000000",
+                borderRadius: "4px",
+                boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                m: "50px 0",
+                color: "#ffffff",
+                ":hover": { cursor: "pointer" },
+              }}
+              onClick={() => setShow(!show)}
+            >
+              <Typography
                 sx={{
-                  position : "absolute",
-                  left : "100%",
-                  top : 0,
-                  backgroundColor: "#073575",
-                  width: "200px",
-                  padding: "5px 20px",
-                  display: "flex",
-                  flexDirection : "column",
-                  alignContent: "center",
-                  border: "2px solid #000000",
-                  borderRadius: "4px",
-                  boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                  clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                  m: "50px 0",
-                  color: "#ffffff",
-                  ":hover": { cursor: "pointer" },
+                  textAlign: "center",
                 }}
-                onClick={() => setShow(!show)}
-                >
-                <Typography sx={{
-                  textAlign : "center"
-                }} variant="h6">
+                variant="h6"
+              >
                 {profile?.selected_title || "Titles"}
-                </Typography>
+              </Typography>
 
-                {show ? (profile?.titles.map((title, index) => {
-                  return (
-                    <Box
-                    key={index}
-                    sx={{
-                        textAlign : "center",
-                        backgroundColor: "#343c53",
-                        width: "90%",
-                        padding: "5px 20px",
-                        display: "flex",
-                        alignContent: "center",
-                        border: "2px solid #000000",
-                        borderRadius: "4px",
-                        boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                        clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                        m: "50px 0",
-                        color: "#ffffff",
-                        ":hover": { cursor: "pointer" },
-                      }}
-                      onClick={(e) => {
-                        setShow(false)
-                        setActiveTitle(title)                        
-                        updateTitle(title)
-                        e.stopPropagation()
-                      }}
-                    >
-                      {title}
-                    </Box>
-                  );
-                })):null}
-              </Box>
-
+              {show
+                ? profile?.titles.map((title, index) => {
+                    return (
+                      <Box
+                        key={index}
+                        sx={{
+                          textAlign: "center",
+                          backgroundColor: "#343c53",
+                          width: "90%",
+                          padding: "5px 20px",
+                          display: "flex",
+                          alignContent: "center",
+                          border: "2px solid #000000",
+                          borderRadius: "4px",
+                          boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                          clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                          m: "50px 0",
+                          color: "#ffffff",
+                          ":hover": { cursor: "pointer" },
+                        }}
+                        onClick={(e) => {
+                          setShow(false);
+                          setActiveTitle(title);
+                          updateTitle(title);
+                          e.stopPropagation();
+                        }}
+                      >
+                        {title}
+                      </Box>
+                    );
+                  })
+                : null}
+            </Box>
           </Box>
 
           {/* Change Name Dialog */}
