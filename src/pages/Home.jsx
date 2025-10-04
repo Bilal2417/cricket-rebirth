@@ -185,7 +185,7 @@ export default function Home() {
     <>
       <Box
         sx={{
-          minHeight: "100vh",
+          height: "100vh",
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -269,7 +269,6 @@ export default function Home() {
                   backgroundColor: "#555",
                 },
 
-                /* Firefox */
                 scrollbarWidth: "thin",
                 scrollbarColor: "#888 #f1f1f1",
               }}
@@ -507,6 +506,7 @@ export default function Home() {
                 : null}
             </Box>
           </Box>
+
           <Box>
             <Button
               sx={{

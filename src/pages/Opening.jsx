@@ -4,11 +4,45 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useParams } from "react-router-dom";
 
 // Example pulled cards (replace with your real data)
+
 const pulledCards = [
-  { name: "Coins", rarity: "Bronze" },
-  { name: "More Coins", rarity: "Silver" },
-  { name: "Double Trophies", rarity: "Gold" },
-  { name: "Team", rarity: "Legendary" },
+  {
+    value: 100,
+    rarity: "Bronze",
+    unlocks: [
+      { type: "coins", resource: 100 },
+      { type: "coins", resource: 250 },
+      { type: "coins", resource: 500 },
+    ],
+  },
+  {
+    value: 200,
+    rarity: "Silver",
+    unlocks: [
+      { type: "coins", resource: 1000 },
+      { type: "coins", resource: 2000 },
+      { type: "coins", resource: 3000 },
+    ],
+  },
+  {
+    value: 300,
+    rarity: "Gold",
+    unlocks: [
+      { type: "trophies", resource: 2 },
+      { type: "trophies", resource: 3 },
+      { type: "trophies", resource: 5 },
+    ],
+  },
+  {
+    value: 400,
+    rarity: "Legendary",
+    unlocks: [
+      { type: "team", resource: "Pakistan" },
+      { type: "team", resource: "India" },
+      { type: "team", resource: "Australia" },
+      { type: "team", resource: "England" },
+    ],
+  },
 ];
 
 const packData = {
@@ -34,25 +68,41 @@ export default function CardOpening({ onFinish }) {
   const [isAnimation, setIsAnimation] = useState(false);
 
   const handleNext = () => {
-    if(isAnimation)return
+    if (isAnimation) return;
     if (currentIndex < pack.size - 1) {
-        setIsAnimation(true)
+      setIsAnimation(true);
       setCurrentIndex((prev) => prev + 1);
     } else {
       // when last card is reached → show summary
       setShowSummary(true);
     }
   };
+
+  const required = 400
+
   useEffect(() => {
     if (!packKey) return;
 
     const newRewards = [];
 
     for (let index = 0; index < pack.size; index++) {
-      const randomIndex = Math.floor(Math.random() * pulledCards.length);
-      newRewards.push(pulledCards[randomIndex]);
+     const eligibleCards = pulledCards.filter((card) => card.value <= required );
+      if (eligibleCards.length === 0) break;
+
+      const randomCardIndex = Math.floor(Math.random() * eligibleCards.length);
+      const card = eligibleCards[randomCardIndex];
+
+      let unlock = null;
+      if (card.unlocks && card.unlocks.length > 0) {
+        const randomUnlockIndex = Math.floor(Math.random() * card.unlocks.length);
+        unlock = card.unlocks[randomUnlockIndex];
+      }
+
+      newRewards.push({ ...card, selectedUnlock: unlock });
+
     }
 
+    console.log(newRewards,"hello")
     setRewards(newRewards);
   }, [packKey]);
 
@@ -99,7 +149,7 @@ export default function CardOpening({ onFinish }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -50, scale: 0.8 }}
               transition={{ duration: 0.5 }}
-              onAnimationComplete={()=>setIsAnimation(false)}
+              onAnimationComplete={() => setIsAnimation(false)}
               style={{ display: "flex", justifyContent: "center" }}
             >
               <Card
@@ -117,8 +167,11 @@ export default function CardOpening({ onFinish }) {
                   textAlign: "center",
                 }}
               >
+                <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 , textTransform : "uppercase" }}>
+                  {rewards[currentIndex]?.selectedUnlock.type}
+                </Typography>
                 <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
-                  {rewards[currentIndex]?.name}
+                  {rewards[currentIndex]?.selectedUnlock.resource}
                 </Typography>
                 <Typography variant="h6" sx={{ letterSpacing: 1 }}>
                   {rewards[currentIndex]?.rarity}
@@ -186,7 +239,13 @@ export default function CardOpening({ onFinish }) {
                   boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
                 }}
               >
-                <Typography variant="h6">{card.name}</Typography>
+                
+                <Typography variant="body1" sx={{ fontWeight: "bold", mb: 2 , textTransform : "uppercase" }}>
+                  {card?.selectedUnlock.type}
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                  {card?.selectedUnlock.resource}
+                </Typography>
                 <Typography variant="body2" sx={{ opacity: 0.8 }}>
                   {card.rarity}
                 </Typography>
