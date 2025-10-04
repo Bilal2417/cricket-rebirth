@@ -29,7 +29,7 @@ export async function handler(event) {
         img TEXT,
         coins INT DEFAULT 0,
         unlocked_teams TEXT DEFAULT '[]',
-        titles TEXT[] DEFAULT '{}'
+        titles TEXT[] DEFAULT '{}',
         selected_title TEXT,
       )
     `);
@@ -41,7 +41,7 @@ export async function handler(event) {
       // Insert new profile with default values
       const result = await client.query(
         `INSERT INTO profiles (id, name, tournaments, trophies, victories, coins, unlocked_teams, img, titles , selected_title)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,$10)
          RETURNING *`,
         [
           profileId,
