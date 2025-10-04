@@ -179,7 +179,7 @@ export default function Profile() {
           </Box>
 
           {/* Profile Image & Name */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <Box sx={{ display: "flex", alignItems : "flex-start", gap: "20px" , position : "relative" }}>
             <Box
               component="img"
               src={profile.img}
@@ -224,9 +224,12 @@ export default function Profile() {
               }}
             />
 
-            <Box>
+
               <Box
                 sx={{
+                  position : "absolute",
+                  left : "100%",
+                  top : 0,
                   backgroundColor: "#073575",
                   width: "200px",
                   padding: "5px 20px",
@@ -243,14 +246,18 @@ export default function Profile() {
                 }}
                 onClick={() => setShow(!show)}
                 >
-                <Typography variant="h6">
+                <Typography sx={{
+                  textAlign : "center"
+                }} variant="h6">
                 {profile?.selected_title || "Titles"}
                 </Typography>
 
                 {show ? (profile?.titles.map((title, index) => {
                   return (
                     <Box
-                      sx={{
+                    key={index}
+                    sx={{
+                        textAlign : "center",
                         backgroundColor: "#343c53",
                         width: "90%",
                         padding: "5px 20px",
@@ -275,7 +282,7 @@ export default function Profile() {
                   );
                 })):null}
               </Box>
-            </Box>
+
           </Box>
 
           {/* Change Name Dialog */}
