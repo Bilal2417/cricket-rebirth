@@ -151,7 +151,7 @@ export default function Profile() {
   const id = localStorage.getItem("MyId");
   if (!id) return console.error("No profile ID found");
 
-  const updatedProfile = { id, selected_title: newTitle || profile.selected_title };
+  const updatedProfile = {...profile, name : null ,id, selected_title: newTitle || profile.selected_title };
 
   fetch("/.netlify/functions/updateProfile", {
     method: "POST",
