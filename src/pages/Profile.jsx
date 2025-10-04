@@ -244,25 +244,27 @@ export default function Profile() {
                 {profile?.selected_title || "Titles"}
 
                 {profile?.titles.map((title, index) => {
-                  <Box
-                    sx={{
-                      backgroundColor: "#343c53",
-                      width: "90%",
-                      padding: "5px 20px",
-                      display: "flex",
-                      alignContent: "center",
-                      border: "2px solid #000000",
-                      borderRadius: "4px",
-                      boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                      clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                      m: "50px 0",
-                      color: "#ffffff",
-                      ":hover": { cursor: "pointer" },
-                    }}
-                    // onClick={() => navigate("/")}
-                  >
-                    {title}
-                  </Box>;
+                  return (
+                    <Box
+                      sx={{
+                        backgroundColor: "#343c53",
+                        width: "90%",
+                        padding: "5px 20px",
+                        display: "flex",
+                        alignContent: "center",
+                        border: "2px solid #000000",
+                        borderRadius: "4px",
+                        boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                        clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                        m: "50px 0",
+                        color: "#ffffff",
+                        ":hover": { cursor: "pointer" },
+                      }}
+                      // onClick={() => navigate("/")}
+                    >
+                      {title}
+                    </Box>
+                  );
                 })}
               </Box>
             </Box>
