@@ -95,44 +95,55 @@ export default function Profile() {
   };
 
   const handleSave = async (newImg) => {
-    if (!profile) return;
+  if (!profile) return;
 
-    const id = localStorage.getItem("MyId");
-    if (!id) return console.error("No profile ID found");
+  const id = localStorage.getItem("MyId");
+  if (!id) return console.error("No profile ID found");
 
-    const updatedProfile = {
-      ...profile,
-      id: profileId,
-      name: tempName || profile.name,
-      img: newImg || profile.img,
-      tournaments: profile.tournaments,
-      trophies: profile.trophies,
-      victories: profile.victories,
-      selected_title: activeTitle,
-    };
+  // Build object dynamically so it only includes changed values
+  const updatedProfile = { id };
 
-    setProfile(updatedProfile);
-    setOpen(false);
+  if (tempName && tempName !== profile.name) {
+    updatedProfile.name = tempName; // only include name if it was changed
+  }
 
-    fetch("/.netlify/functions/updateProfile", {
+  if (newImg && newImg !== profile.img) {
+    updatedProfile.img = newImg; // only include img if changed
+  }
+
+  updatedProfile.tournaments = profile.tournaments;
+  updatedProfile.trophies = profile.trophies;
+  updatedProfile.victories = profile.victories;
+  
+  if (activeTitle && activeTitle !== profile.selected_title) {
+    updatedProfile.selected_title = activeTitle; // only if changed
+  }
+
+  setProfile({ ...profile, ...updatedProfile });
+  setOpen(false);
+
+  try {
+    const res = await fetch("/.netlify/functions/updateProfile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedProfile),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setName(tempName || name);
-          setProfile(data.profile);
-          sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-          showDescToast("Profile Updated Successfully !!");
-        } else {
-          setName(profile.name);
-          showErrToast("Name already exist");
-        }
-      })
-      .catch((err) => console.error("Error updating profile:", err));
-  };
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      setName(tempName || profile.name);
+      setProfile(data.profile);
+      sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+      showDescToast("Profile Updated Successfully !!");
+    } else {
+      setName(profile.name);
+      showErrToast("Name already exist");
+    }
+  } catch (err) {
+    console.error("Error updating profile:", err);
+  }
+};
+
 
   const handleImageClick = () => fileInputRef.current.click();
 

@@ -21,7 +21,7 @@ export async function handler(event) {
     await client.connect();
 
     // Optional check: ensure unique name
-    if (event.path === "/profile" && name) {
+    if ((event.path === "/profile" && name)) {
       const check = await client.query(
         "SELECT id FROM profiles WHERE name = $1 AND id <> $2",
         [name, id]
