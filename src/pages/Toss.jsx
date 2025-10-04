@@ -35,7 +35,7 @@ export default function Toss() {
     localStorage.setItem("Innings", choice);
     localStorage.setItem("FirstInnings", "1");
     navigate("/gamePlay");
-    window.location.reload();
+    // window.location.reload();
   };
 
   const storedProfile = sessionStorage.getItem("Profile");
