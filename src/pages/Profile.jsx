@@ -95,39 +95,36 @@ export default function Profile() {
   };
 
   const handleSave = async (newImg = null) => {
-    if (!profile) return;
+  if (!profile) return;
 
-    const id = localStorage.getItem("MyId");
-    if (!id) return console.error("No profile ID found");
+  const profileId = localStorage.getItem("MyId");
+  if (!profileId) return console.error("No profile ID found");
 
-    const updatedProfile = {
-      ...profile,
-      id,
-      name: tempName || profile.name,
-      img: newImg || profile.img,
-    };
-
-    setProfile(updatedProfile);
-    setOpen(false);
-
-    fetch("/.netlify/functions/updateProfile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedProfile),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setName(tempName || profile.name);
-          setProfile(data.profile);
-          sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-          showDescToast("Profile Updated Successfully !!");
-        } else {
-          showErrToast("Name already exists");
-        }
-      })
-      .catch((err) => console.error("Error updating profile:", err));
+  const updatedProfile = {
+    id: profileId, // mandatory
+    name: tempName || profile.name,
+    img: newImg || profile.img,
   };
+
+  fetch("/.netlify/functions/updateProfile", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedProfile),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        setProfile(data.profile);
+        setName(data.profile.name);
+        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        toast.success("Profile Updated Successfully!");
+      } else {
+        toast.error(data.error || "Failed to update profile");
+      }
+    })
+    .catch((err) => console.error("Error updating profile:", err));
+};
+
 
   const handleImageClick = () => fileInputRef.current.click();
 
@@ -143,36 +140,34 @@ export default function Profile() {
   };
 
   const updateTitle = async (newTitle) => {
-    if (!profile) return;
+  if (!profile) return;
 
-    const id = localStorage.getItem("MyId");
-    if (!id) return console.error("No profile ID found");
+  const profileId = localStorage.getItem("MyId");
+  if (!profileId) return console.error("No profile ID found");
 
-    console.log(newTitle,"ppppa")
-    const updatedProfile = {
-      ...profile,
-      name: null,
-      id :profileId || id,
-      selected_title: newTitle || profile.selected_title,
-    };
-
-    fetch("/.netlify/functions/updateProfile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedProfile),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setProfile(data.profile);
-          sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-          showDescToast("Title Updated Successfully !!");
-        }
-      })
-      .catch((err) => {
-        showErrToast("Title Updated Successfully !!");        
-        console.error("Error updating title:", err)});
+  const updatedProfile = {
+    id: profileId, // mandatory
+    selected_title: newTitle, // only updating title
   };
+
+  fetch("/.netlify/functions/updateProfile", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedProfile),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        setProfile(data.profile);
+        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        toast.success("Title Updated Successfully!");
+      } else {
+        toast.error(data.error || "Failed to update title");
+      }
+    })
+    .catch((err) => console.error("Error updating title:", err));
+};
+
 
   return (
     <>
