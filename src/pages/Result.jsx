@@ -106,6 +106,11 @@ export default function Result() {
 
     setProfile(updatedProfile);
 
+    if(isTournament){
+      navigate("/fixtures")
+    }else{
+      navigate("/")
+    }
     try {
       const res = await fetch("/.netlify/functions/updateProfile", {
         method: "POST",
@@ -117,11 +122,6 @@ export default function Result() {
       if (data.success) {
         setProfile(data.profile);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-        if(isTournament){
-          navigate("/fixtures")
-        }else{
-          navigate("/")
-        }
       } else {
         console.error("Failed to update trophies in database");
       }
