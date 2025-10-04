@@ -20,21 +20,24 @@ export async function handler(event) {
 
     // Ensure table exists
     await client.query(`
-      CREATE TABLE IF NOT EXISTS profiles (
-        id TEXT PRIMARY KEY,
-        name TEXT,
-        tournaments INT DEFAULT 0,
-        trophies INT DEFAULT 0,
-        victories INT DEFAULT 0,
-        img TEXT,
-        coins INT DEFAULT 0,
-        unlocked_teams TEXT DEFAULT '[]',
-        titles TEXT[] DEFAULT '{}',
-        selected_title TEXT,
-      )
+CREATE TABLE IF NOT EXISTS profiles (
+  id TEXT PRIMARY KEY,
+  name TEXT,
+  tournaments INT DEFAULT 0,
+  trophies INT DEFAULT 0,
+  victories INT DEFAULT 0,
+  img TEXT,
+  coins INT DEFAULT 0,
+  unlocked_teams TEXT DEFAULT '[]',
+  titles TEXT[] DEFAULT '{}',
+  selected_title TEXT
+)
+
     `);
 
-    let existing = await client.query(`SELECT * FROM profiles WHERE id=$1`, [profileId]);
+    let existing = await client.query(`SELECT * FROM profiles WHERE id=$1`, [
+      profileId,
+    ]);
 
     let profile;
     if (existing.rows.length === 0) {
@@ -53,7 +56,7 @@ export async function handler(event) {
           JSON.stringify([]), // unlocked_teams
           "/assets/img/pak.png", // img
           [], // titles
-          null
+          null,
         ]
       );
       profile = result.rows[0];
