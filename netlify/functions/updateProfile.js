@@ -94,14 +94,24 @@ export async function handler(event) {
 
     const updated = result.rows[0];
 
+    const safeParse = (val) => {
+      try {
+        return val ? JSON.parse(val) : [];
+      } catch (e) {
+        return Array.isArray(val) ? val : [val]; // fallback to array
+      }
+    };
+
     return {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
         profile: {
           ...updated,
-          unlocked_teams: updated.unlocked_teams ? JSON.parse(updated.unlocked_teams) : [],
-          titles: updated.titles ? JSON.parse(updated.titles) : [],
+          unlocked_teams: updated.unlocked_teams
+            ? safeParse(updated.unlocked_teams)
+            : [],
+          titles: updated.titles ? safeParse(updated.titles) : [],
           selected_title: updated.selected_title || null, // explicitly return selected_title
         },
       }),
