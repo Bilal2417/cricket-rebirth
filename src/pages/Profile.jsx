@@ -52,6 +52,7 @@ export default function Profile() {
             ...data.profile,
             img: data.profile.img || "/assets/img/pak.png",
           };
+          console.log(profileData)
           setProfile(profileData);
           setName(profileData.name);
           setTitles(profileData.titles);
