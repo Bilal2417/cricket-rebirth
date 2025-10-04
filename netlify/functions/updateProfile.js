@@ -16,8 +16,9 @@ export async function handler(event) {
       titles,
       selected_title,
     } = body;
-
+    
     if (!id) {
+      console.log("updateProfile body:", event.body);
       return {
         statusCode: 400,
         body: JSON.stringify({ success: false, error: "Missing id" }),
