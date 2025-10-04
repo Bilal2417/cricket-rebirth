@@ -77,9 +77,9 @@ export default function Fixtures() {
     if (!Profile) return;
 
     const updatedProfile = {
-      ...Profile,      
-        tournaments : Profile.tournaments + 1,
-        titles : [...(Profile.titles || []), userTeam?.name]
+      ...Profile,
+      tournaments: (Profile.tournaments || 0) + 1,
+      titles: userTeam?.name ? [...(Profile.titles || []), userTeam.name] : [...(Profile.titles || [])]
     };
 
     setProfile(updatedProfile);
@@ -99,7 +99,7 @@ export default function Fixtures() {
       } else {
         console.error("Failed to update trophies in database");
       }
-      navigate("/")
+      navigate("/");
     } catch (err) {
       console.error("Error updating trophies:", err);
     }
@@ -140,7 +140,7 @@ export default function Fixtures() {
   return (
     <>
       <Box
-        sx={{          
+        sx={{
           minHeight: "100vh",
           width: "100%",
           display: "flex",
@@ -425,7 +425,7 @@ export default function Fixtures() {
             position: "relative",
             px: 4,
             py: 1.5,
-            minWidth : "200px",
+            minWidth: "200px",
             overflow: "hidden",
             clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
             boxShadow: "inset 0px -8px 8px -4px #262e40",
@@ -518,11 +518,16 @@ export default function Fixtures() {
                 transform: "scale(1.02)",
               },
             }}
-            onClick={() => final && final == userTeam?.name ?  manageTournaments() : navigate("/")}
+            onClick={() => {
+              if (final && final === userTeam?.name) {
+                manageTournaments();
+              } else {
+                navigate("/");
+              }
+            }}
           >
             Finish
           </Button>
-
         </Button>
 
         <Box
