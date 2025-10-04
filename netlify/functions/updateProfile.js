@@ -4,24 +4,13 @@ export async function handler(event) {
   try {
     console.log("updateProfile body:", event.body);
     const body = event.body ? JSON.parse(event.body) : {};
-    const { id, name, img, tournaments, trophies, victories } = body;
+    const { id, name, img, tournaments, trophies, victories, coins, unlocked_teams, titles , selected_title} = body;
 
     if (!id) {
       return {
         statusCode: 400,
         body: JSON.stringify({ success: false, error: "Missing id" }),
       };
-    }
-
-    if (event.path === "/profile" && name) {
-      const check = await client.query(
-        "SELECT id FROM profiles WHERE name = $1 AND id <> $2",
-        [name, id]
-      );
-
-      if (check.rows.length > 0) {
-        throw new Error("Name already exists. Please choose another.");
-      }
     }
 
     const client = new Client({
@@ -31,21 +20,46 @@ export async function handler(event) {
 
     await client.connect();
 
+    // Optional check: ensure unique name
+    if (event.path === "/profile" && name) {
+      const check = await client.query(
+        "SELECT id FROM profiles WHERE name = $1 AND id <> $2",
+        [name, id]
+      );
+      if (check.rows.length > 0) {
+        throw new Error("Name already exists. Please choose another.");
+      }
+    }
+
     const result = await client.query(
       `UPDATE profiles
-   SET name = COALESCE($1, name),
-       img = COALESCE($2, img),
-       tournaments = COALESCE($3, tournaments),
-       trophies = COALESCE($4, trophies),
-       victories = COALESCE($5, victories)
-   WHERE id = $6
-   RETURNING *`,
-      [name, img, tournaments, trophies, victories, id]
+       SET name = COALESCE($1, name),
+           img = COALESCE($2, img),
+           tournaments = COALESCE($3, tournaments),
+           trophies = COALESCE($4, trophies),
+           victories = COALESCE($5, victories),
+           coins = COALESCE($6, coins),
+           unlocked_teams = COALESCE($7, unlocked_teams),
+           titles = COALESCE($8, titles),
+           selected_title = COALESCE($9, titles),
+       WHERE id = $10
+       RETURNING *`,
+      [
+        name,
+        img,
+        tournaments,
+        trophies,
+        victories,
+        coins, 
+        unlocked_teams ? JSON.stringify(unlocked_teams) : null, // array → string
+        titles ? JSON.stringify(titles) : null,                 // array → string
+        selected_title,
+        id,
+      ]
     );
 
     await client.end();
 
-    // If no rows were updated, return 404
     if (!result.rows.length) {
       return {
         statusCode: 404,
@@ -55,7 +69,14 @@ export async function handler(event) {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, profile: result.rows[0] }),
+      body: JSON.stringify({
+        success: true,
+        profile: {
+          ...result.rows[0],
+          unlocked_teams: result.rows[0].unlocked_teams ? JSON.parse(result.rows[0].unlocked_teams) : [],
+          titles: result.rows[0].titles ? JSON.parse(result.rows[0].titles) : [],
+        }
+      }),
     };
   } catch (err) {
     if (err.code === "23505") {

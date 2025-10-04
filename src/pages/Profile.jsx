@@ -33,10 +33,12 @@ export default function Profile() {
     localStorage.setItem("MyId", profileId);
   }
   const [name, setName] = useState("");
+  const [titles, setTitles] = useState([]);
   const [open, setOpen] = useState(false);
   const [tempName, setTempName] = useState("");
 
   const [loading, setLoading] = useState(true);
+  const [activeTitle, setActiveTitle] = useState();
   const [showLoadingPage, setShowLoadingPage] = useState(true);
 
   useEffect(() => {
@@ -51,6 +53,7 @@ export default function Profile() {
           };
           setProfile(profileData);
           setName(profileData.name);
+          setTitles(profileData.titles);
           if (isFirstVisit) {
             showDescToast("Profile Created Successfully !!");
             localStorage.setItem("ProfileVisited", "true");
@@ -95,7 +98,6 @@ export default function Profile() {
     const id = localStorage.getItem("MyId");
     if (!id) return console.error("No profile ID found");
 
-    
     const updatedProfile = {
       ...profile,
       id: profileId,
@@ -104,25 +106,25 @@ export default function Profile() {
       tournaments: profile.tournaments,
       trophies: profile.trophies,
       victories: profile.victories,
+      selected_title: activeTitle,
     };
 
     setProfile(updatedProfile);
     setOpen(false);
-    
-    
+
     fetch("/.netlify/functions/updateProfile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedProfile),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success) {
-        setName(tempName || name);
-        setProfile(data.profile);
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-        showDescToast("Profile Updated Successfully !!");
-      } else {
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setName(tempName || name);
+          setProfile(data.profile);
+          sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+          showDescToast("Profile Updated Successfully !!");
+        } else {
           setName(profile.name);
           showErrToast("Name already exist");
         }
@@ -130,7 +132,6 @@ export default function Profile() {
       .catch((err) => console.error("Error updating profile:", err));
   };
 
-  
   const handleImageClick = () => fileInputRef.current.click();
 
   const handleFileChange = (event) => {
@@ -139,12 +140,10 @@ export default function Profile() {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      handleSave(reader.result); 
+      handleSave(reader.result);
     };
     reader.readAsDataURL(file);
   };
-
-  
 
   return (
     <>
@@ -223,6 +222,50 @@ export default function Profile() {
                 "& .MuiOutlinedInput-notchedOutline": { border: "none" },
               }}
             />
+
+            <Box>
+              <Box
+                sx={{
+                  backgroundColor: "#343c53",
+                  width: "200px",
+                  padding: "5px 20px",
+                  display: "flex",
+                  alignContent: "center",
+                  border: "2px solid #000000",
+                  borderRadius: "4px",
+                  boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                  clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                  m: "50px 0",
+                  color: "#ffffff",
+                  ":hover": { cursor: "pointer" },
+                }}
+                // onClick={() => navigate("/")}
+              >
+                {profile?.selected_title || "Titles"}
+
+                {profile?.titles.map((title, index) => {
+                  <Box
+                    sx={{
+                      backgroundColor: "#343c53",
+                      width: "90%",
+                      padding: "5px 20px",
+                      display: "flex",
+                      alignContent: "center",
+                      border: "2px solid #000000",
+                      borderRadius: "4px",
+                      boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                      clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                      m: "50px 0",
+                      color: "#ffffff",
+                      ":hover": { cursor: "pointer" },
+                    }}
+                    // onClick={() => navigate("/")}
+                  >
+                    {title}
+                  </Box>;
+                })}
+              </Box>
+            </Box>
           </Box>
 
           {/* Change Name Dialog */}

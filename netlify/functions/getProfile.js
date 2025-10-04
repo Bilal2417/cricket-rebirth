@@ -10,18 +10,30 @@ export async function handler() {
     await client.connect();
 
     const result = await client.query(`
-  SELECT id, name, trophies,
-         (NOW() - last_active) < interval '1 minutes' AS is_active,
-         COALESCE(img, '/assets/img/pak.png') AS img
-  FROM profiles
-  ORDER BY trophies DESC
-`);
+      SELECT 
+        id, 
+        name, 
+        trophies,
+        coins,
+        unlocked_teams,
+        titles,
+        selected_title,
+        (NOW() - last_active) < interval '1 minutes' AS is_active,
+        COALESCE(img, '/assets/img/pak.png') AS img
+      FROM profiles
+      ORDER BY trophies DESC
+    `);
 
-    await client.end();
+    // Parse unlocked_teams JSON string into array before returning
+    const profiles = result.rows.map((row) => ({
+      ...row,
+      unlocked_teams: row.unlocked_teams ? JSON.parse(row.unlocked_teams) : [],
+      titles: row.titles || [], // ensure always array
+    }));
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, profiles: result.rows }),
+      body: JSON.stringify({ success: true, profiles }),
     };
   } catch (err) {
     return {

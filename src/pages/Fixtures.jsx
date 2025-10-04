@@ -78,7 +78,8 @@ export default function Fixtures() {
 
     const updatedProfile = {
       ...Profile,      
-        tournaments : Profile.tournaments + 1
+        tournaments : Profile.tournaments + 1,
+        titles : [...(Profile.titles || []), userTeam?.name]
     };
 
     setProfile(updatedProfile);
@@ -517,10 +518,11 @@ export default function Fixtures() {
                 transform: "scale(1.02)",
               },
             }}
-            onClick={() => final && final == semi1 ?  manageTournaments() : navigate("/")}
+            onClick={() => final && final == userTeam?.name ?  manageTournaments() : navigate("/")}
           >
             Finish
           </Button>
+
         </Button>
 
         <Box

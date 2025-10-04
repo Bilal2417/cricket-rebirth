@@ -1299,7 +1299,7 @@ const Data = [
         conceded: 0,
       },
       {
-        name: "Rauf",
+        name: "Naseem",
         score: 0,
         balls: 0,
         out: false,
