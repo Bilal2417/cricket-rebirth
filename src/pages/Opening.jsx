@@ -37,20 +37,21 @@ export default function CardOpening({ onFinish }) {
     }
   };
 
-  return (
-    <Box
-      onClick={handleNext}
-      sx={{
-        height: "100vh",
-        // width: "100vw",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "linear-gradient(135deg, #141e30, #243b55)",
-        overflow: "hidden",
-        cursor: "pointer",
-      }}
-    >
+return (
+  <Box
+    onClick={!showSummary ? handleNext : undefined}
+    sx={{
+      height: "100vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      background: "linear-gradient(135deg, #141e30, #243b55)",
+      overflow: "hidden",
+      cursor: "pointer",
+      flexDirection: "column",
+    }}
+  >
+    {!showSummary ? (
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
@@ -87,6 +88,48 @@ export default function CardOpening({ onFinish }) {
           </Card>
         </motion.div>
       </AnimatePresence>
-    </Box>
-  );
+    ) : (
+      <Box sx={{ textAlign: "center", width: "100%" }}>
+        <Typography
+          variant="h4"
+          sx={{ fontWeight: "bold", mb: 3, color: "#fff" }}
+        >
+          🎉 All Collected Rewards 🎉
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: 2,
+          }}
+        >
+          {pulledCards.map((card, i) => (
+            <Card
+              key={i}
+              sx={{
+                width: 160,
+                height: 240,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 3,
+                color: "#fff",
+                background: getCardBackground(card.rarity),
+                boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
+              }}
+            >
+              <Typography variant="h6">{card.name}</Typography>
+              <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                {card.rarity}
+              </Typography>
+            </Card>
+          ))}
+        </Box>
+      </Box>
+    )}
+  </Box>
+);
+
 }

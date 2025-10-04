@@ -117,7 +117,11 @@ export default function Result() {
       if (data.success) {
         setProfile(data.profile);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-        navigate("/fixtures")
+        if(isTournament){
+          navigate("/fixtures")
+        }else{
+          navigate("/")
+        }
       } else {
         console.error("Failed to update trophies in database");
       }
