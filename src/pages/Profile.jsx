@@ -274,7 +274,6 @@ export default function Profile() {
                 borderRadius: "4px",
                 boxShadow: "inset 0px -8px 8px -4px #2a3043",
                 clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                m: "50px 0",
                 color: "#ffffff",
                 ":hover": { cursor: "pointer" },
               }}
