@@ -15,14 +15,13 @@ import { useEffect } from "react";
 import CardPacksShop from "./components/card";
 import MovingBallsBackground from "./components/background";
 import DisablePullToRefresh from "./components/disable";
+import CardOpening from "./pages/Opening";
 
 function App() {
-
-    useEffect(() => {
-    const profileId = localStorage.getItem("MyId"); 
+  useEffect(() => {
+    const profileId = localStorage.getItem("MyId");
     if (!profileId) return;
 
-    
     const updateActivity = async () => {
       try {
         await fetch(`/.netlify/functions/activeProfile?profileId=${profileId}`);
@@ -33,10 +32,8 @@ function App() {
 
     updateActivity();
 
-    
     const interval = setInterval(updateActivity, 50 * 1000);
 
-    
     return () => clearInterval(interval);
   }, []);
 
@@ -50,31 +47,31 @@ function App() {
         <Box
           sx={{
             // transform: { xs: "rotate(90deg)", md: "none" },
-            
-            
-            overflowX: { xs : "auto" , md : "unset"}, 
-            overflowY: { xs : "auto" , md : "unset"}, 
-            maxWidth: "100vw", 
+
+            overflowX: { xs: "auto", md: "unset" },
+            overflowY: { xs: "auto", md: "unset" },
+            maxWidth: "100vw",
           }}
         >
-          <MovingBallsBackground/>
-          <DisablePullToRefresh/>
+          <MovingBallsBackground />
+          <DisablePullToRefresh />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/card" element={<CardPacksShop />} />
+            <Route path="/open-pack/:packKey" element={<CardOpening />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/modes" element={<Modes />} />
             <Route path="/knockout" element={<Knockout />} />
             <Route path="/fixtures" element={<Fixtures />} />
             <Route path="/team" element={<Selection />} />
-            <Route  path="/gamePlay" element={<ScoreCard24 />} />
+            <Route path="/gamePlay" element={<ScoreCard24 />} />
             <Route path="/toss" element={<Toss />} />
             <Route path="/score" element={<Scorecard />} />
             <Route path="/result" element={<Result />} />
           </Routes>
         </Box>
       </Router>
-      <ToastContainer/>
+      <ToastContainer />
     </Container>
   );
 }

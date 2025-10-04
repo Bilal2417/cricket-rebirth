@@ -117,6 +117,7 @@ export default function Result() {
       if (data.success) {
         setProfile(data.profile);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        navigate("/fixtures")
       } else {
         console.error("Failed to update trophies in database");
       }
@@ -902,8 +903,7 @@ export default function Result() {
                   }
 
                   // Call incrementTrophies but only increment victories
-                  await incrementTrophies(userWon, 0, true); // pass "true" for isTournament
-                  navigate("/fixtures");
+                  await incrementTrophies(userWon, 0, true); // pass "true" for isTournament                  
                 } else {
                   if (userWon) await incrementTrophies(true, 2, false);
                   else if (aiTeam.score > userTeam.score)

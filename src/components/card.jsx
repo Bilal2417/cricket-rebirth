@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Card, CardContent, Typography, Button, Box } from "@mui/material";
 import SportsCricketIcon from "@mui/icons-material/SportsCricket";
+import { useNavigate } from "react-router-dom";
 
 const CardPack = ({ title, description, colors, icon, price, onClick }) => (
   <Card
@@ -122,10 +123,13 @@ export default function CardPacksShop() {
     }
   },[])
 
-  const handleClick = (index) => {
+  const navigate = useNavigate()
+  const handleClick = (pack ,index) => {
     const rect = cardRefs.current[index].getBoundingClientRect();
     setCardPosition({ top: rect.top, left: rect.left });
     setActiveCard(index);
+
+    navigate(`/open-pack/${pack.key}`);
   };
 
   const handleClose = () => setActiveCard(null);
@@ -148,7 +152,7 @@ export default function CardPacksShop() {
           ref={(el) => (cardRefs.current[index] = el)}
           sx={{
             animation:
-              isNaN(pack.price) && pack.key === "starter"
+              isNaN(pack.price) 
                 ? "float 1.5s ease-in-out infinite alternate"
                 : null,
             "@keyframes float": {
@@ -156,7 +160,7 @@ export default function CardPacksShop() {
               "100%": { transform: "translateY(-10px)" },
             },
           }}
-          onClick={() => handleClick(index)}
+          onClick={() => handleClick(pack,index)}
         >
           <CardPack {...pack} />
         </Box>
