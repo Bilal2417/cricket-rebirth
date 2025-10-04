@@ -94,55 +94,41 @@ export default function Profile() {
     });
   };
 
-  const handleSave = async (newImg) => {
+  const handleSave = async (newImg = null) => {
   if (!profile) return;
 
   const id = localStorage.getItem("MyId");
   if (!id) return console.error("No profile ID found");
 
-  // Build object dynamically so it only includes changed values
-  const updatedProfile = { id };
+  const updatedProfile = {
+    ...profile,
+    id,
+    name: tempName || profile.name,   
+    img: newImg || profile.img,       
+  };
 
-  if (tempName && tempName !== profile.name) {
-    updatedProfile.name = tempName; // only include name if it was changed
-  }
-
-  if (newImg && newImg !== profile.img) {
-    updatedProfile.img = newImg; // only include img if changed
-  }
-
-  updatedProfile.tournaments = profile.tournaments;
-  updatedProfile.trophies = profile.trophies;
-  updatedProfile.victories = profile.victories;
-  
-  if (activeTitle && activeTitle !== profile.selected_title) {
-    updatedProfile.selected_title = activeTitle; // only if changed
-  }
-
-  setProfile({ ...profile, ...updatedProfile });
+  setProfile(updatedProfile);
   setOpen(false);
 
-  try {
-    const res = await fetch("/.netlify/functions/updateProfile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedProfile),
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      setName(tempName || profile.name);
-      setProfile(data.profile);
-      sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-      showDescToast("Profile Updated Successfully !!");
-    } else {
-      setName(profile.name);
-      showErrToast("Name already exist");
-    }
-  } catch (err) {
-    console.error("Error updating profile:", err);
-  }
+  fetch("/.netlify/functions/updateProfile", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedProfile),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        setName(tempName || profile.name);
+        setProfile(data.profile);
+        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        showDescToast("Profile Updated Successfully !!");
+      } else {
+        showErrToast("Name already exists");
+      }
+    })
+    .catch((err) => console.error("Error updating profile:", err));
 };
+
 
 
   const handleImageClick = () => fileInputRef.current.click();
@@ -157,6 +143,32 @@ export default function Profile() {
     };
     reader.readAsDataURL(file);
   };
+
+
+  const updateTitle = async (newTitle) => {
+  if (!profile) return;
+
+  const id = localStorage.getItem("MyId");
+  if (!id) return console.error("No profile ID found");
+
+  const updatedProfile = { id, selected_title: newTitle || profile.selected_title };
+
+  fetch("/.netlify/functions/updateProfile", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedProfile),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        setProfile(data.profile);
+        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        showDescToast("Title Updated Successfully !!");
+      }
+    })
+    .catch((err) => console.error("Error updating title:", err));
+};
+
 
   return (
     <>
@@ -283,10 +295,11 @@ export default function Profile() {
                         color: "#ffffff",
                         ":hover": { cursor: "pointer" },
                       }}
-                      onClick={() => {
+                      onClick={(e) => {
                         setShow(false)
                         setActiveTitle(title)                        
-                        handleSave()
+                        updateTitle(title)
+                        e.stopPropagation()
                       }}
                     >
                       {title}
