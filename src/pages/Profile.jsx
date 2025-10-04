@@ -152,7 +152,7 @@ export default function Profile() {
     const updatedProfile = {
       ...profile,
       name: null,
-      id,
+      id :profileId || id,
       selected_title: newTitle || profile.selected_title,
     };
 
