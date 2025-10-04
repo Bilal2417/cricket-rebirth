@@ -35,6 +35,7 @@ export default function Profile() {
   const [name, setName] = useState("");
   const [titles, setTitles] = useState([]);
   const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
   const [tempName, setTempName] = useState("");
 
   const [loading, setLoading] = useState(true);
@@ -226,10 +227,11 @@ export default function Profile() {
             <Box>
               <Box
                 sx={{
-                  backgroundColor: "#343c53",
+                  backgroundColor: "#073575",
                   width: "200px",
                   padding: "5px 20px",
                   display: "flex",
+                  flexDirection : "column",
                   alignContent: "center",
                   border: "2px solid #000000",
                   borderRadius: "4px",
@@ -239,11 +241,13 @@ export default function Profile() {
                   color: "#ffffff",
                   ":hover": { cursor: "pointer" },
                 }}
-                // onClick={() => navigate("/")}
-              >
+                onClick={() => setShow(!show)}
+                >
+                <Typography variant="h6">
                 {profile?.selected_title || "Titles"}
+                </Typography>
 
-                {profile?.titles.map((title, index) => {
+                {show ? (profile?.titles.map((title, index) => {
                   return (
                     <Box
                       sx={{
@@ -260,12 +264,16 @@ export default function Profile() {
                         color: "#ffffff",
                         ":hover": { cursor: "pointer" },
                       }}
-                      // onClick={() => navigate("/")}
+                      onClick={() => {
+                        setShow(false)
+                        setActiveTitle(title)                        
+                        handleSave()
+                      }}
                     >
                       {title}
                     </Box>
                   );
-                })}
+                })):null}
               </Box>
             </Box>
           </Box>
