@@ -108,6 +108,7 @@ export default function Result() {
       trophies: Profile.trophies + trophyIncrement,
     };
 
+    console.log(updatedProfile,"Profile that is sending")
     setProfile(updatedProfile);
 
     try {
