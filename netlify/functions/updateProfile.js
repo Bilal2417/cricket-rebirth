@@ -18,8 +18,6 @@ export async function handler(event) {
       trophies,
       victories,
       coins,
-      unlocked_teams,
-      titles,
       selected_title,
     } = body;
 
@@ -84,8 +82,8 @@ export async function handler(event) {
        trophies = COALESCE($4, trophies),
        victories = COALESCE($5, victories),
        coins = COALESCE($6, coins),
-       selected_title = COALESCE($9, selected_title)
-   WHERE id = $10
+       selected_title = COALESCE($7, selected_title)
+   WHERE id = $8
    RETURNING *`,
       [
         name ?? null,
