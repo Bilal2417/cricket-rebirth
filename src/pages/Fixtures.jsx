@@ -39,7 +39,7 @@ export default function Fixtures() {
   }, []);
 
   useEffect(()=>{
-    if(!userTeam && semi1)return
+    if(!(userTeam && semi1))return
     if(semi1 == userTeam?.name){
       sessionStorage.setItem("Finalist",true)
     }

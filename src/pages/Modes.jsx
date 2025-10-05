@@ -87,7 +87,7 @@ export default function Modes() {
             px: 4,
             py: 1.5,
             overflow: "hidden",
-            clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
+            clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
             boxShadow: `
       inset 0px -8px 8px -4px #262e40,   
       inset 0px 8px 8px -4px rgb(193 193 193)       

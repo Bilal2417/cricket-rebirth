@@ -5,7 +5,7 @@ export default function MovingBallsBackground() {
   const [balls, setBalls] = useState([]);
 
   useEffect(() => {
-    const ballCount = Math.floor(window.innerWidth / 50); // Adjust count based on width
+    const ballCount = Math.floor(window.innerWidth / 40); // Adjust count based on width
     const generatedBalls = Array.from({ length: ballCount }).map(() => ({
       size: Math.random() * 10 + 5, // 5-15px
       left: Math.random() * 100, // % from left
