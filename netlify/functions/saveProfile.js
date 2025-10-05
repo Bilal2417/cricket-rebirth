@@ -28,13 +28,10 @@ CREATE TABLE IF NOT EXISTS profiles (
   victories INT DEFAULT 0,
   img TEXT,
   coins INT DEFAULT 0,
-  unlocked_teams TEXT DEFAULT '[]',
-  titles TEXT[] DEFAULT '{}',
   selected_title TEXT,
   last_active TIMESTAMP DEFAULT NOW()
 )
-
-    `);
+`);
 
     let existing = await client.query(`SELECT * FROM profiles WHERE id=$1`, [
       profileId,
@@ -44,8 +41,8 @@ CREATE TABLE IF NOT EXISTS profiles (
     if (existing.rows.length === 0) {
       // Insert new profile with default values
       const result = await client.query(
-        `INSERT INTO profiles (id, name, tournaments, trophies, victories, coins, unlocked_teams, img, titles , selected_title)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,$10)
+        `INSERT INTO profiles (id, name, tournaments, trophies, victories, coins,  img , selected_title)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
          RETURNING *`,
         [
           profileId,
@@ -54,9 +51,7 @@ CREATE TABLE IF NOT EXISTS profiles (
           0, // trophies
           0, // victories
           0, // coins
-          JSON.stringify([]), // unlocked_teams
           "/assets/img/pak.png", // img
-          [], // titles
           null,
         ]
       );

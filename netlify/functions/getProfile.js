@@ -15,8 +15,6 @@ export async function handler() {
         name, 
         trophies,
         -- coins,
-        -- unlocked_teams,
-        -- titles,
         selected_title,
         (NOW() - last_active) < interval '1 minutes' AS is_active,
         COALESCE(img, '/assets/img/pak.png') AS img

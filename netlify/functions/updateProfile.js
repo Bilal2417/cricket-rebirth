@@ -78,27 +78,23 @@ export async function handler(event) {
     // Update only fields provided
     const result = await client.query(
       `UPDATE profiles
-       SET name = COALESCE($1, name),
-           img = COALESCE($2, img),
-           tournaments = COALESCE($3, tournaments),
-           trophies = COALESCE($4, trophies),
-           victories = COALESCE($5, victories),
-           coins = COALESCE($6, coins),
-           unlocked_teams = COALESCE($7, unlocked_teams),
-           titles = COALESCE($8, titles),
-           selected_title = COALESCE($9, selected_title)
-       WHERE id = $10
-       RETURNING *`,
+   SET name = COALESCE($1, name),
+       img = COALESCE($2, img),
+       tournaments = COALESCE($3, tournaments),
+       trophies = COALESCE($4, trophies),
+       victories = COALESCE($5, victories),
+       coins = COALESCE($6, coins),
+       selected_title = COALESCE($9, selected_title)
+   WHERE id = $10
+   RETURNING *`,
       [
-        name ?? undefined,
-        img ?? undefined,
-        tournaments ?? undefined,
-        trophies ?? undefined,
-        victories ?? undefined,
-        coins ?? undefined,
-        safeStringify(unlocked_teams),
-        safeStringify(titles),
-        selected_title ?? undefined,
+        name ?? null,
+        img ?? null,
+        tournaments ?? null,
+        trophies ?? null,
+        victories ?? null,
+        coins ?? null,
+        selected_title ?? null,
         id,
       ]
     );
@@ -121,10 +117,6 @@ export async function handler(event) {
         success: true,
         profile: {
           ...updated,
-          unlocked_teams: updated.unlocked_teams
-            ? safeParse(updated.unlocked_teams)
-            : [],
-          titles: updated.titles ? safeParse(updated.titles) : [],
           selected_title: updated.selected_title || null, // explicitly return selected_title
         },
       }),
