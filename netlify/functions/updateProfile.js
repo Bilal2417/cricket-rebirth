@@ -23,13 +23,13 @@ export async function handler(event) {
       selected_title,
     } = body;
     
-    if (!id) {
-      console.log("missing",id)
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ success: false, error: "Missing id" }),
-      };
-    }
+    // if (!id) {
+    //   console.log("missing",id)
+    //   return {
+    //     statusCode: 400,
+    //     body: JSON.stringify({ success: false, error: "Missing id" }),
+    //   };
+    // }
 
     const client = new Client({
       connectionString: process.env.DATABASE_URL,
