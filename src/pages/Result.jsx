@@ -101,6 +101,7 @@ export default function Result() {
 
     const updatedProfile = {
       ...Profile,
+      id : Profile.id,
       victories: win ? Profile.victories + 1 : Profile.victories,
       trophies: Profile.trophies + trophyIncrement,
     };
