@@ -86,8 +86,8 @@ export default function Result() {
   // };
 
   const incrementTrophies = async (win, matchType, isTournament = false) => {
-    const profileId = localStorage.getItem("MyId")
-    console.log(profileId,Profile,"all")
+    const profileId = localStorage.getItem("MyId");
+    console.log(profileId, Profile, "all");
     if (!Profile) return;
 
     const overs = localStorage.getItem("Overs");
@@ -103,7 +103,7 @@ export default function Result() {
 
     const updatedProfile = {
       ...Profile,
-      id : Profile?.id || profileId,
+      id: profileId || Profile?.id,
       victories: win ? Profile.victories + 1 : Profile.victories,
       trophies: Profile.trophies + trophyIncrement,
     };

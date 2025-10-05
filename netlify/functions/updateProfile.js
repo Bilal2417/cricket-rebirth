@@ -2,7 +2,14 @@ import { Client } from "pg";
 
 export async function handler(event) {
   try {
-    const body = event.body ? JSON.parse(event.body) : {};
+    let body = {};
+    try {
+      body =
+        typeof event.body === "string" ? JSON.parse(event.body) : event.body;
+    } catch (err) {
+      console.error("Error parsing body:", event.body, err);
+    }
+
     const {
       id,
       name,
