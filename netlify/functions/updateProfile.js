@@ -9,7 +9,7 @@ export async function handler(event) {
     } catch (err) {
       console.error("Error parsing body:", event.body, err);
     }
-    console.log("Parsed", body);
+    
     const {
       id,
       name,
@@ -18,10 +18,11 @@ export async function handler(event) {
       trophies,
       victories,
       coins,
+      unlocked_teams,
+      titles,
       selected_title,
     } = body;
 
-    console.log("id", id, "type of", typeof id);
     if (!id) {
       return {
         statusCode: 400,
@@ -36,7 +37,6 @@ export async function handler(event) {
 
     await client.connect();
 
-    // Check if profile exists
     const existingProfile = await client.query(
       `SELECT * FROM profiles WHERE id=$1`,
       [id]
@@ -50,7 +50,6 @@ export async function handler(event) {
       };
     }
 
-    // Optional: check name uniqueness if changing name
     if (name && name !== existingProfile.rows[0].name) {
       const check = await client.query(
         "SELECT id FROM profiles WHERE name = $1 AND id <> $2",
@@ -68,23 +67,19 @@ export async function handler(event) {
       }
     }
 
-    const safeStringify = (val) => {
-      if (val === undefined || val === null) return undefined;
-      return typeof val === "string" ? val : JSON.stringify(val);
-    };
-
-    // Update only fields provided
     const result = await client.query(
       `UPDATE profiles
-   SET name = COALESCE($1, name),
-       img = COALESCE($2, img),
-       tournaments = COALESCE($3, tournaments),
-       trophies = COALESCE($4, trophies),
-       victories = COALESCE($5, victories),
-       coins = COALESCE($6, coins),
-       selected_title = COALESCE($7, selected_title)
-   WHERE id = $8
-   RETURNING *`,
+       SET name = COALESCE($1, name),
+           img = COALESCE($2, img),
+           tournaments = COALESCE($3, tournaments),
+           trophies = COALESCE($4, trophies),
+           victories = COALESCE($5, victories),
+           coins = COALESCE($6, coins),
+           unlocked_teams = COALESCE($7::jsonb, unlocked_teams),
+           titles = COALESCE($8::jsonb, titles),
+           selected_title = COALESCE($9, selected_title)
+       WHERE id = $10
+       RETURNING *`,
       [
         name ?? null,
         img ?? null,
@@ -92,6 +87,8 @@ export async function handler(event) {
         trophies ?? null,
         victories ?? null,
         coins ?? null,
+        unlocked_teams !== undefined ? JSON.stringify(unlocked_teams) : null,
+        titles !== undefined ? JSON.stringify(titles) : null,
         selected_title ?? null,
         id,
       ]
@@ -99,24 +96,11 @@ export async function handler(event) {
 
     await client.end();
 
-    const updated = result.rows[0];
-
-    const safeParse = (val) => {
-      try {
-        return val ? JSON.parse(val) : [];
-      } catch (e) {
-        return Array.isArray(val) ? val : [val]; // fallback to array
-      }
-    };
-
     return {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        profile: {
-          ...updated,
-          selected_title: updated.selected_title || null, // explicitly return selected_title
-        },
+        profile: result.rows[0],
       }),
     };
   } catch (err) {

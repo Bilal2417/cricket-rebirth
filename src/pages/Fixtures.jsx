@@ -82,39 +82,47 @@ export default function Fixtures() {
     setTotalWkts(overs ? Number(overs) : 0);
   }, []);
 
-  const manageTournaments = async () => {
-    if (!Profile) return;
+const manageTournaments = async () => {
+  if (!Profile) return;
 
-      sessionStorage.removeItem("Finalist")
-    
+  sessionStorage.removeItem("Finalist");
 
-    const updatedProfile = {
-      ...Profile,
-      tournaments: (Profile.tournaments || 0) + 1,
-      titles: userTeam?.name ? [...(Profile.titles || []), userTeam.name] : [...(Profile.titles || [])]
-    };
+  const profileId = localStorage.getItem("MyId");
+  
+  
+  const newTitles = [...(Profile.titles || [])];
+  if (userTeam?.name && !newTitles.includes(userTeam.name)) {
+    newTitles.push(userTeam.name);
+  }
 
-    setProfile(updatedProfile);
-
-    try {
-      const res = await fetch("/.netlify/functions/updateProfile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProfile),
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        setProfile(data.profile);
-        console.log(data.profile);
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-      } else {
-        console.error("Failed to update trophies in database");
-      }
-    } catch (err) {
-      console.error("Error updating trophies:", err);
-    }
+  const updatedProfile = {
+    ...Profile,
+    id: profileId || Profile?.id,
+    tournaments: (Profile.tournaments || 0) + 1,
+    titles: newTitles,
   };
+
+  setProfile(updatedProfile);
+
+  try {
+    const res = await fetch("/.netlify/functions/updateProfile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedProfile),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      setProfile(data.profile);
+      console.log(data.profile);
+      sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+    } else {
+      console.error("Failed to update tournaments in database:", data.error);
+    }
+  } catch (err) {
+    console.error("Error updating tournaments:", err);
+  }
+};
 
   const matchWinner = (teamA, teamB, e) => {
     const matchId = e.currentTarget.value;

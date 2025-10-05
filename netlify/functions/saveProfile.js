@@ -20,18 +20,20 @@ export async function handler(event) {
 
     // Ensure table exists
     await client.query(`
-CREATE TABLE IF NOT EXISTS profiles (
-  id TEXT PRIMARY KEY,
-  name TEXT,
-  tournaments INT DEFAULT 0,
-  trophies INT DEFAULT 0,
-  victories INT DEFAULT 0,
-  img TEXT,
-  coins INT DEFAULT 0,
-  selected_title TEXT,
-  last_active TIMESTAMP DEFAULT NOW()
-)
-`);
+      CREATE TABLE IF NOT EXISTS profiles (
+        id TEXT PRIMARY KEY,
+        name TEXT,
+        tournaments INT DEFAULT 0,
+        trophies INT DEFAULT 0,
+        victories INT DEFAULT 0,
+        img TEXT,
+        coins INT DEFAULT 0,
+        unlocked_teams JSONB DEFAULT '[]'::jsonb,
+        titles JSONB DEFAULT '[]'::jsonb,
+        selected_title TEXT,
+        last_active TIMESTAMP DEFAULT NOW()
+      )
+    `);
 
     let existing = await client.query(`SELECT * FROM profiles WHERE id=$1`, [
       profileId,
@@ -39,41 +41,35 @@ CREATE TABLE IF NOT EXISTS profiles (
 
     let profile;
     if (existing.rows.length === 0) {
-      // Insert new profile with default values
       const result = await client.query(
-        `INSERT INTO profiles (id, name, tournaments, trophies, victories, coins,  img , selected_title)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        `INSERT INTO profiles (id, name, tournaments, trophies, victories, coins, img, unlocked_teams, titles, selected_title)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
          RETURNING *`,
         [
           profileId,
           "Dummy",
-          0, // tournaments
-          0, // trophies
-          0, // victories
-          0, // coins
-          "/assets/img/pak.png", // img
+          0,
+          0,
+          0,
+          0,
+          "/assets/img/pak.png",
+          JSON.stringify([]),
+          JSON.stringify([]),
           null,
         ]
       );
       profile = result.rows[0];
     } else {
-      profile = existing.rows[0]; // Return existing profile
+      profile = existing.rows[0];
     }
 
     await client.end();
 
-    // Parse unlocked_teams before returning
     return {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        profile: {
-          ...profile,
-          unlocked_teams: profile.unlocked_teams
-            ? JSON.parse(profile.unlocked_teams)
-            : [],
-          titles: profile.titles || [],
-        },
+        profile: profile,
       }),
     };
   } catch (err) {
@@ -81,7 +77,5 @@ CREATE TABLE IF NOT EXISTS profiles (
       statusCode: 500,
       body: JSON.stringify({ success: false, error: err.message }),
     };
-  } finally {
-    await client.end();
   }
 }

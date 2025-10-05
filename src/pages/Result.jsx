@@ -352,7 +352,7 @@ export default function Result() {
 
             <Typography
               sx={{
-                display: isTournament !== "KNOCKOUT" ? "none" : "flex",
+                display: isTournament == "KNOCKOUT" ? "none" : "flex",
                 alignItems: "center",
                 gap: "5px",
                 fontWeight: 600,
