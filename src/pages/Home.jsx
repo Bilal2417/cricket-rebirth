@@ -36,6 +36,7 @@ export default function Home() {
       "s2",
       "f",
       "Teams",
+      "Finalist",
       "Boundary",
     ];
     keysToClear.forEach((key) => sessionStorage.removeItem(key));

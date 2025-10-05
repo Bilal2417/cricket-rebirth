@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Batting from "../components/batting";
 import Bowling from "../components/bowling";
 import { useNavigate } from "react-router-dom";
+import { EmojiEventsTwoTone } from "@mui/icons-material";
 
 export default function Result() {
   const [winner, setWinner] = useState(null);
@@ -106,11 +107,6 @@ export default function Result() {
 
     setProfile(updatedProfile);
 
-    if(isTournament){
-      navigate("/fixtures")
-    }else{
-      navigate("/")
-    }
     try {
       const res = await fetch("/.netlify/functions/updateProfile", {
         method: "POST",
@@ -205,6 +201,12 @@ export default function Result() {
   console.log(topScorerFirst, "oopppo");
 
   const isTournament = sessionStorage.getItem("mode");
+
+  let trophyIncrement = 0;
+
+  if (!isTournament) {
+    trophyIncrement = totalWkts === 100 ? 5 : Math.ceil(totalWkts / 2);
+  }
 
   return (
     <>
@@ -329,6 +331,7 @@ export default function Result() {
             sx={{
               padding: { xs: "1px 0px", md: "5px 0px" },
               backgroundColor: "#0f0648",
+              position: "relative",
             }}
           >
             <Typography
@@ -341,6 +344,45 @@ export default function Result() {
               variant="h6"
             >
               Faisalabad
+            </Typography>
+
+            <Typography
+              sx={{
+                display: isTournament ? "none" : "flex",
+                alignItems: "center",
+                gap: "5px",
+                fontWeight: 600,
+                padding: "15px 30px",
+                clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)",
+                justifyContent: "center",
+                color: "rgb(255 196 107)",
+                position: "absolute",
+                right: 10,
+                top: -5,
+              }}
+              variant="body1"
+            >
+              {winner == userTeam?.name ? "+" : "-"}
+              <EmojiEventsTwoTone
+                sx={{
+                  "& .MuiSvgIcon-root": {
+                    fill: "none",
+                  },
+                  "& path:first-of-type": {
+                    fill: "#FFD700",
+                  },
+                  "& path:last-of-type": {
+                    fill: "#DAA520",
+                  },
+                }}
+              />
+              {trophyIncrement}
+              {/* <Box
+                                    sx={{ minWidth: "30px", textAlign: "center" }}
+                                    component="span"
+                                  >
+                                    trophies
+                                  </Box> */}
             </Typography>
           </Box>
 
@@ -905,14 +947,15 @@ export default function Result() {
                       userWon ? userTeam?.name : aiTeam?.name
                     );
                   }
-
+                  navigate("/fixtures");
                   // Call incrementTrophies but only increment victories
-                  await incrementTrophies(userWon, 0, true); // pass "true" for isTournament                  
+                  await incrementTrophies(userWon, 0, true); // pass "true" for isTournament
                 } else {
                   if (userWon) await incrementTrophies(true, 2, false);
                   else if (aiTeam.score > userTeam.score)
                     await incrementTrophies(false, 0, false);
                   else await incrementTrophies(true, 1, false);
+                  navigate("/");
                 }
 
                 setLoading(false);

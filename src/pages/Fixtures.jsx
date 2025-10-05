@@ -21,21 +21,30 @@ export default function Fixtures() {
     // setAiTeam(newTeams.find((team) => team.name === ai) || null);
   }, []);
 
+  
   const [quater1, setQuater1] = useState(sessionStorage.getItem("q1") || null);
   const [quater2, setQuater2] = useState(sessionStorage.getItem("q2") || null);
   const [quater3, setQuater3] = useState(sessionStorage.getItem("q3") || null);
   const [quater4, setQuater4] = useState(sessionStorage.getItem("q4") || null);
-
+  
   const [semi1, setSemi1] = useState(sessionStorage.getItem("s1") || null);
   const [semi2, setSemi2] = useState(sessionStorage.getItem("s2") || null);
-
+  
   const [final, setFinal] = useState(sessionStorage.getItem("f") || null);
-
+  
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     localStorage.removeItem("cricketData");
   }, []);
+
+  useEffect(()=>{
+    if(!userTeam && semi1)return
+    if(semi1 == userTeam?.name){
+      sessionStorage.setItem("Finalist",true)
+    }
+    console.log(semi1 , userTeam?.name , "see")
+  },[semi1])
 
   useEffect(() => {
     // const lastWinner = sessionStorage.getItem("lastMatchWinner");
@@ -76,6 +85,9 @@ export default function Fixtures() {
   const manageTournaments = async () => {
     if (!Profile) return;
 
+      sessionStorage.removeItem("Finalist")
+    
+
     const updatedProfile = {
       ...Profile,
       tournaments: (Profile.tournaments || 0) + 1,
@@ -99,7 +111,6 @@ export default function Fixtures() {
       } else {
         console.error("Failed to update trophies in database");
       }
-      navigate("/");
     } catch (err) {
       console.error("Error updating trophies:", err);
     }
@@ -521,9 +532,8 @@ export default function Fixtures() {
             onClick={() => {
               if (final && final === userTeam?.name) {
                 manageTournaments();
-              } else {
-                navigate("/");
               }
+                navigate("/");
             }}
           >
             Finish

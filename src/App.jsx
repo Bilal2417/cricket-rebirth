@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 import ScoreCard24 from "./components/scr24";
 import Scorecard from "./pages/Scorecard";
 import { Box, Container } from "@mui/material";
@@ -37,13 +37,23 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+    const location = useLocation();
+
+  useEffect(() => {
+    const final = sessionStorage.getItem("Finalist")
+    if (final) {
+      document.body.style.background = "radial-gradient(circle, #cc3f33 0%, #b51c22 100%)";
+    } else {
+      document.body.style.background = "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
+    }
+  }, [location.pathname]);
+
   return (
     <Container
       sx={{
         alignContent: "center",
       }}
     >
-      <Router>
         <Box
           sx={{
             // transform: { xs: "rotate(90deg)", md: "none" },
@@ -70,7 +80,6 @@ function App() {
             <Route path="/result" element={<Result />} />
           </Routes>
         </Box>
-      </Router>
       <ToastContainer />
     </Container>
   );

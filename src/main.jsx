@@ -1,44 +1,23 @@
 import { createTheme, ThemeProvider, responsiveFontSizes } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom"; // ✅ Add this import
 import App from "./App";
 
 // 1. Create a theme
 let theme = createTheme({
   typography: {
     fontFamily: "'Rubik', system-ui, Avenir, Helvetica, Arial, sans-serif",
-    h1: {
-      fontWeight: 700,
-      fontSize: "3rem",
-    },
-    h2: {
-      fontWeight: 600,
-      fontSize: "2.5rem",
-    },
-    h3: {
-      fontWeight: 600,
-      fontSize: "2rem",
-    },
-    h4: {
-      fontWeight: 600,
-      fontSize: "1.75rem",
-    },
-    h5: {
-      fontWeight: 600,
-      fontSize: "1.5rem",
-    },
-    h6: {
-      fontWeight: 600,
-      fontSize: "1.25rem",
-    },
-    body1: {
-      fontSize: "1rem",
-    },
-    body2: {
-      fontSize: "0.875rem",
-    },
+    h1: { fontWeight: 700, fontSize: "3rem" },
+    h2: { fontWeight: 600, fontSize: "2.5rem" },
+    h3: { fontWeight: 600, fontSize: "2rem" },
+    h4: { fontWeight: 600, fontSize: "1.75rem" },
+    h5: { fontWeight: 600, fontSize: "1.5rem" },
+    h6: { fontWeight: 600, fontSize: "1.25rem" },
+    body1: { fontSize: "1rem" },
+    body2: { fontSize: "0.875rem" },
   },
-    components: {
+  components: {
     MuiCssBaseline: {
       styleOverrides: {
         body: {
@@ -55,11 +34,13 @@ let theme = createTheme({
 // 2. Make it responsive
 theme = responsiveFontSizes(theme, { factor: 2 });
 
-// 3. Wrap your app in ThemeProvider
+// 3. Wrap App inside BrowserRouter + ThemeProvider
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ThemeProvider theme={theme}>
     <CssBaseline />
-    <App />
+    <BrowserRouter> {/* ✅ Added Router here */}
+      <App />
+    </BrowserRouter>
   </ThemeProvider>
 );
