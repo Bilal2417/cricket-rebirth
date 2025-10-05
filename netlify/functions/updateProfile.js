@@ -9,7 +9,7 @@ export async function handler(event) {
     } catch (err) {
       console.error("Error parsing body:", event.body, err);
     }
-    console.log("Parsed",body)
+    console.log("Parsed", body);
     const {
       id,
       name,
@@ -22,9 +22,8 @@ export async function handler(event) {
       titles,
       selected_title,
     } = body;
-    
 
-    console.log("id",id , "type of" , typeof id)
+    console.log("id", id, "type of", typeof id);
     if (!id) {
       return {
         statusCode: 400,
@@ -71,6 +70,11 @@ export async function handler(event) {
       }
     }
 
+    const safeStringify = (val) => {
+      if (val === undefined || val === null) return undefined;
+      return typeof val === "string" ? val : JSON.stringify(val);
+    };
+
     // Update only fields provided
     const result = await client.query(
       `UPDATE profiles
@@ -92,8 +96,8 @@ export async function handler(event) {
         trophies ?? undefined,
         victories ?? undefined,
         coins ?? undefined,
-        unlocked_teams ? JSON.stringify(unlocked_teams) : undefined,
-        titles ? JSON.stringify(titles) : undefined,
+        safeStringify(unlocked_teams),
+        safeStringify(titles),
         selected_title ?? undefined,
         id,
       ]
