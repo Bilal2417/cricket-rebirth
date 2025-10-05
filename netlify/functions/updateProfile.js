@@ -9,7 +9,7 @@ export async function handler(event) {
     } catch (err) {
       console.error("Error parsing body:", event.body, err);
     }
-
+    console.log("Parsed",body)
     const {
       id,
       name,
@@ -22,8 +22,9 @@ export async function handler(event) {
       titles,
       selected_title,
     } = body;
-
+    
     if (!id) {
+      console.log("missing",id)
       return {
         statusCode: 400,
         body: JSON.stringify({ success: false, error: "Missing id" }),

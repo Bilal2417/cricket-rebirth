@@ -207,7 +207,7 @@ export default function Result() {
 
   let trophyIncrement = 0;
 
-  if (!isTournament) {
+  if (isTournament !== "KNOCKOUT") {
     trophyIncrement = totalWkts === 100 ? 5 : Math.ceil(totalWkts / 2);
   }
 
@@ -351,7 +351,7 @@ export default function Result() {
 
             <Typography
               sx={{
-                display: isTournament ? "none" : "flex",
+                display: isTournament !== "KNOCKOUT" ? "none" : "flex",
                 alignItems: "center",
                 gap: "5px",
                 fontWeight: 600,
