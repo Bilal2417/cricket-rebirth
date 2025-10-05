@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Card, Typography } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams } from "react-router-dom";
+import { Tune } from "@mui/icons-material";
 
 // Example pulled cards (replace with your real data)
 
@@ -62,7 +63,11 @@ export default function CardOpening({ onFinish }) {
   const pack = packData[packKey];
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [rewards, setRewards] = useState(0);
+
+  const [rewards, setRewards] = useState(() => {
+    const storedRewards = localStorage.getItem("rewards");
+    return storedRewards ? JSON.parse(storedRewards) : []; 
+  });
 
   const [showSummary, setShowSummary] = useState(false);
   const [isAnimation, setIsAnimation] = useState(false);
@@ -78,15 +83,19 @@ export default function CardOpening({ onFinish }) {
     }
   };
 
-  const required = 400
+  const required = 400;
 
   useEffect(() => {
+    if (rewards?.length > 0) return;
     if (!packKey) return;
 
+    setCurrentIndex(0)
     const newRewards = [];
 
     for (let index = 0; index < pack.size; index++) {
-     const eligibleCards = pulledCards.filter((card) => card.value <= required );
+      const eligibleCards = pulledCards.filter(
+        (card) => card.value <= required
+      );
       if (eligibleCards.length === 0) break;
 
       const randomCardIndex = Math.floor(Math.random() * eligibleCards.length);
@@ -94,17 +103,19 @@ export default function CardOpening({ onFinish }) {
 
       let unlock = null;
       if (card.unlocks && card.unlocks.length > 0) {
-        const randomUnlockIndex = Math.floor(Math.random() * card.unlocks.length);
+        const randomUnlockIndex = Math.floor(
+          Math.random() * card.unlocks.length
+        );
         unlock = card.unlocks[randomUnlockIndex];
       }
 
       newRewards.push({ ...card, selectedUnlock: unlock });
-
     }
 
-    console.log(newRewards,"hello")
+    console.log(newRewards, "hello");
+    localStorage.setItem("rewards", JSON.stringify(newRewards));
     setRewards(newRewards);
-  }, [packKey]);
+  }, [packKey , rewards]);
 
   // Function to decide card background by rarity
   const getCardBackground = (rarity) => {
@@ -167,7 +178,10 @@ export default function CardOpening({ onFinish }) {
                   textAlign: "center",
                 }}
               >
-                <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 , textTransform : "uppercase" }}>
+                <Typography
+                  variant="h4"
+                  sx={{ fontWeight: "bold", mb: 2, textTransform: "uppercase" }}
+                >
                   {rewards[currentIndex]?.selectedUnlock.type}
                 </Typography>
                 <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
@@ -208,7 +222,13 @@ export default function CardOpening({ onFinish }) {
           </Box>
         </Box>
       ) : (
-        <Box sx={{ textAlign: "center", width: "100%" }}>
+        <Box
+        onClick={()=> {
+            setRewards([])
+            setShowSummary(false)
+            localStorage.removeItem("rewards")
+        }}
+        sx={{ textAlign: "center", width: "100%" }}>
           <Typography
             variant="h4"
             sx={{ fontWeight: "bold", mb: 3, color: "#fff" }}
@@ -239,8 +259,10 @@ export default function CardOpening({ onFinish }) {
                   boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
                 }}
               >
-                
-                <Typography variant="body1" sx={{ fontWeight: "bold", mb: 2 , textTransform : "uppercase" }}>
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: "bold", mb: 2, textTransform: "uppercase" }}
+                >
                   {card?.selectedUnlock.type}
                 </Typography>
                 <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>

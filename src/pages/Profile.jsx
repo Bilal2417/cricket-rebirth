@@ -27,20 +27,21 @@ export default function Profile() {
   const fileInputRef = useRef(null);
 
   const [profile, setProfile] = useState(null);
-  let profileId = localStorage.getItem("MyId");
-  if (!profileId) {
-    profileId = nanoid();
-    localStorage.setItem("MyId", profileId);
-  }
   const [name, setName] = useState("");
   const [titles, setTitles] = useState([]);
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [tempName, setTempName] = useState("");
-
   const [loading, setLoading] = useState(true);
   const [activeTitle, setActiveTitle] = useState();
   const [showLoadingPage, setShowLoadingPage] = useState(true);
+
+  // Generate ID if not exists
+  let profileId = localStorage.getItem("MyId");
+  if (!profileId) {
+    profileId = nanoid();
+    localStorage.setItem("MyId", profileId);
+  }
 
   useEffect(() => {
     const isFirstVisit = !localStorage.getItem("ProfileVisited");
@@ -52,12 +53,11 @@ export default function Profile() {
             ...data.profile,
             img: data.profile.img || "/assets/img/pak.png",
           };
-          console.log(profileData);
           setProfile(profileData);
           setName(profileData.name);
           setTitles(profileData.titles);
           if (isFirstVisit) {
-            showDescToast("Profile Created Successfully !!");
+            toast.success("Profile Created Successfully !!");
             localStorage.setItem("ProfileVisited", "true");
           }
         }
@@ -72,102 +72,80 @@ export default function Profile() {
   };
   const handleClose = () => setOpen(false);
 
-  const showDescToast = (desc) => {
-    toast.success(desc, {
-      position: "top-right",
-      autoClose: 4000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  };
-
-  const showErrToast = (desc) => {
-    toast.error(desc, {
-      position: "top-right",
-      autoClose: 4000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  };
-
-  const handleSave = async (newImg = null) => {
-  if (!profile) return;
-
-  const profileId = localStorage.getItem("MyId");
-  if (!profileId) return console.error("No profile ID found");
-
-  const updatedProfile = {
-    id: profileId, // mandatory
-    name: tempName || profile.name,
-    img: newImg || profile.img,
-  };
-
-  fetch("/.netlify/functions/updateProfile", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updatedProfile),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success) {
-        setProfile(data.profile);
-        setName(data.profile.name);
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-        toast.success("Profile Updated Successfully!");
-      } else {
-        toast.error(data.error || "Failed to update profile");
-      }
-    })
-    .catch((err) => console.error("Error updating profile:", err));
-};
-
-
-  const handleImageClick = () => fileInputRef.current.click();
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      handleSave(reader.result);
+      // Update preview only, not save
+      setProfile((prev) => ({ ...prev, img: reader.result }));
     };
     reader.readAsDataURL(file);
   };
 
-  const updateTitle = async (newTitle) => {
-  if (!profile) return;
+  const handleSave = async () => {
+    if (!profile) return;
 
-  const profileId = localStorage.getItem("MyId");
-  if (!profileId) return console.error("No profile ID found");
+    const profileId = localStorage.getItem("MyId");
+    if (!profileId) return console.error("No profile ID found");
 
-  const updatedProfile = {
-    id: profileId, // mandatory
-    selected_title: newTitle, // only updating title
-  };
+    const updatedProfile = {
+      id: profileId,
+      name: tempName || profile.name,
+      img: profile.img,
+    };
 
-  fetch("/.netlify/functions/updateProfile", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updatedProfile),
-  })
-    .then((res) => res.json())
-    .then((data) => {
+    try {
+      const res = await fetch("/.netlify/functions/updateProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProfile),
+      });
+      const data = await res.json();
+
       if (data.success) {
         setProfile(data.profile);
+        setName(data.profile.name);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-        toast.success("Title Updated Successfully!");
+        toast.success("Profile Updated Successfully!");
+        setOpen(false);
       } else {
-        toast.error(data.error || "Failed to update title");
+        toast.error(data.error || "Failed to update profile");
       }
-    })
-    .catch((err) => console.error("Error updating title:", err));
-};
+    } catch (err) {
+      console.error("Error updating profile:", err);
+    }
+  };
 
+  const updateTitle = async (newTitle) => {
+    if (!profile) return;
+
+    const profileId = localStorage.getItem("MyId");
+    if (!profileId) return console.error("No profile ID found");
+
+    const updatedProfile = {
+      id: profileId,
+      selected_title: newTitle,
+    };
+
+    fetch("/.netlify/functions/updateProfile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedProfile),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setProfile(data.profile);
+          sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+          toast.success("Title Updated Successfully!");
+        } else {
+          toast.error(data.error || "Failed to update title");
+        }
+      })
+      .catch((err) => console.error("Error updating title:", err));
+  };
 
   return (
     <>
@@ -178,7 +156,7 @@ export default function Profile() {
         />
       )}
 
-      {!showLoadingPage && (
+      {!showLoadingPage && profile && (
         <Box sx={{ width: "fit-content", margin: "auto" }}>
           {/* Back Button */}
           <Box
@@ -222,7 +200,7 @@ export default function Profile() {
                 objectFit: "cover",
                 "&:hover": { cursor: "pointer" },
               }}
-              onClick={handleImageClick}
+              onClick={() => fileInputRef.current.click()}
             />
             <input
               type="file"
@@ -275,60 +253,69 @@ export default function Profile() {
               onClick={() => setShow(!show)}
             >
               <Typography
-                sx={{
-                  textAlign: "center",
-                }}
+                sx={{ textAlign: "center" }}
                 variant="h6"
               >
                 {profile?.selected_title || "Titles"}
               </Typography>
 
-              {show
-                ? profile?.titles.map((title, index) => {
-                    return (
-                      <Box
-                        key={index}
-                        sx={{
-                          textAlign: "center",
-                          backgroundColor: "#343c53",
-                          width: "90%",
-                          padding: "5px 20px",
-                          display: "flex",
-                          alignContent: "center",
-                          border: "2px solid #000000",
-                          borderRadius: "4px",
-                          boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                          clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                          m: "50px 0",
-                          color: "#ffffff",
-                          ":hover": { cursor: "pointer" },
-                        }}
-                        onClick={(e) => {
-                          setShow(false);
-                          setActiveTitle(title);
-                          updateTitle(title);
-                          e.stopPropagation();
-                        }}
-                      >
-                        {title}
-                      </Box>
-                    );
-                  })
-                : null}
+              {show &&
+                profile?.titles.map((title, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      textAlign: "center",
+                      backgroundColor: "#343c53",
+                      width: "90%",
+                      padding: "5px 20px",
+                      display: "flex",
+                      alignContent: "center",
+                      border: "2px solid #000000",
+                      borderRadius: "4px",
+                      boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                      clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                      m: "50px 0",
+                      color: "#ffffff",
+                      ":hover": { cursor: "pointer" },
+                    }}
+                    onClick={(e) => {
+                      setShow(false);
+                      setActiveTitle(title);
+                      updateTitle(title);
+                      e.stopPropagation();
+                    }}
+                  >
+                    {title}
+                  </Box>
+                ))}
             </Box>
           </Box>
+
+          {/* Save Button */}
+          <Button
+            onClick={handleSave}
+            sx={{
+              backgroundColor: "#0174fe",
+              color: "#FFFFFF",
+              fontFamily: "sans-serif",
+              mt: 2,
+              width: "100%",
+              clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+              boxShadow: `
+                inset 0px -8px 8px -4px #0248df,
+                inset 0px 8px 8px -4px #009aff
+              `,
+            }}
+          >
+            Save Changes
+          </Button>
 
           {/* Change Name Dialog */}
           <Dialog
             PaperProps={{
-              sx: {
-                backgroundColor: "transparent",
-                boxShadow: "none",
-              },
+              sx: { backgroundColor: "transparent", boxShadow: "none" },
             }}
-            BackdropProps={{
-              sx: { backgroundColor: "rgba(0,0,0,0.5)" },
-            }}
+            BackdropProps={{ sx: { backgroundColor: "rgba(0,0,0,0.5)" } }}
             open={open}
             onClose={handleClose}
           >
@@ -341,9 +328,9 @@ export default function Profile() {
               <TextField
                 sx={{
                   boxShadow: `
-      inset 0px -8px 8px -4px #ffffff,   
-      inset 0px 8px 8px -4px #c6cbda       
-    `,
+                    inset 0px -8px 8px -4px #ffffff,
+                    inset 0px 8px 8px -4px #c6cbda
+                  `,
                   backgroundColor: "#FFFFFF",
                   borderRadius: "8px",
                 }}
@@ -369,7 +356,7 @@ export default function Profile() {
             </DialogContent>
             <DialogActions>
               <Button
-                onClick={() => handleSave()}
+                onClick={handleSave}
                 sx={{
                   backgroundColor: "#0174fe",
                   color: "#FFFFFF",
@@ -377,9 +364,9 @@ export default function Profile() {
                   width: "100%",
                   clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
                   boxShadow: `
-      inset 0px -8px 8px -4px #0248df,   
-      inset 0px 8px 8px -4px #009aff       
-    `,
+                    inset 0px -8px 8px -4px #0248df,
+                    inset 0px 8px 8px -4px #009aff
+                  `,
                 }}
                 disabled={tempName.length < 3 || tempName.length > 10}
               >
@@ -393,59 +380,17 @@ export default function Profile() {
             {[
               {
                 label: "Trophies",
-                icon: (
-                  <EmojiEventsTwoTone
-                    sx={{
-                      "& .MuiSvgIcon-root": {
-                        fill: "none",
-                      },
-                      "& path:first-of-type": {
-                        fill: "#FFD700",
-                      },
-                      "& path:last-of-type": {
-                        fill: "#DAA520",
-                      },
-                    }}
-                  />
-                ),
+                icon: <EmojiEventsTwoTone />,
                 value: profile.trophies,
               },
               {
                 label: "Victories",
-                icon: (
-                  <StarTwoTone
-                    sx={{
-                      "& .MuiSvgIcon-root": {
-                        fill: "none",
-                      },
-                      "& path:first-of-type": {
-                        fill: "#FFD700",
-                      },
-                      "& path:last-of-type": {
-                        fill: "#DAA520",
-                      },
-                    }}
-                  />
-                ),
+                icon: <StarTwoTone />,
                 value: profile.victories,
               },
               {
                 label: "Tournaments",
-                icon: (
-                  <WhatshotTwoTone
-                    sx={{
-                      "& .MuiSvgIcon-root": {
-                        fill: "none",
-                      },
-                      "& path:first-of-type": {
-                        fill: "#FFD700",
-                      },
-                      "& path:last-of-type": {
-                        fill: "#DAA520",
-                      },
-                    }}
-                  />
-                ),
+                icon: <WhatshotTwoTone />,
                 value: profile.tournaments,
               },
             ].map((stat) => (

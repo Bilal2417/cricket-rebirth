@@ -14,9 +14,9 @@ export async function handler() {
         id, 
         name, 
         trophies,
-        coins,
-        unlocked_teams,
-        titles,
+        // coins,
+        // unlocked_teams,
+        // titles,
         selected_title,
         (NOW() - last_active) < interval '1 minutes' AS is_active,
         COALESCE(img, '/assets/img/pak.png') AS img
@@ -25,15 +25,15 @@ export async function handler() {
     `);
 
     // Parse unlocked_teams JSON string into array before returning
-    const profiles = result.rows.map((row) => ({
-      ...row,
-      unlocked_teams: row.unlocked_teams ? JSON.parse(row.unlocked_teams) : [],
-      titles: row.titles || [], // ensure always array
-    }));
+    // const profiles = result.rows.map((row) => ({
+    //   ...row,
+    //   unlocked_teams: row.unlocked_teams ? JSON.parse(row.unlocked_teams) : [],
+    //   titles: row.titles || [], // ensure always array
+    // }));
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, profiles }),
+      body: JSON.stringify({ success: true, profiles : result.rows }),
     };
   } catch (err) {
     return {

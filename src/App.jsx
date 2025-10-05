@@ -32,7 +32,7 @@ function App() {
 
     updateActivity();
 
-    const interval = setInterval(updateActivity, 50 * 1000);
+    const interval = setInterval(updateActivity, 60 * 1000);
 
     return () => clearInterval(interval);
   }, []);

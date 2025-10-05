@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS profiles (
   coins INT DEFAULT 0,
   unlocked_teams TEXT DEFAULT '[]',
   titles TEXT[] DEFAULT '{}',
-  selected_title TEXT
+  selected_title TEXT,
+  last_active TIMESTAMP DEFAULT NOW()
 )
 
     `);
