@@ -94,6 +94,7 @@ export default function Profile() {
       id: profileId,
       name: tempName || profile.name,
       img: profile.img,
+      selected_title: activeTitle || profile.selected_title,
     };
 
     try {
@@ -252,10 +253,7 @@ export default function Profile() {
               }}
               onClick={() => setShow(!show)}
             >
-              <Typography
-                sx={{ textAlign: "center" }}
-                variant="h6"
-              >
+              <Typography sx={{ textAlign: "center" }} variant="h6">
                 {profile?.selected_title || "Titles"}
               </Typography>
 
@@ -270,6 +268,8 @@ export default function Profile() {
                       padding: "5px 20px",
                       display: "flex",
                       alignContent: "center",
+                      justifyContent: "center",
+                      gap : "10px",
                       border: "2px solid #000000",
                       borderRadius: "4px",
                       boxShadow: "inset 0px -8px 8px -4px #2a3043",
@@ -280,12 +280,20 @@ export default function Profile() {
                     }}
                     onClick={(e) => {
                       setShow(false);
-                      setActiveTitle(title);
-                      updateTitle(title);
+                      if(title.value >= 10){
+                        setActiveTitle(title.name);
+                      }
+                      else{
+                        toast.error("Win tournaments 10 times to unlock title")
+                      }
+                      // updateTitle(title);
                       e.stopPropagation();
                     }}
                   >
-                    {title}
+                    <Box component="span">
+                      {title.value}/10
+                    </Box>
+                    {title.name}
                   </Box>
                 ))}
             </Box>
@@ -356,7 +364,8 @@ export default function Profile() {
             </DialogContent>
             <DialogActions>
               <Button
-                onClick={handleSave}
+                onClick={handleClose}
+                // onClick={handleSave}
                 sx={{
                   backgroundColor: "#0174fe",
                   color: "#FFFFFF",

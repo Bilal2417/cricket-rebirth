@@ -54,12 +54,12 @@ export default function Toss() {
     if (!Profile) return;
 
     const penalty = Number(totalWkts) === 100 ? 5 : Math.ceil(totalWkts / 2);
-
+    const originalTrophies = Profile.trophies
     const updatedProfile = {
       ...Profile,
-      trophies: Math.max(Profile.trophies - penalty, 0),
+      trophies: Math.max(originalTrophies - penalty, 0),
     };
-
+    sessionStorage.setItem("original",originalTrophies)
     setProfile(updatedProfile);
 
     try {

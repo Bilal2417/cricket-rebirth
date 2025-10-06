@@ -1,4 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from "react-router-dom";
 import ScoreCard24 from "./components/scr24";
 import Scorecard from "./pages/Scorecard";
 import { Box, Container } from "@mui/material";
@@ -11,7 +17,7 @@ import Modes from "./pages/Modes";
 import Knockout from "./pages/Knockout";
 import Fixtures from "./pages/Fixtures";
 import { ToastContainer } from "react-toastify";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CardPacksShop from "./components/card";
 import MovingBallsBackground from "./components/background";
 import DisablePullToRefresh from "./components/disable";
@@ -37,16 +43,40 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-    const location = useLocation();
+  const location = useLocation();
 
+  const [finalist, setFinalist] = useState(sessionStorage.getItem("Finalist"));
+  
   useEffect(() => {
-    const final = sessionStorage.getItem("Finalist")
-    if (final) {
-      document.body.style.background = "radial-gradient(circle, #cc3f33 0%, #b51c22 100%)";
-    } else {
-      document.body.style.background = "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
+    const handleBackUpdate = () =>{
+      const final = sessionStorage.getItem("Finalist")
+      if (final) {
+       document.body.style.background =
+         "radial-gradient(circle, #cc3f33 0%, #b51c22 100%)";
+     } 
+    else if(location.pathname === "/") {
+      document.body.style.background =
+        "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
+      }
+      else{
+      document.body.style.background =
+        "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
     }
-  }, [location.pathname]);
+  }
+  handleBackUpdate()
+  window.addEventListener("BackUpdated", handleBackUpdate);
+  return () =>
+    window.removeEventListener("BackUpdated", handleBackUpdate);
+  }, [location.pathname, finalist]);
+
+  
+  useEffect(() => {
+    const handleFinalistUpdate = () =>
+      setFinalist(sessionStorage.getItem("Finalist"));
+    window.addEventListener("finalistUpdated", handleFinalistUpdate);
+    return () =>
+      window.removeEventListener("finalistUpdated", handleFinalistUpdate);
+  }, []);
 
   return (
     <Container
@@ -54,32 +84,32 @@ function App() {
         alignContent: "center",
       }}
     >
-        <Box
-          sx={{
-            // transform: { xs: "rotate(90deg)", md: "none" },
+      <Box
+        sx={{
+          // transform: { xs: "rotate(90deg)", md: "none" },
 
-            overflowX: { xs: "auto", md: "unset" },
-            overflowY: { xs: "auto", md: "unset" },
-            maxWidth: "100vw",
-          }}
-        >
-          <MovingBallsBackground />
-          <DisablePullToRefresh />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/card" element={<CardPacksShop />} />
-            <Route path="/open-pack/:packKey" element={<CardOpening />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/modes" element={<Modes />} />
-            <Route path="/knockout" element={<Knockout />} />
-            <Route path="/fixtures" element={<Fixtures />} />
-            <Route path="/team" element={<Selection />} />
-            <Route path="/gamePlay" element={<ScoreCard24 />} />
-            <Route path="/toss" element={<Toss />} />
-            <Route path="/score" element={<Scorecard />} />
-            <Route path="/result" element={<Result />} />
-          </Routes>
-        </Box>
+          overflowX: { xs: "auto", md: "unset" },
+          overflowY: { xs: "auto", md: "unset" },
+          maxWidth: "100vw",
+        }}
+      >
+        <MovingBallsBackground />
+        <DisablePullToRefresh />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/card" element={<CardPacksShop />} />
+          <Route path="/open-pack/:packKey" element={<CardOpening />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/modes" element={<Modes />} />
+          <Route path="/knockout" element={<Knockout />} />
+          <Route path="/fixtures" element={<Fixtures />} />
+          <Route path="/team" element={<Selection />} />
+          <Route path="/gamePlay" element={<ScoreCard24 />} />
+          <Route path="/toss" element={<Toss />} />
+          <Route path="/score" element={<Scorecard />} />
+          <Route path="/result" element={<Result />} />
+        </Routes>
+      </Box>
       <ToastContainer />
     </Container>
   );

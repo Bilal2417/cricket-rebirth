@@ -88,7 +88,7 @@ export async function handler(event) {
         victories ?? null,
         coins ?? null,
         unlocked_teams !== undefined ? JSON.stringify(unlocked_teams) : null,
-        titles !== undefined ? JSON.stringify(titles) : null,
+        titles !== undefined ? JSON.stringify(titles) : existingProfile.rows[0].titles,
         selected_title ?? null,
         id,
       ]

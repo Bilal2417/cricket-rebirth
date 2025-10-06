@@ -21,30 +21,30 @@ export default function Fixtures() {
     // setAiTeam(newTeams.find((team) => team.name === ai) || null);
   }, []);
 
-  
   const [quater1, setQuater1] = useState(sessionStorage.getItem("q1") || null);
   const [quater2, setQuater2] = useState(sessionStorage.getItem("q2") || null);
   const [quater3, setQuater3] = useState(sessionStorage.getItem("q3") || null);
   const [quater4, setQuater4] = useState(sessionStorage.getItem("q4") || null);
-  
+
   const [semi1, setSemi1] = useState(sessionStorage.getItem("s1") || null);
   const [semi2, setSemi2] = useState(sessionStorage.getItem("s2") || null);
-  
+
   const [final, setFinal] = useState(sessionStorage.getItem("f") || null);
-  
+
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     localStorage.removeItem("cricketData");
   }, []);
 
-  useEffect(()=>{
-    if(!(userTeam && semi1))return
-    if(semi1 == userTeam?.name){
-      sessionStorage.setItem("Finalist",true)
+  useEffect(() => {
+    if (!semi1) return;
+    if (semi1 == userTeam?.name) {
+      sessionStorage.setItem("Finalist", true);
+      window.dispatchEvent(new Event("finalistUpdated"));
     }
-    console.log(semi1 , userTeam?.name , "see")
-  },[semi1])
+    console.log(semi1, userTeam?.name, "see");
+  }, [ userTeam, semi2]);
 
   useEffect(() => {
     // const lastWinner = sessionStorage.getItem("lastMatchWinner");
@@ -82,47 +82,60 @@ export default function Fixtures() {
     setTotalWkts(overs ? Number(overs) : 0);
   }, []);
 
-const manageTournaments = async () => {
-  if (!Profile) return;
+  const manageTournaments = async () => {
+    if (!Profile) return;
 
-  sessionStorage.removeItem("Finalist");
+    sessionStorage.removeItem("Finalist");
 
-  const profileId = localStorage.getItem("MyId");
-  
-  
-  const newTitles = [...(Profile.titles || [])];
-  if (userTeam?.name && !newTitles.includes(userTeam.name)) {
-    newTitles.push(userTeam.name);
-  }
+    const profileId = localStorage.getItem("MyId");
 
-  const updatedProfile = {
-    ...Profile,
-    id: profileId || Profile?.id,
-    tournaments: (Profile.tournaments || 0) + 1,
-    titles: newTitles,
-  };
+    const newTitles = [...(Profile.titles || [])];
 
-  setProfile(updatedProfile);
+    if (userTeam?.name) {
+      // Find if the team already exists by name
+      const existingIndex = newTitles.findIndex(
+        (t) => t.name === userTeam.name
+      );
 
-  try {
-    const res = await fetch("/.netlify/functions/updateProfile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedProfile),
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      setProfile(data.profile);
-      console.log(data.profile);
-      sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-    } else {
-      console.error("Failed to update tournaments in database:", data.error);
+      if (existingIndex !== -1) {
+        // If exists → increment its value
+        if (newTitles[existingIndex].value < 10) {
+          newTitles[existingIndex].value += 1;
+        }
+      } else {
+        // If not exists → add with value 1
+        newTitles.push({ value: 1, name: userTeam.name });
+      }
     }
-  } catch (err) {
-    console.error("Error updating tournaments:", err);
-  }
-};
+
+    const updatedProfile = {
+      ...Profile,
+      id: profileId || Profile?.id,
+      tournaments: (Profile.tournaments || 0) + 1,
+      titles: newTitles,
+    };
+
+    setProfile(updatedProfile);
+
+    try {
+      const res = await fetch("/.netlify/functions/updateProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProfile),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setProfile(data.profile);
+        console.log(data.profile);
+        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+      } else {
+        console.error("Failed to update tournaments in database:", data.error);
+      }
+    } catch (err) {
+      console.error("Error updating tournaments:", err);
+    }
+  };
 
   const matchWinner = (teamA, teamB, e) => {
     const matchId = e.currentTarget.value;
@@ -541,7 +554,7 @@ const manageTournaments = async () => {
               if (final && final === userTeam?.name) {
                 manageTournaments();
               }
-                navigate("/");
+              navigate("/");
             }}
           >
             Finish

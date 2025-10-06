@@ -87,6 +87,7 @@ export default function Result() {
 
   const incrementTrophies = async (win, matchType, isTournament = false) => {
     const profileId = localStorage.getItem("MyId");
+    const originalTrophies = Number(sessionStorage.getItem("original"));
     console.log(profileId, Profile, "all");
     if (!Profile) return;
 
@@ -97,15 +98,15 @@ export default function Result() {
 
     if (win && !isTournament) {
       trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
-      if (matchType === 2) trophyIncrement *= 2;
-      if (matchType === 1) trophyIncrement = Math.ceil(trophyIncrement / 2);
+      // if (matchType === 2) trophyIncrement *= 2;
+      if (matchType === 1) trophyIncrement = 0;
     }
 
     const updatedProfile = {
       ...Profile,
       id: profileId || Profile?.id,
       victories: win ? Profile.victories + 1 : Profile.victories,
-      trophies: Profile.trophies + trophyIncrement,
+      trophies: originalTrophies + trophyIncrement,
     };
 
     console.log(updatedProfile,"Profile that is sending")

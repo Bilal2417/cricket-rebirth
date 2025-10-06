@@ -51,6 +51,9 @@ export default function Home() {
       "winner",
     ];
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
+
+    
+      window.dispatchEvent(new Event("BackUpdated"));
   }, []);
 
   const [overs, setOvers] = useState(() =>
@@ -343,6 +346,12 @@ export default function Home() {
                         }}
                         // onClick={handleImageClick}
                       />
+
+                      <Box sx={{
+                        display : "flex",
+                        flexDirection : "column",
+                        justifyContent : "flex-start"
+                      }}>
                       <Typography
                         sx={{
                           fontWeight: 600,
@@ -350,9 +359,21 @@ export default function Home() {
                           color: "rgb(255 196 107)",
                         }}
                         variant="body1"
-                      >
+                        >
                         {profile?.name}
                       </Typography>
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          fontFamily: "Rubik",
+                          color: "rgb(255 196 107)",
+                          fontSize : "0.7em"
+                        }}
+                        variant="body2"
+                        >
+                        {profile?.selected_title}
+                      </Typography>
+                        </Box>
                       <span
                         style={{
                           display: "inline-block",
