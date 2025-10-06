@@ -211,7 +211,7 @@ export default function Profile() {
               style={{ display: "none" }}
             />
             <TextField
-              value={name}
+              value={tempName || name}
               onClick={handleOpen}
               readOnly
               sx={{

@@ -2,14 +2,14 @@ import { Client } from "pg";
 
 export async function handler(event) {
   try {
+    // Parse body safely
     let body = {};
     try {
-      body =
-        typeof event.body === "string" ? JSON.parse(event.body) : event.body;
+      body = typeof event.body === "string" ? JSON.parse(event.body) : event.body;
     } catch (err) {
       console.error("Error parsing body:", event.body, err);
     }
-    
+
     const {
       id,
       name,
@@ -37,6 +37,7 @@ export async function handler(event) {
 
     await client.connect();
 
+    // Fetch existing profile
     const existingProfile = await client.query(
       `SELECT * FROM profiles WHERE id=$1`,
       [id]
@@ -50,7 +51,10 @@ export async function handler(event) {
       };
     }
 
-    if (name && name !== existingProfile.rows[0].name) {
+    const current = existingProfile.rows[0];
+
+    // Check if new name is unique
+    if (name && name !== current.name) {
       const check = await client.query(
         "SELECT id FROM profiles WHERE name = $1 AND id <> $2",
         [name, id]
@@ -67,6 +71,23 @@ export async function handler(event) {
       }
     }
 
+    // Ensure unlocked_teams is always JSON array/object
+    const safeUnlockedTeams =
+      unlocked_teams != null
+        ? Array.isArray(unlocked_teams)
+          ? unlocked_teams
+          : [unlocked_teams]
+        : null;
+
+    // Ensure titles is always JSON array
+    const safeTitles =
+      titles != null
+        ? Array.isArray(titles)
+          ? titles
+          : [titles]
+        : null;
+
+    // Update profile
     const result = await client.query(
       `UPDATE profiles
        SET name = COALESCE($1, name),
@@ -87,8 +108,8 @@ export async function handler(event) {
         trophies ?? null,
         victories ?? null,
         coins ?? null,
-        unlocked_teams !== undefined ? JSON.stringify(unlocked_teams) : null,
-        titles !== undefined ? JSON.stringify(titles) : existingProfile.rows[0].titles,
+        safeUnlockedTeams != null ? JSON.stringify(safeUnlockedTeams) : null,
+        safeTitles != null ? JSON.stringify(safeTitles) : null,
         selected_title ?? null,
         id,
       ]
