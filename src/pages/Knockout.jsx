@@ -20,7 +20,7 @@ const allTeams = [
   "Sri Lanka",
   "Bangladesh",
   "West Indies",
-  "Afghanistan"
+  "Afghanistan",
 ];
 
 export default function Knockout() {
@@ -43,7 +43,7 @@ export default function Knockout() {
               available[Math.floor(Math.random() * available.length)];
             return [...prev, randomTeam];
           } else {
-            clearInterval(interval); 
+            clearInterval(interval);
             setLoading(false);
             return prev;
           }
@@ -55,7 +55,7 @@ export default function Knockout() {
     return () => clearInterval(interval);
   }, [userTeam]);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -69,7 +69,7 @@ export default function Knockout() {
         sx={{
           fontFamily: "Rubik",
           color: "#FFFFFF",
-          fontWeight : 600
+          fontWeight: 600,
         }}
         variant="h4"
         gutterBottom
@@ -77,27 +77,51 @@ export default function Knockout() {
         Tournament Teams
       </Typography>
 
-      <List>
-        {teams.map((team, i) => (
-          <ListItem
-            sx={{
-              fontFamily: "Rubik",
-              color: "#FFFFFF",
-            }}
-            key={i}
-          >
-            {team}
-          </ListItem>
-        ))}
+      <List
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gridTemplateRows: "repeat(4, auto)",
+        }}
+      >
+        {teams.map((team, i) => {
+          // Determine column and row positions
+          const isRightColumn = i >= 4;
+          const row = isRightColumn ? 8 - i : i + 1;
+          const col = isRightColumn ? 2 : 1;
+
+          return (
+            <ListItem
+              key={i}
+              onClick={() => navigate("/ProfileData", { state: { teams } })}
+              sx={{
+                fontFamily: "Rubik",
+                color: "#FFFFFF",
+                gridColumn: col,
+                gridRow: row,
+                display: "flex",
+                alignItems: "center",
+                width: "155px",
+                justifyContent: "space-between",
+                paddingLeft: i < 4 ? "16px" : "0px",
+              }}
+            >
+              {team}{" "}
+              <span style={{ display: i < 4 ? "inline-block" : "none" }}>
+                vs
+              </span>
+            </ListItem>
+          );
+        })}
       </List>
+
       {loading && (
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-          <CircularProgress sx={{color : "#FFFFFF"}} size={24} />
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <CircularProgress sx={{ color: "#FFFFFF" }} size={24} />
         </Box>
       )}
       {!loading && (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-          
           <Button
             sx={{
               fontFamily: "Rubik",
@@ -132,8 +156,8 @@ export default function Knockout() {
               },
             }}
             onClick={() => {
-                // sessionStorage.setItem(("Teams" , JSON.stringify(teams)))
-                sessionStorage.setItem("Teams" ,JSON.stringify(teams))
+              // sessionStorage.setItem(("Teams" , JSON.stringify(teams)))
+              sessionStorage.setItem("Teams", JSON.stringify(teams));
               navigate("/fixtures");
             }}
           >

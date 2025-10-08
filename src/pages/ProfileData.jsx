@@ -22,17 +22,13 @@ import { nanoid } from "nanoid";
 import { toast } from "react-toastify";
 import LoadingPage from "../components/loading";
 
-export default function Profile() {
-  const location = useLocation();
+export default function ProfileData() {
+  const { state } = useLocation();
+  const profile = state?.profile;
+  console.log(profile);
   const navigate = useNavigate();
-  const fileInputRef = useRef(null);
 
-  const [profile, setProfile] = useState(null);
-  const [name, setName] = useState("");
-  const [titles, setTitles] = useState([]);
-  const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
-  const [tempName, setTempName] = useState("");
   const [loading, setLoading] = useState(true);
   const [activeTitle, setActiveTitle] = useState();
   const [showLoadingPage, setShowLoadingPage] = useState(true);
@@ -44,126 +40,112 @@ export default function Profile() {
     localStorage.setItem("MyId", profileId);
   }
 
-  useEffect(() => {
-    const isFirstVisit = !localStorage.getItem("ProfileVisited");
-    fetch(`/.netlify/functions/saveProfile?profileId=${profileId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          const profileData = {
-            ...data.profile,
-            img: data.profile.img || "/assets/img/pak.png",
-          };
-          setProfile(profileData);
-          setName(profileData.name);
-          setTitles(profileData.titles);
-          if (isFirstVisit) {
-            toast.success("Profile Created Successfully !!");
-            localStorage.setItem("ProfileVisited", "true");
-          }
-        }
-      })
-      .catch((err) => console.error("Error fetching profile:", err))
-      .finally(() => setLoading(false));
-  }, []);
+  //   useEffect(() => {
+  //     const isFirstVisit = !localStorage.getItem("ProfileVisited");
+  //     fetch(`/.netlify/functions/saveProfile?profileId=${profileId}`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data.success) {
+  //           const profileData = {
+  //             ...data.profile,
+  //             img: data.profile.img || "/assets/img/pak.png",
+  //           };
+  //           setProfile(profileData);
+  //           setName(profileData.name);
+  //           setTitles(profileData.titles);
+  //           if (isFirstVisit) {
+  //             toast.success("Profile Created Successfully !!");
+  //             localStorage.setItem("ProfileVisited", "true");
+  //           }
+  //         }
+  //       })
+  //       .catch((err) => console.error("Error fetching profile:", err))
+  //       .finally(() => setLoading(false));
+  //   }, []);
 
-  const handleOpen = () => {
-    setTempName(name);
-    setOpen(true);
-  };
-  const handleClose = () => setOpen(false);
+  //   const handleOpen = () => {
+  //     setTempName(name);
+  //     setOpen(true);
+  //   };
+  //   const handleClose = () => setOpen(false);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  //   const handleSave = async () => {
+  //     if (!profile) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      // Update preview only, not save
-      setProfile((prev) => ({ ...prev, img: reader.result }));
-    };
-    reader.readAsDataURL(file);
-  };
+  //     const profileId = localStorage.getItem("MyId");
+  //     if (!profileId) return console.error("No profile ID found");
 
-  const handleSave = async () => {
-    if (!profile) return;
+  //     setSave(true)
 
-    const profileId = localStorage.getItem("MyId");
-    if (!profileId) return console.error("No profile ID found");
+  //     const updatedProfile = {
+  //       id: profileId,
+  //       name: tempName || profile.name,
+  //       img: profile.img,
+  //       selected_title: activeTitle || profile.selected_title,
+  //     };
 
-    setSave(true)
-    
-    const updatedProfile = {
-      id: profileId,
-      name: tempName || profile.name,
-      img: profile.img,
-      selected_title: activeTitle || profile.selected_title,
-    };
+  //     try {
+  //       const res = await fetch("/.netlify/functions/updateProfile", {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify(updatedProfile),
+  //       });
+  //       const data = await res.json();
 
-    try {
-      const res = await fetch("/.netlify/functions/updateProfile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProfile),
-      });
-      const data = await res.json();
-      
-      if (data.success) {
-        setSave(false)
-        setProfile(data.profile);
-        setName(data.profile.name);
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-        toast.success("Profile Updated Successfully!");
-        setOpen(false);
-      } else {
-        toast.error(data.error || "Failed to update profile");
-      }
-    } catch (err) {
-      console.error("Error updating profile:", err);
-    }
-  };
+  //       if (data.success) {
+  //         setSave(false)
+  //         setProfile(data.profile);
+  //         setName(data.profile.name);
+  //         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+  //         toast.success("Profile Updated Successfully!");
+  //         setOpen(false);
+  //       } else {
+  //         toast.error(data.error || "Failed to update profile");
+  //       }
+  //     } catch (err) {
+  //       console.error("Error updating profile:", err);
+  //     }
+  //   };
 
-  const updateTitle = async (newTitle) => {
-    if (!profile) return;
+  //   const updateTitle = async (newTitle) => {
+  //     if (!profile) return;
 
-    const profileId = localStorage.getItem("MyId");
-    if (!profileId) return console.error("No profile ID found");
+  //     const profileId = localStorage.getItem("MyId");
+  //     if (!profileId) return console.error("No profile ID found");
 
-    const updatedProfile = {
-      id: profileId,
-      selected_title: newTitle,
-    };
+  //     const updatedProfile = {
+  //       id: profileId,
+  //       selected_title: newTitle,
+  //     };
 
-    fetch("/.netlify/functions/updateProfile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedProfile),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setProfile(data.profile);
-          sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-          toast.success("Title Updated Successfully!");
-        } else {
-          toast.error(data.error || "Failed to update title");
-        }
-      })
-      .catch((err) => console.error("Error updating title:", err));
-  }
-
-  const [ save , setSave ] = useState(false)
+  //     fetch("/.netlify/functions/updateProfile", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(updatedProfile),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data.success) {
+  //           setProfile(data.profile);
+  //           sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+  //           toast.success("Title Updated Successfully!");
+  //         } else {
+  //           toast.error(data.error || "Failed to update title");
+  //         }
+  //       })
+  //       .catch((err) => console.error("Error updating title:", err));
+  //   }
 
   return (
     <>
-      {showLoadingPage && (
+      {!showLoadingPage && (
         <LoadingPage
           loading={loading}
           onFinish={() => setShowLoadingPage(false)}
         />
       )}
 
-      {!showLoadingPage && profile && (
+      {showLoadingPage && (
         <Box sx={{ width: "fit-content", margin: "auto" }}>
           {/* Back Button */}
           <Box
@@ -197,7 +179,7 @@ export default function Profile() {
           >
             <Box
               component="img"
-              src={profile.img}
+              src={profile?.img}
               alt="profile"
               sx={{
                 width: 120,
@@ -207,18 +189,9 @@ export default function Profile() {
                 objectFit: "cover",
                 "&:hover": { cursor: "pointer" },
               }}
-              onClick={() => fileInputRef.current.click()}
-            />
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              style={{ display: "none" }}
             />
             <TextField
-              value={tempName || name}
-              onClick={handleOpen}
+              value={profile?.name || "dummy"}
               readOnly
               sx={{
                 padding: "10px 60px",
@@ -295,102 +268,19 @@ export default function Profile() {
                       e.stopPropagation();
                     }}
                   >
-                    <Box component="span">{title.value}/10</Box>
+                    <Box
+                      sx={{
+                        display: title.value >= 10 ? "none" : "inline-block",
+                      }}
+                      component="span"
+                    >
+                      {title.value}/10
+                    </Box>
                     {title.name}
                   </Box>
                 ))}
             </Box>
           </Box>
-
-          {/* Save Button */}
-          <Button
-            onClick={handleSave}
-            sx={{
-              backgroundColor: "#0174fe",
-              color: "#FFFFFF",
-              fontFamily: "sans-serif",
-              mt: 2,
-              width: "100%",
-              clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-              boxShadow: `
-                inset 0px -8px 8px -4px #0248df,
-                inset 0px 8px 8px -4px #009aff
-              `,
-            }}            
-              disabled={save}
-          >
-            {save ? (
-              <CircularProgress size={20} sx={{ color: "#fff" }} />
-            ) : (
-              "Save Changes"
-            )}
-          </Button>
-
-          {/* Change Name Dialog */}
-          <Dialog
-            PaperProps={{
-              sx: { backgroundColor: "transparent", boxShadow: "none" },
-            }}
-            BackdropProps={{ sx: { backgroundColor: "rgba(0,0,0,0.5)" } }}
-            open={open}
-            onClose={handleClose}
-          >
-            <DialogTitle
-              sx={{ color: "#FFFFFF", textAlign: "center", fontWeight: 600 }}
-            >
-              Change Name
-            </DialogTitle>
-            <DialogContent>
-              <TextField
-                sx={{
-                  boxShadow: `
-                    inset 0px -8px 8px -4px #ffffff,
-                    inset 0px 8px 8px -4px #c6cbda
-                  `,
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: "8px",
-                }}
-                autoFocus
-                margin="dense"
-                label="New Name"
-                fullWidth
-                value={tempName}
-                inputProps={{ maxLength: 12 }}
-                onChange={(e) => setTempName(e.target.value)}
-                error={
-                  tempName.length > 0 &&
-                  (tempName.length < 3 || tempName.length > 10)
-                }
-                helperText={
-                  tempName.length > 0 && tempName.length < 3
-                    ? "Name must be at least 3 characters"
-                    : tempName.length > 10
-                    ? "Name cannot exceed 10 characters"
-                    : ""
-                }
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={handleClose}
-                // onClick={handleSave}
-                sx={{
-                  backgroundColor: "#0174fe",
-                  color: "#FFFFFF",
-                  fontFamily: "sans-serif",
-                  width: "100%",
-                  clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                  boxShadow: `
-                    inset 0px -8px 8px -4px #0248df,
-                    inset 0px 8px 8px -4px #009aff
-                  `,
-                }}
-                disabled={tempName.length < 3 || tempName.length > 10}
-              >
-                Save
-              </Button>
-            </DialogActions>
-          </Dialog>
 
           {/* Stats */}
           <Grid container sx={{ margin: "20px 0" }}>
@@ -398,17 +288,17 @@ export default function Profile() {
               {
                 label: "Trophies",
                 icon: <EmojiEventsTwoTone />,
-                value: profile.trophies,
+                value: profile?.trophies || 0,
               },
               {
                 label: "Victories",
                 icon: <StarTwoTone />,
-                value: profile.victories,
+                value: profile?.victories || 0,
               },
               {
                 label: "Tournaments",
                 icon: <WhatshotTwoTone />,
-                value: profile.tournaments,
+                value: profile?.tournaments || 0,
               },
             ].map((stat) => (
               <Box

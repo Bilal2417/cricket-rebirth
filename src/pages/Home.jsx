@@ -52,8 +52,7 @@ export default function Home() {
     ];
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
 
-    
-      window.dispatchEvent(new Event("BackUpdated"));
+    window.dispatchEvent(new Event("BackUpdated"));
   }, []);
 
   const [overs, setOvers] = useState(() =>
@@ -281,6 +280,9 @@ export default function Home() {
                 return (
                   <Box
                     key={index}
+                    onClick={() =>
+                      navigate("/ProfileData", { state: { profile } })
+                    }
                     sx={{
                       backgroundColor:
                         profile?.id == profileId ? "#ef7627" : "#897689",
@@ -347,33 +349,35 @@ export default function Home() {
                         // onClick={handleImageClick}
                       />
 
-                      <Box sx={{
-                        display : "flex",
-                        flexDirection : "column",
-                        justifyContent : "flex-start"
-                      }}>
-                      <Typography
+                      <Box
                         sx={{
-                          fontWeight: 600,
-                          fontFamily: "Rubik",
-                          color: "rgb(255 196 107)",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "flex-start",
                         }}
-                        variant="body1"
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 600,
+                            fontFamily: "Rubik",
+                            color: "rgb(255 196 107)",
+                          }}
+                          variant="body1"
                         >
-                        {profile?.name}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontWeight: 600,
-                          fontFamily: "Rubik",
-                          color: "rgb(255 196 107)",
-                          fontSize : "0.7em"
-                        }}
-                        variant="body2"
+                          {profile?.name}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontWeight: 600,
+                            fontFamily: "Rubik",
+                            color: "rgb(255 196 107)",
+                            fontSize: "0.7em",
+                          }}
+                          variant="body2"
                         >
-                        {profile?.selected_title}
-                      </Typography>
-                        </Box>
+                          {profile?.selected_title}
+                        </Typography>
+                      </Box>
                       <span
                         style={{
                           display: "inline-block",

@@ -22,6 +22,7 @@ import CardPacksShop from "./components/card";
 import MovingBallsBackground from "./components/background";
 import DisablePullToRefresh from "./components/disable";
 import CardOpening from "./pages/Opening";
+import ProfileData from "./pages/ProfileData";
 
 function App() {
   useEffect(() => {
@@ -50,18 +51,21 @@ function App() {
   useEffect(() => {
     const handleBackUpdate = () =>{
       const final = sessionStorage.getItem("Finalist")
-      if (final) {
-       document.body.style.background =
-         "radial-gradient(circle, #cc3f33 0%, #b51c22 100%)";
-     } 
-    else if(location.pathname === "/") {
-      document.body.style.background =
-        "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
+      if(!final){
+        setFinalist(false)
       }
-      else{
-      document.body.style.background =
-        "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
-    }
+    //   if (final) {
+    //    document.body.style.background =
+    //      "radial-gradient(circle, #cc3f33 0%, #b51c22 100%)";
+    //  } 
+    // else if(location.pathname === "/") {
+    //   document.body.style.background =
+    //     "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
+    //   }
+    //   else{
+    //   document.body.style.background =
+    //     "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
+    // }
   }
   handleBackUpdate()
   window.addEventListener("BackUpdated", handleBackUpdate);
@@ -93,13 +97,14 @@ function App() {
           maxWidth: "100vw",
         }}
       >
-        <MovingBallsBackground />
+        <MovingBallsBackground color={finalist ? "#111" : "white"} background={finalist ? "radial-gradient(circle, #b51c22,  #111 120%)" : "radial-gradient(circle, #1164ee 0%, #381daa 100%)"} speed={finalist ? 4 : 7}/>
         <DisablePullToRefresh />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/card" element={<CardPacksShop />} />
           <Route path="/open-pack/:packKey" element={<CardOpening />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profileData" element={<ProfileData />} />
           <Route path="/modes" element={<Modes />} />
           <Route path="/knockout" element={<Knockout />} />
           <Route path="/fixtures" element={<Fixtures />} />
