@@ -111,7 +111,7 @@ export default function Fixtures() {
     const updatedProfile = {
       ...Profile,
       id: profileId || Profile?.id,
-      tournaments: (Profile.tournaments || 0) + 1,
+      knockOut: (Profile.knockout || 0) + 1,
       titles: newTitles,
     };
 

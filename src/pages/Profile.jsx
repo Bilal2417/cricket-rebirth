@@ -406,9 +406,14 @@ export default function Profile() {
                 value: profile.victories,
               },
               {
-                label: "Tournaments",
+                label: "World Cup",
                 icon: <WhatshotTwoTone />,
                 value: profile.tournaments,
+              },
+              {
+                label: "KnockOut",
+                icon: <WhatshotTwoTone />,
+                value: profile.knockout,
               },
             ].map((stat) => (
               <Box

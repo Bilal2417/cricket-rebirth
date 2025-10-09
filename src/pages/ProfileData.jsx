@@ -237,7 +237,7 @@ export default function ProfileData() {
               </Typography>
 
               {show &&
-                profile?.titles.map((title, index) => (
+                profile?.titles?.map((title, index) => (
                   <Box
                     key={index}
                     sx={{

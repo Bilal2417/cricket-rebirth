@@ -43,7 +43,7 @@ export default function Home() {
 
     const keysToClearLocally = [
       "Ai",
-      "User",
+      // "User",
       "CurrentBowler",
       "FirstInnings",
       "Innings",
@@ -52,6 +52,10 @@ export default function Home() {
     ];
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
 
+    const tournament = localStorage.getItem("tournamentData")
+    if(!tournament){
+      localStorage.removeItem("User")
+    }
     window.dispatchEvent(new Event("BackUpdated"));
   }, []);
 
@@ -68,20 +72,7 @@ export default function Home() {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  // const [name, setName] = useState("");
 
-  // Fetch profile on page load
-  // useEffect(() => {
-  //   fetch("/.netlify/functions/saveProfile")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         console.log(data.profile.name)
-  //         setName(data.profile.name);
-  //       }
-  //     })
-  //     .catch((err) => console.error("Error fetching profile:", err));
-  // }, []);
 
   const showDescToast = (desc) => {
     toast.error(desc, {
@@ -96,26 +87,7 @@ export default function Home() {
 
   const profileId = localStorage.getItem("MyId");
 
-  // useEffect(() => {
-  //   fetch("/.netlify/functions/getProfile")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data?.success && data.profiles) {
-  //         setProfiles(data.profiles);
 
-  //         const matchedProfile = data.profiles.find(
-  //           (profile) => profile.id === profileId
-  //         );
-
-  //         if (matchedProfile) {
-  //           setUserProfile(matchedProfile);
-  //           sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
-  //         }
-  //       }
-  //     })
-  //     .catch((err) => console.error("Error fetching profiles:", err))
-  //     .finally(() => setLoading(false));
-  // }, []);
 
   useEffect(() => {
     const fetchProfiles = () => {
@@ -146,42 +118,19 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [profileId]);
 
-  // useEffect(() => {
-  //   const fetchProfiles = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const res = await fetch("/.netlify/functions/getProfile");
-  //       const data = await res.json();
 
-  //       if (data?.success && data.profiles) {
-  //         setProfiles(data.profiles);
-
-  //         const matchedProfile = data.profiles.find(
-  //           (profile) => profile.id === profileId
-  //         );
-
-  //         if (matchedProfile) {
-  //           setUserProfile(matchedProfile);
-  //           sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
-  //         }
-  //       }
-  //     } catch (err) {
-  //       console.error("Error fetching profiles:", err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchProfiles();
-  //   const interval = setInterval(fetchProfiles, 10000);
-  //   return () => clearInterval(interval);
-  // }, [profileId]);
 
   const [mode, setMode] = useState(null);
+  const [save, setSave] = useState(false);
 
   useEffect(() => {
     const selectMode = sessionStorage.getItem("mode");
     setMode(selectMode);
+    
+    const saved = localStorage.getItem("tournamentData");
+    if(saved){
+      setSave(true)
+    }
   }, []);
 
   return (
@@ -253,9 +202,14 @@ export default function Home() {
             <Box
               sx={{
                 maxHeight: "230px",
-                overflowY: "auto",
+                overflowY: "scroll", // Change from "auto" to "scroll"
                 overflowX: "hidden",
                 paddingRight: "10px",
+                WebkitOverflowScrolling: "touch",
+                touchAction: "pan-y",
+                overscrollBehavior: "contain",
+                position: "relative", // Add this
+                isolation: "isolate",
                 "&::-webkit-scrollbar": {
                   width: "8px",
                 },
@@ -279,7 +233,7 @@ export default function Home() {
               {profiles?.map((profile, index) => {
                 return (
                   <Box
-                    key={index}
+                    key={profile?.id}
                     onClick={() =>
                       navigate("/ProfileData", { state: { profile } })
                     }
@@ -299,12 +253,13 @@ export default function Home() {
                           : "inset 0px -8px 8px -4px #655b67",
                       clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
                       transition: "all 0.3s",
-                      ":hover": {
+                      "@media (hover: hover)": {
                         cursor: "pointer",
-                        transform: "scale(1.025)",
+                        // transform: "scale(1.025)",
+                        opacity: 0.9,
                       },
                       ":active": {
-                        transform: "scale(1)",
+                        transform: "scale(0.9)",
                       },
                     }}
                   >
@@ -430,7 +385,7 @@ export default function Home() {
                         sx={{ minWidth: "30px", textAlign: "center" }}
                         component="span"
                       >
-                        {profile?.trophies < 0 ? 0 : profile?.trophies}
+                        {Math.max(profile?.trophies , 0)}
                       </Box>
                     </Typography>
                   </Box>
@@ -619,16 +574,12 @@ export default function Home() {
                   showDescToast("Select Game Mode first!");
                   return;
                 }
-                // if (
-                //   userProfile?.trophies <
-                //     (overs === 100 ? 5 : Math.ceil(overs / 2)) &&
-                //   mode !== "KNOCKOUT"
-                // ) {
-                //   showDescToast("Not enough trophies to play this mode!");
-                //   return;
-                // }
 
-                navigate("/team");
+                if(save && mode == "TOURNAMENT"){
+                  navigate("/tournament")
+                }else{
+                  navigate("/team");
+                }
               }}
             >
               {loading ? (

@@ -85,7 +85,7 @@ export default function Result() {
   //   }
   // };
 
-  const incrementTrophies = async (win, matchType, isTournament = false) => {
+  const incrementTrophies = async (win, matchType, isKO = false) => {
     const profileId = localStorage.getItem("MyId");
     // const originalTrophies = Number(sessionStorage.getItem("original"));
     console.log(profileId, Profile, "all");
@@ -95,11 +95,18 @@ export default function Result() {
     const wkts = Number(totalWkts) || Number(overs);
 
     let trophyIncrement = 0;
+    let coinsIncrement = 0;
 
-    if (win && !isTournament) {
+    if (win && !isKO) {
       trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
-      if (matchType === 2) trophyIncrement *= 2;
-      if (matchType === 1) trophyIncrement = Math.ceil(wkts / 2)
+      if (matchType === 2) {
+        trophyIncrement *= 2;
+        coinsIncrement = wkts === 100 ? trophyIncrement*1 : trophyIncrement*10 
+      }
+      if (matchType === 1) {
+        trophyIncrement = Math.ceil(wkts / 2);
+        coinsIncrement = wkts === 100 ? trophyIncrement*1 : trophyIncrement*5 
+      }
     }
 
     const updatedProfile = {
@@ -107,10 +114,11 @@ export default function Result() {
       id: profileId || Profile?.id,
       victories: win ? Profile.victories + 1 : Profile.victories,
       trophies: Profile.trophies + trophyIncrement,
-      coins : Profile.coins + (!isTournament ?  (matchType == 2 ? (trophyIncrement*10) : (trophyIncrement*5)) : 0) 
+      coins:
+        Profile.coins + coinsIncrement
     };
 
-    console.log(updatedProfile,"Profile that is sending")
+    console.log(updatedProfile, "Profile that is sending");
     setProfile(updatedProfile);
 
     try {
@@ -157,16 +165,8 @@ export default function Result() {
 
     if (foundUserTeam && foundAiTeam) {
       if (foundUserTeam.score > foundAiTeam.score) {
-        // const isTournament = sessionStorage.getItem("mode");
-        // if (isTournament !== "KNOCKOUT") {
-        //   incrementTrophies(true);
-        // }
         setWinner(foundUserTeam.name);
       } else if (foundAiTeam.score > foundUserTeam.score) {
-        // const isTournament = sessionStorage.getItem("mode");
-        // if (isTournament !== "KNOCKOUT") {
-        //   incrementTrophies(false);
-        // }
         setWinner(foundAiTeam.name);
       } else {
         setWinner("Match Tied");
@@ -206,11 +206,11 @@ export default function Result() {
 
   console.log(topScorerFirst, "oopppo");
 
-  const isTournament = sessionStorage.getItem("mode");
+  const currentMode = sessionStorage.getItem("mode");
 
   let trophyIncrement = 0;
 
-  if (isTournament !== "KNOCKOUT") {
+  if (currentMode !== "KNOCKOUT") {
     trophyIncrement = totalWkts === 100 ? 5 : Math.ceil(totalWkts / 2);
   }
 
@@ -354,7 +354,7 @@ export default function Result() {
 
             <Typography
               sx={{
-                display: isTournament == "KNOCKOUT" ? "none" : "flex",
+                display: currentMode == "KNOCKOUT" || currentMode == "TOURNAMENT"  ? "none" : "flex",
                 alignItems: "center",
                 gap: "5px",
                 fontWeight: 600,
@@ -904,43 +904,38 @@ export default function Result() {
                 },
               }}
               disabled={buttonDisabled}
-              // onClick={async () => {
-              //   setButtonDisabled(true);
-              //   setLoading(true);
 
-              //   if (isTournament === "KNOCKOUT") {
-              //     const id = sessionStorage.getItem("lastMatchId");
-              //     if (winner === "Match Tied") {
-              //       const tieBreaker =
-              //         Math.random() < 0.5 ? userTeam?.name : aiTeam?.name;
-              //       sessionStorage.setItem(id, tieBreaker);
-              //     } else {
-              //       sessionStorage.setItem(id, winner);
-              //     }
-              //     navigate("/fixtures");
-              //   } else {
-              //     if (userTeam.score > aiTeam.score) {
-              //       await incrementTrophies(true, 2);
-              //     } else if (aiTeam.score > userTeam.score) {
-              //       await incrementTrophies(false, 0);
-              //     } else {
-              //       await incrementTrophies(true, 1);
-              //     }
-              //   }
-
-              //   setLoading(false);
-              // }}
               onClick={async () => {
                 setButtonDisabled(true);
                 setLoading(true);
 
-                const isTournament =
-                  sessionStorage.getItem("mode") === "KNOCKOUT";
+                const isKO = sessionStorage.getItem("mode") === "KNOCKOUT";
+                const isTour = sessionStorage.getItem("mode") === "TOURNAMENT";
 
                 const userWon = userTeam.score > aiTeam.score;
                 const tie = userTeam.score === aiTeam.score;
+                
+                
+                if (isTour) {
+                  const tieBreaker =
+                    Math.random() < 0.5 ? userTeam?.name : aiTeam?.name;
+                    const looser = tieBreaker == userTeam?.name ? aiTeam?.name : userTeam?.name
+                  const storedMatch =
+                    JSON.parse(sessionStorage.getItem("latestUserMatch")) || {};
+                    
+                  
+                  const updatedMatch = {
+                    ...storedMatch,
+                    winner:tie ? tieBreaker : (userWon ? userTeam.name : aiTeam.name),
+                    loser: tie ? looser :(userWon ? aiTeam.name : userTeam.name),
+                  };
+                  sessionStorage.setItem(
+                    "latestUserMatch",
+                    JSON.stringify(updatedMatch)
+                  );
 
-                if (isTournament) {
+                  navigate("/tournament");
+                } else if (isKO) {
                   // Store winner/tie for tournament fixtures
                   const id = sessionStorage.getItem("lastMatchId");
                   if (tie) {
@@ -955,7 +950,7 @@ export default function Result() {
                   }
                   navigate("/fixtures");
                   // Call incrementTrophies but only increment victories
-                  await incrementTrophies(userWon, 0, true); // pass "true" for isTournament
+                  await incrementTrophies(userWon, 0, true); // pass "true" for isKO
                 } else {
                   if (userWon) await incrementTrophies(true, 2, false);
                   else if (aiTeam.score > userTeam.score)

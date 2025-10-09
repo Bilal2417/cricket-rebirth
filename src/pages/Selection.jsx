@@ -18,7 +18,10 @@ export default function Selection() {
     const page = sessionStorage.getItem("mode");
     if (page === "KNOCKOUT") {
       navigate("/knockout");
-    } else {
+    }else if (page === "TOURNAMENT"){
+      navigate("/tournament");
+    } 
+    else {
       navigate("/toss");
     }
   }

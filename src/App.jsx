@@ -23,6 +23,7 @@ import MovingBallsBackground from "./components/background";
 import DisablePullToRefresh from "./components/disable";
 import CardOpening from "./pages/Opening";
 import ProfileData from "./pages/ProfileData";
+import Tournament from "./pages/Tournament";
 
 function App() {
   useEffect(() => {
@@ -102,6 +103,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/card" element={<CardPacksShop />} />
+          <Route path="/tournament" element={<Tournament />} />
           <Route path="/open-pack/:packKey" element={<CardOpening />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profileData" element={<ProfileData />} />
