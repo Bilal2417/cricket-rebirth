@@ -234,6 +234,8 @@ export default function Result() {
             height: "100%",
             // overflow: "hidden",
             alignContent: "center",
+            
+            // marginTop : { xs : "0px" , sm : "50px" , md : "150px"}
           }}
         >
           <Box

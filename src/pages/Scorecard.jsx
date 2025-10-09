@@ -61,6 +61,7 @@ export default function Scorecard() {
           sx={{
             borderRadius: "12px",
             width: "100%",
+            marginTop : { xs : "0px" , sm : "50px" , md : "150px", lg : "0px"}
           }}
         >
           <Box

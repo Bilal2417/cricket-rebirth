@@ -615,7 +615,7 @@ export default function ScoreCard24() {
                   <Typography
                     sx={{
                       color: "#e7d58d",
-                      transform: "scale(0.75)",
+                      fontSize: "0.75em",
                     }}
                     variant="body1"
                   >
@@ -662,7 +662,7 @@ export default function ScoreCard24() {
                   <Typography
                     sx={{
                       color: "#e7d58d",
-                      transform: "scale(0.75)",
+                      fontSize: "0.75em",
                     }}
                     variant="body1"
                   >
@@ -710,7 +710,7 @@ export default function ScoreCard24() {
                       : getInitials(aiTeam?.name)}{" "}
                     <Box
                       sx={{
-                        transform: "scale(0.7)",
+                        fontSize : "0.7em"
                       }}
                       variant="span"
                     >
@@ -722,7 +722,7 @@ export default function ScoreCard24() {
                       color: "#0e0a20",
                       fontFamily: "Rubik",
                       textTransform: "uppercase",
-                      transform: "scale(1.1)",
+                      fontSize : "1.1em",
                       fontWeight: 600,
                     }}
                     variant="h6"
@@ -745,7 +745,7 @@ export default function ScoreCard24() {
                     variant="h6"
                     sx={{
                       color: "#FFFFFF",
-                      transform: "scale(0.9)",
+                      fontSize : "0.9em",
                       fontWeight: "600",
                       fontFamily: "Rubik",
                       textAlign: "center",
@@ -780,7 +780,7 @@ export default function ScoreCard24() {
                   </Typography>
                   <Box
                     sx={{
-                      transform: "scale(0.7)",
+                      fontSize : "0.7em",
                       fontWeight: 400,
                       color: "#0e0a20",
                     }}
@@ -937,7 +937,7 @@ export default function ScoreCard24() {
                   <Typography
                     sx={{
                       color: "#e7d58d",
-                      transform: "scale(0.75)",
+                      fontSize : "0.75em",
                       fontFamily: "Rubik",
                     }}
                     variant="body1"

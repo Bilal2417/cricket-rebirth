@@ -233,32 +233,45 @@ export default function Tournament() {
       }));
 
       // Recalculate standings from all fixtures
-      setStandings((prev) =>
-        prev.map((s) => {
+      setStandings((prev) => {
+        // Update standings first
+        const updated = prev.map((s) => {
           if (s.team === winnerTeam) {
             const newPlayed = s.played + 1;
             const newNRR = (s.nrr * s.played + Number(nrrChange)) / newPlayed;
+
             return {
               ...s,
-              played: s.played + 1,
+              played: newPlayed,
               won: s.won + 1,
               points: s.points + 2,
               nrr: parseFloat(newNRR.toFixed(2)),
             };
           }
+
           if (s.team === losingTeam) {
             const newPlayed = s.played + 1;
             const newNRR = (s.nrr * s.played - Number(nrrChange)) / newPlayed;
+
             return {
               ...s,
-              played: s.played + 1,
+              played: newPlayed,
               lost: s.lost + 1,
               nrr: parseFloat(newNRR.toFixed(2)),
             };
           }
+
           return s;
-        })
-      );
+        });
+
+        // Then sort by points (desc), and by NRR (desc) if points are equal
+        const sorted = [...updated].sort((a, b) => {
+          if (b.points === a.points) return b.nrr - a.nrr;
+          return b.points - a.points;
+        });
+
+        return sorted;
+      });
     }
   };
 
@@ -283,32 +296,47 @@ export default function Tournament() {
       const losingTeam = winnerTeam === f.team1 ? f.team2 : f.team1;
       const nrrChange = (Math.random() * 0.75).toFixed(2);
 
-      setStandings((prev) =>
-        prev.map((s) => {
+      setStandings((prev) => {
+        // Update standings first
+        const updated = prev.map((s) => {
           if (s.team === winnerTeam) {
             const newPlayed = s.played + 1;
             const newNRR = (s.nrr * s.played + Number(nrrChange)) / newPlayed;
+
             return {
               ...s,
-              played: s.played + 1,
+              played: newPlayed,
               won: s.won + 1,
               points: s.points + 2,
               nrr: parseFloat(newNRR.toFixed(2)),
             };
           }
+
           if (s.team === losingTeam) {
             const newPlayed = s.played + 1;
             const newNRR = (s.nrr * s.played - Number(nrrChange)) / newPlayed;
+
             return {
               ...s,
-              played: s.played + 1,
+              played: newPlayed,
               lost: s.lost + 1,
               nrr: parseFloat(newNRR.toFixed(2)),
             };
           }
+
           return s;
-        })
-      );
+        });
+
+        // Then sort by points (desc), and by NRR (desc) if points are equal
+        const sorted = [...updated].sort((a, b) => {
+          if (b.points === a.points) return b.nrr - a.nrr;
+          return b.points - a.points;
+        });
+
+        return sorted;
+      });
+
+
     } else if (stage == "semis") {
       setSemiFinals((prev) =>
         prev.map((m, idx) =>
@@ -698,7 +726,7 @@ export default function Tournament() {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box>
       <Paper sx={{ p: 2, mb: 2 }}>
         <Typography variant="h4" align="center" gutterBottom>
           🏆 Cricket World Cup
@@ -736,16 +764,15 @@ export default function Tournament() {
       </Box>
 
       {stage === "league" && (
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            <Box sx={{ p: 2 }}>
+        <Grid container spacing={3} justifyContent="center">
+          <Grid item xs={2} md={8}>
+            <Box>
               <Typography variant="h6" gutterBottom>
                 📋 League Stage
               </Typography>
 
               <Box
                 sx={{
-                  p: 2,
                   maxHeight: "500px",
                   overflow: "auto",
                   "&::-webkit-scrollbar": {
@@ -774,7 +801,7 @@ export default function Tournament() {
             </Box>
           </Grid>
 
-          <Grid item xs={12} md={4}>
+          <Grid item xs={4} md={4} sx={{ overflow: "auto" }}>
             <Paper sx={{ p: 2 }}>
               <Typography variant="h6" gutterBottom>
                 📊 Points Table
