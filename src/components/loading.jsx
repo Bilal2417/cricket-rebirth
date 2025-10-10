@@ -12,13 +12,12 @@ export default function LoadingPage({ loading, onFinish }) {
         setProgress((old) => Math.min(old + Math.random() * 5, 95));
       }, 200);
     } else {
-        
       timer = setInterval(() => {
         setProgress((old) => {
           if (old >= 100) {
-            old = 100
+            old = 100;
             clearInterval(timer);
-            onFinish(); 
+            onFinish();
             return 100;
           }
           return old + 5;
@@ -37,11 +36,14 @@ export default function LoadingPage({ loading, onFinish }) {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",        
+        alignItems: "center",
         gap: 2,
       }}
     >
-      <Typography variant="h5" sx={{ fontFamily: "Rubik", fontWeight: 600 , color : "#FFFFFF"}}>
+      <Typography
+        variant="h5"
+        sx={{  fontWeight: 600, color: "#FFFFFF" }}
+      >
         Loading, please wait...
       </Typography>
       <Box sx={{ width: "80%" }}>
@@ -58,7 +60,10 @@ export default function LoadingPage({ loading, onFinish }) {
           }}
         />
       </Box>
-      <Typography variant="body2" sx={{ fontFamily: "Rubik" , color : "#FFFFFF" }}>
+      <Typography
+        variant="body2"
+        sx={{  color: "#FFFFFF" }}
+      >
         {Math.round(progress)}%
       </Typography>
     </Box>

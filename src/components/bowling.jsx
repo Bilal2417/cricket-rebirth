@@ -27,7 +27,7 @@ export default function Bowling(squad) {
             <Typography
               sx={{
                 fontWeight: 600,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "8px 16px",
                 width: "75px",
@@ -41,7 +41,7 @@ export default function Bowling(squad) {
             <Typography
               sx={{
                 fontWeight: 600,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
                 width: "75px",
@@ -54,7 +54,7 @@ export default function Bowling(squad) {
             <Typography
               sx={{
                 fontWeight: 600,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
                 width: "75px",
@@ -67,7 +67,7 @@ export default function Bowling(squad) {
             <Typography
               sx={{
                 fontWeight: 600,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
                 width: "75px",
@@ -80,7 +80,7 @@ export default function Bowling(squad) {
             <Typography
               sx={{
                 fontWeight: 600,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
                 width: "75px",
@@ -114,7 +114,7 @@ export default function Bowling(squad) {
                 <Typography
                   sx={{
                     fontWeight: 600,
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                     textTransform: "uppercase",
                     padding: "8px 16px",
                   }}
@@ -134,7 +134,7 @@ export default function Bowling(squad) {
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
                       padding: { xs: "4px 16px", md: "8px 16px" },
                       width: "75px",
@@ -147,7 +147,7 @@ export default function Bowling(squad) {
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
                   padding: { xs: "4px 16px", md: "8px 16px" },
                       width: "75px",
@@ -160,7 +160,7 @@ export default function Bowling(squad) {
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
                   padding: { xs: "4px 16px", md: "8px 16px" },
                       width: "75px",
@@ -173,7 +173,7 @@ export default function Bowling(squad) {
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
                   padding: { xs: "4px 16px", md: "8px 16px" },
                       width: "75px",
@@ -186,7 +186,7 @@ export default function Bowling(squad) {
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
                   padding: { xs: "4px 16px", md: "8px 16px" },
                       width: "75px",
@@ -242,7 +242,7 @@ export default function Bowling(squad) {
                 color: "#FFFFFF",
                 textTransform: "uppercase",
                 fontWeight: 600,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 padding: "0px 15px",
                 width: "220px",
               }}
@@ -291,7 +291,7 @@ export default function Bowling(squad) {
               sx={{
                 textTransform: "uppercase",
                 fontWeight: 600,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 padding: "4px 15px",
                 width: "220px",
                 color: "#000000",

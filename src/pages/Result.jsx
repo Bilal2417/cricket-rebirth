@@ -263,7 +263,7 @@ export default function Result() {
                 sx={{
                   textTransform: "uppercase",
                   fontWeight: 600,
-                  fontFamily: "Rubik",
+                  // fontfamily: "Rubik",
                   color: "#0f0648",
                   textAlign: "center",
                   ":hover": {
@@ -292,7 +292,7 @@ export default function Result() {
                 color: "#FFFFFF",
                 padding: "9px 16px",
                 fontWeight: 900,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 textTransform: "uppercase",
               }}
             >
@@ -321,7 +321,7 @@ export default function Result() {
                 sx={{
                   textTransform: "uppercase",
                   fontWeight: 600,
-                  fontFamily: "Rubik",
+                  // fontfamily: "Rubik",
                   color: "#0f0648",
                   textAlign: "center",
                   ":hover": {
@@ -344,7 +344,7 @@ export default function Result() {
           >
             <Typography
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 fontWeight: 600,
                 textAlign: "center",
                 color: "#FFFFFF",
@@ -417,7 +417,7 @@ export default function Result() {
               >
                 <Typography
                   sx={{
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                     fontWeight: 600,
                     padding: "0 16px",
                     color: "#FFFFFF",
@@ -469,7 +469,7 @@ export default function Result() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             padding: "0px 16px",
                           }}
@@ -487,7 +487,7 @@ export default function Result() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             padding: { xs: "2px 16px", md: "8px 16px" },
                             boxShadow: "4px -4px 5px -3px #0003",
@@ -501,7 +501,7 @@ export default function Result() {
                         </Typography>
                         <Typography
                           sx={{
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             padding: "0px 20px",
                             width: "50px",
@@ -535,7 +535,7 @@ export default function Result() {
               >
                 <Typography
                   sx={{
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                     fontWeight: 600,
                     padding: "0 16px",
                     color: "#FFFFFF",
@@ -587,7 +587,7 @@ export default function Result() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             padding: "0px 16px",
                           }}
@@ -605,7 +605,7 @@ export default function Result() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             padding: { xs: "2px 16px", md: "8px 16px" },
                             boxShadow: "4px -4px 5px -3px #0003",
@@ -619,7 +619,7 @@ export default function Result() {
                         </Typography>
                         <Typography
                           sx={{
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             padding: "0px 20px",
                             width: "50px",
@@ -660,7 +660,7 @@ export default function Result() {
               >
                 <Typography
                   sx={{
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                     fontWeight: 600,
                     padding: "0 16px",
                     color: "#FFFFFF",
@@ -710,7 +710,7 @@ export default function Result() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             padding: "0px 16px",
                           }}
@@ -728,7 +728,7 @@ export default function Result() {
                       >
                         <Typography
                           sx={{
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             width: "50px",
                             textAlign: "end",
@@ -741,7 +741,7 @@ export default function Result() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             padding: "0px 16px",
                             width: "50px",
@@ -774,7 +774,7 @@ export default function Result() {
               >
                 <Typography
                   sx={{
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                     fontWeight: 600,
                     padding: "0 16px",
                     color: "#FFFFFF",
@@ -824,7 +824,7 @@ export default function Result() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             padding: "0px 16px",
                           }}
@@ -842,7 +842,7 @@ export default function Result() {
                       >
                         <Typography
                           sx={{
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             width: "50px",
                             textAlign: "end",
@@ -855,7 +855,7 @@ export default function Result() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             textTransform: "uppercase",
                             padding: "0px 16px",
                             width: "50px",
@@ -887,7 +887,7 @@ export default function Result() {
           >
             <Button
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 color: "#FFFFFF",
                 backgroundColor: "#fa208e",
                 padding: "8px 16px",
@@ -973,7 +973,7 @@ export default function Result() {
 
             <Typography
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 color: "#dece43",
                 textTransform: "uppercase",
               }}
@@ -993,7 +993,7 @@ export default function Result() {
             {winnerFirst ? (
               <Typography
                 sx={{
-                  fontFamily: "Rubik",
+                  // fontfamily: "Rubik",
                   color: "#dece43",
                   textTransform: "uppercase",
                   ml: "5px",
@@ -1009,7 +1009,7 @@ export default function Result() {
             ) : (
               <Typography
                 sx={{
-                  fontFamily: "Rubik",
+                  // fontfamily: "Rubik",
                   color: "#dece43",
                   textTransform: "uppercase",
                   ml: "5px",

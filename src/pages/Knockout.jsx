@@ -67,7 +67,7 @@ export default function Knockout() {
     >
       <Typography
         sx={{
-          fontFamily: "Rubik",
+          // fontfamily: "Rubik",
           color: "#FFFFFF",
           fontWeight: 600,
         }}
@@ -95,7 +95,7 @@ export default function Knockout() {
               key={i}
               onClick={() => navigate("/ProfileData", { state: { teams } })}
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 color: "#FFFFFF",
                 gridColumn: col,
                 gridRow: row,
@@ -124,7 +124,7 @@ export default function Knockout() {
         <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
           <Button
             sx={{
-              fontFamily: "Rubik",
+              // fontfamily: "Rubik",
               backgroundColor: "#f6c401",
               color: "#FFFFFF",
               textShadow: `

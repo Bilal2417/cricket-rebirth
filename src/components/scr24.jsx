@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Data from "./data";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "./loading";
+import { Howl } from "howler";
 
 export default function ScoreCard24() {
   const storedData = localStorage.getItem("cricketData");
@@ -211,6 +212,24 @@ export default function ScoreCard24() {
     return Number(localStorage.getItem("Boundary")) || 0;
   });
 
+  let clickSound = null;
+
+  const playSound = (sound) => {
+    if (clickSound && clickSound.playing()) {
+      clickSound.stop();
+    }
+
+    clickSound = new Howl({
+      src: [`/sound/${sound}.mp3`],
+      volume: 1,
+      onend: () => {
+        clickSound = null;
+      },
+    });
+
+    clickSound.play();
+  };
+
   const scoreDecision = (userRun) => {
     if (balls == 5) {
       setIsSix(0);
@@ -245,6 +264,9 @@ export default function ScoreCard24() {
     if (!isWicket) {
       setPartnership((prev) => prev + (batting ? userRun : aiChoice));
       setPartnershipBalls((prev) => prev + 1);
+    } else {
+      const sounds = ["bowled", "bowled2", "bowled3"];
+      playSound(sounds[Math.floor(Math.random() * sounds.length)]);
     }
 
     handleBall(userRun, isWicket, aiChoice);
@@ -260,6 +282,18 @@ export default function ScoreCard24() {
     isOverComplete = false,
     Wicket = false
   ) => {
+     if (run == 0) {
+       const sounds = ["tip", "tip2"];
+       playSound(sounds[Math.floor(Math.random() * sounds.length)]);
+     }
+     else if (run == 4) {
+       const sounds = ["four", "four1"];
+       playSound(sounds[Math.floor(Math.random() * sounds.length)]);
+      }
+      else if (run == 6) {
+         const sounds = ["six", "six1"];
+         playSound(sounds[Math.floor(Math.random() * sounds.length)]);
+       }
     const updatedTeams = Teams.map((team) => {
       if (team.name === bowlingTeam) {
         return {
@@ -576,7 +610,7 @@ export default function ScoreCard24() {
                     textTransform: "uppercase",
                     color: "#e4dff9",
                     fontSize: "0.9em",
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                     display: "flex",
                     alignItems: "center",
                     gap: "5px",
@@ -635,7 +669,7 @@ export default function ScoreCard24() {
                     textTransform: "uppercase",
                     color: "#e4dff9",
                     fontSize: "0.9em",
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                     width: "80px",
                   }}
                   variant="body1"
@@ -700,7 +734,7 @@ export default function ScoreCard24() {
                       alignItems: "baseline",
                       gap: "5px",
                       color: "#0e0a20",
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
                     }}
                     variant="body1"
@@ -710,7 +744,7 @@ export default function ScoreCard24() {
                       : getInitials(aiTeam?.name)}{" "}
                     <Box
                       sx={{
-                        fontSize : "0.7em"
+                        fontSize: "0.7em",
                       }}
                       variant="span"
                     >
@@ -720,9 +754,9 @@ export default function ScoreCard24() {
                   <Typography
                     sx={{
                       color: "#0e0a20",
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
-                      fontSize : "1.1em",
+                      fontSize: "1.1em",
                       fontWeight: 600,
                     }}
                     variant="h6"
@@ -745,9 +779,9 @@ export default function ScoreCard24() {
                     variant="h6"
                     sx={{
                       color: "#FFFFFF",
-                      fontSize : "0.9em",
+                      fontSize: "0.9em",
                       fontWeight: "600",
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textAlign: "center",
                     }}
                   >
@@ -765,7 +799,7 @@ export default function ScoreCard24() {
                   <Typography
                     sx={{
                       color: "#0e0a20",
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
                       fontWeight: 600,
                       fontSize: "0.9em",
@@ -780,7 +814,7 @@ export default function ScoreCard24() {
                   </Typography>
                   <Box
                     sx={{
-                      fontSize : "0.7em",
+                      fontSize: "0.7em",
                       fontWeight: 400,
                       color: "#0e0a20",
                     }}
@@ -803,7 +837,7 @@ export default function ScoreCard24() {
                   <Typography
                     sx={{
                       color: "#0e0a20",
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
                       fontWeight: 600,
                       position: "absolute",
@@ -824,7 +858,7 @@ export default function ScoreCard24() {
                   <Typography
                     sx={{
                       color: "#0e0a20",
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
                       fontWeight: 600,
                       position: "absolute",
@@ -839,7 +873,7 @@ export default function ScoreCard24() {
                   <Typography
                     sx={{
                       color: "#0e0a20",
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
                       fontWeight: 600,
                       position: "absolute",
@@ -876,7 +910,7 @@ export default function ScoreCard24() {
                 sx={{
                   color: "#e7d58d",
                   textTransform: "uppercase",
-                  fontFamily: "Poppins ,sans-serif , Rubik",
+                  // fontFamily: "Poppins ,sans-serif , Rubik",
                   position: "absolute",
                   top: "-50px",
                   left: 0,
@@ -910,7 +944,7 @@ export default function ScoreCard24() {
                     textTransform: "uppercase",
                     color: "#e4dff9",
                     fontSize: "0.9em",
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                   }}
                   variant="body1"
                 >
@@ -926,7 +960,7 @@ export default function ScoreCard24() {
                   <Typography
                     sx={{
                       color: "#e7d58d",
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       width: "50px",
                       textAlign: "center",
                     }}
@@ -937,8 +971,8 @@ export default function ScoreCard24() {
                   <Typography
                     sx={{
                       color: "#e7d58d",
-                      fontSize : "0.75em",
-                      fontFamily: "Rubik",
+                      fontSize: "0.75em",
+                      // fontfamily: "Rubik",
                     }}
                     variant="body1"
                   >
@@ -1054,7 +1088,7 @@ export default function ScoreCard24() {
                     borderRadius: "50%",
                     fontWeight: 600,
                     fontSize: "1em",
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                     borderBottom: " 4px solid #53489a",
                     borderRight: "3px solid #53489a",
                     ":hover": {

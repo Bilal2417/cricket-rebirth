@@ -38,7 +38,7 @@ export default function Batting(squad) {
             <Typography
               sx={{
                 fontWeight: 600,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "0px 16px",
               }}
@@ -49,7 +49,7 @@ export default function Batting(squad) {
             {data.out && location.pathname == "/score"? (
               <Box
                 sx={{
-                  fontFamily: "Rubik",
+                  // fontfamily: "Rubik",
                   fontWeight: 600,
                   color: data.notout ? "#FFFFFF" : "#0f0648",
                   display: "flex",
@@ -79,7 +79,7 @@ export default function Batting(squad) {
             <Typography
               sx={{
                 fontWeight: 600,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: { xs : "2px 16px" , md : "6px 16px"},
                 boxShadow: "4px -4px 5px -3px #0003",
@@ -92,7 +92,7 @@ export default function Batting(squad) {
             </Typography>
             <Typography
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "0px 20px",
                 width : "50px",

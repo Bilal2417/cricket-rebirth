@@ -200,7 +200,7 @@ export default function Fixtures() {
                 display: "flex",
                 flexDirection: "column",
                 gap: "10px",
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 backgroundColor: "#343c53",
                 color: "#FFFFFF",
                 textShadow: `
@@ -281,7 +281,7 @@ export default function Fixtures() {
                 display: "flex",
                 flexDirection: "column",
                 gap: "10px",
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 backgroundColor: "#343c53",
                 color: "#FFFFFF",
                 textShadow: `
@@ -364,7 +364,7 @@ export default function Fixtures() {
               display: "flex",
               flexDirection: "column",
               gap: "10px",
-              fontFamily: "Rubik",
+              // fontfamily: "Rubik",
               backgroundColor: "#343c53",
               color: "#FFFFFF",
               textShadow: `
@@ -443,7 +443,7 @@ export default function Fixtures() {
             display: "flex",
             flexDirection: "column",
             gap: "40px",
-            fontFamily: "Rubik",
+            // fontfamily: "Rubik",
             backgroundColor: "#343c53",
             color: "#FFFFFF",
             textShadow: `
@@ -519,7 +519,7 @@ export default function Fixtures() {
           <Button
             sx={{
               display: final ? "block" : "none",
-              fontFamily: "Rubik",
+              // fontfamily: "Rubik",
               backgroundColor: "#f6c401",
               color: "#FFFFFF",
               textShadow: `
@@ -573,7 +573,7 @@ export default function Fixtures() {
               display: "flex",
               flexDirection: "column",
               gap: "10px",
-              fontFamily: "Rubik",
+              // fontfamily: "Rubik",
               backgroundColor: "#343c53",
               color: "#FFFFFF",
               textShadow: `
@@ -657,7 +657,7 @@ export default function Fixtures() {
                 display: "flex",
                 flexDirection: "column",
                 gap: "10px",
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 backgroundColor: "#343c53",
                 color: "#FFFFFF",
                 textShadow: `
@@ -739,7 +739,7 @@ export default function Fixtures() {
                 display: "flex",
                 flexDirection: "column",
                 gap: "10px",
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 backgroundColor: "#343c53",
                 color: "#FFFFFF",
                 textShadow: `

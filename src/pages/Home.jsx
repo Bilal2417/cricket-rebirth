@@ -22,6 +22,7 @@ export default function Home() {
 
   const navigate = useNavigate();
 
+
   const [profiles, setProfiles] = useState([]);
   const [userProfile, setUserProfile] = useState();
   const [loading, setLoading] = useState(true);
@@ -192,7 +193,7 @@ export default function Home() {
               sx={{
                 color: "#FFFFFF",
                 fontWeight: 600,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
               }}
               variant="h5"
             >
@@ -273,7 +274,7 @@ export default function Home() {
                     >
                       <Typography
                         sx={{
-                          fontFamily: "Rubik",
+                          // fontfamily: "Rubik",
                           backgroundColor:
                             profile?.id == profileId
                               ? "rgb(255 168 0)"
@@ -314,7 +315,7 @@ export default function Home() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             color: "rgb(255 196 107)",
                           }}
                           variant="body1"
@@ -324,7 +325,7 @@ export default function Home() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             color: "rgb(255 196 107)",
                             fontSize: "0.7em",
                           }}
@@ -353,7 +354,7 @@ export default function Home() {
                         display: "flex",
                         alignItems: "center",
                         gap: "5px",
-                        fontFamily: "Rubik",
+                        // fontfamily: "Rubik",
                         fontWeight: 600,
                         backgroundColor:
                           profile?.id == profileId ? "#dc5425" : "#665963",
@@ -432,7 +433,7 @@ export default function Home() {
                         >
                           <Typography
                             sx={{
-                              fontFamily: "Rubik",
+                              // fontfamily: "Rubik",
                               backgroundColor: "#6e606d",
                               color: "#aa9ca9",
                               padding: "4px 12px",
@@ -446,7 +447,7 @@ export default function Home() {
                             sx={{
                               backgroundColor: "#6e606d",
                               fontWeight: 600,
-                              fontFamily: "Rubik",
+                              // fontfamily: "Rubik",
                               textTransform: "uppercase",
                               color: "#f7bb1e",
                               minWidth: "200px",
@@ -460,7 +461,7 @@ export default function Home() {
                             display: "flex",
                             alignItems: "center",
                             gap: "5px",
-                            fontFamily: "Rubik",
+                            // fontfamily: "Rubik",
                             fontWeight: 600,
                             backgroundColor: "#665963",
                             padding: "10px 30px",
@@ -491,7 +492,7 @@ export default function Home() {
           <Box>
             <Button
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 backgroundColor: "#343c53",
                 color: "#FFFFFF",
                 textShadow: `
@@ -532,7 +533,7 @@ export default function Home() {
 
             <Button
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 backgroundColor: "#f6c401",
                 color: "#FFFFFF",
                 textShadow: `

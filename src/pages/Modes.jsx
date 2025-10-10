@@ -84,7 +84,7 @@ export default function Modes() {
       >
         <Button
           sx={{
-            fontFamily: "Rubik",
+            // fontfamily: "Rubik",
             backgroundColor: unlocked ?  "#f5214b" : "#f55c73",
             color: unlocked ? "#FFFFFF" : "#a0a0a0",
             textShadow: `
@@ -149,7 +149,7 @@ export default function Modes() {
             )}
             <Typography
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 fontWeight: 600,
                 display: "flex",
                 alignItems: "center",
@@ -189,7 +189,7 @@ export default function Modes() {
             </Typography>
             <Typography
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 fontWeight: 600,
               }}
               variant={saved ? "h3" : "body1"}
@@ -210,7 +210,7 @@ export default function Modes() {
               <Button
                 key={index}
                 sx={{
-                  fontFamily: "Rubik",
+                  // fontfamily: "Rubik",
                   background: "linear-gradient(#60da01 , #90e100)",
                   color: "#FFFFFF",
                   textShadow: `
@@ -290,7 +290,7 @@ export default function Modes() {
 
           <Button
             sx={{
-              fontFamily: "Rubik",
+              // fontfamily: "Rubik",
               backgroundColor: "#8237ca",
               color: "#FFFFFF",
               textShadow: `
@@ -365,7 +365,7 @@ export default function Modes() {
         </Box>
         <Button
           sx={{
-            fontFamily: "Rubik",
+            // fontfamily: "Rubik",
             backgroundColor: "#f47909",
             color: "#FFFFFF",
             textShadow: `
@@ -411,7 +411,7 @@ export default function Modes() {
           <Box>
             <Typography
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 fontWeight: 600,
                 display: "flex",
                 alignItems: "center",
@@ -451,7 +451,7 @@ export default function Modes() {
             </Typography>
             <Typography
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 fontWeight: 600,
               }}
               variant="body1"

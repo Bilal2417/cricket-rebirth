@@ -88,7 +88,7 @@ export default function Scorecard() {
                 sx={{
                   textTransform: "uppercase",
                   fontWeight: 600,
-                  fontFamily: "Rubik",
+                  // fontfamily: "Rubik",
                   color: Innings % 2 == 1 ? "#0f0648" : "#0f064894",
                   ":hover": {
                     cursor: "pointer",
@@ -143,7 +143,7 @@ export default function Scorecard() {
                 color: "#FFFFFF",
                 padding: "9px 16px",
                 fontWeight: 900,
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 position: "absolute",
                 left: "47%",
@@ -196,7 +196,7 @@ export default function Scorecard() {
                 sx={{
                   textTransform: "uppercase",
                   fontWeight: 600,
-                  fontFamily: "Rubik",
+                  // fontfamily: "Rubik",
                   color: Innings % 2 == 0 ? "#0f0648" : "#0f064894",
                   ":hover": {
                     cursor: "pointer",
@@ -221,7 +221,7 @@ export default function Scorecard() {
           >
             <Typography
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 fontWeight: 600,
                 textAlign: "center",
                 color: "#FFFFFF",
@@ -232,7 +232,7 @@ export default function Scorecard() {
             </Typography>
             <Typography
               sx={{
-                fontFamily: "Rubik",
+                // fontfamily: "Rubik",
                 fontWeight: 600,
                 textAlign: "center",
                 color: "#dece43",
@@ -313,7 +313,7 @@ export default function Scorecard() {
               >
                 <Typography
                   sx={{
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                     fontWeight: 600,
                     textAlign: "center",
                     color: "#FFFFFF",
@@ -324,7 +324,7 @@ export default function Scorecard() {
                 </Typography>
                 <Box
                   sx={{
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                     color: "#FFFFFF",
                     backgroundColor: "#fa208e",
                     padding: "8px 32px",
@@ -346,7 +346,7 @@ export default function Scorecard() {
                 <Box>
                   <Typography
                     sx={{
-                      fontFamily: "Rubik",
+                      // fontfamily: "Rubik",
                       fontWeight: 600,
                       textAlign: "center",
                       color: "#dece43",
@@ -396,7 +396,7 @@ export default function Scorecard() {
                 <Typography
                   sx={{
                     fontWeight: "600",
-                    fontFamily: "Rubik",
+                    // fontfamily: "Rubik",
                     textAlign: "center",
                     display: "flex",
                     alignItems: "center",

@@ -335,8 +335,6 @@ export default function Tournament() {
 
         return sorted;
       });
-
-
     } else if (stage == "semis") {
       setSemiFinals((prev) =>
         prev.map((m, idx) =>
@@ -939,36 +937,41 @@ export default function Tournament() {
                       },
                     }}
                     onClick={() => {
-                      if (sf.team1 == userTeam || sf.team2 == userTeam) {
-                        if (sf.team1 == userTeam) {
-                          localStorage.setItem("User", sf.team1);
-                          localStorage.setItem("Ai", sf.team2);
+                      if (!sf.result) {
+                        if (sf.team1 == userTeam || sf.team2 == userTeam) {
+                          if (sf.team1 == userTeam) {
+                            localStorage.setItem("User", sf.team1);
+                            localStorage.setItem("Ai", sf.team2);
+                          } else {
+                            localStorage.setItem("User", sf.team2);
+                            localStorage.setItem("Ai", sf.team1);
+                          }
+                          const userMatch = {
+                            fixtureId: i,
+                            winner: null,
+                            loser: null,
+                          };
+                          sessionStorage.setItem(
+                            "latestUserMatch",
+                            JSON.stringify(userMatch)
+                          );
+                          navigate("/toss");
                         } else {
-                          localStorage.setItem("User", sf.team2);
-                          localStorage.setItem("Ai", sf.team1);
+                          setSemiFinals((prev) =>
+                            prev.map((m, idx) =>
+                              idx === i
+                                ? {
+                                    ...m,
+                                    result:
+                                      Math.random() < 0.5 ? sf.team1 : sf.team2,
+                                  }
+                                : m
+                            )
+                          );
                         }
-                        const userMatch = {
-                          fixtureId: i,
-                          winner: null,
-                          loser: null,
-                        };
-                        sessionStorage.setItem(
-                          "latestUserMatch",
-                          JSON.stringify(userMatch)
-                        );
-                        navigate("/toss");
                       } else {
-                        setSemiFinals((prev) =>
-                          prev.map((m, idx) =>
-                            idx === i
-                              ? {
-                                  ...m,
-                                  result:
-                                    Math.random() < 0.5 ? sf.team1 : sf.team2,
-                                }
-                              : m
-                          )
-                        );
+                        setOpenToast(true);
+                        setToastMsg("Match already played!");
                       }
                     }}
                     variant="outlined"
@@ -1077,30 +1080,38 @@ export default function Tournament() {
             },
           }}
           onClick={() => {
-            if (finalMatch.team1 == userTeam || finalMatch.team2 == userTeam) {
-              if (finalMatch.team1 == userTeam) {
-                localStorage.setItem("User", finalMatch.team1);
-                localStorage.setItem("Ai", finalMatch.team2);
+            if (!finalMatch.result) {
+              if (
+                finalMatch.team1 == userTeam ||
+                finalMatch.team2 == userTeam
+              ) {
+                if (finalMatch.team1 == userTeam) {
+                  localStorage.setItem("User", finalMatch.team1);
+                  localStorage.setItem("Ai", finalMatch.team2);
+                } else {
+                  localStorage.setItem("User", finalMatch.team2);
+                  localStorage.setItem("Ai", finalMatch.team1);
+                }
+                const userMatch = {
+                  fixtureId: "f",
+                  winner: null,
+                  loser: null,
+                };
+                sessionStorage.setItem(
+                  "latestUserMatch",
+                  JSON.stringify(userMatch)
+                );
+                navigate("/toss");
               } else {
-                localStorage.setItem("User", finalMatch.team2);
-                localStorage.setItem("Ai", finalMatch.team1);
+                setFinalMatch({
+                  ...finalMatch,
+                  result:
+                    Math.random() < 0.5 ? finalMatch.team1 : finalMatch.team2,
+                });
               }
-              const userMatch = {
-                fixtureId: "f",
-                winner: null,
-                loser: null,
-              };
-              sessionStorage.setItem(
-                "latestUserMatch",
-                JSON.stringify(userMatch)
-              );
-              navigate("/toss");
             } else {
-              setFinalMatch({
-                ...finalMatch,
-                result:
-                  Math.random() < 0.5 ? finalMatch.team1 : finalMatch.team2,
-              });
+              setOpenToast(true);
+              setToastMsg("Match already played!");
             }
           }}
         >
@@ -1162,7 +1173,7 @@ export default function Tournament() {
           ) : (
             <Stack direction="row" spacing={1}>
               <Button variant="outlined" sx={{ flex: 1 }} disabled>
-                Waiting
+                TBD
               </Button>
             </Stack>
           )}

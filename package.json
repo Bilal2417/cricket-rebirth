@@ -16,6 +16,7 @@
     "@mui/material": "^7.3.2",
     "dotenv": "^17.2.3",
     "framer-motion": "^12.23.22",
+    "howler": "^2.2.4",
     "localforage": "^1.10.0",
     "nanoid": "^5.1.6",
     "pg": "^8.16.3",
