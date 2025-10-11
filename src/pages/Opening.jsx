@@ -17,7 +17,7 @@ const pulledCards = [
       { type: "trophy 2x", resource: [1, 3] },
       { type: "coins", resource: [50, 200] },
       { type: "trophy 2x", resource: [1, 3] },
-      { type: "team", resource: ["Oman", "Zimbabwe"] },
+      { type: "team", resource: [] },
     ],
   },
   {
