@@ -3,6 +3,7 @@ import { Client } from "pg";
 export async function handler(event) {
   const profileId = event.queryStringParameters?.profileId;
 
+      console.log("ID",profileId)
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
@@ -31,11 +32,12 @@ export async function handler(event) {
       unlocked_teams: row.unlocked_teams ? JSON.parse(row.unlocked_teams) : [],
     }));
 
+      console.log("profilesssssssss",profiles[0])
     return {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        profile: profiles[0] || null,
+        profile: profiles[0] ,
       }),
     };
   } catch (err) {

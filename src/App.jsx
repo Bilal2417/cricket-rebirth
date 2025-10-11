@@ -71,6 +71,7 @@ function App() {
     const [profile, setProfile] = useState(null);
     
     useEffect(() => {
+      console.log("ID",profileId)
       if (!profileId) return; 
     
       fetch(`/.netlify/functions/userProfile?profileId=${profileId}`)
@@ -80,6 +81,7 @@ function App() {
     
     
             setProfile(data.profile);
+      console.log("datadata",data.profile)
     
             
             sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
