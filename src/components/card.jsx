@@ -70,7 +70,7 @@ export default function CardPacksShop({ profile }) {
     if (!starter) {
       setPacks(allPacks.filter((pack) => pack.packKey !== "starter"));
     } else {
-      setPacks(allPacks);
+      setPacks(allPacks);    
     }
   }, []);
 
@@ -93,14 +93,14 @@ export default function CardPacksShop({ profile }) {
     price,
     packKey,
     isActive,
-    coins,
+    starter
   }) => {
     const navigate = useNavigate();
 
     const profileId = localStorage.getItem("MyId");
 
     const handleCardClick = async () => {
-      if (isActive && price <= Profile.coins) {
+      if (isActive && (price <= Profile.coins || price == "Free") ) {
         sessionStorage.setItem("canOpen", true);
 
         const updatedProfile = {
@@ -115,6 +115,7 @@ export default function CardPacksShop({ profile }) {
 
 
         navigate(`/open-pack/${packKey}`);
+        localStorage.removeItem("collectedStarter")
       } else if (isActive && price > Profile.coins) [toast.error("Not enough coins!")];
     };
 
@@ -246,6 +247,7 @@ export default function CardPacksShop({ profile }) {
           >
             <CardPack
               isActive={true}
+              starter={true}
               coins={profile?.coins}
               {...packs[activeCard]}
             />

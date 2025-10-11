@@ -59,7 +59,8 @@ export default function Profile() {
           setTitles(profileData.titles);
           if (isFirstVisit) {
             toast.success("Profile Created Successfully !!");
-            localStorage.setItem("ProfileVisited", "true");
+            localStorage.setItem("ProfileVisited", true);
+            localStorage.getItem("collectedStarter",true)
           }
         }
       })
