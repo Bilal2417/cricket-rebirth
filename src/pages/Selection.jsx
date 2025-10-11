@@ -72,11 +72,12 @@ export default function Selection() {
               src={team?.flag}
               alt={team?.name}
               style={{
-                width: "100%",
+                // width: "100%",
                 height: "auto",
                 borderRadius: "6px",
                 boxShadow: "3px 3px 8px -2px #000000",
-                maxWidth: "100px",
+                width: "100px",
+                objectFit : "cover",
                 filter: Profile?.unlocked_teams?.includes(team?.name) ? "none" : "grayscale(100%)",
               }}
             />
