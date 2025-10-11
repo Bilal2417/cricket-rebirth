@@ -1,64 +1,91 @@
 import React, { useEffect, useState } from "react";
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Button, Card, Typography } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import { useParams } from "react-router-dom";
-import { Tune } from "@mui/icons-material";
+import { useNavigate, useParams } from "react-router-dom";
+import Data from "../components/data";
+import LoadingPage from "../components/loading";
 
 // Example pulled cards (replace with your real data)
+const team = Data;
+console.log(team);
 
 const pulledCards = [
   {
     value: 100,
     rarity: "Bronze",
     unlocks: [
-      { type: "coins", resource: 100 },
-      { type: "coins", resource: 250 },
-      { type: "coins", resource: 500 },
+      { type: "coins", resource: [50, 200] },
+      { type: "trophy 2x", resource: [1, 3] },
+      { type: "coins", resource: [50, 200] },
+      { type: "trophy 2x", resource: [1, 3] },
+      { type: "team", resource: ["Oman", "Zimbabwe"] },
     ],
   },
   {
     value: 200,
     rarity: "Silver",
     unlocks: [
-      { type: "coins", resource: 1000 },
-      { type: "coins", resource: 2000 },
-      { type: "coins", resource: 3000 },
+      { type: "coins", resource: [100, 500] },
+      { type: "trophy 2x", resource: [2, 5] },
+      { type: "coins", resource: [100, 500] },
+      { type: "trophy 2x", resource: [2, 5] },
+      { type: "team", resource: [] },
     ],
   },
   {
     value: 300,
     rarity: "Gold",
     unlocks: [
-      { type: "trophies", resource: 2 },
-      { type: "trophies", resource: 3 },
-      { type: "trophies", resource: 5 },
+      { type: "coins", resource: [200, 1000] },
+      { type: "trophy 2x", resource: [3, 10] },
+      { type: "coins", resource: [200, 1000] },
+      { type: "trophy 2x", resource: [3, 10] },
+      { type: "team", resource: [] },
     ],
   },
   {
     value: 400,
     rarity: "Legendary",
     unlocks: [
-      { type: "team", resource: "Pakistan" },
-      { type: "team", resource: "India" },
-      { type: "team", resource: "Australia" },
-      { type: "team", resource: "England" },
+      { type: "coins", resource: [500, 2000] },
+      { type: "trophy 2x", resource: [8, 20] },
+      { type: "coins", resource: [500, 2000] },
+      { type: "trophy 2x", resource: [8, 20] },
+      { type: "team", resource: [] },
     ],
   },
 ];
 
+const updatedPulledCards = pulledCards.map((card) => {
+  const relatedTeams = team
+    .filter((team) => team.category === card.rarity)
+    .map((t) => t.name);
+
+  return {
+    ...card,
+    unlocks: card.unlocks.map((unlock) =>
+      unlock.type === "team" && relatedTeams.length > 0
+        ? { ...unlock, resource: relatedTeams }
+        : unlock
+    ),
+  };
+});
+
+console.log(updatedPulledCards);
+
 const packData = {
-  starter: { title: "Starter Pack", size: 2, colors: ["#00b894", "#55efc4"] },
-  bronze: { title: "Bronze Pack", size: 3, colors: ["#8d5524", "#d2691e"] },
-  silver: { title: "Silver Pack", size: 5, colors: ["#bdc3c7", "#2c3e50"] },
-  gold: { title: "Gold Pack", size: 7, colors: ["#FFD700", "#FF8C00"] },
-  legendary: {
+  Starter: { title: "Starter Pack", size: 2, colors: ["#00b894", "#55efc4"] },
+  Bronze: { title: "Bronze Pack", size: 3, colors: ["#8d5524", "#d2691e"] },
+  Silver: { title: "Silver Pack", size: 5, colors: ["#bdc3c7", "#2c3e50"] },
+  Gold: { title: "Gold Pack", size: 7, colors: ["#FFD700", "#FF8C00"] },
+  Legendary: {
     title: "Legendary Pack",
     size: 10,
     colors: ["#7b4397", "#dc2430"],
   },
 };
 
-export default function CardOpening({ onFinish }) {
+export default function CardOpening() {
   const { packKey } = useParams();
   const pack = packData[packKey];
 
@@ -66,7 +93,7 @@ export default function CardOpening({ onFinish }) {
 
   const [rewards, setRewards] = useState(() => {
     const storedRewards = localStorage.getItem("rewards");
-    return storedRewards ? JSON.parse(storedRewards) : []; 
+    return storedRewards ? JSON.parse(storedRewards) : [];
   });
 
   const [showSummary, setShowSummary] = useState(false);
@@ -83,41 +110,203 @@ export default function CardOpening({ onFinish }) {
     }
   };
 
-  const required = 400;
+  const getRandomValue = (resource) => {
+    if (!resource) return 0;
+    const [min, max] = resource;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
 
+// let profileId = localStorage.getItem("MyId");
+
+// const [profile, setProfile] = useState(null);
+// const [loading, setLoading] = useState(true);
+
+// useEffect(() => {
+//   if (!profileId) return; // prevent fetch if no ID found
+
+//   fetch(`/.netlify/functions/userProfile?profileId=${profileId}`)
+//     .then((res) => res.json())
+//     .then((data) => {
+//       if (data.success && data.profile) {
+
+
+//         setProfile(data.profile);
+
+        
+//         localStorage.setItem("ProfileTeams", JSON.stringify(data.profile));
+//       }
+//     })
+//     .catch((err) => console.error("Error fetching profile:", err))
+//     .finally(() => setLoading(false));
+// }, []);
+
+
+  const [ show , setShow ] = useState(false)
   useEffect(() => {
+    const yes =sessionStorage.getItem("canOpen")
+    if(yes){
+      setShow(true)
+    }
     if (rewards?.length > 0) return;
     if (!packKey) return;
 
-    setCurrentIndex(0)
+    setCurrentIndex(0);
     const newRewards = [];
+    const unlockedTeams = new Set();
 
-    for (let index = 0; index < pack.size; index++) {
-      const eligibleCards = pulledCards.filter(
-        (card) => card.value <= required
+    // Determine required value limit based on pack rarity
+    const rarityMap = {
+      Bronze: { required: 100, guarantee: null },
+      Silver: { required: 200, guarantee: "Bronze" },
+      Gold: { required: 300, guarantee: "Silver" },
+      Legendary: { required: 400, guarantee: "Gold" },
+      Starter: { required: 400, guarantee: "Any" },
+    };
+
+    const packTier = rarityMap[packKey];
+    if (!packTier) return;
+    let guaranteedReward = null;
+
+    // ✅ 1. Guarantee at least one team unlock from guaranteed tier (if applicable)
+    if (packTier.guarantee === "Any") {
+      // Filter available cards except those with the same guarantee category
+      const guaranteedCards = updatedPulledCards.filter(
+        (card) => card.rarity !== packTier.guarantee
+      );
+
+      if (guaranteedCards.length > 0) {
+        // Pick a random card
+        const randomCard =
+          guaranteedCards[Math.floor(Math.random() * guaranteedCards.length)];
+
+        // Filter only team unlocks
+        const teamUnlocks = randomCard.unlocks.filter((u) => u.type === "team");
+
+        if (teamUnlocks.length > 0) {
+          // Select a random team unlock from the unlocks array
+          const randomUnlock =
+            teamUnlocks[Math.floor(Math.random() * teamUnlocks.length)];
+
+          // Pick a random team name from the resource array
+          const possibleTeams = randomUnlock.resource.filter(
+            (teamName) => !unlockedTeams.has(teamName)
+          );
+
+          if (possibleTeams.length > 0) {
+            const randomTeam =
+              possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
+
+            // Mark this team as unlocked
+            unlockedTeams.add(randomTeam);
+
+            // Store result for later use
+            guaranteedReward = {
+              ...randomCard,
+              selectedUnlock: { ...randomUnlock, resource: randomTeam },
+            };
+          }
+        }
+      }
+    } else if (packTier.guarantee) {
+      // Filter only cards matching the guarantee rarity
+      const guaranteedCards = updatedPulledCards.filter(
+        (card) => card.rarity === packTier.guarantee
+      );
+
+      if (guaranteedCards.length > 0) {
+        // Pick a random card
+        const randomCard =
+          guaranteedCards[Math.floor(Math.random() * guaranteedCards.length)];
+
+        // Filter only team unlocks
+        const teamUnlocks = randomCard.unlocks.filter((u) => u.type === "team");
+
+        if (teamUnlocks.length > 0) {
+          // Randomly pick a team unlock entry
+          const randomUnlock =
+            teamUnlocks[Math.floor(Math.random() * teamUnlocks.length)];
+
+          // From its resource array, pick a team not yet unlocked
+          const possibleTeams = randomUnlock.resource.filter(
+            (teamName) => !unlockedTeams.has(teamName)
+          );
+
+          if (possibleTeams.length > 0) {
+            const randomTeam =
+              possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
+
+            // Mark this team as unlocked
+            unlockedTeams.add(randomTeam);
+
+            // Store result
+            guaranteedReward = {
+              ...randomCard,
+              selectedUnlock: { ...randomUnlock, resource: randomTeam },
+            };
+          }
+        }
+      }
+    }
+
+    // ✅ 2. Fill remaining rewards
+    while (newRewards.length < pack.size - (guaranteedReward ? 1 : 0)) {
+      const eligibleCards = updatedPulledCards.filter(
+        (card) => card.value <= packTier.required
       );
       if (eligibleCards.length === 0) break;
 
-      const randomCardIndex = Math.floor(Math.random() * eligibleCards.length);
-      const card = eligibleCards[randomCardIndex];
+      const randomCard =
+        eligibleCards[Math.floor(Math.random() * eligibleCards.length)];
 
       let unlock = null;
-      if (card.unlocks && card.unlocks.length > 0) {
-        const randomUnlockIndex = Math.floor(
-          Math.random() * card.unlocks.length
-        );
-        unlock = card.unlocks[randomUnlockIndex];
+
+      if (randomCard.unlocks && randomCard.unlocks.length > 0) {
+        const tryUnlock = (attempt = 0) => {
+          // safety: prevent infinite loop
+          if (attempt > 10) return null;
+
+          const randomUnlockIndex = Math.floor(
+            Math.random() * randomCard.unlocks.length
+          );
+          let u = randomCard.unlocks[randomUnlockIndex];
+
+          if (u.type === "team") {
+            // Pick from resource array
+            const possibleTeams = (u.resource || []).filter(
+              (teamName) => !unlockedTeams.has(teamName)
+            );
+
+            if (possibleTeams.length === 0) {
+              // All teams unlocked — retry
+              return tryUnlock(attempt + 1);
+            }
+
+            const randomTeam =
+              possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
+            unlockedTeams.add(randomTeam);
+
+            return { ...u, resource: randomTeam };
+          } else {
+            // For non-team unlocks, keep old logic
+            return { ...u, resource: getRandomValue(u.resource) };
+          }
+        };
+
+        unlock = tryUnlock();
       }
 
-      newRewards.push({ ...card, selectedUnlock: unlock });
+      newRewards.push({ ...randomCard, selectedUnlock: unlock });
     }
 
-    console.log(newRewards, "hello");
+    if (guaranteedReward) {
+      newRewards.push(guaranteedReward);
+    }
+
+    console.log(newRewards, "✅ Final Rewards");
     localStorage.setItem("rewards", JSON.stringify(newRewards));
     setRewards(newRewards);
-  }, [packKey , rewards]);
+  }, [packKey, rewards]);
 
-  // Function to decide card background by rarity
   const getCardBackground = (rarity) => {
     switch (rarity) {
       case "Bronze":
@@ -133,9 +322,18 @@ export default function CardOpening({ onFinish }) {
     }
   };
 
-  const nextReward = rewards[currentIndex + 1]?.rarity;
+  const nextReward = rewards[currentIndex + 1]?.selectedUnlock?.type == "team";
+  const navigate = useNavigate();
+  const [showLoadingPage, setShowLoadingPage] = useState(true);
 
   return (
+    <>
+          {showLoadingPage || !show ? (
+            <LoadingPage
+              loading={loading}
+              onFinish={() => setShowLoadingPage(false)}
+            />
+          ):
     <Box
       onClick={!showSummary ? handleNext : undefined}
       sx={{
@@ -182,10 +380,10 @@ export default function CardOpening({ onFinish }) {
                   variant="h4"
                   sx={{ fontWeight: "bold", mb: 2, textTransform: "uppercase" }}
                 >
-                  {rewards[currentIndex]?.selectedUnlock.type}
+                  {rewards[currentIndex]?.selectedUnlock?.type}
                 </Typography>
                 <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
-                  {rewards[currentIndex]?.selectedUnlock.resource}
+                  {rewards[currentIndex]?.selectedUnlock?.resource}
                 </Typography>
                 <Typography variant="h6" sx={{ letterSpacing: 1 }}>
                   {rewards[currentIndex]?.rarity}
@@ -198,19 +396,17 @@ export default function CardOpening({ onFinish }) {
           </AnimatePresence>
           <Box
             sx={{
-              backgroundColor: "red",
+              backgroundColor: "#d32323",
               borderRadius: "8px",
               padding: "4px 12px",
               color: "#FFFFFF",
               display: rewards.length - currentIndex - 1 > 0 ? "" : "none",
               width: "fit-content",
               margin: "50px 0 0 auto",
-              boxShadow:
-                nextReward == "Legendary"
-                  ? "0 0 15px 5px rgba(255,0,0,0.8), 0 0 30px 10px rgba(255,0,0,0.6)"
-                  : "none",
-              animation:
-                nextReward == "Legendary" ? "pulse 1.3s infinite" : "none",
+              boxShadow: nextReward
+                ? "0 0 15px 5px rgba(255,0,0,0.8), 0 0 30px 10px rgba(255,0,0,0.6)"
+                : "none",
+              animation: nextReward ? "pulse 1.3s infinite" : "none",
               "@keyframes pulse": {
                 "0%": { boxShadow: "0 0 10px 3px rgba(255,0,0,0.6)" },
                 "50%": { boxShadow: "0 0 25px 10px rgba(255,0,0,1)" },
@@ -222,13 +418,7 @@ export default function CardOpening({ onFinish }) {
           </Box>
         </Box>
       ) : (
-        <Box
-        onClick={()=> {
-            setRewards([])
-            setShowSummary(false)
-            localStorage.removeItem("rewards")
-        }}
-        sx={{ textAlign: "center", width: "100%" }}>
+        <Box sx={{ textAlign: "center", width: "100%" }}>
           <Typography
             variant="h4"
             sx={{ fontWeight: "bold", mb: 3, color: "#fff" }}
@@ -256,26 +446,64 @@ export default function CardOpening({ onFinish }) {
                   borderRadius: 3,
                   color: "#fff",
                   background: getCardBackground(card.rarity),
-                  boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
+                  // boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
+                  boxShadow: card?.selectedUnlock?.type == "team"
+                    ? "0 0 15px 5px rgba(255,0,0,0.8), 0 0 30px 10px rgba(255,0,0,0.6)"
+                    : "none",
+                  animation: card?.selectedUnlock?.type == "team" ? "shine 1.3s infinite linear" : "none",
+                  "@keyframes shine": {
+                    "0%": {
+                      boxShadow: "0 0 10px 3px #ffffff30",
+                      backgroundPosition: "-200% 0",
+                    },
+                    "50%": {
+                      boxShadow: "0 0 25px 10px #ffffff90",
+                      backgroundPosition: "200% 0",
+                    },
+                    "100%": {
+                      boxShadow: "0 0 10px 3px #ffffff30",
+                      backgroundPosition: "-200% 0",
+                    },
+                  },
                 }}
               >
                 <Typography
                   variant="body1"
                   sx={{ fontWeight: "bold", mb: 2, textTransform: "uppercase" }}
                 >
-                  {card?.selectedUnlock.type}
+                  {card?.selectedUnlock?.type}
                 </Typography>
                 <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-                  {card?.selectedUnlock.resource}
+                  {card?.selectedUnlock?.resource}
                 </Typography>
                 <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                  {card.rarity}
+                  {card?.rarity}
                 </Typography>
               </Card>
             ))}
           </Box>
+          <Button
+            sx={{
+              color: "#FFFFFF",
+              backgroundColor: "#d32323",
+              width: "200px",
+              m: "20px 0",
+            }}
+            onClick={() => {
+              // setRewards([]);
+              setShowSummary(false);
+              localStorage.removeItem("rewards");
+              sessionStorage.removeItem("canOpen")
+              setShow(false)
+              navigate("/shop");
+            }}
+          >
+            Finish
+          </Button>
         </Box>
       )}
     </Box>
+          }
+    </>
   );
 }

@@ -2,6 +2,7 @@
 const Data = [
               {
     name: "Afghanistan",
+    category : "Silver",
     score: 0,
     wicket: 0,
     flag: "/img/afg.png",
@@ -190,6 +191,7 @@ const Data = [
   },
     {
     name: "Australia",
+    category : "Legendary",
     score: 0,
     wicket: 0,
     flag: "/img/aus.png",
@@ -378,6 +380,7 @@ const Data = [
   },
                 {
     name: "Bangladesh",
+    category : "Silver",
     score: 0,
     wicket: 0,
     flag: "/img/ban.png",
@@ -566,6 +569,7 @@ const Data = [
   },
       {
     name: "England",
+    category : "Legendary",
     score: 0,
     wicket: 0,
     flag: "/img/eng.png",
@@ -754,6 +758,7 @@ const Data = [
   },
     {
     name: "India",
+    category : "Legendary",
     score: 0,
     wicket: 0,
     flag: "/img/ind.png",
@@ -942,6 +947,7 @@ const Data = [
   },
         {
     name: "New Zealand",
+    category : "Gold",
     score: 0,
     wicket: 0,
     flag: "/img/nz.png",
@@ -1130,6 +1136,7 @@ const Data = [
   },
   {
     name: "Pakistan",
+    category : "Legendary",
     score: 0,
     wicket: 0,
     flag: "/img/pak.png",
@@ -1318,6 +1325,7 @@ const Data = [
   },
         {
     name: "South Africa",
+    category : "Gold",
     score: 0,
     wicket: 0,
     flag: "/img/sa.png",
@@ -1506,6 +1514,7 @@ const Data = [
   },
           {
     name: "Sri Lanka",
+    category : "Gold",
     score: 0,
     wicket: 0,
     flag: "/img/sri.png",
@@ -1694,6 +1703,7 @@ const Data = [
   },
                 {
     name: "West Indies",
+    category : "Silver",
     score: 0,
     wicket: 0,
     flag: "/img/wi.png",

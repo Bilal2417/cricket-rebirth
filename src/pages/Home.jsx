@@ -3,12 +3,14 @@ import {
   EmojiEventsTwoTone,
   HighlightOff,
   Person,
+  ShoppingCart,
 } from "@mui/icons-material";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { keyframes } from "@emotion/react";
+import { GiShoppingCart } from "react-icons/gi";
 
 export default function Home() {
   const shimmer = keyframes`
@@ -138,7 +140,7 @@ export default function Home() {
     <>
       <Box
         sx={{
-          height: "100vh",
+          height: "90vh",
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -169,9 +171,9 @@ export default function Home() {
               transform: "scale(1)",
             },
           }}
-          onClick={() => navigate("/profile")}
+          onClick={() => navigate("/shop")}
         >
-          <Person sx={{ color: "#FFFFFF" }} />
+          <GiShoppingCart size={30}/>
         </Box>
 
         <Box

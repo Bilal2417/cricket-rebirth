@@ -24,8 +24,10 @@ import DisablePullToRefresh from "./components/disable";
 import CardOpening from "./pages/Opening";
 import ProfileData from "./pages/ProfileData";
 import Tournament from "./pages/Tournament";
+import Navbar from "./components/navbar";
 
 function App() {
+
   useEffect(() => {
     const profileId = localStorage.getItem("MyId");
     if (!profileId) return;
@@ -55,18 +57,6 @@ function App() {
       if(!final){
         setFinalist(false)
       }
-    //   if (final) {
-    //    document.body.style.background =
-    //      "radial-gradient(circle, #cc3f33 0%, #b51c22 100%)";
-    //  } 
-    // else if(location.pathname === "/") {
-    //   document.body.style.background =
-    //     "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
-    //   }
-    //   else{
-    //   document.body.style.background =
-    //     "radial-gradient(circle, #1164ee 0%, #381daa 100%)";
-    // }
   }
   handleBackUpdate()
   window.addEventListener("BackUpdated", handleBackUpdate);
@@ -75,6 +65,30 @@ function App() {
   }, [location.pathname, finalist]);
 
   
+
+    let profileId = localStorage.getItem("MyId");
+    
+    const [profile, setProfile] = useState(null);
+    
+    useEffect(() => {
+      if (!profileId) return; 
+    
+      fetch(`/.netlify/functions/userProfile?profileId=${profileId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.profile) {
+    
+    
+            setProfile(data.profile);
+    
+            
+            sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+          }
+        })
+        .catch((err) => console.error("Error fetching profile:", err))
+    }, []);
+
+
   useEffect(() => {
     const handleFinalistUpdate = () =>
       setFinalist(sessionStorage.getItem("Finalist"));
@@ -100,9 +114,10 @@ function App() {
       >
         <MovingBallsBackground color={finalist ? "#111" : "white"} background={finalist ? "radial-gradient(circle, #b51c22,  #111 120%)" : "radial-gradient(circle, #1164ee 0%, #381daa 100%)"} speed={finalist ? 4 : 7}/>
         <DisablePullToRefresh />
+        <Navbar profile={profile}/>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/card" element={<CardPacksShop />} />
+          <Route path="/shop" element={<CardPacksShop />} />
           <Route path="/tournament" element={<Tournament />} />
           <Route path="/open-pack/:packKey" element={<CardOpening />} />
           <Route path="/profile" element={<Profile />} />

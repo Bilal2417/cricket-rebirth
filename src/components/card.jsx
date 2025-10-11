@@ -3,67 +3,87 @@ import { Card, CardContent, Typography, Button, Box } from "@mui/material";
 import SportsCricketIcon from "@mui/icons-material/SportsCricket";
 import { useNavigate } from "react-router-dom";
 
-const CardPack = ({ title, description, colors, icon, price, onClick }) => (
-  <Card
-    onClick={onClick}
-    sx={{
-      width: 280,
-      height: 380,
-      borderRadius: 4,
-      cursor: "pointer",
-      background: `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`,
-      color: "#fff",
-      boxShadow: "0 8px 20px rgba(0,0,0,0.3)",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-      transition: "transform 0.3s, box-shadow 0.3s",
-      "&:hover": { transform: "scale(1.05)", boxShadow: "0 12px 30px rgba(0,0,0,0.5)" },
-      "&:active": { transform: "scale(0.97)" },
-    }}
-  >
-    <Box
+// ✅ CardPack should RETURN JSX (you forgot 'return')
+const CardPack = ({ title, description, colors, icon, price, packKey , isActive}) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    if (isActive) {
+      sessionStorage.setItem("canOpen",true)
+      navigate(`/open-pack/${packKey}`);
+    } 
+  };
+
+  return (
+    <Card
+      // onClick={handleCardClick}
       sx={{
+        width: 280,
+        height: 380,
+        borderRadius: 4,
+        cursor: "pointer",
+        background: `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`,
+        color: "#fff",
+        boxShadow: "0 8px 20px rgba(0,0,0,0.3)",
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: 160,
-        background: "rgba(255,255,255,0.15)",
-        borderTopLeftRadius: "16px",
-        borderTopRightRadius: "16px",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        transition: "transform 0.3s, box-shadow 0.3s",
+        "&:hover": {
+          transform: "scale(1.05)",
+          boxShadow: "0 12px 30px rgba(0,0,0,0.5)",
+          cursor : isActive ? "default" : "cursor"
+        },
+        "&:active": { transform: "scale(0.97)" },
       }}
     >
-      {icon}
-    </Box>
-    <CardContent sx={{ textAlign: "center", mb: 1 }}>
-      <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
-        {title}
-      </Typography>
-      <Typography variant="body2" sx={{ mb: 3, opacity: 0.9 }}>
-        {description}
-      </Typography>
-      <Button
-        variant="contained"
+      <Box
         sx={{
-          borderRadius: "20px",
-          px: 4,
-          py: 1,
-          background: `linear-gradient(135deg, ${colors[1]}, ${colors[0]})`,
-          color: "#000",
-          fontWeight: "bold",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: 160,
+          background: "rgba(255,255,255,0.15)",
+          borderTopLeftRadius: "16px",
+          borderTopRightRadius: "16px",
         }}
-        onClick={onClick}
       >
-        {!isNaN(price) ? `Buy for ${price} Coins` : price}
-      </Button>
-    </CardContent>
-  </Card>
-);
+        {icon}
+      </Box>
+
+      <CardContent sx={{ textAlign: "center", mb: 1 }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
+          {title}
+        </Typography>
+
+        <Typography variant="body2" sx={{ mb: 3, opacity: 0.9 }}>
+          {description}
+        </Typography>
+
+        <Button
+          variant="contained"
+          sx={{
+            borderRadius: "20px",
+            px: 4,
+            py: 1,
+            background: `linear-gradient(135deg, ${colors[1]}, ${colors[0]})`,
+            color: "#000",
+            fontWeight: "bold",
+          }}
+          onClick={handleCardClick}
+        >
+          {!isNaN(price) ? `Buy for ${price} Coins` : price}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default function CardPacksShop() {
   const [activeCard, setActiveCard] = useState(null);
   const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 });
   const cardRefs = useRef([]);
+  const navigate = useNavigate();
 
   const allPacks = [
     {
@@ -72,64 +92,64 @@ export default function CardPacksShop() {
       colors: ["#00b894", "#55efc4"],
       icon: <SportsCricketIcon sx={{ fontSize: 80, color: "#00fff0" }} />,
       price: "Free",
-      key: "starter",
+      packKey: "Starter",
     },
     {
       title: "Bronze Pack",
-      description: "Contains 3 cards with a chance to get Bronze-level players.",
+      description:
+        "Contains 3 cards with a chance to get Bronze-level Teams.",
       colors: ["#8d5524", "#d2691e"],
       icon: <SportsCricketIcon sx={{ fontSize: 80, color: "#FFD39B" }} />,
-      price: 100,
-      key: "bronze",
+      price: 1000,
+      packKey: "Bronze",
     },
     {
       title: "Silver Pack",
       description:
-        "Contains 5 cards. Guaranteed Bronze players with a chance to pull Silver players.",
+        "Contains 5 cards. Guaranteed Bronze Teams with a chance to pull Silver Teams.",
       colors: ["#bdc3c7", "#2c3e50"],
       icon: <SportsCricketIcon sx={{ fontSize: 80, color: "#C0C0C0" }} />,
-      price: 250,
-      key: "silver",
+      price: 2500,
+      packKey: "Silver",
     },
     {
       title: "Gold Pack",
       description:
-        "Contains 7 cards. Guaranteed Silver players with a chance to get Gold players.",
+        "Contains 7 cards. Guaranteed Silver Teams with a chance to get Gold Teams.",
       colors: ["#FFD700", "#FF8C00"],
       icon: <SportsCricketIcon sx={{ fontSize: 80, color: "#FFD700" }} />,
-      price: 500,
-      key: "gold",
+      price: 5000,
+      packKey: "Gold",
     },
     {
       title: "Legendary Pack",
       description:
-        "Contains 10 cards. Guaranteed Gold players with a chance to pull Legendary players.",
+        "Contains 10 cards. Guaranteed Gold Teams with a chance to pull Legendary Teams.",
       colors: ["#7b4397", "#dc2430"],
       icon: <SportsCricketIcon sx={{ fontSize: 80, color: "#FF4500" }} />,
-      price: 1000,
-      key: "legendary",
+      price: 10000,
+      packKey: "Legendary",
     },
   ];
 
-  const [packs, setPacks] = useState();
+  const [packs, setPacks] = useState([]);
 
-  useEffect(()=>{
-    const starter = localStorage.getItem("collectedStarter")
-    if(!starter){
-      setPacks(()=>allPacks.filter((pack)=>pack.key !== "starter"))
+  useEffect(() => {
+    const starter = localStorage.getItem("collectedStarter");
+    if (!starter) {
+      setPacks(allPacks.filter((pack) => pack.packKey !== "starter"));
+    } else {
+      setPacks(allPacks);
     }
-    else{
-      setPacks(allPacks)
-    }
-  },[])
+  }, []);
 
-  const navigate = useNavigate()
-  const handleClick = (pack ,index) => {
+  const handleClick = (pack, index) => {
     const rect = cardRefs.current[index].getBoundingClientRect();
     setCardPosition({ top: rect.top, left: rect.left });
+    // if (activeCard !== null) navigate(`/open-pack/${pack.packKey}`);
     setActiveCard(index);
 
-    navigate(`/open-pack/${pack.key}`);
+    // You don’t need this check — navigate right away
   };
 
   const handleClose = () => setActiveCard(null);
@@ -146,23 +166,26 @@ export default function CardPacksShop() {
         position: "relative",
       }}
     >
-      {packs?.map((pack, index) => (
+      {packs.map((pack, index) => (
         <Box
           key={index}
           ref={(el) => (cardRefs.current[index] = el)}
           sx={{
-            animation:
-              isNaN(pack.price) 
-                ? "float 1.5s ease-in-out infinite alternate"
-                : null,
+            animation: isNaN(pack.price)
+              ? "float 1.5s ease-in-out infinite alternate"
+              : null,
             "@keyframes float": {
               "0%": { transform: "translateY(0px)" },
               "100%": { transform: "translateY(-10px)" },
             },
           }}
-          onClick={() => handleClick(pack,index)}
+          onClick={() => handleClick(pack, index)}
         >
-          <CardPack {...pack} />
+          <CardPack
+            {...pack}
+            isActive={false}
+            onClick={() => setActiveCard(index)}
+          />
         </Box>
       ))}
 
@@ -192,7 +215,7 @@ export default function CardPacksShop() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <CardPack {...packs[activeCard]} />
+            <CardPack isActive={true} {...packs[activeCard]} />
           </Box>
         </Box>
       )}

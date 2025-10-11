@@ -28,12 +28,12 @@ export default function Profile() {
   const fileInputRef = useRef(null);
 
   const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
   const [titles, setTitles] = useState([]);
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [tempName, setTempName] = useState("");
-  const [loading, setLoading] = useState(true);
   const [activeTitle, setActiveTitle] = useState();
   const [showLoadingPage, setShowLoadingPage] = useState(true);
 
@@ -166,7 +166,7 @@ export default function Profile() {
       {!showLoadingPage && profile && (
         <Box sx={{ width: "fit-content", margin: "auto" }}>
           {/* Back Button */}
-          <Box
+          {/* <Box
             sx={{
               backgroundColor: "#343c53",
               width: "fit-content",
@@ -184,7 +184,7 @@ export default function Profile() {
             onClick={() => navigate("/")}
           >
             <ArrowBackIosNew sx={{ color: "#FFFFFF" }} />
-          </Box>
+          </Box> */}
 
           {/* Profile Image & Name */}
           <Box
