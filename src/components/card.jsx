@@ -2,88 +2,20 @@ import React, { useEffect, useState, useRef } from "react";
 import { Card, CardContent, Typography, Button, Box } from "@mui/material";
 import SportsCricketIcon from "@mui/icons-material/SportsCricket";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // ✅ CardPack should RETURN JSX (you forgot 'return')
-const CardPack = ({ title, description, colors, icon, price, packKey , isActive}) => {
-  const navigate = useNavigate();
 
-  const handleCardClick = () => {
-    if (isActive) {
-      sessionStorage.setItem("canOpen",true)
-      navigate(`/open-pack/${packKey}`);
-    } 
-  };
-
-  return (
-    <Card
-      // onClick={handleCardClick}
-      sx={{
-        width: 280,
-        height: 380,
-        borderRadius: 4,
-        cursor: "pointer",
-        background: `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`,
-        color: "#fff",
-        boxShadow: "0 8px 20px rgba(0,0,0,0.3)",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        transition: "transform 0.3s, box-shadow 0.3s",
-        "&:hover": {
-          transform: "scale(1.05)",
-          boxShadow: "0 12px 30px rgba(0,0,0,0.5)",
-          cursor : isActive ? "default" : "cursor"
-        },
-        "&:active": { transform: "scale(0.97)" },
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: 160,
-          background: "rgba(255,255,255,0.15)",
-          borderTopLeftRadius: "16px",
-          borderTopRightRadius: "16px",
-        }}
-      >
-        {icon}
-      </Box>
-
-      <CardContent sx={{ textAlign: "center", mb: 1 }}>
-        <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
-          {title}
-        </Typography>
-
-        <Typography variant="body2" sx={{ mb: 3, opacity: 0.9 }}>
-          {description}
-        </Typography>
-
-        <Button
-          variant="contained"
-          sx={{
-            borderRadius: "20px",
-            px: 4,
-            py: 1,
-            background: `linear-gradient(135deg, ${colors[1]}, ${colors[0]})`,
-            color: "#000",
-            fontWeight: "bold",
-          }}
-          onClick={handleCardClick}
-        >
-          {!isNaN(price) ? `Buy for ${price} Coins` : price}
-        </Button>
-      </CardContent>
-    </Card>
-  );
-};
-
-export default function CardPacksShop() {
+export default function CardPacksShop({ profile }) {
   const [activeCard, setActiveCard] = useState(null);
   const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 });
   const cardRefs = useRef([]);
   const navigate = useNavigate();
+
+  const storedProfile = sessionStorage.getItem("UserProfile");
+  const [Profile, setProfile] = useState(
+    storedProfile ? JSON.parse(storedProfile) : ""
+  );
 
   const allPacks = [
     {
@@ -96,8 +28,7 @@ export default function CardPacksShop() {
     },
     {
       title: "Bronze Pack",
-      description:
-        "Contains 3 cards with a chance to get Bronze-level Teams.",
+      description: "Contains 3 cards with a chance to get Bronze-level Teams.",
       colors: ["#8d5524", "#d2691e"],
       icon: <SportsCricketIcon sx={{ fontSize: 80, color: "#FFD39B" }} />,
       price: 1000,
@@ -153,6 +84,104 @@ export default function CardPacksShop() {
   };
 
   const handleClose = () => setActiveCard(null);
+
+  const CardPack = ({
+    title,
+    description,
+    colors,
+    icon,
+    price,
+    packKey,
+    isActive,
+    coins,
+  }) => {
+    const navigate = useNavigate();
+
+    const profileId = localStorage.getItem("MyId");
+
+    const handleCardClick = async () => {
+      if (isActive && price <= Profile.coins) {
+        sessionStorage.setItem("canOpen", true);
+
+        const updatedProfile = {
+          ...Profile,
+          id: profileId || Profile?.id,
+          coins: Profile.coins - price,
+        };
+
+        setProfile(updatedProfile);
+        console.log(updatedProfile)
+        sessionStorage.setItem("UserProfile",JSON.stringify(updatedProfile))
+
+
+        navigate(`/open-pack/${packKey}`);
+      } else if (isActive && price > Profile.coins) [toast.error("Not enough coins!")];
+    };
+
+    return (
+      <Card
+        // onClick={handleCardClick}
+        sx={{
+          width: 280,
+          height: 380,
+          borderRadius: 4,
+          cursor: "pointer",
+          background: `linear-gradient(135deg, ${colors[0]}, ${colors[1]})`,
+          color: "#fff",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.3)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          transition: "transform 0.3s, box-shadow 0.3s",
+          "&:hover": {
+            transform: "scale(1.05)",
+            boxShadow: "0 12px 30px rgba(0,0,0,0.5)",
+            cursor: isActive ? "default" : "cursor",
+          },
+          "&:active": { transform: "scale(0.97)" },
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: 160,
+            background: "rgba(255,255,255,0.15)",
+            borderTopLeftRadius: "16px",
+            borderTopRightRadius: "16px",
+          }}
+        >
+          {icon}
+        </Box>
+
+        <CardContent sx={{ textAlign: "center", mb: 1 }}>
+          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
+            {title}
+          </Typography>
+
+          <Typography variant="body2" sx={{ mb: 3, opacity: 0.9 }}>
+            {description}
+          </Typography>
+
+          <Button
+            variant="contained"
+            sx={{
+              borderRadius: "20px",
+              px: 4,
+              py: 1,
+              background: `linear-gradient(135deg, ${colors[1]}, ${colors[0]})`,
+              color: "#000",
+              fontWeight: "bold",
+            }}
+            onClick={handleCardClick}
+          >
+            {!isNaN(price) ? `Buy for ${price} Coins` : price}
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  };
 
   return (
     <Box
@@ -215,7 +244,11 @@ export default function CardPacksShop() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <CardPack isActive={true} {...packs[activeCard]} />
+            <CardPack
+              isActive={true}
+              coins={profile?.coins}
+              {...packs[activeCard]}
+            />
           </Box>
         </Box>
       )}

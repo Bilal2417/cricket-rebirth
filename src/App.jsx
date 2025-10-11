@@ -27,7 +27,6 @@ import Tournament from "./pages/Tournament";
 import Navbar from "./components/navbar";
 
 function App() {
-
   useEffect(() => {
     const profileId = localStorage.getItem("MyId");
     if (!profileId) return;
@@ -50,46 +49,48 @@ function App() {
   const location = useLocation();
 
   const [finalist, setFinalist] = useState(sessionStorage.getItem("Finalist"));
-  
+
   useEffect(() => {
-    const handleBackUpdate = () =>{
-      const final = sessionStorage.getItem("Finalist")
-      if(!final){
-        setFinalist(false)
+    const handleBackUpdate = () => {
+      const final = sessionStorage.getItem("Finalist");
+      if (!final) {
+        setFinalist(false);
       }
-  }
-  handleBackUpdate()
-  window.addEventListener("BackUpdated", handleBackUpdate);
-  return () =>
-    window.removeEventListener("BackUpdated", handleBackUpdate);
+    };
+    handleBackUpdate();
+    window.addEventListener("BackUpdated", handleBackUpdate);
+    return () => window.removeEventListener("BackUpdated", handleBackUpdate);
   }, [location.pathname, finalist]);
 
-  
+  let profileId = localStorage.getItem("MyId");
 
-    let profileId = localStorage.getItem("MyId");
-    
-    const [profile, setProfile] = useState(null);
-    
-    useEffect(() => {
-      console.log("ID",profileId)
-      if (!profileId) return; 
-    
-      fetch(`/.netlify/functions/userProfile?profileId=${profileId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success && data.profile) {
-    
-    
-            setProfile(data.profile);
-      console.log("datadata",data.profile)
-    
-            
-            sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
-          }
-        })
-        .catch((err) => console.error("Error fetching profile:", err))
-    }, []);
+  const [profile, setProfile] = useState(null);
+  useEffect(() => {
+    if (!profileId) return;
 
+    // initial fetch
+    fetch(`/.netlify/functions/userProfile?profileId=${profileId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.profile) {
+          setProfile(data.profile);
+          sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+        }
+      })
+      .catch((err) => console.error("Error fetching profile:", err));
+
+    const handleProfileUpdate = () => {
+      const updated = sessionStorage.getItem("UserProfile");
+      if (updated) {
+        setProfile(JSON.parse(updated));
+      }
+    };
+
+    window.addEventListener("profileUpdated", handleProfileUpdate);
+
+    return () =>
+      window.removeEventListener("profileUpdated", handleProfileUpdate);
+  }, []);
 
   useEffect(() => {
     const handleFinalistUpdate = () =>
@@ -114,12 +115,20 @@ function App() {
           maxWidth: "100vw",
         }}
       >
-        <MovingBallsBackground color={finalist ? "#111" : "white"} background={finalist ? "radial-gradient(circle, #b51c22,  #111 120%)" : "radial-gradient(circle, #1164ee 0%, #381daa 100%)"} speed={finalist ? 4 : 7}/>
+        <MovingBallsBackground
+          color={finalist ? "#111" : "white"}
+          background={
+            finalist
+              ? "radial-gradient(circle, #b51c22,  #111 120%)"
+              : "radial-gradient(circle, #1164ee 0%, #381daa 100%)"
+          }
+          speed={finalist ? 4 : 7}
+        />
         <DisablePullToRefresh />
-        <Navbar profile={profile}/>
+        {location.pathname === "/" ? <Navbar profile={profile} /> : null}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/shop" element={<CardPacksShop />} />
+          <Route path="/shop" element={<CardPacksShop profile={profile} />} />
           <Route path="/tournament" element={<Tournament />} />
           <Route path="/open-pack/:packKey" element={<CardOpening />} />
           <Route path="/profile" element={<Profile />} />

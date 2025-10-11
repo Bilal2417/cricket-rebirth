@@ -7,7 +7,6 @@ import LoadingPage from "../components/loading";
 
 // Example pulled cards (replace with your real data)
 const team = Data;
-console.log(team);
 
 const pulledCards = [
   {
@@ -71,7 +70,7 @@ const updatedPulledCards = pulledCards.map((card) => {
   };
 });
 
-console.log(updatedPulledCards);
+// console.log(updatedPulledCards);
 
 const packData = {
   Starter: { title: "Starter Pack", size: 2, colors: ["#00b894", "#55efc4"] },
@@ -116,37 +115,18 @@ export default function CardOpening() {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
-// let profileId = localStorage.getItem("MyId");
+  const storedProfile = sessionStorage.getItem("UserProfile");
+  const [Profile, setProfile] = useState(
+    storedProfile ? JSON.parse(storedProfile) : ""
+  );
 
-// const [profile, setProfile] = useState(null);
-// const [loading, setLoading] = useState(true);
+  const [show, setShow] = useState(false);
 
-// useEffect(() => {
-//   if (!profileId) return; // prevent fetch if no ID found
-
-//   fetch(`/.netlify/functions/userProfile?profileId=${profileId}`)
-//     .then((res) => res.json())
-//     .then((data) => {
-//       if (data.success && data.profile) {
-
-
-//         setProfile(data.profile);
-
-        
-//         localStorage.setItem("ProfileTeams", JSON.stringify(data.profile));
-//       }
-//     })
-//     .catch((err) => console.error("Error fetching profile:", err))
-//     .finally(() => setLoading(false));
-// }, []);
-
-
-  const [ show , setShow ] = useState(false)
   useEffect(() => {
-    const yes =sessionStorage.getItem("canOpen")
-    if(yes){
-      setShow(true)
-    }
+    const yes = sessionStorage.getItem("canOpen");
+    if (!yes) return;
+    setShow(true);
+
     if (rewards?.length > 0) return;
     if (!packKey) return;
 
@@ -237,7 +217,6 @@ export default function CardOpening() {
 
             // Mark this team as unlocked
             unlockedTeams.add(randomTeam);
-
             // Store result
             guaranteedReward = {
               ...randomCard,
@@ -302,6 +281,52 @@ export default function CardOpening() {
       newRewards.push(guaranteedReward);
     }
 
+
+    
+  const updateProfile = async () => {
+    let updatedProfile = { ...Profile}
+    newRewards.forEach((rewards) => {
+      if (rewards.selectedUnlock.type == "coins") {
+        updatedProfile = {
+          ...updatedProfile,
+          id:  Profile?.id || updatedProfile.id,
+          coins: Profile.coins + rewards.selectedUnlock.resource,
+        };
+      } else if (rewards.selectedUnlock.type == "team") {
+        updatedProfile = {
+          ...updatedProfile,
+          unlocked_teams: [
+            ...(updatedProfile.unlocked_teams || []),
+            rewards.selectedUnlock.resource,
+          ],
+        };
+      }
+    });
+
+    try {
+      const res = await fetch("/.netlify/functions/updateProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProfile),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setProfile(data.profile);
+        console.log(data.profile);
+        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+
+        window.dispatchEvent(new Event("profileUpdated"));
+      } else {
+        console.error("Failed to update tournaments in database:", data.error);
+      }
+    } catch (err) {
+      console.error("Error updating tournaments:", err);
+    }
+  }
+
+  updateProfile()
+
     console.log(newRewards, "✅ Final Rewards");
     localStorage.setItem("rewards", JSON.stringify(newRewards));
     setRewards(newRewards);
@@ -324,186 +349,192 @@ export default function CardOpening() {
 
   const nextReward = rewards[currentIndex + 1]?.selectedUnlock?.type == "team";
   const navigate = useNavigate();
-  const [showLoadingPage, setShowLoadingPage] = useState(true);
 
   return (
     <>
-          {showLoadingPage || !show ? (
-            <LoadingPage
-              loading={loading}
-              onFinish={() => setShowLoadingPage(false)}
-            />
-          ):
-    <Box
-      onClick={!showSummary ? handleNext : undefined}
-      sx={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "none",
-        overflow: "hidden",
-        cursor: "pointer",
-        flexDirection: "column",
-        WebkitTapHighlightColor: "transparent", // 🔥 removes mobile tap flash
-        userSelect: "none",
-      }}
-    >
-      {!showSummary ? (
-        <Box>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, y: 50, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -50, scale: 0.8 }}
-              transition={{ duration: 0.5 }}
-              onAnimationComplete={() => setIsAnimation(false)}
-              style={{ display: "flex", justifyContent: "center" }}
+      <Box
+        onClick={!showSummary ? handleNext : undefined}
+        sx={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "none",
+          overflow: "hidden",
+          cursor: "pointer",
+          flexDirection: "column",
+          WebkitTapHighlightColor: "transparent", // 🔥 removes mobile tap flash
+          userSelect: "none",
+        }}
+      >
+        {!showSummary ? (
+          <Box>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -50, scale: 0.8 }}
+                transition={{ duration: 0.5 }}
+                onAnimationComplete={() => setIsAnimation(false)}
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                <Card
+                  sx={{
+                    width: 300,
+                    height: 420,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 4,
+                    color: "#fff",
+                    background: getCardBackground(
+                      rewards[currentIndex]?.rarity
+                    ),
+                    boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      fontWeight: "bold",
+                      mb: 2,
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {rewards[currentIndex]?.selectedUnlock?.type}
+                  </Typography>
+                  <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
+                    {rewards[currentIndex]?.selectedUnlock?.resource}
+                  </Typography>
+                  <Typography variant="h6" sx={{ letterSpacing: 1 }}>
+                    {rewards[currentIndex]?.rarity}
+                  </Typography>
+                  <Typography variant="body2" sx={{ mt: 3, opacity: 0.7 }}>
+                    (Tap anywhere to reveal next)
+                  </Typography>
+                </Card>
+              </motion.div>
+            </AnimatePresence>
+            <Box
+              sx={{
+                backgroundColor: "#d32323",
+                borderRadius: "8px",
+                padding: "4px 12px",
+                color: "#FFFFFF",
+                display: rewards.length - currentIndex - 1 > 0 ? "" : "none",
+                width: "fit-content",
+                margin: "50px 0 0 auto",
+                boxShadow: nextReward
+                  ? "0 0 15px 5px rgba(255,0,0,0.8), 0 0 30px 10px rgba(255,0,0,0.6)"
+                  : "none",
+                animation: nextReward ? "pulse 1.3s infinite" : "none",
+                "@keyframes pulse": {
+                  "0%": { boxShadow: "0 0 10px 3px rgba(255,0,0,0.6)" },
+                  "50%": { boxShadow: "0 0 25px 10px rgba(255,0,0,1)" },
+                  "100%": { boxShadow: "0 0 10px 3px rgba(255,0,0,0.6)" },
+                },
+              }}
             >
-              <Card
-                sx={{
-                  width: 300,
-                  height: 420,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 4,
-                  color: "#fff",
-                  background: getCardBackground(rewards[currentIndex]?.rarity),
-                  boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
-                  textAlign: "center",
-                }}
-              >
-                <Typography
-                  variant="h4"
-                  sx={{ fontWeight: "bold", mb: 2, textTransform: "uppercase" }}
-                >
-                  {rewards[currentIndex]?.selectedUnlock?.type}
-                </Typography>
-                <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
-                  {rewards[currentIndex]?.selectedUnlock?.resource}
-                </Typography>
-                <Typography variant="h6" sx={{ letterSpacing: 1 }}>
-                  {rewards[currentIndex]?.rarity}
-                </Typography>
-                <Typography variant="body2" sx={{ mt: 3, opacity: 0.7 }}>
-                  (Tap anywhere to reveal next)
-                </Typography>
-              </Card>
-            </motion.div>
-          </AnimatePresence>
-          <Box
-            sx={{
-              backgroundColor: "#d32323",
-              borderRadius: "8px",
-              padding: "4px 12px",
-              color: "#FFFFFF",
-              display: rewards.length - currentIndex - 1 > 0 ? "" : "none",
-              width: "fit-content",
-              margin: "50px 0 0 auto",
-              boxShadow: nextReward
-                ? "0 0 15px 5px rgba(255,0,0,0.8), 0 0 30px 10px rgba(255,0,0,0.6)"
-                : "none",
-              animation: nextReward ? "pulse 1.3s infinite" : "none",
-              "@keyframes pulse": {
-                "0%": { boxShadow: "0 0 10px 3px rgba(255,0,0,0.6)" },
-                "50%": { boxShadow: "0 0 25px 10px rgba(255,0,0,1)" },
-                "100%": { boxShadow: "0 0 10px 3px rgba(255,0,0,0.6)" },
-              },
-            }}
-          >
-            {rewards.length - currentIndex - 1}
+              {rewards.length - currentIndex - 1}
+            </Box>
           </Box>
-        </Box>
-      ) : (
-        <Box sx={{ textAlign: "center", width: "100%" }}>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: "bold", mb: 3, color: "#fff" }}
-          >
-            🎉 All Collected Rewards 🎉
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: 2,
-            }}
-          >
-            {rewards?.map((card, i) => (
-              <Card
-                key={i}
-                sx={{
-                  width: 160,
-                  height: 240,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 3,
-                  color: "#fff",
-                  background: getCardBackground(card.rarity),
-                  // boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
-                  boxShadow: card?.selectedUnlock?.type == "team"
-                    ? "0 0 15px 5px rgba(255,0,0,0.8), 0 0 30px 10px rgba(255,0,0,0.6)"
-                    : "none",
-                  animation: card?.selectedUnlock?.type == "team" ? "shine 1.3s infinite linear" : "none",
-                  "@keyframes shine": {
-                    "0%": {
-                      boxShadow: "0 0 10px 3px #ffffff30",
-                      backgroundPosition: "-200% 0",
+        ) : (
+          <Box sx={{ textAlign: "center", width: "100%" }}>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: "bold", mb: 3, color: "#fff" }}
+            >
+              🎉 All Collected Rewards 🎉
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 2,
+              }}
+            >
+              {rewards?.map((card, i) => (
+                <Card
+                  key={i}
+                  sx={{
+                    width: 160,
+                    height: 240,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 3,
+                    color: "#fff",
+                    background: getCardBackground(card.rarity),
+                    // boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
+                    boxShadow:
+                      card?.selectedUnlock?.type == "team"
+                        ? "0 0 15px 5px rgba(255,0,0,0.8), 0 0 30px 10px rgba(255,0,0,0.6)"
+                        : "none",
+                    animation:
+                      card?.selectedUnlock?.type == "team"
+                        ? "shine 1.3s infinite linear"
+                        : "none",
+                    "@keyframes shine": {
+                      "0%": {
+                        boxShadow: "0 0 10px 3px #ffffff30",
+                        backgroundPosition: "-200% 0",
+                      },
+                      "50%": {
+                        boxShadow: "0 0 25px 10px #ffffff90",
+                        backgroundPosition: "200% 0",
+                      },
+                      "100%": {
+                        boxShadow: "0 0 10px 3px #ffffff30",
+                        backgroundPosition: "-200% 0",
+                      },
                     },
-                    "50%": {
-                      boxShadow: "0 0 25px 10px #ffffff90",
-                      backgroundPosition: "200% 0",
-                    },
-                    "100%": {
-                      boxShadow: "0 0 10px 3px #ffffff30",
-                      backgroundPosition: "-200% 0",
-                    },
-                  },
-                }}
-              >
-                <Typography
-                  variant="body1"
-                  sx={{ fontWeight: "bold", mb: 2, textTransform: "uppercase" }}
+                  }}
                 >
-                  {card?.selectedUnlock?.type}
-                </Typography>
-                <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-                  {card?.selectedUnlock?.resource}
-                </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                  {card?.rarity}
-                </Typography>
-              </Card>
-            ))}
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: "bold",
+                      mb: 2,
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {card?.selectedUnlock?.type}
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                    {card?.selectedUnlock?.resource}
+                  </Typography>
+                  <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                    {card?.rarity}
+                  </Typography>
+                </Card>
+              ))}
+            </Box>
+            <Button
+              sx={{
+                color: "#FFFFFF",
+                backgroundColor: "#d32323",
+                width: "200px",
+                m: "20px 0",
+              }}
+              onClick={() => {
+                // setRewards([]);
+                setShowSummary(false);
+                localStorage.removeItem("rewards");
+                sessionStorage.removeItem("canOpen");
+                setShow(false);
+                navigate("/shop");
+              }}
+            >
+              Finish
+            </Button>
           </Box>
-          <Button
-            sx={{
-              color: "#FFFFFF",
-              backgroundColor: "#d32323",
-              width: "200px",
-              m: "20px 0",
-            }}
-            onClick={() => {
-              // setRewards([]);
-              setShowSummary(false);
-              localStorage.removeItem("rewards");
-              sessionStorage.removeItem("canOpen")
-              setShow(false)
-              navigate("/shop");
-            }}
-          >
-            Finish
-          </Button>
-        </Box>
-      )}
-    </Box>
-          }
+        )}
+      </Box>
     </>
   );
 }
