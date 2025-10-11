@@ -3,7 +3,7 @@ import { Client } from "pg";
 export async function handler(event) {
   const profileId = event.queryStringParameters?.profileId;
 
-      console.log("ID",profileId)
+  console.log("ID", profileId);
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
@@ -27,17 +27,34 @@ export async function handler(event) {
     );
 
     // Parse unlocked_teams JSON safely
-    const profiles = result.rows.map((row) => ({
-      ...row,
-      unlocked_teams: row.unlocked_teams ? JSON.parse(row.unlocked_teams) : [],
-    }));
+    // const profiles = result.rows.map((row) => ({
+    //   ...row,
+    //   unlocked_teams: row.unlocked_teams ? JSON.parse(row.unlocked_teams) : [],
+    // }));
+    const profiles = result.rows.map((row) => {
+      let unlockedTeams = [];
 
-      console.log("profilesssssssss",profiles[0])
+      try {
+        if (row.unlocked_teams && row.unlocked_teams.trim() !== "") {
+          unlockedTeams = JSON.parse(row.unlocked_teams);
+        }
+      } catch (e) {
+        console.warn("Failed to parse unlocked_teams JSON for row:", row.id);
+        unlockedTeams = [];
+      }
+
+      return {
+        ...row,
+        unlocked_teams: unlockedTeams,
+      };
+    });
+
+    console.log("profilesssssssss", profiles[0]);
     return {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        profile: profiles[0] ,
+        profile: profiles[0],
       }),
     };
   } catch (err) {
