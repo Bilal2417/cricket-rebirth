@@ -125,7 +125,9 @@ function App() {
           speed={finalist ? 4 : 7}
         />
         <DisablePullToRefresh />
-        {location.pathname === "/" ? <Navbar profile={profile} /> : null}
+        {(location.pathname === "/" || location.pathname === "/shop") && (
+          <Navbar profile={profile} />
+        )}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<CardPacksShop profile={profile} />} />

@@ -24,6 +24,7 @@ export async function handler(event) {
         id TEXT PRIMARY KEY,
         name TEXT,
         tournaments INT DEFAULT 0,
+        trophydoubler INT DEFAULT 0,
         trophies INT DEFAULT 0,
         victories INT DEFAULT 0,
         img TEXT,

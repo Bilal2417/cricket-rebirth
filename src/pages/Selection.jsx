@@ -2,12 +2,17 @@ import { Box, Grid } from "@mui/material";
 import Data from "../components/data";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Selection() {
-  const [teams] = useState(Data); // teams are fixed
+  const [teams] = useState(Data);
   const navigate = useNavigate();
 
-  // Function to select AI team
+  const storedProfile = sessionStorage.getItem("UserProfile");
+  const [Profile, setProfile] = useState(
+    storedProfile ? JSON.parse(storedProfile) : ""
+  );
+
   function AiTeamSelection(selectedTeam) {
     const availableTeams = teams.filter((t) => t.name !== selectedTeam);
     const aiTeam =
@@ -18,10 +23,9 @@ export default function Selection() {
     const page = sessionStorage.getItem("mode");
     if (page === "KNOCKOUT") {
       navigate("/knockout");
-    }else if (page === "TOURNAMENT"){
+    } else if (page === "TOURNAMENT") {
       navigate("/tournament");
-    } 
-    else {
+    } else {
       navigate("/toss");
     }
   }
@@ -61,7 +65,7 @@ export default function Selection() {
               textAlign: "center",
             }}
             onClick={() => {
-              AiTeamSelection(team?.name);
+              Profile?.unlocked_teams?.includes(team?.name) ? AiTeamSelection(team?.name) : toast.error("Team not unlocked!")
             }}
           >
             <img
@@ -69,10 +73,11 @@ export default function Selection() {
               alt={team?.name}
               style={{
                 width: "100%",
-                maxWidth: "120px",
                 height: "auto",
                 borderRadius: "6px",
                 boxShadow: "3px 3px 8px -2px #000000",
+                maxWidth: "100px",
+                filter: Profile?.unlocked_teams?.includes(team?.name) ? "none" : "grayscale(100%)",
               }}
             />
           </Grid>

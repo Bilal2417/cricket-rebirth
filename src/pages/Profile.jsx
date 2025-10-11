@@ -166,7 +166,7 @@ export default function Profile() {
       {!showLoadingPage && profile && (
         <Box sx={{ width: "fit-content", margin: "auto" }}>
           {/* Back Button */}
-          {/* <Box
+          <Box
             sx={{
               backgroundColor: "#343c53",
               width: "fit-content",
@@ -184,7 +184,7 @@ export default function Profile() {
             onClick={() => navigate("/")}
           >
             <ArrowBackIosNew sx={{ color: "#FFFFFF" }} />
-          </Box> */}
+          </Box>
 
           {/* Profile Image & Name */}
           <Box

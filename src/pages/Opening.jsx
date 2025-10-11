@@ -132,7 +132,7 @@ export default function CardOpening() {
 
     setCurrentIndex(0);
     const newRewards = [];
-    const unlockedTeams = new Set();
+    const unlockedTeams = Profile?.unlocked_teams;
 
     // Determine required value limit based on pack rarity
     const rarityMap = {
@@ -252,7 +252,7 @@ export default function CardOpening() {
           if (u.type === "team") {
             // Pick from resource array
             const possibleTeams = (u.resource || []).filter(
-              (teamName) => !unlockedTeams.has(teamName)
+              (teamName) => !unlockedTeams.includes(teamName)
             );
 
             if (possibleTeams.length === 0) {
@@ -299,6 +299,11 @@ export default function CardOpening() {
             ...(updatedProfile.unlocked_teams || []),
             rewards.selectedUnlock.resource,
           ],
+        };
+      }else if (rewards.selectedUnlock.type == "trophy 2x") {
+        updatedProfile = {
+          ...updatedProfile,
+          trophydoubler : Profile.trophydoubler + rewards.selectedUnlock.resource
         };
       }
     });

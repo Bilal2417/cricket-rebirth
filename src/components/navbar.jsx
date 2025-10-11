@@ -5,6 +5,7 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import {
   ArrowBackIosNew,
   EmojiEventsTwoTone,
+  Home,
   Person,
 } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -53,7 +54,7 @@ export default function Navbar({ profile }) {
             location.pathname == "/" ? navigate("/profile") : navigate("/")
           }
         >
-          <Person sx={{ color: "#FFFFFF" }} />
+          {location.pathname == "/"  ? <Person sx={{ color: "#FFFFFF" }} /> :  <Home sx={{ color: "#FFFFFF" }}/>}
         </Box>
 
         <Box
