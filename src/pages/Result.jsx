@@ -132,6 +132,9 @@ export default function Result() {
       if (data.success) {
         setProfile(data.profile);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+        
+        window.dispatchEvent(new Event("profileUpdated"));
       } else {
         console.error("Failed to update trophies in database");
       }

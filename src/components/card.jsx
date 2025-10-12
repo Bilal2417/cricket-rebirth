@@ -64,15 +64,16 @@ export default function CardPacksShop({ profile }) {
   ];
 
   const [packs, setPacks] = useState([]);
+  const [starter, setStarter] = useState(localStorage.getItem("collectedStarter"));
 
   useEffect(() => {
-    const starter = localStorage.getItem("collectedStarter");
+    // const starter = ;
     if (!starter) {
-      setPacks(allPacks.filter((pack) => pack.packKey !== "starter"));
+      setPacks(allPacks.filter((pack) => pack.packKey !== "Starter"));
     } else {
       setPacks(allPacks);    
     }
-  }, []);
+  }, [starter]);
 
   const handleClick = (pack, index) => {
     const rect = cardRefs.current[index].getBoundingClientRect();
@@ -93,7 +94,6 @@ export default function CardPacksShop({ profile }) {
     price,
     packKey,
     isActive,
-    starter
   }) => {
     const navigate = useNavigate();
 
@@ -116,6 +116,7 @@ export default function CardPacksShop({ profile }) {
 
         navigate(`/open-pack/${packKey}`);
         localStorage.removeItem("collectedStarter")
+        setStarter(false)
       } else if (isActive && price > Profile.coins) [toast.error("Not enough coins!")];
     };
 
