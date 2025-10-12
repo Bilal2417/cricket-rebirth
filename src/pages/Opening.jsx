@@ -132,7 +132,7 @@ export default function CardOpening() {
 
     setCurrentIndex(0);
     const newRewards = [];
-    const unlockedTeams = Profile?.unlocked_teams;
+    const unlockedTeams = [...(Profile?.unlocked_teams || [])];
 
     // Determine required value limit based on pack rarity
     const rarityMap = {
@@ -148,7 +148,7 @@ export default function CardOpening() {
     let guaranteedReward = null;
 
     // ✅ 1. Guarantee at least one team unlock from guaranteed tier (if applicable)
-    if (packTier.guarantee === "Any") {
+    if (packTier?.guarantee === "Any") {
       // Filter available cards except those with the same guarantee category
       const guaranteedCards = updatedPulledCards.filter(
         (card) => card.rarity !== packTier.guarantee
@@ -177,7 +177,7 @@ export default function CardOpening() {
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
 
             // Mark this team as unlocked
-            unlockedTeams?.push(randomTeam);
+            // unlockedTeams?.push(randomTeam);
 
             // Store result for later use
             guaranteedReward = {
@@ -187,7 +187,7 @@ export default function CardOpening() {
           }
         }
       }
-    } else if (packTier.guarantee) {
+    } else if (packTier?.guarantee) {
       // Filter only cards matching the guarantee rarity
       const guaranteedCards = updatedPulledCards.filter(
         (card) => card.rarity === packTier.guarantee
@@ -216,7 +216,7 @@ export default function CardOpening() {
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
 
             // Mark this team as unlocked
-            unlockedTeams?.push(randomTeam);
+            // unlockedTeams?.push(randomTeam);
             // Store result
             guaranteedReward = {
               ...randomCard,
@@ -262,7 +262,7 @@ export default function CardOpening() {
 
             const randomTeam =
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
-            unlockedTeams?.push(randomTeam);
+            // unlockedTeams?.push(randomTeam);
 
             return { ...u, resource: randomTeam };
           } else {

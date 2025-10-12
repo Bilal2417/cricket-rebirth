@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import Data from "../components/data";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -34,6 +34,21 @@ export default function Selection() {
     localStorage.removeItem("cricketData");
   }, []);
 
+    const getCardBackground = (rarity) => {
+    switch (rarity) {
+      case "Bronze":
+        return "linear-gradient(135deg, #8d5524, #d2691e)";
+      case "Silver":
+        return "linear-gradient(135deg, #bdc3c7, #2c3e50)";
+      case "Gold":
+        return "linear-gradient(135deg, #FFD700, #FF8C00)";
+      case "Legendary":
+        return "linear-gradient(135deg, #7b4397, #dc2430)";
+      default:
+        return "linear-gradient(135deg, #333, #111)";
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -65,12 +80,20 @@ export default function Selection() {
               textAlign: "center",
             }}
             onClick={() => {
-              Profile?.unlocked_teams?.includes(team?.name) ? AiTeamSelection(team?.name) : toast.error("Team not unlocked!")
+              Profile?.unlocked_teams?.includes(team?.name) ? AiTeamSelection(team?.name) : toast.error("Unlock team from Packs!")
             }}
           >
+
+            <Box sx={{
+              background : getCardBackground(team?.category) ,
+              borderRadius : '6px',
+              height : "fit-content"
+            }}>
+              <Typography variant="body1">{team?.category}</Typography>
             <img
               src={team?.flag}
               alt={team?.name}
+              title={team?.name}
               style={{
                 // width: "100%",
                 height: "auto",
@@ -80,7 +103,8 @@ export default function Selection() {
                 objectFit : "cover",
                 filter: Profile?.unlocked_teams?.includes(team?.name) ? "none" : "grayscale(100%)",
               }}
-            />
+              />
+              </Box>
           </Grid>
         ))}
       </Grid>
