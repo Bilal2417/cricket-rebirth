@@ -189,7 +189,7 @@ export default function CardPacksShop({ profile }) {
       sx={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-        gap: 4,
+        gap: { xs : 2 , lg : 2},
         justifyContent: "center",
         mt: 4,
         p: 2,

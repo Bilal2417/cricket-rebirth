@@ -669,6 +669,7 @@ export default function Tournament() {
         winner: null,
       })
     );
+    navigate("/")
   };
 
   const [Profile, setProfile] = useState(() => {
