@@ -78,6 +78,7 @@ export default function Modes() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
+          gap : "20px",
           py: 8,
           px: 2,
         }}

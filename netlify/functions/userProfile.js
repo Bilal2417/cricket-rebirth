@@ -27,20 +27,19 @@ export async function handler(event) {
       [profileId]
     );
 
-    // Parse unlocked_teams JSON safely
-    // const profiles = result.rows.map((row) => ({
-    //   ...row,
-    //   unlocked_teams: row.unlocked_teams ? JSON.parse(row.unlocked_teams) : [],
-    // }));
     const profiles = result.rows.map((row) => {
       let unlockedTeams = [];
 
       try {
-        if (row.unlocked_teams && row.unlocked_teams.trim() !== "") {
+        if (Array.isArray(row.unlocked_teams)) {
+          // ✅ Already parsed JSONB array
+          unlockedTeams = row.unlocked_teams;
+        } else if (typeof row.unlocked_teams === "string" && row.unlocked_teams.trim() !== "") {
+          // ✅ Stored as JSON string
           unlockedTeams = JSON.parse(row.unlocked_teams);
         }
       } catch (e) {
-        console.warn("Failed to parse unlocked_teams JSON for row:", row.id);
+        console.warn("Failed to parse unlocked_teams JSON for row:", row.id, e);
         unlockedTeams = [];
       }
 
@@ -50,7 +49,7 @@ export async function handler(event) {
       };
     });
 
-    console.log("profilesssssssss", profiles[0]);
+    console.log("✅ Final profile:", profiles[0]);
     return {
       statusCode: 200,
       body: JSON.stringify({
