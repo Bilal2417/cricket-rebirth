@@ -177,7 +177,7 @@ export default function CardOpening() {
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
 
             // Mark this team as unlocked
-            unlockedTeams?.add(randomTeam);
+            unlockedTeams?.push(randomTeam);
 
             // Store result for later use
             guaranteedReward = {
@@ -216,7 +216,7 @@ export default function CardOpening() {
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
 
             // Mark this team as unlocked
-            unlockedTeams?.add(randomTeam);
+            unlockedTeams?.push(randomTeam);
             // Store result
             guaranteedReward = {
               ...randomCard,
@@ -262,7 +262,7 @@ export default function CardOpening() {
 
             const randomTeam =
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
-            unlockedTeams.add(randomTeam);
+            unlockedTeams?.push(randomTeam);
 
             return { ...u, resource: randomTeam };
           } else {
