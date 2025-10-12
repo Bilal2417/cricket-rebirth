@@ -60,7 +60,7 @@ export default function Profile() {
           if (isFirstVisit) {
             toast.success("Profile Created Successfully !!");
             localStorage.setItem("ProfileVisited", true);
-            localStorage.getItem("collectedStarter",true)
+            localStorage.getItem("collectedStarter", true);
           }
         }
       })
@@ -92,8 +92,8 @@ export default function Profile() {
     const profileId = localStorage.getItem("MyId");
     if (!profileId) return console.error("No profile ID found");
 
-    setSave(true)
-    
+    setSave(true);
+
     const updatedProfile = {
       id: profileId,
       name: tempName || profile.name,
@@ -108,9 +108,9 @@ export default function Profile() {
         body: JSON.stringify(updatedProfile),
       });
       const data = await res.json();
-      
+
       if (data.success) {
-        setSave(false)
+        setSave(false);
         setProfile(data.profile);
         setName(data.profile.name);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
@@ -151,9 +151,9 @@ export default function Profile() {
         }
       })
       .catch((err) => console.error("Error updating title:", err));
-  }
+  };
 
-  const [ save , setSave ] = useState(false)
+  const [save, setSave] = useState(false);
 
   return (
     <>
@@ -265,7 +265,7 @@ export default function Profile() {
               </Typography>
 
               {show &&
-                profile?.titles.map((title, index) => (
+                profile?.titles?.map((title, index) => (
                   <Box
                     key={index}
                     sx={{
@@ -273,7 +273,7 @@ export default function Profile() {
                       backgroundColor: "#343c53",
                       width: "90%",
                       padding: "5px 20px",
-                      display: "flex",
+                      display: title.value == 0 ? "none" : "flex",
                       alignContent: "center",
                       justifyContent: "center",
                       gap: "10px",
@@ -296,7 +296,14 @@ export default function Profile() {
                       e.stopPropagation();
                     }}
                   >
-                    <Box component="span">{title.value}/10</Box>
+                    <Box
+                      sx={{
+                        display: title.value >= 10 ? "none" : "block",
+                      }}
+                      component="span"
+                    >
+                      {title.value}/10
+                    </Box>
                     {title.name}
                   </Box>
                 ))}
@@ -317,8 +324,8 @@ export default function Profile() {
                 inset 0px -8px 8px -4px #0248df,
                 inset 0px 8px 8px -4px #009aff
               `,
-            }}            
-              disabled={save}
+            }}
+            disabled={save}
           >
             {save ? (
               <CircularProgress size={20} sx={{ color: "#fff" }} />
