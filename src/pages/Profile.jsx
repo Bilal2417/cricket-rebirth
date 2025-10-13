@@ -61,8 +61,6 @@ export default function Profile() {
             toast.success("Profile Created Successfully !!");
             localStorage.setItem("ProfileVisited", true);
             localStorage.setItem("collectedStarter", true);
-          }else if(profileData.name == "Arsal 84"){
-            localStorage.setItem("collectedStarter", true);
           }
         }
       })
