@@ -61,6 +61,8 @@ export default function Profile() {
             toast.success("Profile Created Successfully !!");
             localStorage.setItem("ProfileVisited", true);
             localStorage.setItem("collectedStarter", true);
+          }else if(profileData.name == "Arsal 84"){
+            localStorage.setItem("collectedStarter", true);
           }
         }
       })
@@ -319,6 +321,7 @@ export default function Profile() {
               fontFamily: "sans-serif",
               mt: 2,
               width: "100%",
+              padding : "5px",
               clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
               boxShadow: `
                 inset 0px -8px 8px -4px #0248df,
