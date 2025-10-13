@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 // ✅ CardPack should RETURN JSX (you forgot 'return')
 
-export default function CardPacksShop({ profile }) {
+export default function CardPacksShop() {
   const [activeCard, setActiveCard] = useState(null);
   const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 });
   const cardRefs = useRef([]);
@@ -95,7 +95,7 @@ export default function CardPacksShop({ profile }) {
     packKey,
     isActive,
   }) => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const profileId = localStorage.getItem("MyId");
 
@@ -117,7 +117,7 @@ export default function CardPacksShop({ profile }) {
         navigate(`/open-pack/${packKey}`);
         localStorage.removeItem("collectedStarter")
         setStarter(false)
-      } else if (isActive && price > Profile.coins) [toast.error("Not enough coins!")];
+      } else if (isActive &&( price > Profile.coins || Profile.coins == null)) [toast.error("Not enough coins!")];
     };
 
     return (
@@ -188,12 +188,10 @@ export default function CardPacksShop({ profile }) {
   return (
     <Box
       sx={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+        display: "flex",
+        // gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
         gap: { xs : 2 , lg : 2},
         justifyContent: "center",
-        mt: 4,
-        p: 2,
         position: "relative",
       }}
     >
@@ -249,7 +247,7 @@ export default function CardPacksShop({ profile }) {
             <CardPack
               isActive={true}
               starter={true}
-              coins={profile?.coins}
+              coins={Profile?.coins}
               {...packs[activeCard]}
             />
           </Box>

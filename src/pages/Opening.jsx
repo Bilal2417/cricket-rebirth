@@ -5,14 +5,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import Data from "../components/data";
 import LoadingPage from "../components/loading";
 
-
 const team = Data;
 
 const pulledCards = [
   {
     value: 100,
     rarity: "Bronze",
-    weight : 50,
+    weight: 50,
     unlocks: [
       { type: "coins", resource: [50, 200] },
       { type: "trophy 2x", resource: [1, 3] },
@@ -24,7 +23,7 @@ const pulledCards = [
   {
     value: 200,
     rarity: "Silver",
-    weight : 30,
+    weight: 30,
     unlocks: [
       { type: "coins", resource: [100, 500] },
       { type: "trophy 2x", resource: [2, 5] },
@@ -35,7 +34,7 @@ const pulledCards = [
   },
   {
     value: 300,
-    weight : 15,
+    weight: 15,
     rarity: "Gold",
     unlocks: [
       { type: "coins", resource: [200, 1000] },
@@ -48,7 +47,7 @@ const pulledCards = [
   {
     value: 400,
     rarity: "Legendary",
-    weight : 5,
+    weight: 5,
     unlocks: [
       { type: "coins", resource: [500, 2000] },
       { type: "trophy 2x", resource: [8, 20] },
@@ -72,7 +71,6 @@ function getWeightedRandomCard(cards) {
 
   return cards[0];
 }
-
 
 const updatedPulledCards = pulledCards.map((card) => {
   const relatedTeams = team
@@ -123,7 +121,6 @@ export default function CardOpening() {
       setIsAnimation(true);
       setCurrentIndex((prev) => prev + 1);
     } else {
-      
       setShowSummary(true);
     }
   };
@@ -153,7 +150,6 @@ export default function CardOpening() {
     const newRewards = [];
     const unlockedTeams = [...(Profile?.unlocked_teams || [])];
 
-    
     const rarityMap = {
       Bronze: { required: 100, guarantee: null },
       Silver: { required: 200, guarantee: "Bronze" },
@@ -166,29 +162,23 @@ export default function CardOpening() {
     if (!packTier) return;
     let guaranteedReward = null;
 
-    
     if (packTier?.guarantee === "Any") {
-      
       const guaranteedCards = updatedPulledCards.filter(
         (card) => card.rarity !== packTier.guarantee
       );
 
       if (guaranteedCards.length > 0) {
-        
         // const randomCard =
         //   guaranteedCards[Math.floor(Math.random() * guaranteedCards.length)];
 
-          const randomCard = getWeightedRandomCard(guaranteedCards);
+        const randomCard = getWeightedRandomCard(guaranteedCards);
 
-          
         const teamUnlocks = randomCard.unlocks.filter((u) => u.type === "team");
 
         if (teamUnlocks.length > 0) {
-          
           const randomUnlock =
             teamUnlocks[Math.floor(Math.random() * teamUnlocks.length)];
 
-            
           const possibleTeams = randomUnlock.resource.filter(
             (teamName) => !unlockedTeams?.includes(teamName)
           );
@@ -197,7 +187,6 @@ export default function CardOpening() {
             const randomTeam =
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
 
-              
             guaranteedReward = {
               ...randomCard,
               selectedUnlock: { ...randomUnlock, resource: randomTeam },
@@ -206,27 +195,22 @@ export default function CardOpening() {
         }
       }
     } else if (packTier?.guarantee) {
-      
       const guaranteedCards = updatedPulledCards.filter(
         (card) => card.rarity === packTier.guarantee
       );
 
       if (guaranteedCards.length > 0) {
-        
         // const randomCard =
         //   guaranteedCards[Math.floor(Math.random() * guaranteedCards.length)];
 
-        
-          const randomCard = getWeightedRandomCard(guaranteedCards);
-          
+        const randomCard = getWeightedRandomCard(guaranteedCards);
+        console.log("Random", randomCard, "Guareanteed", guaranteedCards);
         const teamUnlocks = randomCard.unlocks.filter((u) => u.type === "team");
 
         if (teamUnlocks.length > 0) {
-          
           const randomUnlock =
             teamUnlocks[Math.floor(Math.random() * teamUnlocks.length)];
 
-            
           const possibleTeams = randomUnlock.resource.filter(
             (teamName) => !unlockedTeams?.includes(teamName)
           );
@@ -235,7 +219,6 @@ export default function CardOpening() {
             const randomTeam =
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
 
-              
             guaranteedReward = {
               ...randomCard,
               selectedUnlock: { ...randomUnlock, resource: randomTeam },
@@ -245,7 +228,6 @@ export default function CardOpening() {
       }
     }
 
-    
     while (newRewards.length < pack.size - (guaranteedReward ? 1 : 0)) {
       const eligibleCards = updatedPulledCards.filter(
         (card) => card.value <= packTier.required
@@ -255,14 +237,12 @@ export default function CardOpening() {
       // const randomCard =
       //   eligibleCards[Math.floor(Math.random() * eligibleCards.length)];
 
-        
-          const randomCard = getWeightedRandomCard(eligibleCards);
+      const randomCard = getWeightedRandomCard(eligibleCards);
 
       let unlock = null;
 
       if (randomCard.unlocks && randomCard.unlocks.length > 0) {
         const tryUnlock = (attempt = 0) => {
-          
           if (attempt > 10) return null;
 
           const randomUnlockIndex = Math.floor(
@@ -271,23 +251,20 @@ export default function CardOpening() {
           let u = randomCard.unlocks[randomUnlockIndex];
 
           if (u.type === "team") {
-            
             const possibleTeams = (u.resource || []).filter(
               (teamName) => !unlockedTeams?.includes(teamName)
             );
 
             if (possibleTeams.length === 0) {
-
               return tryUnlock(attempt + 1);
             }
 
             const randomTeam =
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
-         
 
+            unlockedTeams.push(randomTeam);
             return { ...u, resource: randomTeam };
           } else {
-            
             return { ...u, resource: getRandomValue(u.resource) };
           }
         };
@@ -302,56 +279,64 @@ export default function CardOpening() {
       newRewards.push(guaranteedReward);
     }
 
+    const updateProfile = async () => {
+      let updatedProfile = { ...Profile };
+      newRewards.forEach((rewards) => {
+        if (rewards.selectedUnlock.type == "coins") {
+          updatedProfile = {
+            ...updatedProfile,
+            id: Profile?.id || updatedProfile.id,
+            coins: Profile.coins + rewards.selectedUnlock.resource,
+          };
+        } else if (rewards.selectedUnlock.type == "team") {
+          const currentTeams = updatedProfile.unlocked_teams || [];
+          const newTeam = rewards.selectedUnlock.resource;
 
-    
-  const updateProfile = async () => {
-    let updatedProfile = { ...Profile}
-    newRewards.forEach((rewards) => {
-      if (rewards.selectedUnlock.type == "coins") {
-        updatedProfile = {
-          ...updatedProfile,
-          id:  Profile?.id || updatedProfile.id,
-          coins: Profile.coins + rewards.selectedUnlock.resource,
-        };
-      } else if (rewards.selectedUnlock.type == "team") {
-        updatedProfile = {
-          ...updatedProfile,
-          unlocked_teams: [
-            ...(updatedProfile.unlocked_teams || []),
-            rewards.selectedUnlock.resource,
-          ],
-        };
-      }else if (rewards.selectedUnlock.type == "trophy 2x") {
-        updatedProfile = {
-          ...updatedProfile,
-          trophydoubler : Profile.trophydoubler + rewards.selectedUnlock.resource
-        };
-      }
-    });
-
-    try {
-      const res = await fetch("/.netlify/functions/updateProfile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProfile),
+          if (!currentTeams.includes(newTeam)) {
+            updatedProfile = {
+              ...updatedProfile,
+              unlocked_teams: [...currentTeams, newTeam],
+            };
+          }
+        } else if (rewards.selectedUnlock.type == "trophy 2x") {
+          updatedProfile = {
+            ...updatedProfile,
+            trophydoubler:
+              Profile.trophydoubler + rewards.selectedUnlock.resource,
+          };
+        }
       });
 
-      const data = await res.json();
-      if (data.success) {
-        setProfile(data.profile);
-        console.log(data.profile);
-        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+      try {
+        updatedProfile.unlocked_teams = [
+          ...new Set(updatedProfile.unlocked_teams),
+        ];
 
-        window.dispatchEvent(new Event("profileUpdated"));
-      } else {
-        console.error("Failed to update tournaments in database:", data.error);
+        const res = await fetch("/.netlify/functions/updateProfile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedProfile),
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          setProfile(data.profile);
+          console.log(data.profile);
+          sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+
+          window.dispatchEvent(new Event("profileUpdated"));
+        } else {
+          console.error(
+            "Failed to update tournaments in database:",
+            data.error
+          );
+        }
+      } catch (err) {
+        console.error("Error updating tournaments:", err);
       }
-    } catch (err) {
-      console.error("Error updating tournaments:", err);
-    }
-  }
+    };
 
-  updateProfile()
+    updateProfile();
 
     console.log(newRewards, "✅ Final Rewards");
     localStorage.setItem("rewards", JSON.stringify(newRewards));
@@ -376,6 +361,10 @@ export default function CardOpening() {
   const nextReward = rewards[currentIndex + 1]?.selectedUnlock?.type == "team";
   const navigate = useNavigate();
 
+  const selectedTeam = team.find(
+    (t) => t.name === rewards[currentIndex]?.selectedUnlock?.resource
+  );
+
   return (
     <>
       <Box
@@ -389,7 +378,7 @@ export default function CardOpening() {
           overflow: "hidden",
           cursor: "pointer",
           flexDirection: "column",
-          WebkitTapHighlightColor: "transparent", 
+          WebkitTapHighlightColor: "transparent",
           userSelect: "none",
         }}
       >
@@ -418,6 +407,7 @@ export default function CardOpening() {
                     background: getCardBackground(
                       rewards[currentIndex]?.rarity
                     ),
+                    backdropFilter: "blur(10px)",
                     boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
                     textAlign: "center",
                   }}
@@ -432,7 +422,19 @@ export default function CardOpening() {
                   >
                     {rewards[currentIndex]?.selectedUnlock?.type}
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
+                  <Box
+                    sx={{
+                      width: 90,
+                      height: 60,
+                      display:
+                        rewards[currentIndex]?.selectedUnlock?.type == "team"
+                          ? "block"
+                          : "none",
+                    }}
+                    src={selectedTeam?.flag}
+                    component="img"
+                  />
+                  <Typography variant="h4" sx={{ fontWeight: "bold", m: 2 }}>
                     {rewards[currentIndex]?.selectedUnlock?.resource}
                   </Typography>
                   <Typography variant="h6" sx={{ letterSpacing: 1 }}>
@@ -480,65 +482,83 @@ export default function CardOpening() {
                 display: "flex",
                 flexWrap: "wrap",
                 justifyContent: "center",
-                gap: { xs : 1 , lg : 2},
+                gap: { xs: 1, lg: 2 },
               }}
             >
-              {rewards?.map((card, i) => (
-                <Card
-                  key={i}
-                  sx={{
-                    width: 160,
-                    height: 240,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: 3,
-                    color: "#fff",
-                    background: getCardBackground(card.rarity),
-                    // boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
-                    boxShadow:
-                      card?.selectedUnlock?.type == "team"
-                        ? "0 0 15px 5px rgba(255,0,0,0.8), 0 0 30px 10px rgba(255,0,0,0.6)"
-                        : "none",
-                    animation:
-                      card?.selectedUnlock?.type == "team"
-                        ? "shine 1.3s infinite linear"
-                        : "none",
-                    "@keyframes shine": {
-                      "0%": {
-                        boxShadow: "0 0 10px 3px #ffffff30",
-                        backgroundPosition: "-200% 0",
-                      },
-                      "50%": {
-                        boxShadow: "0 0 25px 10px #ffffff90",
-                        backgroundPosition: "200% 0",
-                      },
-                      "100%": {
-                        boxShadow: "0 0 10px 3px #ffffff30",
-                        backgroundPosition: "-200% 0",
-                      },
-                    },
-                  }}
-                >
-                  <Typography
-                    variant="body1"
+              {rewards?.map((card, i) => {
+                const matchTeam = team.find(
+                  (t) =>
+                    t.name === card?.selectedUnlock?.resource
+                );
+                return (
+                  <Card
+                    key={i}
                     sx={{
-                      fontWeight: "bold",
-                      mb: 2,
-                      textTransform: "uppercase",
+                      width: 160,
+                      height: 240,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 3,
+                      color: "#fff",
+                      background: getCardBackground(card.rarity),
+                      // boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
+                      boxShadow:
+                        card?.selectedUnlock?.type == "team"
+                          ? "0 0 15px 5px rgba(255,0,0,0.8), 0 0 30px 10px rgba(255,0,0,0.6)"
+                          : "0 8px 30px rgba(0,0,0,0.4)",
+                      animation:
+                        card?.selectedUnlock?.type == "team"
+                          ? "shine 1.3s infinite linear"
+                          : "none",
+                      "@keyframes shine": {
+                        "0%": {
+                          boxShadow: "0 0 10px 3px #ffffff30",
+                          backgroundPosition: "-200% 0",
+                        },
+                        "50%": {
+                          boxShadow: "0 0 25px 10px #ffffff90",
+                          backgroundPosition: "200% 0",
+                        },
+                        "100%": {
+                          boxShadow: "0 0 10px 3px #ffffff30",
+                          backgroundPosition: "-200% 0",
+                        },
+                      },
                     }}
                   >
-                    {card?.selectedUnlock?.type}
-                  </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-                    {card?.selectedUnlock?.resource}
-                  </Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                    {card?.rarity}
-                  </Typography>
-                </Card>
-              ))}
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: "bold",
+                        mb: 2,
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {card?.selectedUnlock?.type}
+                    </Typography>
+                    <Box
+                      sx={{
+                        width: 75,
+                        height: 50,
+                        display:
+                          card?.selectedUnlock?.type == "team"
+                            ? "block"
+                            : "none",
+                      }}
+                      src={matchTeam?.flag}
+                      component="img"
+                    />
+                    <Typography variant="h6" sx={{ fontWeight: "bold", m: 2 }}>
+                      {card?.selectedUnlock?.resource}
+                    </Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                      {card?.rarity}
+                    </Typography>
+                  </Card>
+                );
+              })}
             </Box>
             <Button
               sx={{

@@ -25,6 +25,7 @@ import CardOpening from "./pages/Opening";
 import ProfileData from "./pages/ProfileData";
 import Tournament from "./pages/Tournament";
 import Navbar from "./components/navbar";
+import Shop from "./pages/Shop";
 
 function App() {
   useEffect(() => {
@@ -130,7 +131,7 @@ function App() {
         )}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/shop" element={<CardPacksShop profile={profile} />} />
+          <Route path="/shop" element={<Shop profile={profile} />} />
           <Route path="/tournament" element={<Tournament />} />
           <Route path="/open-pack/:packKey" element={<CardOpening />} />
           <Route path="/profile" element={<Profile />} />

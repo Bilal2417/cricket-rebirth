@@ -27,7 +27,11 @@ import Data from "../components/data"; // your Data with flag URLs
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const teamsData = Data;
+
+const teamsData = Data.filter(
+  (team) => team.category !== "Bronze" && team.name !== "Netherlands"
+);
+
 
 // Round-robin generator (returns fixtures grouped by round)
 function generateRoundRobinRounds(teams) {
@@ -111,7 +115,7 @@ export default function Tournament() {
       // flatten
       const flattened = randomizedRounds.flat();
 
-      const initialStandings = teamsData.map((t) => ({
+      const initialStandings = teamsData?.map((t) => ({
         team: t.name,
         fullName: t.name,
         flag: t.flag,
@@ -657,18 +661,18 @@ export default function Tournament() {
     setFinalMatch(null);
     setWinner(null);
 
-    localStorage.setItem(
-      "tournamentData",
-      JSON.stringify({
-        rounds: randomizedRounds,
-        flatFixtures: flattened,
-        standings: sortedStandings,
-        stage: "league",
-        semiFinals: [],
-        finalMatch: null,
-        winner: null,
-      })
-    );
+    // localStorage.setItem(
+    //   "tournamentData",
+    //   JSON.stringify({
+    //     rounds: randomizedRounds,
+    //     flatFixtures: flattened,
+    //     standings: sortedStandings,
+    //     stage: "league",
+    //     semiFinals: [],
+    //     finalMatch: null,
+    //     winner: null,
+    //   })
+    // );
     navigate("/")
   };
 

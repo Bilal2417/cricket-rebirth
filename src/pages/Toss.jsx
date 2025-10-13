@@ -57,7 +57,7 @@ export default function Toss() {
     // const originalTrophies = Profile.trophies
     const updatedProfile = {
       ...Profile,
-      trophies: Math.max(Profile.trophies - penalty, 0),
+      trophies: Math.max(Profile.trophies - Math.ceil(penalty/2), 0),
     };
     // sessionStorage.setItem("original",originalTrophies)
     setProfile(updatedProfile);

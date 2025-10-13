@@ -5,7 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function Selection() {
-  const [teams] = useState(Data);
+  const mode = sessionStorage.getItem("mode")
+  const [teams] = useState(()=>{
+     if(mode == "TOURNAMENT"){
+    return  Data.filter((team)=> team.category !== "Bronze" && team.name !== "Netherlands")
+  } else if( mode == "KNOCKOUT"){
+      return  Data.filter((team)=> team.category !== "Bronze")
+    }else{
+      return  Data
+    }
+  });
   const navigate = useNavigate();
 
   const storedProfile = sessionStorage.getItem("UserProfile");
@@ -66,10 +75,10 @@ export default function Selection() {
           <Grid
             item
             key={index}
-            xs={6} // 2 per row on extra small screens
-            sm={4} // 3 per row on small screens
-            md={3} // 4 per row on medium screens
-            lg={2} // 6 per row on large screens
+            xs={6}  
+            sm={4} 
+            md={3} 
+            lg={2} 
             sx={{
               ":hover": {
                 cursor: "pointer",

@@ -21,6 +21,7 @@ const allTeams = [
   "Bangladesh",
   "West Indies",
   "Afghanistan",
+  "Netherlands",
 ];
 
 export default function Knockout() {

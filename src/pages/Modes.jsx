@@ -42,7 +42,7 @@ export default function Modes() {
       <span>
         This mode allows <strong>{over.wkt}</strong> wicket(s) in{" "}
         <strong>{over.value}</strong> over(s), with{" "}
-        <strong>{Math.ceil(over.value / 2)}</strong> trophies gained or lost per
+        <strong>{Math.ceil(over.value / 2)}</strong> trophies gained or <strong>{Math.ceil(over.value / 4)}</strong> trophies lost per
         game.
       </span>
     ),
@@ -78,7 +78,7 @@ export default function Modes() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          gap : "20px",
+          gap: "20px",
           py: 8,
           px: 2,
         }}
@@ -86,7 +86,7 @@ export default function Modes() {
         <Button
           sx={{
             // fontfamily: "Rubik",
-            backgroundColor: unlocked ?  "#f5214b" : "#f55c73",
+            backgroundColor: unlocked ? "#f5214b" : "#f55c73",
             color: unlocked ? "#FFFFFF" : "#a0a0a0",
             textShadow: `
           -1px -1px 0 #000,  
@@ -117,7 +117,7 @@ export default function Modes() {
             },
             ":hover": {
               transform: "scale(1.02)",
-              cursor : unlocked ? "pointer" : "not-allowed"
+              cursor: unlocked ? "pointer" : "not-allowed",
             },
             display: "flex",
             alignItems: "center",
@@ -129,10 +129,7 @@ export default function Modes() {
               localStorage.setItem("Overs", 10);
               sessionStorage.setItem("mode", `TOURNAMENT`);
             } else {
-              handlePopoverOpen(
-                e,
-                <strong>Buy this item from shop</strong>
-              );
+              handlePopoverOpen(e, <strong>Buy this item from shop</strong>);
             }
           }}
           // disabled={!saved}
@@ -170,6 +167,9 @@ export default function Modes() {
                       overs with <strong>10</strong> wickets.{" "}
                       <strong>All teams</strong> face each other, and the{" "}
                       <strong>strongest team</strong> wins the tournament.
+                      <br />
+                      <strong>REQUIRED : </strong>Teams higher than{" "}
+                      <strong>BRONZE</strong> and not <strong>NETHERLANDS</strong>
                     </span>
                   )
                 }
@@ -432,6 +432,9 @@ export default function Modes() {
                       with <strong>10</strong> wickets. All <strong>8</strong>{" "}
                       teams face each other, and the{" "}
                       <strong>undefeated team</strong> wins the tournament.
+                      <br />
+                      <strong>REQUIRED : </strong>Teams higher than{" "}
+                      <strong>BRONZE</strong>
                     </span>
                   )
                 }
