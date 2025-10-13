@@ -118,7 +118,7 @@ export default function Navbar({ profile }) {
         {/* Right: Coins display */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <MonetizationOnIcon sx={{ color: "#f6c401" }} />
-          <Typography variant="body1">{profile?.coins}</Typography>
+          <Typography variant="body1">{profile?.coins || "0"}</Typography>
         </Box>
       </Toolbar>
     </AppBar>

@@ -21,6 +21,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { toast } from "react-toastify";
 import LoadingPage from "../components/loading";
+import Data from "../components/data";
 
 export default function ProfileData() {
   const { state } = useLocation();
@@ -29,6 +30,7 @@ export default function ProfileData() {
   const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
+  const [teams, setTeams] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeTitle, setActiveTitle] = useState();
   const [showLoadingPage, setShowLoadingPage] = useState(true);
@@ -40,101 +42,24 @@ export default function ProfileData() {
     localStorage.setItem("MyId", profileId);
   }
 
-  //   useEffect(() => {
-  //     const isFirstVisit = !localStorage.getItem("ProfileVisited");
-  //     fetch(`/.netlify/functions/saveProfile?profileId=${profileId}`)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         if (data.success) {
-  //           const profileData = {
-  //             ...data.profile,
-  //             img: data.profile.img || "/assets/img/pak.png",
-  //           };
-  //           setProfile(profileData);
-  //           setName(profileData.name);
-  //           setTitles(profileData.titles);
-  //           if (isFirstVisit) {
-  //             toast.success("Profile Created Successfully !!");
-  //             localStorage.setItem("ProfileVisited", "true");
-  //           }
-  //         }
-  //       })
-  //       .catch((err) => console.error("Error fetching profile:", err))
-  //       .finally(() => setLoading(false));
-  //   }, []);
+  const getCardBackground = (rarity) => {
+    switch (rarity) {
+      case "Bronze":
+        return "linear-gradient(135deg, #8d5524, #d2691e)";
+      case "Silver":
+        return "linear-gradient(135deg, #bdc3c7, #2c3e50)";
+      case "Gold":
+        return "linear-gradient(135deg, #FFD700, #FF8C00)";
+      case "Legendary":
+        return "linear-gradient(135deg, #7b4397, #dc2430)";
+      default:
+        return "linear-gradient(135deg, #333, #111)";
+    }
+  };
 
-  //   const handleOpen = () => {
-  //     setTempName(name);
-  //     setOpen(true);
-  //   };
-  //   const handleClose = () => setOpen(false);
-
-  //   const handleSave = async () => {
-  //     if (!profile) return;
-
-  //     const profileId = localStorage.getItem("MyId");
-  //     if (!profileId) return console.error("No profile ID found");
-
-  //     setSave(true)
-
-  //     const updatedProfile = {
-  //       id: profileId,
-  //       name: tempName || profile.name,
-  //       img: profile.img,
-  //       selected_title: activeTitle || profile.selected_title,
-  //     };
-
-  //     try {
-  //       const res = await fetch("/.netlify/functions/updateProfile", {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify(updatedProfile),
-  //       });
-  //       const data = await res.json();
-
-  //       if (data.success) {
-  //         setSave(false)
-  //         setProfile(data.profile);
-  //         setName(data.profile.name);
-  //         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-  //         toast.success("Profile Updated Successfully!");
-  //         setOpen(false);
-  //       } else {
-  //         toast.error(data.error || "Failed to update profile");
-  //       }
-  //     } catch (err) {
-  //       console.error("Error updating profile:", err);
-  //     }
-  //   };
-
-  //   const updateTitle = async (newTitle) => {
-  //     if (!profile) return;
-
-  //     const profileId = localStorage.getItem("MyId");
-  //     if (!profileId) return console.error("No profile ID found");
-
-  //     const updatedProfile = {
-  //       id: profileId,
-  //       selected_title: newTitle,
-  //     };
-
-  //     fetch("/.netlify/functions/updateProfile", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(updatedProfile),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         if (data.success) {
-  //           setProfile(data.profile);
-  //           sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-  //           toast.success("Title Updated Successfully!");
-  //         } else {
-  //           toast.error(data.error || "Failed to update title");
-  //         }
-  //       })
-  //       .catch((err) => console.error("Error updating title:", err));
-  //   }
+  const teamsData = Data.filter((team) =>
+    profile?.unlocked_teams?.includes(team.name)
+  );
 
   return (
     <>
@@ -150,73 +75,34 @@ export default function ProfileData() {
           {/* Back Button */}
           <Box
             sx={{
-              backgroundColor: "#343c53",
-              width: "fit-content",
-              padding: "5px 20px",
               display: "flex",
-              alignContent: "center",
-              border: "2px solid #000000",
-              borderRadius: "4px",
-              boxShadow: "inset 0px -8px 8px -4px #2a3043",
-              clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-              m: "50px 0",
-              color: "#ffffff",
-              ":hover": { cursor: "pointer" },
-            }}
-            onClick={() => navigate("/")}
-          >
-            <ArrowBackIosNew sx={{ color: "#FFFFFF" }} />
-          </Box>
-
-          {/* Profile Image & Name */}
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "20px",
-              position: "relative",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "300px",
             }}
           >
             <Box
-              component="img"
-              src={profile?.img}
-              alt="profile"
               sx={{
-                width: 120,
-                height: 120,
-                border: "4px solid #000",
-                borderRadius: 2,
-                objectFit: "cover",
-                "&:hover": { cursor: "pointer" },
+                backgroundColor: "#343c53",
+                width: "fit-content",
+                padding: "5px 20px",
+                display: "flex",
+                alignContent: "center",
+                border: "2px solid #000000",
+                borderRadius: "4px",
+                boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                m: "50px 0",
+                color: "#ffffff",
+                ":hover": { cursor: "pointer" },
               }}
-            />
-            <TextField
-              value={profile?.name || "dummy"}
-              readOnly
-              sx={{
-                padding: "10px 60px",
-                backgroundColor: "#313c64",
-                color: "#fff",
-                textAlign: "center",
-                textTransform: "uppercase",
-                cursor: "pointer",
-                fontFamily: "Rubik , Poppins , sans-serif",
-                clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
-                "& .MuiOutlinedInput-input": {
-                  textAlign: "center",
-                  fontWeight: 600,
-                  color: "#fff",
-                  fontSize: "1.2em",
-                },
-                "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-              }}
-            />
+              onClick={() => navigate("/")}
+            >
+              <ArrowBackIosNew sx={{ color: "#FFFFFF" }} />
+            </Box>
 
             <Box
               sx={{
-                position: "absolute",
-                left: "100%",
-                top: 0,
                 backgroundColor: "#073575",
                 width: "200px",
                 padding: "5px 20px",
@@ -230,118 +116,247 @@ export default function ProfileData() {
                 color: "#ffffff",
                 ":hover": { cursor: "pointer" },
               }}
-              onClick={() => setShow(!show)}
+              onClick={() => profile?.unlocked_teams?.length > 0 ? setTeams(!teams) : toast.error("No teams unlocked yet!")} 
             >
               <Typography sx={{ textAlign: "center" }} variant="h6">
-                {profile?.selected_title || "Titles"}
+                Teams {profile?.unlocked_teams?.length || 0}/20
               </Typography>
+            </Box>
+          </Box>
 
-              {show &&
-                profile?.titles?.map((title, index) => (
+          {/* Profile Image & Name */}
+          <Box>
+            {!teams ? (
+              <>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "120px",
+                    position: "relative",
+                    ml : "50px"
+                  }}
+                >
                   <Box
-                    key={index}
+                    component="img"
+                    src={profile?.img}
+                    alt="profile"
                     sx={{
+                      width: 120,
+                      height: 120,
+                      border: "4px solid #000",
+                      borderRadius: 2,
+                      objectFit: "cover",
+                      "&:hover": { cursor: "pointer" },
+                    }}
+                  />
+                  <TextField
+                    value={profile?.name || "dummy"}
+                    readOnly
+                    sx={{
+                      padding: "10px 60px",
+                      backgroundColor: "#313c64",
+                      color: "#fff",
                       textAlign: "center",
-                      backgroundColor: "#343c53",
-                      width: "90%",
+                      textTransform: "uppercase",
+                      cursor: "pointer",
+                      fontFamily: "Rubik , Poppins , sans-serif",
+                      clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
+                      "& .MuiOutlinedInput-input": {
+                        textAlign: "center",
+                        fontWeight: 600,
+                        color: "#fff",
+                        fontSize: "1.2em",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                    }}
+                  />
+
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      left: "100%",
+                      top: 0,
+                      backgroundColor: "#073575",
+                      width: "200px",
                       padding: "5px 20px",
                       display: "flex",
+                      flexDirection: "column",
                       alignContent: "center",
-                      justifyContent: "center",
-                      gap: "10px",
                       border: "2px solid #000000",
                       borderRadius: "4px",
                       boxShadow: "inset 0px -8px 8px -4px #2a3043",
                       clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-                      m: "50px 0",
                       color: "#ffffff",
                       ":hover": { cursor: "pointer" },
                     }}
-                    onClick={(e) => {
-                      setShow(false);
-                      if (title.value >= 10) {
-                        setActiveTitle(title.name);
-                      } else {
-                        toast.error("Win tournaments 10 times to unlock title");
-                      }
-                      // updateTitle(title);
-                      e.stopPropagation();
+                    onClick={() => setShow(!show)}
+                  >
+                    <Typography sx={{ textAlign: "center" }} variant="h6">
+                      {profile?.selected_title || "Titles"}
+                    </Typography>
+
+                    {show &&
+                      profile?.titles?.map((title, index) => (
+                        <Box
+                          key={index}
+                          sx={{
+                            textAlign: "center",
+                            backgroundColor: "#343c53",
+                            width: "90%",
+                            padding: "5px 20px",
+                            display: "flex",
+                            alignContent: "center",
+                            justifyContent: "center",
+                            gap: "10px",
+                            border: "2px solid #000000",
+                            borderRadius: "4px",
+                            boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                            clipPath:
+                              "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                            m: "50px 0",
+                            color: "#ffffff",
+                            ":hover": { cursor: "pointer" },
+                          }}
+                          onClick={(e) => {
+                            setShow(false);
+                            if (title.value >= 10) {
+                              setActiveTitle(title.name);
+                            } else {
+                              toast.error(
+                                "Win tournaments 10 times to unlock title"
+                              );
+                            }
+                            // updateTitle(title);
+                            e.stopPropagation();
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display:
+                                title.value >= 10 ? "none" : "inline-block",
+                            }}
+                            component="span"
+                          >
+                            {title.value}/10
+                          </Box>
+                          {title.name}
+                        </Box>
+                      ))}
+                  </Box>
+                </Box>
+
+                <Grid container sx={{ margin: "20px 0" }}>
+                  {[
+                    {
+                      label: "Trophies",
+                      icon: <EmojiEventsTwoTone />,
+                      value: profile?.trophies || 0,
+                    },
+                    {
+                      label: "Victories",
+                      icon: <StarTwoTone />,
+                      value: profile?.victories || 0,
+                    },
+                    {
+                      label: "World Cup",
+                      icon: <WhatshotTwoTone />,
+                      value: profile?.tournaments || 0,
+                    },
+                    {
+                      label: "KnockOut",
+                      icon: <WhatshotTwoTone />,
+                      value: profile?.knockout || 0,
+                    },
+                  ].map((stat) => (
+                    <Box
+                      key={stat.label}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 1,
+                        m: 1,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          color: "#fff",
+                          WebkitTextStroke: "1px black",
+                          fontSize: "1.4em",
+                          fontWeight: 900,
+                          textTransform: "uppercase",
+                          fontFamily: "Rubik , Poppins , sans-serif",
+                        }}
+                      >
+                        {stat.label}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontFamily: "Rubik , Poppins , sans-serif",
+                          padding: "10px 70px",
+                          backgroundColor: "#073575",
+                          textAlign: "center",
+                          borderRadius: 2,
+                          fontWeight: 600,
+                          color: "#fff",
+                          display: "flex",
+                          gap: 1,
+                          clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
+                        }}
+                      >
+                        {stat.icon} {stat.value}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Grid>
+              </>
+            ) : (
+              <Grid container spacing={2} justifyContent="center">
+                {teamsData?.map((team, index) => (
+                  <Grid
+                    item
+                    key={index}
+                    xs={6}
+                    sm={4}
+                    md={3}
+                    lg={2}
+                    sx={{
+                      ":hover": {
+                        cursor: "pointer",
+                        transform: "scale(1.1)",
+                        ":active": { transform: "scale(0.9)" },
+                        transition: "all 0.3s",
+                      },
+                      textAlign: "center",
                     }}
                   >
                     <Box
                       sx={{
-                        display: title.value >= 10 ? "none" : "inline-block",
+                        background: getCardBackground(team?.category),
+                        borderRadius: "6px",
+                        height: "fit-content",
                       }}
-                      component="span"
                     >
-                      {title.value}/10
+                      <Typography variant="body1">{team?.category}</Typography>
+                      <img
+                        src={team?.flag}
+                        alt={team?.name}
+                        title={team?.name}
+                        style={{
+                          height: "auto",
+                          borderRadius: "6px",
+                          boxShadow: "3px 3px 8px -2px #000000",
+                          width: "100px",
+                          objectFit: "cover",
+                        }}
+                      />
                     </Box>
-                    {title.name}
-                  </Box>
+                  </Grid>
                 ))}
-            </Box>
+              </Grid>
+            )}
           </Box>
-
-          {/* Stats */}
-          <Grid container sx={{ margin: "20px 0" }}>
-            {[
-              {
-                label: "Trophies",
-                icon: <EmojiEventsTwoTone />,
-                value: profile?.trophies || 0,
-              },
-              {
-                label: "Victories",
-                icon: <StarTwoTone />,
-                value: profile?.victories || 0,
-              },
-              {
-                label: "Tournaments",
-                icon: <WhatshotTwoTone />,
-                value: profile?.tournaments || 0,
-              },
-            ].map((stat) => (
-              <Box
-                key={stat.label}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 1,
-                  m: 1,
-                }}
-              >
-                <Typography
-                  sx={{
-                    color: "#fff",
-                    WebkitTextStroke: "1px black",
-                    fontSize: "1.4em",
-                    fontWeight: 900,
-                    textTransform: "uppercase",
-                    fontFamily: "Rubik , Poppins , sans-serif",
-                  }}
-                >
-                  {stat.label}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: "Rubik , Poppins , sans-serif",
-                    padding: "10px 70px",
-                    backgroundColor: "#073575",
-                    textAlign: "center",
-                    borderRadius: 2,
-                    fontWeight: 600,
-                    color: "#fff",
-                    display: "flex",
-                    gap: 1,
-                    clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
-                  }}
-                >
-                  {stat.icon} {stat.value}
-                </Typography>
-              </Box>
-            ))}
-          </Grid>
         </Box>
       )}
     </>

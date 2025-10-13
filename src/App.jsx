@@ -135,7 +135,7 @@ function App() {
           <Route path="/tournament" element={<Tournament />} />
           <Route path="/open-pack/:packKey" element={<CardOpening />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/profileData" element={<ProfileData />} />
+          <Route path="/profileData" element={<ProfileData/>} />
           <Route path="/modes" element={<Modes />} />
           <Route path="/knockout" element={<Knockout />} />
           <Route path="/fixtures" element={<Fixtures />} />
