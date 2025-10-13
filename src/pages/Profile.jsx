@@ -60,7 +60,7 @@ export default function Profile() {
           if (isFirstVisit) {
             toast.success("Profile Created Successfully !!");
             localStorage.setItem("ProfileVisited", true);
-            localStorage.getItem("collectedStarter", true);
+            localStorage.setItem("collectedStarter", true);
           }
         }
       })
