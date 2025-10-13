@@ -5,13 +5,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import Data from "../components/data";
 import LoadingPage from "../components/loading";
 
-// Example pulled cards (replace with your real data)
+
 const team = Data;
 
 const pulledCards = [
   {
     value: 100,
     rarity: "Bronze",
+    weight : 50,
     unlocks: [
       { type: "coins", resource: [50, 200] },
       { type: "trophy 2x", resource: [1, 3] },
@@ -23,6 +24,7 @@ const pulledCards = [
   {
     value: 200,
     rarity: "Silver",
+    weight : 30,
     unlocks: [
       { type: "coins", resource: [100, 500] },
       { type: "trophy 2x", resource: [2, 5] },
@@ -33,6 +35,7 @@ const pulledCards = [
   },
   {
     value: 300,
+    weight : 15,
     rarity: "Gold",
     unlocks: [
       { type: "coins", resource: [200, 1000] },
@@ -45,6 +48,7 @@ const pulledCards = [
   {
     value: 400,
     rarity: "Legendary",
+    weight : 5,
     unlocks: [
       { type: "coins", resource: [500, 2000] },
       { type: "trophy 2x", resource: [8, 20] },
@@ -54,6 +58,21 @@ const pulledCards = [
     ],
   },
 ];
+
+function getWeightedRandomCard(cards) {
+  const totalWeight = cards.reduce((sum, c) => sum + (c.weight || 1), 0);
+  let random = Math.random() * totalWeight;
+
+  for (const card of cards) {
+    if (random < (card.weight || 1)) {
+      return card;
+    }
+    random -= card.weight || 1;
+  }
+
+  return cards[0];
+}
+
 
 const updatedPulledCards = pulledCards.map((card) => {
   const relatedTeams = team
@@ -104,7 +123,7 @@ export default function CardOpening() {
       setIsAnimation(true);
       setCurrentIndex((prev) => prev + 1);
     } else {
-      // when last card is reached → show summary
+      
       setShowSummary(true);
     }
   };
@@ -134,7 +153,7 @@ export default function CardOpening() {
     const newRewards = [];
     const unlockedTeams = [...(Profile?.unlocked_teams || [])];
 
-    // Determine required value limit based on pack rarity
+    
     const rarityMap = {
       Bronze: { required: 100, guarantee: null },
       Silver: { required: 200, guarantee: "Bronze" },
@@ -147,27 +166,29 @@ export default function CardOpening() {
     if (!packTier) return;
     let guaranteedReward = null;
 
-    // ✅ 1. Guarantee at least one team unlock from guaranteed tier (if applicable)
+    
     if (packTier?.guarantee === "Any") {
-      // Filter available cards except those with the same guarantee category
+      
       const guaranteedCards = updatedPulledCards.filter(
         (card) => card.rarity !== packTier.guarantee
       );
 
       if (guaranteedCards.length > 0) {
-        // Pick a random card
-        const randomCard =
-          guaranteedCards[Math.floor(Math.random() * guaranteedCards.length)];
+        
+        // const randomCard =
+        //   guaranteedCards[Math.floor(Math.random() * guaranteedCards.length)];
 
-        // Filter only team unlocks
+          const randomCard = getWeightedRandomCard(guaranteedCards);
+
+          
         const teamUnlocks = randomCard.unlocks.filter((u) => u.type === "team");
 
         if (teamUnlocks.length > 0) {
-          // Select a random team unlock from the unlocks array
+          
           const randomUnlock =
             teamUnlocks[Math.floor(Math.random() * teamUnlocks.length)];
 
-          // Pick a random team name from the resource array
+            
           const possibleTeams = randomUnlock.resource.filter(
             (teamName) => !unlockedTeams?.includes(teamName)
           );
@@ -176,10 +197,7 @@ export default function CardOpening() {
             const randomTeam =
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
 
-            // Mark this team as unlocked
-            // unlockedTeams?.push(randomTeam);
-
-            // Store result for later use
+              
             guaranteedReward = {
               ...randomCard,
               selectedUnlock: { ...randomUnlock, resource: randomTeam },
@@ -188,25 +206,27 @@ export default function CardOpening() {
         }
       }
     } else if (packTier?.guarantee) {
-      // Filter only cards matching the guarantee rarity
+      
       const guaranteedCards = updatedPulledCards.filter(
         (card) => card.rarity === packTier.guarantee
       );
 
       if (guaranteedCards.length > 0) {
-        // Pick a random card
-        const randomCard =
-          guaranteedCards[Math.floor(Math.random() * guaranteedCards.length)];
+        
+        // const randomCard =
+        //   guaranteedCards[Math.floor(Math.random() * guaranteedCards.length)];
 
-        // Filter only team unlocks
+        
+          const randomCard = getWeightedRandomCard(guaranteedCards);
+          
         const teamUnlocks = randomCard.unlocks.filter((u) => u.type === "team");
 
         if (teamUnlocks.length > 0) {
-          // Randomly pick a team unlock entry
+          
           const randomUnlock =
             teamUnlocks[Math.floor(Math.random() * teamUnlocks.length)];
 
-          // From its resource array, pick a team not yet unlocked
+            
           const possibleTeams = randomUnlock.resource.filter(
             (teamName) => !unlockedTeams?.includes(teamName)
           );
@@ -215,9 +235,7 @@ export default function CardOpening() {
             const randomTeam =
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
 
-            // Mark this team as unlocked
-            // unlockedTeams?.push(randomTeam);
-            // Store result
+              
             guaranteedReward = {
               ...randomCard,
               selectedUnlock: { ...randomUnlock, resource: randomTeam },
@@ -227,21 +245,24 @@ export default function CardOpening() {
       }
     }
 
-    // ✅ 2. Fill remaining rewards
+    
     while (newRewards.length < pack.size - (guaranteedReward ? 1 : 0)) {
       const eligibleCards = updatedPulledCards.filter(
         (card) => card.value <= packTier.required
       );
       if (eligibleCards.length === 0) break;
 
-      const randomCard =
-        eligibleCards[Math.floor(Math.random() * eligibleCards.length)];
+      // const randomCard =
+      //   eligibleCards[Math.floor(Math.random() * eligibleCards.length)];
+
+        
+          const randomCard = getWeightedRandomCard(eligibleCards);
 
       let unlock = null;
 
       if (randomCard.unlocks && randomCard.unlocks.length > 0) {
         const tryUnlock = (attempt = 0) => {
-          // safety: prevent infinite loop
+          
           if (attempt > 10) return null;
 
           const randomUnlockIndex = Math.floor(
@@ -250,23 +271,23 @@ export default function CardOpening() {
           let u = randomCard.unlocks[randomUnlockIndex];
 
           if (u.type === "team") {
-            // Pick from resource array
+            
             const possibleTeams = (u.resource || []).filter(
               (teamName) => !unlockedTeams?.includes(teamName)
             );
 
             if (possibleTeams.length === 0) {
-              // All teams unlocked — retry
+
               return tryUnlock(attempt + 1);
             }
 
             const randomTeam =
               possibleTeams[Math.floor(Math.random() * possibleTeams.length)];
-            // unlockedTeams?.push(randomTeam);
+         
 
             return { ...u, resource: randomTeam };
           } else {
-            // For non-team unlocks, keep old logic
+            
             return { ...u, resource: getRandomValue(u.resource) };
           }
         };
@@ -368,7 +389,7 @@ export default function CardOpening() {
           overflow: "hidden",
           cursor: "pointer",
           flexDirection: "column",
-          WebkitTapHighlightColor: "transparent", // 🔥 removes mobile tap flash
+          WebkitTapHighlightColor: "transparent", 
           userSelect: "none",
         }}
       >
