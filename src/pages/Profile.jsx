@@ -45,7 +45,7 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    const isFirstVisit = !localStorage.getItem("ProfileVisited");
+    const isFirstVisit = localStorage.getItem("FirstVisit");
     fetch(`/.netlify/functions/saveProfile?profileId=${profileId}`)
       .then((res) => res.json())
       .then((data) => {
@@ -57,9 +57,9 @@ export default function Profile() {
           setProfile(profileData);
           setName(profileData.name);
           setTitles(profileData.titles);
-          if (isFirstVisit) {
+          if (!isFirstVisit) {
             toast.success("Profile Created Successfully !!");
-            localStorage.setItem("ProfileVisited", true);
+            localStorage.setItem("FirstVisit", true);
             localStorage.setItem("collectedStarter", true);
           }
         }

@@ -49,7 +49,7 @@ export async function handler() {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        profile: profiles[0],
+        profile: profiles,
       }),
     };
   } catch (err) {
