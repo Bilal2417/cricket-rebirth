@@ -3,6 +3,7 @@ import {
   EmojiEventsTwoTone,
   HighlightOff,
   Person,
+  ScoreboardRounded,
   ShoppingCart,
 } from "@mui/icons-material";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
@@ -23,7 +24,6 @@ export default function Home() {
 `;
 
   const navigate = useNavigate();
-
 
   const [profiles, setProfiles] = useState([]);
   const [userProfile, setUserProfile] = useState();
@@ -55,9 +55,9 @@ export default function Home() {
     ];
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
 
-    const tournament = localStorage.getItem("tournamentData")
-    if(!tournament){
-      localStorage.removeItem("User")
+    const tournament = localStorage.getItem("tournamentData");
+    if (!tournament) {
+      localStorage.removeItem("User");
     }
     window.dispatchEvent(new Event("BackUpdated"));
   }, []);
@@ -75,8 +75,6 @@ export default function Home() {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-
-
   const showDescToast = (desc) => {
     toast.error(desc, {
       position: "top-right",
@@ -90,7 +88,7 @@ export default function Home() {
 
   const profileId = localStorage.getItem("MyId");
 
-
+  const board = localStorage.getItem("Board");
 
   useEffect(() => {
     const fetchProfiles = () => {
@@ -121,18 +119,16 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [profileId]);
 
-
-
   const [mode, setMode] = useState(null);
   const [save, setSave] = useState(false);
 
   useEffect(() => {
     const selectMode = sessionStorage.getItem("mode");
     setMode(selectMode);
-    
+
     const saved = localStorage.getItem("tournamentData");
-    if(saved){
-      setSave(true)
+    if (saved) {
+      setSave(true);
     }
   }, []);
 
@@ -148,6 +144,7 @@ export default function Home() {
           py: 8,
           px: 2,
           boxSizing: "border-box",
+          gap: "50px",
         }}
       >
         <Box
@@ -173,7 +170,33 @@ export default function Home() {
           }}
           onClick={() => navigate("/shop")}
         >
-          <GiShoppingCart size={30}/>
+          <GiShoppingCart size={30} />
+        </Box>
+
+        <Box
+          sx={{
+            backgroundColor: "#343c53",
+            width: "fit-content",
+            padding: "5px 20px",
+            display: "flex",
+            alignContent: "center",
+            border: "2px solid #000000",
+            borderRadius: "4px",
+            boxShadow: "inset 0px -8px 8px -4px #2a3043",
+            clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+            color: "#ffffff",
+            transition: "all 0.3s",
+            ":hover": {
+              cursor: "pointer",
+              transform: "scale(1.1)",
+            },
+            ":active": {
+              transform: "scale(1)",
+            },
+          }}
+          onClick={() => navigate("/scoreboards")}
+        >
+          <ScoreboardRounded size={30} />
         </Box>
 
         <Box
@@ -388,7 +411,7 @@ export default function Home() {
                         sx={{ minWidth: "30px", textAlign: "center" }}
                         component="span"
                       >
-                        {Math.max(profile?.trophies , 0)}
+                        {Math.max(profile?.trophies, 0)}
                       </Box>
                     </Typography>
                   </Box>
@@ -577,10 +600,14 @@ export default function Home() {
                   showDescToast("Select Game Mode first!");
                   return;
                 }
+                if (!board) {
+                  showDescToast("Select Scoreboard first!");
+                  return;
+                }
 
-                if(save && mode == "TOURNAMENT"){
-                  navigate("/tournament")
-                }else{
+                if (save && mode == "TOURNAMENT") {
+                  navigate("/tournament");
+                } else {
                   navigate("/team");
                 }
               }}

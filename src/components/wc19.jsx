@@ -6,11 +6,11 @@ export default function Wc19({
   userTeam,
   striker,
   nonStriker,
-  getInitials,
+  //   getInitials,
   totalOvers,
   over,
   balls,
-  show,
+  show = 0,
   partnership,
   partnershipBalls,
   firstInnings,
@@ -19,10 +19,21 @@ export default function Wc19({
   randomBowler,
 }) {
   const colors = {
-    6: "#0f0648",
-    W: "red",
-    4: "#0f0648",
+    6: "#222589",
+    W: "#e00244",
+    4: "#222589",
   };
+
+  function getInitials(name) {
+    if (!name) return "";
+    const words = name.trim().split(" ").filter(Boolean);
+
+    if (words.length === 1) {
+      return words[0].substring(0, 3).toUpperCase();
+    }
+
+    return (words[0][0] + words[1][0]).toUpperCase();
+  }
 
   return (
     <>
@@ -33,7 +44,7 @@ export default function Wc19({
           minHeight: "50px",
           display: "flex",
           justifyContent: "center",
-          //   padding: { xs: "0 300px", md: "0" },
+          boxShadow: `0 0 6px 2px #12174c`,
         }}
       >
         <Box
@@ -48,7 +59,7 @@ export default function Wc19({
             style={{
               width: "60px",
               height: "40px",
-              boxShadow: "3px 3px 8px -2px #000000",
+              boxShadow: "3px 3px 8px -2px #12174c",
             }}
             src={!batting ? aiTeam?.flag : userTeam?.flag}
             alt={!batting ? aiTeam?.name : userTeam?.name}
@@ -97,7 +108,7 @@ export default function Wc19({
                     marginLeft: "-10px",
                   }}
                 ></Box>
-                {striker?.name}
+                {striker?.name || "Robo"}
               </Box>
               <Box
                 sx={{
@@ -114,7 +125,7 @@ export default function Wc19({
                   }}
                   variant="body1"
                 >
-                  {striker?.score}
+                  {striker?.score || 0}
                 </Typography>
                 <Typography
                   sx={{
@@ -123,7 +134,7 @@ export default function Wc19({
                   }}
                   variant="body1"
                 >
-                  {striker?.balls}
+                  {striker?.balls || 0}
                 </Typography>
               </Box>
             </Box>
@@ -144,7 +155,7 @@ export default function Wc19({
                 }}
                 variant="body1"
               >
-                {nonStriker?.name}
+                {nonStriker?.name || "Robo"}
               </Typography>
               <Box
                 sx={{
@@ -161,7 +172,7 @@ export default function Wc19({
                   }}
                   variant="body1"
                 >
-                  {nonStriker?.score}
+                  {nonStriker?.score || 0}
                 </Typography>
                 <Typography
                   sx={{
@@ -170,7 +181,7 @@ export default function Wc19({
                   }}
                   variant="body1"
                 >
-                  {nonStriker?.balls}
+                  {nonStriker?.balls || 0}
                 </Typography>
               </Box>
             </Box>
@@ -178,9 +189,9 @@ export default function Wc19({
 
           <Box
             sx={{
-              backgroundColor: "#0f0648",
+              backgroundColor: "#12174c",
               padding: " 4px 16px 4px 0",
-              minWidth: "300px",
+              minWidth: "310px",
               borderRadius: "32px",
               overflow: "hidden",
             }}
@@ -198,7 +209,8 @@ export default function Wc19({
                   display: "flex",
                   alignItems: "flex-end",
                   gap: "10px",
-                  background: "linear-gradient(to left , red 20%, blue 70%)",
+                  background:
+                    "linear-gradient(to left , #e00244 20%, #222589 70%)",
                   borderRadius: "0 32px 32px 0",
                   padding: "0 10px",
                 }}
@@ -226,13 +238,13 @@ export default function Wc19({
                         color: "#faf8fb",
                         textTransform: "uppercase",
                         // fontSize: "1.1em",
-                        opacity : 0.8
+                        opacity: 0.8,
                       }}
                       variant="body1"
                     >
                       {!batting
-                        ? getInitials(userTeam?.name)
-                        : getInitials(aiTeam?.name)}{" "}
+                        ? getInitials(userTeam?.name || "Robo")
+                        : getInitials(aiTeam?.name || "Robo")}{" "}
                     </Typography>
                     <Box
                       sx={{
@@ -254,8 +266,8 @@ export default function Wc19({
                     variant="h6"
                   >
                     {!batting
-                      ? getInitials(aiTeam?.name)
-                      : getInitials(userTeam?.name)}{" "}
+                      ? getInitials(aiTeam?.name || "Robo")
+                      : getInitials(userTeam?.name || "Robo")}{" "}
                   </Typography>
                 </Box>
 
@@ -277,8 +289,8 @@ export default function Wc19({
                       textAlign: "center",
                     }}
                   >
-                    {batting ? userTeam?.score : aiTeam?.score} -{" "}
-                    {batting ? userTeam?.wicket : aiTeam?.wicket}
+                    {batting ? userTeam?.score || 0 : aiTeam?.score || 0} -{" "}
+                    {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
                   </Typography>
                 </Box>
               </Box>
@@ -302,8 +314,8 @@ export default function Wc19({
                   variant="body1"
                 >
                   {/* {over}.{balls}{" "} */}
-                  {batting ? userTeam?.Over : aiTeam?.Over}.
-                  {batting ? userTeam?.Ball : aiTeam?.Ball}
+                  {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
+                  {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0}
                 </Typography>
                 <Box
                   sx={{
@@ -343,7 +355,7 @@ export default function Wc19({
                     ? "0.00"
                     : (
                         (batting ? userTeam?.score : aiTeam?.score) /
-                        (over + balls / 6)
+                          (over + balls / 6) || 0
                       ).toFixed(2)}
                 </Typography>
               </Fade>
@@ -399,7 +411,7 @@ export default function Wc19({
             <Typography
               variant="body1"
               sx={{
-                color: "#0f0648",
+                color: "#12174c",
                 textTransform: "uppercase",
                 // fontFamily: "Poppins ,sans-serif , Rubik",
                 position: "absolute",
@@ -434,13 +446,13 @@ export default function Wc19({
               <Typography
                 sx={{
                   textTransform: "uppercase",
-                  color: "#0f0648",
+                  color: "#12174c",
                   fontSize: "0.9em",
                   // fontfamily: "Rubik",
                 }}
                 variant="body1"
               >
-                {randomBowler?.name}
+                {randomBowler?.name || "Robo"}
               </Typography>
               <Box
                 sx={{
@@ -451,24 +463,24 @@ export default function Wc19({
               >
                 <Typography
                   sx={{
-                    color: "#0f0648",
+                    color: "#12174c",
                     // fontfamily: "Rubik",
                     width: "50px",
                     textAlign: "center",
                   }}
                   variant="body1"
                 >
-                  {randomBowler?.wickets}-{randomBowler?.conceded}
+                  {randomBowler?.wickets || 0}-{randomBowler?.conceded || 0}
                 </Typography>
                 <Typography
                   sx={{
-                    color: "#0f0648",
+                    color: "#12174c",
                     fontSize: "0.75em",
                     // fontfamily: "Rubik",
                   }}
                   variant="body1"
                 >
-                  {randomBowler?.overs}.{randomBowler?.bowled}
+                  {randomBowler?.overs || 0}.{randomBowler?.bowled || 0}
                 </Typography>
               </Box>
             </Box>
@@ -495,7 +507,7 @@ export default function Wc19({
                                 : aiTeam?.ballHistory[index]
                             ]
                           }`
-                        : "2px solid #0f0648"
+                        : "2px solid #12174c"
                       : aiTeam?.ballHistory[index] > 3 ||
                         aiTeam?.ballHistory[index] == "W"
                       ? `2px solid ${
@@ -505,17 +517,17 @@ export default function Wc19({
                               : aiTeam?.ballHistory[index]
                           ]
                         }`
-                      : "2px solid #0f0648",
+                      : "2px solid #12174c",
 
                     color: batting
                       ? userTeam?.ballHistory[index] > 3 ||
                         userTeam?.ballHistory[index] == "W"
                         ? "#FFFFFF"
-                        : "#0f0648"
+                        : "#12174c"
                       : aiTeam?.ballHistory[index] > 3 ||
                         aiTeam?.ballHistory[index] == "W"
                       ? "#FFFFFF"
-                      : "#0f0648",
+                      : "#12174c",
 
                     borderRadius: "50%",
                     padding: "2px",
@@ -554,7 +566,7 @@ export default function Wc19({
             style={{
               width: "60px",
               height: "40px",
-              boxShadow: "3px 3px 8px -2px #000000",
+              boxShadow: "3px 3px 8px -2px #12174c",
             }}
             src={batting ? aiTeam?.flag : userTeam?.flag}
           />

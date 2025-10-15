@@ -9,7 +9,7 @@ export default function AUS({
   totalOvers,
   over,
   balls,
-  show,
+  show = 0,
   partnership,
   partnershipBalls,
   firstInnings,
@@ -31,9 +31,10 @@ export default function AUS({
           gap: "20px",
           padding: "10px 20px 20px",
           alignItems: "flex-start",
-          mt: "100px",
+          // mt: "100px",
           borderRadius: "64px",
-          width : "100%"
+          width : "100%",          
+            boxShadow: `0 0 6px 2px black`,
         }}
       >
         <Box
@@ -46,7 +47,7 @@ export default function AUS({
           <Box
             sx={{
               borderRadius: "50%",
-              boxShadow: `0 0 10px 2px ${batting ? userTeam?.primary: aiTeam?.primary}`,
+              boxShadow: `0 0 10px 2px ${batting ? userTeam?.primary: aiTeam?.primary || "red"}`,
               p: "13px 10px",
             }}
           >
@@ -97,8 +98,8 @@ export default function AUS({
             </Typography>
             <Typography fontWeight={600} variant="body1">
               
-                {batting ? userTeam?.Over : aiTeam?.Over}.
-                {batting ? userTeam?.Ball : aiTeam?.Ball}
+                {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
+                {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0}
             </Typography>
           </Box>
         </Box>
@@ -119,11 +120,11 @@ export default function AUS({
                 justifyContent: "space-between",
                 padding: "5px 20px",
                 borderRadius: "32px",
-                outline: `2px solid ${batting ? userTeam?.primary: aiTeam?.primary}`,
+                outline: `2px solid ${batting ? userTeam?.primary: aiTeam?.primary || "red"}`,
                 flexGrow: 1,
                 position: "relative",
                 zIndex: 2,
-                boxShadow: `0 0 20px 4px ${batting ? userTeam?.primary: aiTeam?.primary}`,
+                boxShadow: `0 0 20px 4px ${batting ? userTeam?.primary: aiTeam?.primary || "red"}`,
               }}
             >
               <Typography width="120px" textTransform="uppercase" variant="h6">{striker?.name || "Dummy"}</Typography>
@@ -403,7 +404,7 @@ export default function AUS({
           <Box
             sx={{
               borderRadius: "50%",
-              boxShadow: `0 0 10px 2px ${!batting ? userTeam?.primary: aiTeam?.primary}`,
+              boxShadow: `0 0 10px 2px ${!batting ? userTeam?.primary || "skyblue": aiTeam?.primary}`,
               p: "13px 10px",
             }}
           >

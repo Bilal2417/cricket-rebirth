@@ -307,7 +307,7 @@ export default function CardOpening() {
           updatedProfile = {
             ...updatedProfile,
             id: Profile?.id || updatedProfile.id,
-            coins: Profile.coins + rewards.selectedUnlock.resource,
+            coins: (updatedProfile?.coins || 0) + rewards.selectedUnlock.resource,
           };
         } else if (rewards.selectedUnlock.type == "team") {
           const currentTeams = updatedProfile.unlocked_teams || [];
@@ -323,7 +323,7 @@ export default function CardOpening() {
           updatedProfile = {
             ...updatedProfile,
             trophydoubler:
-              Profile.trophydoubler + rewards.selectedUnlock.resource,
+              updatedProfile.trophydoubler + rewards.selectedUnlock.resource,
           };
         }
       });
@@ -331,12 +331,12 @@ export default function CardOpening() {
       updatedProfile = {
         ...updatedProfile,
         id: Profile?.id || updatedProfile.id,
-        coins: Profile.coins - pack.price
+        coins: (updatedProfile?.coins || 0) - pack.price
       };
 
       try {
         updatedProfile.unlocked_teams = [
-          ...new Set(updatedProfile.unlocked_teams),
+          ...new Set(updatedProfile.unlocked_teams || []),
         ];
 
         const res = await fetch("/.netlify/functions/updateProfile", {

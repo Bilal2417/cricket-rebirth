@@ -28,6 +28,8 @@ import Navbar from "./components/navbar";
 import Shop from "./pages/Shop";
 import AUS from "./components/aus";
 import Wc19 from "./components/wc19";
+import ScoreBoards from "./pages/Scoreboards";
+import BAN from "./components/ban";
 
 function App() {
   useEffect(() => {
@@ -137,10 +139,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/wc19" element={<Wc19 />} />
+          <Route path="/ban" element={<BAN />} />
           <Route path="/shop" element={<Shop profile={profile} />} />
           <Route path="/tournament" element={<Tournament />} />
           <Route path="/open-pack/:packKey" element={<CardOpening />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/scoreboards" element={<ScoreBoards />} />
           <Route path="/profileData" element={<ProfileData/>} />
           <Route path="/modes" element={<Modes />} />
           <Route path="/knockout" element={<Knockout />} />

@@ -6,6 +6,8 @@ import LoadingPage from "./loading";
 import { Howl } from "howler";
 import Wc24 from "./wc24";
 import AUS from "./aus";
+import BAN from "./ban";
+import Wc19 from "./wc19";
 
 export default function ScoreCard() {
   const storedData = localStorage.getItem("cricketData");
@@ -19,26 +21,7 @@ export default function ScoreCard() {
   const [userTeam, setUserTeam] = useState(null);
   const [aiTeam, setAiTeam] = useState(null);
 
-  // const choice = [
-  //   {
-  //     value: 0,
-  //   },
-  //   {
-  //     value: 1,
-  //   },
-  //   {
-  //     value: 2,
-  //   },
-  //   {
-  //     value: 3,
-  //   },
-  //   {
-  //     value: 4,
-  //   },
-  //   {
-  //     value: 6,
-  //   },
-  // ];
+  const board = localStorage.getItem("Board");
 
   const choice = [
     { value: 0, weight: 0.1 },
@@ -288,7 +271,9 @@ export default function ScoreCard() {
       const sounds = ["six", "six1"];
       playSound(sounds[Math.floor(Math.random() * sounds.length)]);
     }
-    const updatedTeams = Teams.filter((team)=> team.name == battingTeam || team.name == bowlingTeam).map((team) => {
+    const updatedTeams = Teams.filter(
+      (team) => team.name == battingTeam || team.name == bowlingTeam
+    ).map((team) => {
       if (team.name === bowlingTeam) {
         return {
           ...team,
@@ -555,41 +540,82 @@ export default function ScoreCard() {
             gap: 2,
           }}
         >
-          <Wc24
-            batting={batting}
-            aiTeam={aiTeam}
-            userTeam={userTeam}
-            striker={striker}
-            nonStriker={nonStriker}
-            getInitials={getInitials}
-            totalOvers={totalOvers}
-            over={over}
-            balls={balls}
-            show={show}
-            partnership={partnership}
-            partnershipBalls={partnershipBalls}
-            firstInnings={firstInnings}
-            target={target}
-            isSix={isSix}
-            randomBowler={randomBowler}
+          {board == "wc24" ? (
+            <Wc24
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              // getInitials={getInitials}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
             />
-          {/* <AUS
-            batting={batting}
-            aiTeam={aiTeam}
-            userTeam={userTeam}
-            striker={striker}
-            nonStriker={nonStriker}
-            totalOvers={totalOvers}
-            over={over}
-            balls={balls}
-            show={show}
-            partnership={partnership}
-            partnershipBalls={partnershipBalls}
-            firstInnings={firstInnings}
-            target={target}
-            isSix={isSix}
-            randomBowler={randomBowler}
-          /> */}
+          ) : board == "aus" ? (
+            <AUS
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
+          ) : board == "ban" ? (
+            <BAN
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
+          ) : board == "wc19" ? (
+            <Wc19
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              // getInitials={getInitials}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
+          ) : null}
+
           <Box
             sx={{
               display: "flex",

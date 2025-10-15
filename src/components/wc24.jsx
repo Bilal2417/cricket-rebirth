@@ -6,11 +6,11 @@ export default function Wc24({
   userTeam,
   striker,
   nonStriker,
-  getInitials,
+  // getInitials,
   totalOvers,
   over,
   balls,
-  show,
+  show = 0,
   partnership,
   partnershipBalls,
   firstInnings,
@@ -23,6 +23,17 @@ export default function Wc24({
     W: "#fa208e",
     4: "#15daab",
   };
+  function getInitials(name) {
+    if (!name) return "";
+    const words = name.trim().split(" ").filter(Boolean);
+
+    if (words.length === 1) {
+      return words[0].substring(0, 3).toUpperCase();
+    }
+
+    return (words[0][0] + words[1][0]).toUpperCase();
+  }
+
 
   return (
     <>
@@ -32,8 +43,8 @@ export default function Wc24({
           backgroundColor: "#faf8fb",
           minHeight: "50px",
           display: "flex",
-          justifyContent: "center",
-          //   padding: { xs: "0 300px", md: "0" },
+          justifyContent: "center",        
+            boxShadow: `0 0 6px 2px black`,
         }}
       >
         <Box
@@ -90,7 +101,7 @@ export default function Wc24({
                   marginLeft: "-10px",
                 }}
               ></Box>
-              {striker?.name}
+              {striker?.name || "Bot1"}
             </Box>
             <Box
               sx={{
@@ -107,7 +118,7 @@ export default function Wc24({
                 }}
                 variant="body1"
               >
-                {striker?.score}
+                {striker?.score || 0}
               </Typography>
               <Typography
                 sx={{
@@ -116,10 +127,11 @@ export default function Wc24({
                 }}
                 variant="body1"
               >
-                {striker?.balls}
+                {striker?.balls || 0}
               </Typography>
             </Box>
           </Box>
+
           <Box
             sx={{
               display: "flex",
@@ -137,7 +149,7 @@ export default function Wc24({
               }}
               variant="body1"
             >
-              {nonStriker?.name}
+              {nonStriker?.name || "Bot2"}
             </Typography>
             <Box
               sx={{
@@ -154,7 +166,7 @@ export default function Wc24({
                 }}
                 variant="body1"
               >
-                {nonStriker?.score}
+                {nonStriker?.score || 0}
               </Typography>
               <Typography
                 sx={{
@@ -163,7 +175,7 @@ export default function Wc24({
                 }}
                 variant="body1"
               >
-                {nonStriker?.balls}
+                {nonStriker?.balls || 0}
               </Typography>
             </Box>
           </Box>
@@ -203,8 +215,8 @@ export default function Wc24({
                 variant="body1"
               >
                 {!batting
-                  ? getInitials(userTeam?.name)
-                  : getInitials(aiTeam?.name)}{" "}
+                  ? getInitials(userTeam?.name || "Bot1")
+                  : getInitials(aiTeam?.name || "Bot2")}{" "}
                 <Box
                   sx={{
                     fontSize: "0.7em",
@@ -225,8 +237,8 @@ export default function Wc24({
                 variant="h6"
               >
                 {!batting
-                  ? getInitials(aiTeam?.name)
-                  : getInitials(userTeam?.name)}{" "}
+                  ? getInitials(aiTeam?.name || "Bot2")
+                  : getInitials(userTeam?.name || "Bot1")}{" "}
               </Typography>
             </Box>
 
@@ -248,8 +260,8 @@ export default function Wc24({
                   textAlign: "center",
                 }}
               >
-                {batting ? userTeam?.score : aiTeam?.score} -{" "}
-                {batting ? userTeam?.wicket : aiTeam?.wicket}
+                {batting ? userTeam?.score || 0 : aiTeam?.score || 0} -{" "}
+                {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
               </Typography>
             </Box>
 
@@ -272,8 +284,8 @@ export default function Wc24({
                 variant="body1"
               >
                 {/* {over}.{balls}{" "} */}
-                {batting ? userTeam?.Over : aiTeam?.Over}.
-                {batting ? userTeam?.Ball : aiTeam?.Ball}
+                {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
+                {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0}
               </Typography>
               <Box
                 sx={{
@@ -283,7 +295,7 @@ export default function Wc24({
                 }}
                 component="span"
               >
-                overs ({totalOvers == 100 ? "∞" : totalOvers})
+                overs ({totalOvers == 100 ? "∞" : totalOvers || 20})
               </Box>
             </Box>
           </Box>
@@ -312,8 +324,8 @@ export default function Wc24({
                 {over === 0 && balls === 0
                   ? "0.00"
                   : (
-                      (batting ? userTeam?.score : aiTeam?.score) /
-                      (over + balls / 6)
+                     ( (batting ? userTeam?.score : aiTeam?.score) /
+                      (over + balls / 6)) || 0
                     ).toFixed(2)}
               </Typography>
             </Fade>
@@ -413,7 +425,7 @@ export default function Wc24({
               }}
               variant="body1"
             >
-              {randomBowler?.name}
+              {randomBowler?.name || "Bot3"}
             </Typography>
             <Box
               sx={{
@@ -431,7 +443,7 @@ export default function Wc24({
                 }}
                 variant="body1"
               >
-                {randomBowler?.wickets}-{randomBowler?.conceded}
+                {randomBowler?.wickets || 0}-{randomBowler?.conceded || 0}
               </Typography>
               <Typography
                 sx={{
@@ -441,10 +453,11 @@ export default function Wc24({
                 }}
                 variant="body1"
               >
-                {randomBowler?.overs}.{randomBowler?.bowled}
+                {randomBowler?.overs || 0}.{randomBowler?.bowled || 0}
               </Typography>
             </Box>
           </Box>
+
           <Box
             sx={{
               display: "flex",
