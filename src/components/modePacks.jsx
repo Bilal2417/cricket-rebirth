@@ -32,6 +32,8 @@ export default function ModePack({
   const handleCardClick = async (price, isActive , key ) => {
     const profileId = localStorage.getItem("MyId");
     if (isActive && price <= Profile?.coins) {
+      const currentItems = Profile.unlocked_items || [];
+      const newItem = key;
       
       const updatedProfile = {
         ...Profile,
@@ -39,8 +41,6 @@ export default function ModePack({
         coins: Profile.coins - price,
         unlocked_items: [...currentItems, newItem],
       };
-      const currentItems = updatedProfile.unlocked_items || [];
-      const newItem = key;
       
       try {
         const res = await fetch("/.netlify/functions/updateProfile", {
