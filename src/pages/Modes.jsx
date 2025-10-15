@@ -42,16 +42,28 @@ export default function Modes() {
       <span>
         This mode allows <strong>{over.wkt}</strong> wicket(s) in{" "}
         <strong>{over.value}</strong> over(s), with{" "}
-        <strong>{Math.ceil(over.value / 2)}</strong> trophies gained or <strong>{Math.ceil(over.value / 4)}</strong> trophies lost per
-        game.
+        <strong>{Math.ceil(over.value / 2)}</strong> trophies gained or{" "}
+        <strong>{Math.ceil(over.value / 4)}</strong> trophies lost per game.
       </span>
     ),
   }));
 
+  const storedProfile = sessionStorage.getItem("UserProfile");
+  const [Profile, setProfile] = useState(
+    storedProfile ? JSON.parse(storedProfile) : ""
+  );
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverDesc, setPopoverDesc] = useState("");
   const [activeIndex, setActiveIndex] = useState(null);
-  const [unlocked, setUnlocked] = useState(true);
+
+  const [unlocked, setUnlocked] = useState(
+    () => !!Profile?.unlocked_items?.includes("worldcup")
+  );
+
+  const [unlockedKO, setUnlockedKO] = useState(
+    () => !!Profile?.unlocked_items?.includes("knockout")
+  );
 
   const [saved, setSaved] = useState(() => {
     const storedCup = localStorage.getItem("tournamentData");
@@ -169,7 +181,8 @@ export default function Modes() {
                       <strong>strongest team</strong> wins the tournament.
                       <br />
                       <strong>REQUIRED : </strong>Teams higher than{" "}
-                      <strong>BRONZE</strong> and not <strong>NETHERLANDS</strong>
+                      <strong>BRONZE</strong> and not{" "}
+                      <strong>NETHERLANDS</strong>
                     </span>
                   )
                 }
@@ -367,8 +380,8 @@ export default function Modes() {
         <Button
           sx={{
             // fontfamily: "Rubik",
-            backgroundColor: "#f47909",
-            color: "#FFFFFF",
+            backgroundColor: unlockedKO ? "#f47909" : "#d69153",
+            color: unlockedKO ? "#FFFFFF" : "#a0a0a0",
             textShadow: `
           -1px -1px 0 #000,  
            1px -1px 0 #000,
@@ -398,18 +411,33 @@ export default function Modes() {
             },
             ":hover": {
               transform: "scale(1.02)",
+              cursor: unlocked ? "pointer" : "not-allowed",
             },
             display: "flex",
             alignItems: "center",
             gap: "10px",
           }}
-          onClick={() => {
-            navigate("/");
-            localStorage.setItem("Overs", 10);
-            sessionStorage.setItem("mode", `KNOCKOUT`);
+          onClick={(e) => {
+            if (unlocked) {
+              navigate("/");
+              localStorage.setItem("Overs", 10);
+              sessionStorage.setItem("mode", `KNOCKOUT`);
+            } else {
+              handlePopoverOpen(e, <strong>Buy this item from shop</strong>);
+            }
           }}
         >
           <Box>
+            {!unlockedKO && (
+              <Lock
+                sx={{
+                  position: "absolute",
+                  top: 10,
+                  fontSize: 50,
+                  color: "#000",
+                }}
+              />
+            )}
             <Typography
               sx={{
                 // fontfamily: "Rubik",

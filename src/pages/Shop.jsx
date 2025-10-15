@@ -1,15 +1,33 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import CardPacksShop from "../components/card";
-import { EmojiEventsSharp, Help } from "@mui/icons-material";
+import {
+  EmojiEvents,
+  EmojiEventsSharp,
+  Help,
+  SportsKabaddiOutlined,
+} from "@mui/icons-material";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import ModePack from "../components/modePacks";
+import ScoreCardShop from "../components/scoreCardShop";
 
 export default function Shop({ profile }) {
+  const [unlocked, setUnlocked] = useState(false);
+  const [focused, setFocused] = useState();
   return (
     <>
       <Box
         sx={{
           display: "flex",
           alignItems: "stretch",
-          gap:4,
+          gap: 4,
           overflowX: "auto",
           overflowY: "hidden",
           scrollBehavior: "smooth",
@@ -31,72 +49,31 @@ export default function Shop({ profile }) {
         <CardPacksShop />
 
         {/* World Cup Button */}
-        <Button
-          sx={{
-            minWidth: "400px",
-            borderRadius : "12px",
-            backgroundColor: "#f5214b",
-            color: "#FFFFFF",
-            textShadow: `
-              -1px -1px 0 #000,  
-              1px -1px 0 #000,
-              -1px  1px 0 #000,
-               2px  1.5px 0 #000
-            `,
-            padding: "10px 40px",
-            fontSize: "1.1em",
-            position: "relative",
-            px: 4,
-            py: 1.5,
-            overflow: "hidden",
-            boxShadow: `
-              inset 0px -8px 8px -4px #262e40,   
-              inset 0px 8px 8px -4px rgb(193 193 193)       
-            `,            
-            transition: "all 0.3s",
-            ":hover": {
-              transform: "scale(1.02)",
-            },
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10px",
-          }}
-        >
-          <Box>
-            <Typography
-              sx={{
-                fontWeight: 600,
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-              }}
-              variant="h5"
-            >
-              <EmojiEventsSharp />
-              World Cup
-              <IconButton
-                sx={{
-                  position: "absolute",
-                  top: -6,
-                  right: -6,
-                  width: 32,
-                  height: 32,
-                  backgroundColor: "#fa208e",
-                  color: "#fff",
-                  "&:hover": { backgroundColor: "#ff4eb0" },
-                  boxShadow: "0px 2px 5px rgba(0,0,0,0.3)",
-                }}
-              >
-                <Help sx={{ fontSize: "18px", color: "#FFFFFF" }} />
-              </IconButton>
-            </Typography>
+        <ModePack
+          title="WORLD CUP ACCESS"
+          value="worldcup"
+          price={5000}
+          // unlocked={false}
+          icon={<EmojiEvents sx={{ fontSize: 50, color: "#fff" }} />}
+          gradient="linear-gradient(180deg, #0f0648 0%, #1b1063 40%, #fa208e 100%)"
+          isFocused={focused === "world"}
+          onClick={() => setFocused(focused === "world" ? null : "world")}
+          description="Unlock the exclusive World Cup Mode — face 10 teams in the grand tournament."
+        />
 
-            <Typography sx={{ fontWeight: 600 }} variant="h4">
-              10 Teams, 1 Winner
-            </Typography>
-          </Box>
-        </Button>
+        <ModePack
+          title="KNOCKOUT ACCESS"
+          value="knockout"
+          price={2500}
+          // unlocked={false}
+          icon={<SportsKabaddiOutlined sx={{ fontSize: 50, color: "#fff" }} />}
+          gradient="linear-gradient(180deg, #061c48 0%, #102b63 40%, #20faf0 100%)"
+          isFocused={focused === "knockout"}
+          onClick={() => setFocused(focused === "knockout" ? null : "knockout")}
+          description="Unlock the Knockout Mode — play quarterfinals to finals for massive rewards!"
+        />
+
+        <ScoreCardShop/>
       </Box>
     </>
   );

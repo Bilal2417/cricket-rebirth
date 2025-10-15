@@ -9,6 +9,19 @@ export async function handler(event) {
     ssl: { rejectUnauthorized: false },
   });
 
+  // ✅ Helper to safely parse JSON/array fields
+  const parseField = (value) => {
+    if (Array.isArray(value)) return value;
+    if (typeof value === "string" && value.trim() !== "") {
+      try {
+        return JSON.parse(value);
+      } catch {
+        console.warn("Failed to parse field:", value);
+      }
+    }
+    return [];
+  };
+
   try {
     await client.connect();
 
@@ -20,34 +33,19 @@ export async function handler(event) {
         coins,
         trophies,
         trophydoubler,
-        unlocked_teams
+        unlocked_teams,
+        unlocked_items
       FROM profiles
       WHERE id = $1
       `,
       [profileId]
     );
 
-    const profiles = result.rows.map((row) => {
-      let unlockedTeams = [];
-
-      try {
-        if (Array.isArray(row.unlocked_teams)) {
-          // ✅ Already parsed JSONB array
-          unlockedTeams = row.unlocked_teams;
-        } else if (typeof row.unlocked_teams === "string" && row.unlocked_teams.trim() !== "") {
-          // ✅ Stored as JSON string
-          unlockedTeams = JSON.parse(row.unlocked_teams);
-        }
-      } catch (e) {
-        console.warn("Failed to parse unlocked_teams JSON for row:", row.id, e);
-        unlockedTeams = [];
-      }
-
-      return {
-        ...row,
-        unlocked_teams: unlockedTeams,
-      };
-    });
+    const profiles = result.rows.map((row) => ({
+      ...row,
+      unlocked_teams: parseField(row.unlocked_teams),
+      unlocked_items: parseField(row.unlocked_items),
+    }));
 
     console.log("✅ Final profile:", profiles[0]);
     return {

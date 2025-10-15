@@ -21,6 +21,7 @@ export async function handler(event) {
       unlocked_teams,
       titles,
       selected_title,
+      unlocked_items,      
     } = body;
 
     if (!id) {
@@ -79,6 +80,13 @@ export async function handler(event) {
           : [unlocked_teams]
         : null;
 
+    const safeUnlockedItems =
+      unlocked_items != null
+        ? Array.isArray(unlocked_items)
+          ? unlocked_items
+          : [unlocked_items]
+        : null;
+
     // Ensure titles is always JSON array
     const safeTitles =
       titles != null
@@ -99,7 +107,8 @@ export async function handler(event) {
            unlocked_teams = COALESCE($7::jsonb, unlocked_teams),
            titles = COALESCE($8::jsonb, titles),
            selected_title = COALESCE($9, selected_title)
-       WHERE id = $10
+           unlocked_items = COALESCE($10::jsonb, unlocked_items),
+       WHERE id = $11
        RETURNING *`,
       [
         name ?? null,
@@ -111,6 +120,7 @@ export async function handler(event) {
         safeUnlockedTeams != null ? JSON.stringify(safeUnlockedTeams) : null,
         safeTitles != null ? JSON.stringify(safeTitles) : null,
         selected_title ?? null,
+        safeUnlockedItems != null ? JSON.stringify(safeUnlockedItems) : null,
         id,
       ]
     );

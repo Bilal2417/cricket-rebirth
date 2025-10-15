@@ -5,7 +5,7 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
-import ScoreCard24 from "./components/scr24";
+import ScoreCard from "./components/score";
 import Scorecard from "./pages/Scorecard";
 import { Box, Container } from "@mui/material";
 import Selection from "./pages/Selection";
@@ -26,6 +26,7 @@ import ProfileData from "./pages/ProfileData";
 import Tournament from "./pages/Tournament";
 import Navbar from "./components/navbar";
 import Shop from "./pages/Shop";
+import AUS from "./components/aus";
 
 function App() {
   useEffect(() => {
@@ -134,6 +135,7 @@ function App() {
         )}
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/aus" element={<AUS />} />
           <Route path="/shop" element={<Shop profile={profile} />} />
           <Route path="/tournament" element={<Tournament />} />
           <Route path="/open-pack/:packKey" element={<CardOpening />} />
@@ -143,7 +145,7 @@ function App() {
           <Route path="/knockout" element={<Knockout />} />
           <Route path="/fixtures" element={<Fixtures />} />
           <Route path="/team" element={<Selection />} />
-          <Route path="/gamePlay" element={<ScoreCard24 />} />
+          <Route path="/gamePlay" element={<ScoreCard />} />
           <Route path="/toss" element={<Toss />} />
           <Route path="/score" element={<Scorecard />} />
           <Route path="/result" element={<Result />} />

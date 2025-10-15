@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, Button, Box } from "@mui/material";
 import SportsCricketIcon from "@mui/icons-material/SportsCricket";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { EmojiEvents } from "@mui/icons-material";
 
 // ✅ CardPack should RETURN JSX (you forgot 'return')
 
@@ -64,14 +65,16 @@ export default function CardPacksShop() {
   ];
 
   const [packs, setPacks] = useState([]);
-  const [starter, setStarter] = useState(localStorage.getItem("collectedStarter"));
+  const [starter, setStarter] = useState(
+    localStorage.getItem("collectedStarter")
+  );
 
   useEffect(() => {
     // const starter = ;
     if (!starter) {
       setPacks(allPacks.filter((pack) => pack.packKey !== "Starter"));
     } else {
-      setPacks(allPacks);    
+      setPacks(allPacks);
     }
   }, [starter]);
 
@@ -100,7 +103,7 @@ export default function CardPacksShop() {
     const profileId = localStorage.getItem("MyId");
 
     const handleCardClick = async () => {
-      if (isActive && (price <= Profile.coins || price == "Free") ) {
+      if (isActive && (price <= Profile.coins || price == "Free")) {
         sessionStorage.setItem("canOpen", true);
 
         const updatedProfile = {
@@ -110,14 +113,14 @@ export default function CardPacksShop() {
         };
 
         setProfile(updatedProfile);
-        console.log(updatedProfile)
-        sessionStorage.setItem("UserProfile",JSON.stringify(updatedProfile))
-
+        // console.log(updatedProfile);
+        sessionStorage.setItem("UserProfile", JSON.stringify(updatedProfile));
 
         navigate(`/open-pack/${packKey}`);
-        localStorage.removeItem("collectedStarter")
-        setStarter(false)
-      } else if (isActive &&( price > Profile.coins || Profile.coins == null)) [toast.error("Not enough coins!")];
+        localStorage.removeItem("collectedStarter");
+        setStarter(false);
+      } else if (isActive && (price > Profile.coins || Profile.coins == null))
+        [toast.error("Not enough coins!")];
     };
 
     return (
@@ -138,7 +141,7 @@ export default function CardPacksShop() {
           "&:hover": {
             transform: "scale(1.05)",
             boxShadow: "0 12px 30px rgba(0,0,0,0.5)",
-            cursor: isActive ? "default" : "cursor",
+            cursor: isActive ? "default" : "pointer",
           },
           "&:active": { transform: "scale(0.97)" },
         }}
@@ -190,7 +193,7 @@ export default function CardPacksShop() {
       sx={{
         display: "flex",
         // gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-        gap: { xs : 2 , lg : 2},
+        gap: { xs: 2, lg: 2 },
         justifyContent: "center",
         position: "relative",
       }}

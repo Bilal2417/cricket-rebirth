@@ -30,6 +30,7 @@ export async function handler(event) {
         img TEXT,
         coins INT DEFAULT 0,
         unlocked_teams JSONB DEFAULT '[]'::jsonb,
+        unlocked_items JSONB DEFAULT '[]'::jsonb,
         titles JSONB DEFAULT '[]'::jsonb,
         selected_title TEXT,
         last_active TIMESTAMP DEFAULT NOW()
@@ -43,8 +44,8 @@ export async function handler(event) {
     let profile;
     if (existing.rows.length === 0) {
       const result = await client.query(
-        `INSERT INTO profiles (id, name, tournaments, trophies, victories, coins, img, unlocked_teams, titles, selected_title)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        `INSERT INTO profiles (id, name, tournaments, trophies, victories, coins, img, unlocked_teams, unlocked_items, titles, selected_title)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 , $11)
          RETURNING *`,
         [
           profileId,
@@ -54,6 +55,7 @@ export async function handler(event) {
           0,
           0,
           "/assets/img/pak.png",
+          JSON.stringify([]),
           JSON.stringify([]),
           JSON.stringify([]),
           null,
