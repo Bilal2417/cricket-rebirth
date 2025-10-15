@@ -126,7 +126,7 @@ export default function AUS({
                 boxShadow: `0 0 20px 4px ${batting ? userTeam?.primary: aiTeam?.primary}`,
               }}
             >
-              <Typography textTransform="uppercase" variant="h6">{striker?.name || "Dummy"}</Typography>
+              <Typography width="120px" textTransform="uppercase" variant="h6">{striker?.name || "Dummy"}</Typography>
 
               <Box
                 sx={{
@@ -151,7 +151,7 @@ export default function AUS({
                 flexGrow: 1,
               }}
             >
-              <Typography textTransform="uppercase" variant="h6">
+              <Typography width="120px" textTransform="uppercase" variant="h6">
                 {nonStriker?.name || "Dummy"}
               </Typography>
 

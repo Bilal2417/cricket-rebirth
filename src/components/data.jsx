@@ -959,7 +959,7 @@ const Data = [
     Ball: 0,
     ballHistory: [],
     fow: [],
-    primary : "#fdcb07",
+    primary : "#0572c4",
     players: [
       {
         name: "Munsey",
@@ -2669,8 +2669,8 @@ const Data = [
     Ball: 0,
     ballHistory: [],
     fow: [],
-    primary : "#ffb915",
-    secondary : "#007847",
+    primary : "#007847",
+    secondary : "#ffb915",
     players: [
       {
         name: "De kock",

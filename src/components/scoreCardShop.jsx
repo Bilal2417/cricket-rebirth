@@ -163,8 +163,9 @@ export default function ScoreCardShop() {
     </Card>
   );
 
-  return (
-    <Box
+  return <>
+  coming soon...
+    {/* <Box
       sx={{
         display: "flex",
         justifyContent: "center",
@@ -241,6 +242,6 @@ export default function ScoreCardShop() {
           </Box>
         </Box>
       )}
-    </Box>
-  );
+    </Box> */}
+  </>
 }

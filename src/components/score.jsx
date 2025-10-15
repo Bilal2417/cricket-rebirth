@@ -278,7 +278,7 @@ export default function ScoreCard() {
     isOverComplete = false,
     Wicket = false
   ) => {
-    if (run == 0) {
+    if (run == 0 && !Wicket) {
       const sounds = ["tip", "tip2"];
       playSound(sounds[Math.floor(Math.random() * sounds.length)]);
     } else if (run == 4) {
@@ -555,7 +555,7 @@ export default function ScoreCard() {
             gap: 2,
           }}
         >
-          {/* <Wc24
+          <Wc24
             batting={batting}
             aiTeam={aiTeam}
             userTeam={userTeam}
@@ -572,8 +572,8 @@ export default function ScoreCard() {
             target={target}
             isSix={isSix}
             randomBowler={randomBowler}
-            /> */}
-          <AUS
+            />
+          {/* <AUS
             batting={batting}
             aiTeam={aiTeam}
             userTeam={userTeam}
@@ -589,7 +589,7 @@ export default function ScoreCard() {
             target={target}
             isSix={isSix}
             randomBowler={randomBowler}
-          />
+          /> */}
           <Box
             sx={{
               display: "flex",
