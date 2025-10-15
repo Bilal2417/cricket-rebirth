@@ -90,13 +90,34 @@ const updatedPulledCards = pulledCards.map((card) => {
 // console.log(updatedPulledCards);
 
 const packData = {
-  Starter: { title: "Starter Pack", size: 2, colors: ["#00b894", "#55efc4"] },
-  Bronze: { title: "Bronze Pack", size: 3, colors: ["#8d5524", "#d2691e"] },
-  Silver: { title: "Silver Pack", size: 5, colors: ["#bdc3c7", "#2c3e50"] },
-  Gold: { title: "Gold Pack", size: 7, colors: ["#FFD700", "#FF8C00"] },
+  Starter: {
+    title: "Starter Pack",
+    size: 2,
+    price: 0,
+    colors: ["#00b894", "#55efc4"],
+  },
+  Bronze: {
+    title: "Bronze Pack",
+    size: 3,
+    price: 1000,
+    colors: ["#8d5524", "#d2691e"],
+  },
+  Silver: {
+    title: "Silver Pack",
+    size: 5,
+    price: 2500,
+    colors: ["#bdc3c7", "#2c3e50"],
+  },
+  Gold: {
+    title: "Gold Pack",
+    size: 7,
+    price: 5000,
+    colors: ["#FFD700", "#FF8C00"],
+  },
   Legendary: {
     title: "Legendary Pack",
     size: 10,
+    price: 10000,
     colors: ["#7b4397", "#dc2430"],
   },
 };
@@ -307,6 +328,12 @@ export default function CardOpening() {
         }
       });
 
+      updatedProfile = {
+        ...updatedProfile,
+        id: Profile?.id || updatedProfile.id,
+        coins: Profile.coins - pack.price
+      };
+
       try {
         updatedProfile.unlocked_teams = [
           ...new Set(updatedProfile.unlocked_teams),
@@ -487,8 +514,7 @@ export default function CardOpening() {
             >
               {rewards?.map((card, i) => {
                 const matchTeam = team.find(
-                  (t) =>
-                    t.name === card?.selectedUnlock?.resource
+                  (t) => t.name === card?.selectedUnlock?.resource
                 );
                 return (
                   <Card

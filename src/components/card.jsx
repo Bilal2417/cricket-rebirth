@@ -106,15 +106,15 @@ export default function CardPacksShop() {
       if (isActive && (price <= Profile.coins || price == "Free")) {
         sessionStorage.setItem("canOpen", true);
 
-        const updatedProfile = {
-          ...Profile,
-          id: profileId || Profile?.id,
-          coins: Profile.coins - price,
-        };
+        // const updatedProfile = {
+        //   ...Profile,
+        //   id: profileId || Profile?.id,
+        //   coins: Profile.coins - price,
+        // };
 
-        setProfile(updatedProfile);
-        // console.log(updatedProfile);
-        sessionStorage.setItem("UserProfile", JSON.stringify(updatedProfile));
+        // setProfile(updatedProfile);
+        // // console.log(updatedProfile);
+        // sessionStorage.setItem("UserProfile", JSON.stringify(updatedProfile));
 
         navigate(`/open-pack/${packKey}`);
         localStorage.removeItem("collectedStarter");
