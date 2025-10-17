@@ -29,7 +29,7 @@ export default function AUS({
           background:
             "radial-gradient(circle, rgba(255,255,255) -400%, #141517 100%)",
           display: "flex",
-          gap: "20px",
+          gap: "15px",
           padding: "20px",
           alignItems: "flex-start",
           // mt: "100px",
@@ -136,7 +136,7 @@ export default function AUS({
               }}
             >
               <Typography
-                minWidth="120px"
+                minWidth="100px"
                 textTransform="uppercase"
                 variant="body1"
                 fontSize="1.2em"
@@ -171,7 +171,7 @@ export default function AUS({
               }}
             >
               <Typography
-                minWidth="120px"
+                minWidth="100px"
                 textTransform="uppercase"
                 variant="body1"
                 fontSize="1.2em"

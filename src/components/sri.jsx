@@ -35,6 +35,7 @@ export default function SRI({
     return (words[0][0] + words[1][0]).toUpperCase();
   }
 
+  const teams = ["Australia", "UAE"];
   return (
     <>
       <Box
@@ -80,7 +81,10 @@ export default function SRI({
               </Typography>
             </Fade>
 
-            <Fade in={firstInnings == 2 ?  (show == 1 || show == 2) : show == 1} timeout={500}>
+            <Fade
+              in={firstInnings == 2 ? show == 1 || show == 2 : show == 1}
+              timeout={500}
+            >
               <Typography
                 sx={{
                   color: "#000",
@@ -123,8 +127,16 @@ export default function SRI({
             sx={{
               display: "flex",
               alignItems: "center",
-              background: batting ? userTeam?.primary : aiTeam?.primary || "#ff4d4d",
+              // background: batting
+              //   ? userTeam?.primary
+              //   : aiTeam?.primary || "#ff4d4d",
+              // sec to pri
               padding: "0px 8px",
+              background: `linear-gradient(to bottom, ${
+                batting ? userTeam?.secondary : aiTeam?.secondary || "#163c8c"
+              }, ${
+                batting ? userTeam?.primary : aiTeam?.primary || "#0e306f"
+              })`,
             }}
           >
             <img
@@ -140,6 +152,9 @@ export default function SRI({
               sx={{
                 textTransform: "uppercase",
                 padding: "4px 25px",
+                color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                  ? "#000000"
+                  : "#FFFFFF",
               }}
               variant="body1"
             >
@@ -155,6 +170,8 @@ export default function SRI({
                 textTransform: "uppercase",
                 color: "#000000",
                 fontWeight: 600,
+                textAlign: "center",
+                minWidth: "120px",
               }}
               variant="body1"
             >
@@ -166,8 +183,10 @@ export default function SRI({
               sx={{
                 padding: "4px 20px",
                 textTransform: "uppercase",
-                color: "#FFFFFF",
-                borderRight: "2px solid #4f4f4f",
+                color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                  ? "#000000"
+                  : "#FFFFFF",
+                borderRight: "2px solid #74747450",
               }}
               variant="body1"
             >
@@ -194,7 +213,11 @@ export default function SRI({
                 <Box
                   sx={{
                     textTransform: "uppercase",
-                    color: "#fff",
+                    color: teams.includes(
+                      batting ? userTeam?.name : aiTeam?.name
+                    )
+                      ? "#000000"
+                      : "#FFFFFF",
                     display: "flex",
                     alignItems: "center",
                     gap: "5px",
@@ -225,7 +248,11 @@ export default function SRI({
                 >
                   <Typography
                     sx={{
-                      color: "#fff",
+                      color: teams.includes(
+                        batting ? userTeam?.name : aiTeam?.name
+                      )
+                        ? "#000000"
+                        : "#FFFFFF",
                       fontWeight: 600,
                       minWidth: "20px",
                     }}
@@ -235,7 +262,11 @@ export default function SRI({
                   </Typography>
                   <Typography
                     sx={{
-                      color: "#fff",
+                      color: teams.includes(
+                        batting ? userTeam?.name : aiTeam?.name
+                      )
+                        ? "#000000"
+                        : "#FFFFFF",
                       fontSize: "0.75em",
                       minWidth: "20px",
                     }}
@@ -258,7 +289,11 @@ export default function SRI({
                   variant="body1"
                   sx={{
                     textTransform: "uppercase",
-                    color: "#fff",
+                    color: teams.includes(
+                      batting ? userTeam?.name : aiTeam?.name
+                    )
+                      ? "#000000"
+                      : "#FFFFFF",
                     gap: "5px",
                     minWidth: "80px",
                     fontWeight: 600,
@@ -278,7 +313,11 @@ export default function SRI({
                 >
                   <Typography
                     sx={{
-                      color: "#fff",
+                      color: teams.includes(
+                        batting ? userTeam?.name : aiTeam?.name
+                      )
+                        ? "#000000"
+                        : "#FFFFFF",
                       fontWeight: 600,
                       minWidth: "20px",
                     }}
@@ -288,7 +327,11 @@ export default function SRI({
                   </Typography>
                   <Typography
                     sx={{
-                      color: "#fff",
+                      color: teams.includes(
+                        batting ? userTeam?.name : aiTeam?.name
+                      )
+                        ? "#000000"
+                        : "#FFFFFF",
                       fontSize: "0.75em",
                       minWidth: "20px",
                     }}
@@ -342,19 +385,25 @@ export default function SRI({
               gap: "10px",
               background: "#FFFFFF",
               padding: "4px 20px",
-              position : "relative"
+              position: "relative",
             }}
           >
             <Typography
               variant="body1"
               sx={{
-                color: "#FFFFFF",
+                color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                  ? "#000000"
+                  : "#FFFFFF",
                 textTransform: "uppercase",
                 position: "absolute",
                 top: -70,
                 left: 0,
                 fontSize: "0.8em",
-                background: batting ? userTeam?.primary : aiTeam?.primary || "#ff4d4d",
+                background: `linear-gradient(to bottom, ${
+                  batting ? userTeam?.secondary : aiTeam?.secondary || "#163c8c"
+                }, ${
+                  batting ? userTeam?.primary : aiTeam?.primary || "#0e306f"
+                })`,
                 padding: "6px 12px",
               }}
             >
@@ -375,10 +424,10 @@ export default function SRI({
                   width: "20px",
                   height: "15px",
                   color: batting
-                    ? userTeam?.ballHistory[index] <= 3 
+                    ? userTeam?.ballHistory[index] <= 3
                       ? "#12174c"
                       : "#FFFFFF"
-                    : aiTeam?.ballHistory[index] <= 3 
+                    : aiTeam?.ballHistory[index] <= 3
                     ? "#12174c"
                     : "#FFFFFF",
                   padding: "12px 8px",
@@ -388,17 +437,17 @@ export default function SRI({
                   fontSize: "0.9em",
                   fontWeight: 900,
                   background: batting
-                    ? userTeam?.ballHistory[index] > 3 
-                    ? userTeam?.primary
-                    : aiTeam?.primary
-                    : aiTeam?.ballHistory[index] > 3 
+                    ? userTeam?.ballHistory[index] > 3
+                      ? userTeam?.primary
+                      : aiTeam?.primary
+                    : aiTeam?.ballHistory[index] > 3
                     ? aiTeam?.primary
-                    : userTeam?.primary
+                    : userTeam?.primary,
                 }}
               >
                 {/* {ballHistory[index] ?? ""} */}
                 {batting
-                  ? userTeam?.ballHistory[index] 
+                  ? userTeam?.ballHistory[index]
                   : aiTeam?.ballHistory[index]}
               </Box>
             ))}
@@ -409,8 +458,12 @@ export default function SRI({
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              background: !batting ? userTeam?.primary || "yellowgreen" : aiTeam?.primary,
               padding: "4px 20px 4px 4px",
+              background: `linear-gradient(to bottom, ${
+                batting ? aiTeam?.secondary : userTeam?.secondary || "#fde505"
+              }, ${
+                batting ? aiTeam?.primary : userTeam?.primary || "#c1ab11"
+              })`,
             }}
           >
             <img
@@ -425,7 +478,9 @@ export default function SRI({
             <Typography
               sx={{
                 textTransform: "uppercase",
-                color: "#fff",
+                color: teams.includes(!batting ? userTeam?.name : aiTeam?.name)
+                  ? "#000000"
+                  : "#FFFFFF",
                 fontSize: "0.9em",
                 fontWeight: 600,
                 minWidth: "80px",
@@ -444,7 +499,11 @@ export default function SRI({
             >
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: teams.includes(
+                    !batting ? userTeam?.name : aiTeam?.name
+                  )
+                    ? "#000000"
+                    : "#FFFFFF",
                   minWidth: "80px",
                   textAlign: "center",
                 }}
@@ -454,9 +513,12 @@ export default function SRI({
               </Typography>
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: teams.includes(
+                    !batting ? userTeam?.name : aiTeam?.name
+                  )
+                    ? "#000000"
+                    : "#FFFFFF",
                   fontSize: "0.8em",
-                  // fontfamily: "Rubik",
                 }}
                 variant="body1"
               >

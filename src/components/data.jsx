@@ -10,6 +10,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#d52b1e",
+    secondary : "#ff6b5c",
     players: [
       {
         name: "Bin Zafar",
@@ -200,6 +201,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#30763a",
+    secondary : "#5fbf6b",
     players: [
       {
         name: "Adair",
@@ -390,6 +392,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#003f8a",
+    secondary : "#3f8fff",
     players: [
       {
         name: "Frylinck",
@@ -580,6 +583,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#3399ff",
+    secondary : "#80c1ff",
     players: [
       {
         name: "Paudel",
@@ -770,6 +774,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#df1a23",
+    secondary : "#ff5c61",
     players: [
       {
         name: "Prajapati",
@@ -960,6 +965,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#0572c4",
+    secondary : "#66b9ff",
     players: [
       {
         name: "Munsey",
@@ -1150,6 +1156,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#cacaca",
+    secondary : "#ffffff",
     players: [
       {
         name: "Waseem",
@@ -1340,6 +1347,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#bb133e",
+    secondary : "#ff7b9b",
     players: [
       {
         name: "Patel",
@@ -1530,6 +1538,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#ffd200",
+    secondary : "#fff27a",
     players: [
       {
         name: "Marumani",
@@ -1720,6 +1729,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#4497d4",
+    secondary : "#7cc0ff",
     players: [
       {
         name: "Gurbaz",
@@ -1910,6 +1920,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#006b4f",
+    secondary : "#2dd59b",
     players: [
       {
         name: "Liton",
@@ -2100,6 +2111,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#ff8533",
+    secondary : "#ffb366",
     players: [
       {
         name: "O’Dowd",
@@ -2290,6 +2302,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#9c1444",
+    secondary : "#e04b7f",
     players: [
       {
         name: "Hope",
@@ -2480,6 +2493,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#555555",
+    secondary : "#888888",
     players: [
       {
         name: "F Allen",
@@ -2670,7 +2684,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#007847",
-    secondary : "#ffb915",
+    secondary : "#26d98a",
     players: [
       {
         name: "De kock",
@@ -2860,7 +2874,8 @@ const Data = [
     Ball: 0,
     ballHistory: [],
     fow: [],
-    primary : "#3c3cff",
+    primary : "#0e306f",
+    secondary : "#163c8c",
     players: [
       {
         name: "K Mendis",
@@ -3050,7 +3065,8 @@ const Data = [
     Ball: 0,
     ballHistory: [],
     fow: [],
-    primary : "#fdcb07",
+    primary : "#c1ab11",
+    secondary : "#fde505",
     players: [
       {
         name: "Head",
@@ -3241,6 +3257,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#2d91be",
+    secondary : "#6fc8f1",
     players: [
       {
         name: "Duckett",
@@ -3431,6 +3448,7 @@ const Data = [
     ballHistory: [],
     fow: [],
     primary : "#ff9933",
+    secondary : "#ffc266",
     players: [
       {
         name: "Rohit",
@@ -3620,7 +3638,8 @@ const Data = [
     Ball: 0,
     ballHistory: [],
     fow: [],
-    primary : "#358055",
+    primary : "#01411c",
+    secondary : "#03a65a",
     players: [
       {
         name: "Babar",

@@ -36,7 +36,7 @@ export default function BAN({
           display: "flex",
           alignItems: "center",
           gap: "10px",
-          transform: { xs: "scale(0.6)", md: "scale(0.8)", lg: "scale(1.0)" },
+          transform: { xs: "scale(0.7)", md: "scale(0.9)", lg: "scale(1.0)" },
         }}
       >
         <Box
@@ -89,11 +89,12 @@ export default function BAN({
                     "linear-gradient(to bottom , #8b0605 , #9a0001 , #8b0605 )",
                   padding: "4px 20px",
                   textTransform: "uppercase",
+                  textAlign : "center",
+                  minWidth : "120px",
                 }}
                 variant="body1"
               >
-                {batting ? userTeam?.score || 0 : aiTeam?.score || 0} -{" "}
-                {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
+                {batting ? userTeam?.score || 0 : aiTeam?.score || 0} - {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
               </Typography>
               <Typography
                 sx={{
@@ -188,7 +189,7 @@ export default function BAN({
                     "linear-gradient(to bottom , #8b0605 , #9a0001 , #8b0605 )",
                   padding: "4px 10px",
                   textTransform: "uppercase",
-                  minWidth: "200px",
+                  minWidth: "180px",
                   textAlign: "center",
                   position: "relative",
                 }}
