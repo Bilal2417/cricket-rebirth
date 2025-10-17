@@ -630,7 +630,7 @@ export default function ScoreCard() {
               return (
                 <Button
                   sx={{
-                    backgroundColor: "#0f0648",
+                    backgroundColor: board == "aus" ? "#141517" :"#0f0648",
                     color: "#FFFFFF",
                     width: "60px",
                     height: "60px",
@@ -638,14 +638,13 @@ export default function ScoreCard() {
                     borderRadius: "50%",
                     fontWeight: 600,
                     fontSize: "1em",
-                    // fontfamily: "Rubik",
-                    borderBottom: " 4px solid #53489a",
-                    borderRight: "3px solid #53489a",
+                    borderBottom: board == "aus" ? `4px solid ${batting ? userTeam?.primary : aiTeam?.primary}` :`4px solid #53489a`,
+                    borderRight: board == "aus" ? `4px solid ${batting ? userTeam?.primary : aiTeam?.primary}` :`4px solid #53489a`,
                     ":hover": {
-                      backgroundColor: "#0f0648cc",
+                      backgroundColor: board == "aus" ? "#141517cc" :"#0f0648cc",
                       transform: "scale(1.05)",
-                      borderBottom: " 4px solid #53489a",
-                      borderRight: "3px solid #53489a",
+                      borderBottom: board == "aus" ? `4px solid ${batting ? userTeam?.primary : aiTeam?.primary}` :`4px solid #53489a`,
+                      borderRight: board == "aus" ? `3px solid ${batting ? userTeam?.primary : aiTeam?.primary}` :`3px solid #53489a`,
                       transition: "all 0.3s",
                     },
                     ":focus": {

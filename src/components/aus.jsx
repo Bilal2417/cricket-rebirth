@@ -26,15 +26,17 @@ export default function AUS({
     <>
       <Box
         sx={{
-          background: "linear-gradient(to bottom , #141517 , #1a1b1f)",
+          background:
+            "radial-gradient(circle, rgba(255,255,255) -400%, #141517 100%)",
           display: "flex",
           gap: "20px",
           padding: "10px 20px 20px",
           alignItems: "flex-start",
           // mt: "100px",
           borderRadius: "64px",
-          width : "100%",          
-            boxShadow: `0 0 6px 2px black`,
+          // width: "100%",
+          boxShadow: `0 0 6px 2px black`,
+          transform: { xs: "scale(0.6)", md: "scale(0.8)", lg: "scale(1.0)" },
         }}
       >
         <Box
@@ -47,7 +49,9 @@ export default function AUS({
           <Box
             sx={{
               borderRadius: "50%",
-              boxShadow: `0 0 10px 2px ${batting ? userTeam?.primary: aiTeam?.primary || "red"}`,
+              boxShadow: `0 0 10px 2px ${
+                batting ? userTeam?.primary : aiTeam?.primary || "red"
+              }`,
               p: "13px 10px",
             }}
           >
@@ -78,7 +82,7 @@ export default function AUS({
                 fontSize: "1.8em !important",
                 transform: "scaleY(1.8)",
                 transformOrigin: "center",
-                color: batting ? userTeam?.primary: aiTeam?.primary,
+                color: batting ? userTeam?.primary : aiTeam?.primary,
               }}
               variant="h6"
             >
@@ -97,9 +101,8 @@ export default function AUS({
               Overs
             </Typography>
             <Typography fontWeight={600} variant="body1">
-              
-                {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
-                {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0}
+              {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
+              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0}
             </Typography>
           </Box>
         </Box>
@@ -119,15 +122,27 @@ export default function AUS({
                 alignItems: "center",
                 justifyContent: "space-between",
                 padding: "5px 20px",
+                gap: "10px",
                 borderRadius: "32px",
-                outline: `2px solid ${batting ? userTeam?.primary: aiTeam?.primary || "red"}`,
+                outline: `2px solid ${
+                  batting ? userTeam?.primary : aiTeam?.primary || "red"
+                }`,
                 flexGrow: 1,
                 position: "relative",
                 zIndex: 2,
-                boxShadow: `0 0 20px 4px ${batting ? userTeam?.primary: aiTeam?.primary || "red"}`,
+                boxShadow: `0 0 20px 4px ${
+                  batting ? userTeam?.primary : aiTeam?.primary || "red"
+                }`,
               }}
             >
-              <Typography width="120px" textTransform="uppercase" variant="h6">{striker?.name || "Dummy"}</Typography>
+              <Typography
+                minWidth="120px"
+                textTransform="uppercase"
+                variant="body1"
+                fontSize="1.2em"
+              >
+                {striker?.name || "Dummy"}
+              </Typography>
 
               <Box
                 sx={{
@@ -136,8 +151,10 @@ export default function AUS({
                   gap: "10px",
                 }}
               >
-                <Typography variant="body1">{striker?.score || 0}</Typography>
-                <Typography fontSize="0.8em" variant="body2">
+                <Typography minWidth="20px" variant="body1">
+                  {striker?.score || 0}
+                </Typography>
+                <Typography minWidth="20px" fontSize="0.8em" variant="body2">
                   {striker?.balls || 0}
                 </Typography>
               </Box>
@@ -149,10 +166,16 @@ export default function AUS({
                 alignItems: "center",
                 justifyContent: "space-between",
                 padding: "5px 20px",
+                gap: "10px",
                 flexGrow: 1,
               }}
             >
-              <Typography width="120px" textTransform="uppercase" variant="h6">
+              <Typography
+                minWidth="120px"
+                textTransform="uppercase"
+                variant="body1"
+                fontSize="1.2em"
+              >
                 {nonStriker?.name || "Dummy"}
               </Typography>
 
@@ -163,10 +186,10 @@ export default function AUS({
                   gap: "10px",
                 }}
               >
-                <Typography variant="body1">
+                <Typography minWidth="20px" variant="body1">
                   {nonStriker?.score || 0}
                 </Typography>
-                <Typography fontSize="0.8em" variant="body2">
+                <Typography minWidth="20px" fontSize="0.8em" variant="body2">
                   {nonStriker?.balls || 0}
                 </Typography>
               </Box>
@@ -252,7 +275,7 @@ export default function AUS({
           <Typography
             variant="body1"
             sx={{
-              color: "#e7d58d",
+              color: "#ffffff",
               textTransform: "uppercase",
               // fontFamily: "Poppins ,sans-serif , Rubik",
               position: "absolute",
@@ -262,8 +285,12 @@ export default function AUS({
               background: "linear-gradient(to bottom , #141517 , #1a1b1f)",
               padding: "10px 20px",
               borderRadius: "32px",
-              borderBottom : `2px solid ${batting ? aiTeam?.primary : userTeam?.primary}`,
-              borderRight : `2px solid ${batting ? aiTeam?.primary : userTeam?.primary}`
+              borderBottom: `3px solid ${
+                batting ? aiTeam?.primary : userTeam?.primary
+              }`,
+              borderRight: `2px solid ${
+                batting ? aiTeam?.primary : userTeam?.primary
+              }`,
             }}
           >
             wkt % :{" "}
@@ -291,15 +318,16 @@ export default function AUS({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginBottom: "5px",
+                marginBottom: "7px",
               }}
             >
               <Typography
                 sx={{
                   textTransform: "uppercase",
-                  color: !batting ? userTeam?.primary: aiTeam?.primary,
+                  color: !batting ? userTeam?.primary : aiTeam?.primary,
                   fontSize: "0.9em",
                   fontWeight: 600,
+                  minWidth : "80px"
                 }}
                 variant="body1"
               >
@@ -309,12 +337,12 @@ export default function AUS({
                 sx={{
                   display: "flex",
                   alignItems: "baseline",
-                  gap: "10px",
+                  gap: "5px",
                 }}
               >
                 <Typography
                   sx={{
-                    color: !batting ? userTeam?.primary: aiTeam?.primary,
+                    color: !batting ? userTeam?.primary : aiTeam?.primary,
                     width: "50px",
                     textAlign: "center",
                   }}
@@ -324,7 +352,7 @@ export default function AUS({
                 </Typography>
                 <Typography
                   sx={{
-                    color: !batting ? userTeam?.primary: aiTeam?.primary,
+                    color: !batting ? userTeam?.primary : aiTeam?.primary,
                     fontSize: "0.75em",
                   }}
                   variant="body1"
@@ -404,7 +432,9 @@ export default function AUS({
           <Box
             sx={{
               borderRadius: "50%",
-              boxShadow: `0 0 10px 2px ${!batting ? userTeam?.primary || "skyblue": aiTeam?.primary}`,
+              boxShadow: `0 0 10px 2px ${
+                !batting ? userTeam?.primary || "skyblue" : aiTeam?.primary
+              }`,
               p: "13px 10px",
             }}
           >

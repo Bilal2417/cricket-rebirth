@@ -41,15 +41,15 @@ export default function BAN({
         <Box
           sx={{
             alignContent: "center",
-            padding: "15px",
+            padding: "10px",
             background: "radial-gradient( #e0dee0 , #cbcbcb )",
             borderRadius: "50%",
           }}
         >
           <img
             style={{
-              width: "60px",
-              height: "40px",
+              width: "45px",
+              height: "30px",
               boxShadow: "3px 3px 8px -2px #000000",
             }}
             src={!batting ? aiTeam?.flag : userTeam?.flag}
@@ -76,7 +76,7 @@ export default function BAN({
                   textTransform: "uppercase",
                   background:
                     "linear-gradient(to bottom , #005601 , #006700 , #005601 )",
-                  padding: "4px 40px",
+                  padding: "4px 20px",
                 }}
                 variant="body1"
               >
@@ -86,7 +86,7 @@ export default function BAN({
                 sx={{
                   background:
                     "linear-gradient(to bottom , #8b0605 , #9a0001 , #8b0605 )",
-                  padding: "4px 30px",
+                  padding: "4px 15px",
                   textTransform: "uppercase",
                 }}
                 variant="body1"
@@ -97,7 +97,7 @@ export default function BAN({
               <Typography
                 sx={{
                   background: "linear-gradient(to bottom , #e0dee0 , #cbcbcb )",
-                  padding: "4px 30px",
+                  padding: "4px 15px",
                   textTransform: "uppercase",
                   color: "#000000",
                 }}
@@ -117,7 +117,7 @@ export default function BAN({
                   alignItems: "center",
                   justifyContent: "center",
                   minHeight: "32px",
-                  // minWidth: "340px",
+                  minWidth: "300px",
                   flexGrow: 2,
                 }}
               >
@@ -185,9 +185,9 @@ export default function BAN({
                 sx={{
                   background:
                     "linear-gradient(to bottom , #8b0605 , #9a0001 , #8b0605 )",
-                  padding: "4px 20px",
+                  padding: "4px 10px",
                   textTransform: "uppercase",
-                  minWidth: "200px",
+                  minWidth: "150px",
                   textAlign: "center",
                   position: "relative",
                 }}
@@ -206,7 +206,7 @@ export default function BAN({
                     fontSize: "0.8em",
                     background:
                       "linear-gradient(to bottom , #8b0605 , #9a0001 , #8b0605 )",
-                    padding: "10px 20px",
+                    padding: "6px 12px",
                     border : "4px solid #000000"
                   }}
                 >
@@ -237,6 +237,7 @@ export default function BAN({
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
+                  gap : "10px"
                 }}
               >
                 <Box
@@ -246,7 +247,7 @@ export default function BAN({
                     display: "flex",
                     alignItems: "center",
                     gap: "5px",
-                    width: "80px",
+                    minWidth: "80px",
                     fontWeight: 600,
                   }}
                 >
@@ -265,7 +266,7 @@ export default function BAN({
                   sx={{
                     display: "flex",
                     alignItems: "baseline",
-                    gap: "10px",
+                    gap: "15px",
                     width: "50px",
                     justifyContent: "center",
                   }}
@@ -296,26 +297,28 @@ export default function BAN({
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
+                  gap : "10px"
                 }}
               >
-                <Box
+                <Typography
+                variant="body1"
                   sx={{
                     textTransform: "uppercase",
                     color: "#000000",
-                    display: "flex",
-                    alignItems: "center",
                     gap: "5px",
-                    width: "80px",
+                    minWidth: "80px",
                     fontWeight: 600,
+                    
+                    textAlign : "right"
                   }}
                 >
                   {nonStriker?.name || "Bot1"}
-                </Box>
+                </Typography>
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "baseline",
-                    gap: "10px",
+                    gap: "15px",
                     width: "50px",
                     justifyContent: "center",
                   }}
@@ -346,7 +349,6 @@ export default function BAN({
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  marginBottom: "5px",
                 }}
               >
                 <Typography
@@ -354,6 +356,8 @@ export default function BAN({
                     textTransform: "uppercase",
                     color: "#000000",
                     fontWeight: 600,
+                    minWidth: "80px",
+                    textAlign : "right"
                   }}
                   variant="body1"
                 >
@@ -363,7 +367,7 @@ export default function BAN({
                   sx={{
                     display: "flex",
                     alignItems: "flex-end",
-                    gap: "10px",
+                    gap: "5px",
                   }}
                 >
                   <Typography
@@ -396,15 +400,15 @@ export default function BAN({
         <Box
           sx={{
             alignContent: "center",
-            padding: "15px",
+            padding: "10px",
             background: "radial-gradient( #e0dee0 , #cbcbcb )",
             borderRadius: "50%",
           }}
         >
           <img
             style={{
-              width: "60px",
-              height: "40px",
+              width: "45px",
+              height: "30px",
               boxShadow: "3px 3px 8px -2px #000000",
             }}
             src={batting ? aiTeam?.flag : userTeam?.flag}

@@ -19,7 +19,7 @@ export default function Navbar({ profile }) {
   return (
     <AppBar
       position="static"
-      sx={{ background: "none", px: 2, backdropFilter: "blur(3px)" }}
+      sx={{ background: "none",  backdropFilter: "blur(3px)" }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Left: Profile Button */}

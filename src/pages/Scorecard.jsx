@@ -51,7 +51,7 @@ export default function Scorecard() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
+          // height: "100vh",
           flexDirection: "column",
           width: { xs: "800px", sm: "1150px", md: "auto" },
           margin: "auto",
@@ -61,7 +61,8 @@ export default function Scorecard() {
           sx={{
             borderRadius: "12px",
             width: "100%",
-            marginTop : { xs : "0px" , sm : "50px" , md : "150px", lg : "0px"}
+            marginTop : { xs : "50px"},
+            paddingBottom : { xs : "50px"}
           }}
         >
           <Box

@@ -224,7 +224,6 @@ export default function Result() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
           flexDirection: "column",
           // width: { xs: "800px", sm: "1150px", md: "auto" },
           margin: "auto",
@@ -234,11 +233,10 @@ export default function Result() {
           sx={{
             borderRadius: "12px",
             width: "100%",
-            height: "100%",
             // overflow: "hidden",
-            alignContent: "center",
-            
-            // marginTop : { xs : "0px" , sm : "50px" , md : "150px"}
+            alignContent: "center",            
+            marginTop : { xs : "50px" },
+            paddingBottom : { xs : "50px" },
           }}
         >
           <Box

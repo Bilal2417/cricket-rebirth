@@ -50,7 +50,7 @@ export default function Wc19({
         <Box
           sx={{
             alignContent: "center",
-            padding: "0px 20px 0px 100px",
+            padding: "0px 20px",
             backgroundColor: "#faf8fb",
             borderRadius: "0 32px 32px 0",
           }}
@@ -76,7 +76,7 @@ export default function Wc19({
         >
           <Box
             sx={{
-              width: "220px",
+              width: "200px",
               minHeight: "40px",
               padding: "10px 15px",
             }}
@@ -191,7 +191,7 @@ export default function Wc19({
             sx={{
               backgroundColor: "#12174c",
               padding: " 4px 16px 4px 0",
-              minWidth: "310px",
+              minWidth: "300px",
               borderRadius: "32px",
               overflow: "hidden",
             }}
@@ -402,7 +402,7 @@ export default function Wc19({
 
           <Box
             sx={{
-              width: "220px",
+              width: "200px",
               minHeight: "40px",
               padding: "10px 15px",
               position: "relative",
@@ -557,7 +557,7 @@ export default function Wc19({
         <Box
           sx={{
             alignContent: "center",
-            padding: "0px 100px 0px 20px",
+            padding: "0px 20px",
             backgroundColor: "#faf8fb",
             borderRadius: "32px 0px 0px 32px",
           }}
