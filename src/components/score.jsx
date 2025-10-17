@@ -8,6 +8,7 @@ import Wc24 from "./wc24";
 import AUS from "./aus";
 import BAN from "./ban";
 import Wc19 from "./wc19";
+import SRI from "./sri";
 
 export default function ScoreCard() {
   const storedData = localStorage.getItem("cricketData");
@@ -63,13 +64,15 @@ export default function ScoreCard() {
     ban: "#005601",
     wc19: "#12174c",
     wc24: "#0f0648",
+    sri: userTeam?.primary,
   };
-
+  
   const borderColors = {
     aus: batting ? userTeam?.primary : aiTeam?.primary,
     ban: "#8b0605",
     wc19: "#8b0605",
     wc24: "#fa208e",
+    sri: "black",
   };
 
   const handleBall = (run, Wkt = false, aiRun) => {
@@ -611,6 +614,25 @@ export default function ScoreCard() {
             />
           ) : board == "wc19" ? (
             <Wc19
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              // getInitials={getInitials}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
+          ) : board == "sri" ? (
+            <SRI
               batting={batting}
               aiTeam={aiTeam}
               userTeam={userTeam}

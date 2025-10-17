@@ -26,10 +26,8 @@ import ProfileData from "./pages/ProfileData";
 import Tournament from "./pages/Tournament";
 import Navbar from "./components/navbar";
 import Shop from "./pages/Shop";
-import AUS from "./components/aus";
-import Wc19 from "./components/wc19";
 import ScoreBoards from "./pages/Scoreboards";
-import BAN from "./components/ban";
+import SRI from "./components/sri";
 
 function App() {
   useEffect(() => {
@@ -138,8 +136,7 @@ function App() {
         )}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/wc19" element={<Wc19 />} />
-          <Route path="/ban" element={<BAN />} />
+          <Route path="/sri" element={<SRI />} />
           <Route path="/shop" element={<Shop profile={profile} />} />
           <Route path="/tournament" element={<Tournament />} />
           <Route path="/open-pack/:packKey" element={<CardOpening />} />

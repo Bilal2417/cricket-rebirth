@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Lock } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import BAN from "../components/ban";
+import SRI from "../components/sri";
 
 export default function ScoreBoards() {
   const [active, setActive] = useState();
@@ -14,6 +15,10 @@ export default function ScoreBoards() {
     {
       key: "ban",
       board: <BAN />,
+    },
+    {
+      key: "sri",
+      board: <SRI />,
     },
     {
       key: "wc19",

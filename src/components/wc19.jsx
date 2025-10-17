@@ -484,6 +484,7 @@ export default function Wc19({
                 </Typography>
               </Box>
             </Box>
+
             <Box
               sx={{
                 display: "flex",
@@ -551,6 +552,7 @@ export default function Wc19({
                 </Box>
               ))}
             </Box>
+            
           </Box>
         </Box>
 
