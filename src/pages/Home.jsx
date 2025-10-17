@@ -147,65 +147,72 @@ export default function Home() {
           gap: "50px",
         }}
       >
-        <Box
-          sx={{
-            backgroundColor: "#343c53",
-            width: "fit-content",
-            padding: "5px 20px",
-            display: "flex",
-            alignContent: "center",
-            border: "2px solid #000000",
-            borderRadius: "4px",
-            boxShadow: "inset 0px -8px 8px -4px #2a3043",
-            clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-            color: "#ffffff",
-            transition: "all 0.3s",
-            ":hover": {
-              cursor: "pointer",
-              transform: "scale(1.1)",
-            },
-            ":active": {
-              transform: "scale(1)",
-            },
-          }}
-          onClick={() => navigate("/shop")}
-        >
-          <GiShoppingCart size={30} />
-        </Box>
+        <Box sx={{
+          display : "flex",
+          justifyContent : "space-between",
+          alignItems : "flex-start"
+        }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "150px",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box
+              sx={{
+                backgroundColor: "#343c53",
+                width: "fit-content",
+                padding: "5px 20px",
+                display: "flex",
+                alignContent: "center",
+                border: "2px solid #000000",
+                borderRadius: "4px",
+                boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                color: "#ffffff",
+                transition: "all 0.3s",
+                ":hover": {
+                  cursor: "pointer",
+                  transform: "scale(1.1)",
+                },
+                ":active": {
+                  transform: "scale(1)",
+                },
+              }}
+              onClick={() => navigate("/shop")}
+            >
+              <GiShoppingCart size={30} />
+            </Box>
 
-        <Box
-          sx={{
-            backgroundColor: "#343c53",
-            width: "fit-content",
-            padding: "5px 20px",
-            display: "flex",
-            alignContent: "center",
-            border: "2px solid #000000",
-            borderRadius: "4px",
-            boxShadow: "inset 0px -8px 8px -4px #2a3043",
-            clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
-            color: "#ffffff",
-            transition: "all 0.3s",
-            ":hover": {
-              cursor: "pointer",
-              transform: "scale(1.1)",
-            },
-            ":active": {
-              transform: "scale(1)",
-            },
-          }}
-          onClick={() => navigate("/scoreboards")}
-        >
-          <ScoreboardRounded size={30} />
-        </Box>
+            <Box
+              sx={{
+                backgroundColor: "#343c53",
+                width: "fit-content",
+                padding: "5px 20px",
+                display: "flex",
+                alignContent: "center",
+                border: "2px solid #000000",
+                borderRadius: "4px",
+                boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                color: "#ffffff",
+                transition: "all 0.3s",
+                ":hover": {
+                  cursor: "pointer",
+                  transform: "scale(1.1)",
+                },
+                ":active": {
+                  transform: "scale(1)",
+                },
+              }}
+              onClick={() => navigate("/scoreboards")}
+            >
+              <ScoreboardRounded size={30} />
+            </Box>
+          </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
-          }}
-        >
           <Box
             sx={{
               display: "flex",
@@ -227,7 +234,7 @@ export default function Home() {
 
             <Box
               sx={{
-                maxHeight: "230px",
+                maxHeight: "280px",
                 overflowY: "scroll", // Change from "auto" to "scroll"
                 overflowX: "hidden",
                 paddingRight: "10px",
@@ -419,7 +426,7 @@ export default function Home() {
               })}
 
               {loading
-                ? ["1", "2", "3", "4"].map((index) => {
+                ? ["1", "2", "3", "4",'5'].map((index) => {
                     return (
                       <Box
                         key={index}
@@ -513,8 +520,15 @@ export default function Home() {
                 : null}
             </Box>
           </Box>
+        </Box>
 
-          <Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
             <Button
               sx={{
                 // fontfamily: "Rubik",
@@ -618,7 +632,6 @@ export default function Home() {
                 "Play"
               )}
             </Button>
-          </Box>
         </Box>
       </Box>
     </>

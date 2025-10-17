@@ -34,9 +34,9 @@ export default function AUS({
           alignItems: "flex-start",
           // mt: "100px",
           borderRadius: "64px",
-          // width: "100%",
+          width: { xs : "auto" , lg : "100%"},
           boxShadow: `0 0 6px 2px black`,
-          transform: { xs: "scale(0.6)", md: "scale(0.8)", lg: "scale(1.0)" },
+          transform: { xs: "scale(0.7)", md: "scale(0.9)", lg: "scale(1.0)" },
         }}
       >
         <Box

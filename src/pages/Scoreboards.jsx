@@ -7,6 +7,9 @@ import { Lock } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import BAN from "../components/ban";
 import SRI from "../components/sri";
+import Wc21 from "../components/wc21";
+import Wc22 from "../components/wc22";
+import Ct25 from "../components/ct25";
 
 export default function ScoreBoards() {
   const [active, setActive] = useState();
@@ -21,16 +24,28 @@ export default function ScoreBoards() {
       board: <SRI />,
     },
     {
+      key: "aus",
+      board: <AUS />,
+    },
+    {
       key: "wc19",
       board: <Wc19 />,
+    },
+    {
+      key: "wc21",
+      board: <Wc21 />,
+    },
+    {
+      key: "wc22",
+      board: <Wc22 />,
     },
     {
       key: "wc24",
       board: <Wc24 />,
     },
     {
-      key: "aus",
-      board: <AUS />,
+      key: "ct25",
+      board: <Ct25 />,
     },
   ];
 

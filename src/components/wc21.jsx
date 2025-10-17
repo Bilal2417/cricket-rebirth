@@ -1,6 +1,6 @@
 import { Box, Fade, Typography } from "@mui/material";
 
-export default function Wc19({
+export default function Wc21({
   batting,
   aiTeam,
   userTeam,
@@ -40,7 +40,6 @@ export default function Wc19({
       <Box
         sx={{
           width: { xs : "auto" , md : "100%"},
-          //   backgroundColor: "#faf8fb",
           minHeight: "50px",
           display: "flex",
           justifyContent: "center",
@@ -51,7 +50,7 @@ export default function Wc19({
           sx={{
             alignContent: "center",
             padding: "0px 20px 0 100px",
-            backgroundColor: "#faf8fb",
+            background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
             borderRadius: "0 32px 32px 0",
           }}
         >
@@ -69,7 +68,7 @@ export default function Wc19({
         <Box
           sx={{
             display: "flex",
-            backgroundColor: "#faf8fb",
+            background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
             borderRadius: "64px",
             padding: "2px 15px",
           }}
@@ -103,7 +102,7 @@ export default function Wc19({
                   sx={{
                     width: "5px",
                     height: "5px",
-                    backgroundColor: "#fa208e",
+                    backgroundColor: "#da2c4e",
                     borderRadius: "50%",
                     marginLeft: "-10px",
                   }}
@@ -189,10 +188,10 @@ export default function Wc19({
 
           <Box
             sx={{
-              backgroundColor: "#12174c",
-              padding: " 4px 16px 4px 0",
+              backgroundColor: "#0f033f",
+            //   padding: " 0px 16px 0px 0",
               minWidth: "300px",
-              borderRadius: "32px",
+              borderRadius: "100px",
               overflow: "hidden",
             }}
           >
@@ -202,6 +201,9 @@ export default function Wc19({
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "10px",
+                // background : "linear-gradient(to right , #047eb0 , #009fd2)",
+                background : "linear-gradient(to top , #5221ba , #702be7)",
+                paddingRight : "10px"
               }}
             >
               <Box
@@ -209,10 +211,13 @@ export default function Wc19({
                   display: "flex",
                   alignItems: "flex-end",
                   gap: "10px",
+                //   background : "#da2c4e",
                   background:
-                    "linear-gradient(to left , #e00244 20%, #222589 70%)",
+                    "linear-gradient(to bottom , #f83059 , #da2c4e )",
                   borderRadius: "0 32px 32px 0",
                   padding: "0 10px",
+                  
+                  boxShadow: "3px 2px 10px -3px #000000",
                 }}
               >
                 <Box
@@ -337,7 +342,7 @@ export default function Wc19({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                minHeight: "24px",
+                minHeight: "32px",
               }}
             >
               <Fade in={show == 0} timeout={500}>
@@ -538,12 +543,12 @@ export default function Wc19({
                     justifyContent: "center",
                     fontSize: "0.9em",
                     fontWeight: 900,
-                    backgroundColor:
+                    background:
                       colors[
                         batting
                           ? userTeam?.ballHistory[index]
                           : aiTeam?.ballHistory[index]
-                      ] || "#faf8fb",
+                      ] || "radial-gradient( #fdfffc , #d7d8df)",
                   }}
                 >
                   {/* {ballHistory[index] ?? ""} */}
@@ -561,7 +566,7 @@ export default function Wc19({
           sx={{
             alignContent: "center",
             padding: "0px 100px 0 20px",
-            backgroundColor: "#faf8fb",
+            background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
             borderRadius: "32px 0px 0px 32px",
           }}
         >

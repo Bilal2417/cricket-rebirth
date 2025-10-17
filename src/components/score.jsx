@@ -9,6 +9,9 @@ import AUS from "./aus";
 import BAN from "./ban";
 import Wc19 from "./wc19";
 import SRI from "./sri";
+import Wc21 from "./wc21";
+import Wc22 from "./wc22";
+import Ct25 from "./ct25";
 
 export default function ScoreCard() {
   const storedData = localStorage.getItem("cricketData");
@@ -63,7 +66,10 @@ export default function ScoreCard() {
     aus: "#141517",
     ban: "#005601",
     wc19: "#12174c",
+    wc21: "#0f033f",
+    wc22: "#0f044a",
     wc24: "#0f0648",
+    ct25: "#090533",
     sri: userTeam?.primary,
   };
   
@@ -71,7 +77,10 @@ export default function ScoreCard() {
     aus: batting ? userTeam?.primary : aiTeam?.primary,
     ban: "#8b0605",
     wc19: "#8b0605",
+    wc21: "#da2c4e",
+    wc22: "#d71c59",
     wc24: "#fa208e",
+    ct25: "#02c208",
     sri: "black",
   };
 
@@ -633,6 +642,63 @@ export default function ScoreCard() {
             />
           ) : board == "sri" ? (
             <SRI
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              // getInitials={getInitials}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
+          ) : board == "wc21" ? (
+            <Wc21
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              // getInitials={getInitials}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
+          ) : board == "wc22" ? (
+            <Wc22
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              // getInitials={getInitials}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
+          ) : board == "ct25" ? (
+            <Ct25
               batting={batting}
               aiTeam={aiTeam}
               userTeam={userTeam}

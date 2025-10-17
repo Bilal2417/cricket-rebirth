@@ -1,6 +1,6 @@
 import { Box, Fade, Typography } from "@mui/material";
 
-export default function Wc19({
+export default function Wc22({
   batting,
   aiTeam,
   userTeam,
@@ -39,8 +39,7 @@ export default function Wc19({
     <>
       <Box
         sx={{
-          width: { xs : "auto" , md : "100%"},
-          //   backgroundColor: "#faf8fb",
+          width: { xs: "auto", md: "100%" },
           minHeight: "50px",
           display: "flex",
           justifyContent: "center",
@@ -51,7 +50,7 @@ export default function Wc19({
           sx={{
             alignContent: "center",
             padding: "0px 20px 0 100px",
-            backgroundColor: "#faf8fb",
+            background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
             borderRadius: "0 32px 32px 0",
           }}
         >
@@ -69,7 +68,8 @@ export default function Wc19({
         <Box
           sx={{
             display: "flex",
-            backgroundColor: "#faf8fb",
+            background: "linear-gradient(to bottom , #fefefe , #dcdce5)",
+            // background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
             borderRadius: "64px",
             padding: "2px 15px",
           }}
@@ -103,7 +103,7 @@ export default function Wc19({
                   sx={{
                     width: "5px",
                     height: "5px",
-                    backgroundColor: "#fa208e",
+                    backgroundColor: "#da2c4e",
                     borderRadius: "50%",
                     marginLeft: "-10px",
                   }}
@@ -189,10 +189,10 @@ export default function Wc19({
 
           <Box
             sx={{
-              backgroundColor: "#12174c",
-              padding: " 4px 16px 4px 0",
+              backgroundColor: "#0f044a",
+              //   padding: " 0px 16px 0px 0",
               minWidth: "300px",
-              borderRadius: "32px",
+              borderRadius: "100px",
               overflow: "hidden",
             }}
           >
@@ -202,17 +202,19 @@ export default function Wc19({
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "10px",
+                background: "linear-gradient(to right , #047eb0 , #009fd2)",
+                paddingRight: "10px",
               }}
             >
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "flex-end",
+                  alignItems: "baseline",
                   gap: "10px",
-                  background:
-                    "linear-gradient(to left , #e00244 20%, #222589 70%)",
+                  background: "linear-gradient(to bottom , #de265c , #d71c59 )",
                   borderRadius: "0 32px 32px 0",
                   padding: "0 10px",
+                  boxShadow: "3px 2px 10px -3px #000000",
                 }}
               >
                 <Box
@@ -260,7 +262,7 @@ export default function Wc19({
                       color: "#faf8fb",
                       // fontfamily: "Rubik",
                       textTransform: "uppercase",
-                      fontSize: "1.1em",
+                      fontSize: "1.4em !important",
                       fontWeight: 600,
                     }}
                     variant="h6"
@@ -322,7 +324,7 @@ export default function Wc19({
                     fontSize: "0.7em",
                     fontWeight: 400,
                     color: "#faf8fb",
-                    minWidth : "65px",
+                    minWidth: "65px",
                   }}
                   component="span"
                 >
@@ -337,7 +339,7 @@ export default function Wc19({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                minHeight: "24px",
+                minHeight: "32px",
               }}
             >
               <Fade in={show == 0} timeout={500}>
@@ -538,12 +540,12 @@ export default function Wc19({
                     justifyContent: "center",
                     fontSize: "0.9em",
                     fontWeight: 900,
-                    backgroundColor:
+                    background:
                       colors[
                         batting
                           ? userTeam?.ballHistory[index]
                           : aiTeam?.ballHistory[index]
-                      ] || "#faf8fb",
+                      ] || "radial-gradient( #fdfffc , #d7d8df)",
                   }}
                 >
                   {/* {ballHistory[index] ?? ""} */}
@@ -553,7 +555,6 @@ export default function Wc19({
                 </Box>
               ))}
             </Box>
-            
           </Box>
         </Box>
 
@@ -561,7 +562,7 @@ export default function Wc19({
           sx={{
             alignContent: "center",
             padding: "0px 100px 0 20px",
-            backgroundColor: "#faf8fb",
+            background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
             borderRadius: "32px 0px 0px 32px",
           }}
         >

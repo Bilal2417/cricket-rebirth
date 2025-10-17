@@ -42,7 +42,7 @@ export default function SRI({
         sx={{
           display: "flex",
           justifyContent: "center",
-          transform: { xs: "scale(0.7)", md: "scale(0.8)", lg: "scale(1.0)" },
+          transform: { xs: "scale(0.65)", md: "scale(0.9)", lg: "scale(1.0)" },
           gap: "40px",
         }}
       >

@@ -38,13 +38,13 @@ export default function Wc24({
     <>
       <Box
         sx={{
-          width: "100%",
+          width: { xs : 'auto' , md : "100%"},
           backgroundColor: "#faf8fb",
           minHeight: "50px",
           display: "flex",
           justifyContent: "center",
           boxShadow: `0 0 6px 2px black`,
-          transform: { xs: "scale(0.6)", md: "scale(0.8)", lg: "scale(1.0)" },
+          transform: { xs: "scale(0.7)", md: "scale(0.8)", lg: "scale(1.0)" },
         }}
       >
         <Box
@@ -180,6 +180,7 @@ export default function Wc24({
             </Box>
           </Box>
         </Box>
+
 
         <Box
           sx={{

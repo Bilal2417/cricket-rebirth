@@ -1,6 +1,6 @@
 import { Box, Fade, Typography } from "@mui/material";
 
-export default function Wc19({
+export default function Ct25({
   batting,
   aiTeam,
   userTeam,
@@ -19,9 +19,9 @@ export default function Wc19({
   randomBowler,
 }) {
   const colors = {
-    6: "#222589",
-    W: "#e00244",
-    4: "#222589",
+    6: "#090533",
+    W: "#02c208",
+    4: "#090533",
   };
 
   function getInitials(name) {
@@ -39,20 +39,21 @@ export default function Wc19({
     <>
       <Box
         sx={{
-          width: { xs : "auto" , md : "100%"},
-          //   backgroundColor: "#faf8fb",
+            width: { xs: "auto", md: "100%" },
           minHeight: "50px",
           display: "flex",
-          justifyContent: "center",
           transform: { xs: "scale(0.7)", md: "scale(0.8)", lg: "scale(1.0)" },
+          background: "linear-gradient(to bottom , #fffdfe , #e8e7f0)",
+          justifyContent : "space-between"
         }}
       >
         <Box
           sx={{
             alignContent: "center",
-            padding: "0px 20px 0 100px",
-            backgroundColor: "#faf8fb",
+            padding: "0px 30px 0 90px",
+            background: "linear-gradient(to left , #00af06 , #04c802)",
             borderRadius: "0 32px 32px 0",
+            boxShadow: "3px 0px 25px -3px #000000",
           }}
         >
           <img
@@ -69,8 +70,9 @@ export default function Wc19({
         <Box
           sx={{
             display: "flex",
-            backgroundColor: "#faf8fb",
-            borderRadius: "64px",
+            // background: "linear-gradient(to bottom , #fffdfe , #e8e7f0)",
+            // background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
+            // borderRadius: "64px",
             padding: "2px 15px",
           }}
         >
@@ -97,13 +99,14 @@ export default function Wc19({
                   alignItems: "center",
                   gap: "5px",
                   width: "80px",
+                  fontWeight : 600
                 }}
               >
                 <Box
                   sx={{
                     width: "5px",
                     height: "5px",
-                    backgroundColor: "#fa208e",
+                    backgroundColor: "#da2c4e",
                     borderRadius: "50%",
                     marginLeft: "-10px",
                   }}
@@ -122,6 +125,7 @@ export default function Wc19({
                 <Typography
                   sx={{
                     color: "#0f0648",
+                    fontWeight: 600,
                   }}
                   variant="body1"
                 >
@@ -150,8 +154,8 @@ export default function Wc19({
                   textTransform: "uppercase",
                   color: "#0f0648",
                   fontSize: "0.9em",
-                  // fontfamily: "Rubik",
                   width: "80px",
+                  fontWeight : 600
                 }}
                 variant="body1"
               >
@@ -169,6 +173,7 @@ export default function Wc19({
                 <Typography
                   sx={{
                     color: "#0f0648",
+                    fontWeight: 600,
                   }}
                   variant="body1"
                 >
@@ -187,13 +192,13 @@ export default function Wc19({
             </Box>
           </Box>
 
+          {/* score */}
           <Box
             sx={{
-              backgroundColor: "#12174c",
-              padding: " 4px 16px 4px 0",
+              background: "linear-gradient(to bottom , #16004c , #090533)",
+              padding: " 4px 8px",
               minWidth: "300px",
-              borderRadius: "32px",
-              overflow: "hidden",
+              borderRadius: "100px",
             }}
           >
             <Box
@@ -207,92 +212,66 @@ export default function Wc19({
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "flex-end",
-                  gap: "10px",
-                  background:
-                    "linear-gradient(to left , #e00244 20%, #222589 70%)",
-                  borderRadius: "0 32px 32px 0",
-                  padding: "0 10px",
+                  alignItems: "baseline",
+                  gap: "3px",
                 }}
               >
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "baseline",
-                    gap: "3px",
+                    gap: "5px",
+                    textTransform: "uppercase",
+                    color: "#02c208",
                   }}
+                  variant="body1"
                 >
+                  {!batting
+                    ? getInitials(userTeam?.name || "Bot1")
+                    : getInitials(aiTeam?.name || "Bot2")}{" "}
                   <Box
                     sx={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: "5px",
-                      color: "#faf8fb",
-                      // fontfamily: "Rubik",
-                      textTransform: "uppercase",
+                      fontSize: "0.7em",
                     }}
-                    variant="body1"
+                    variant="span"
                   >
-                    <Typography
-                      sx={{
-                        color: "#faf8fb",
-                        textTransform: "uppercase",
-                        // fontSize: "1.1em",
-                        opacity: 0.8,
-                      }}
-                      variant="body1"
-                    >
-                      {!batting
-                        ? getInitials(userTeam?.name || "Robo")
-                        : getInitials(aiTeam?.name || "Robo")}{" "}
-                    </Typography>
-                    <Box
-                      sx={{
-                        fontSize: "0.7em",
-                      }}
-                      variant="span"
-                    >
-                      v
-                    </Box>
+                    v
                   </Box>
-                  <Typography
-                    sx={{
-                      color: "#faf8fb",
-                      // fontfamily: "Rubik",
-                      textTransform: "uppercase",
-                      fontSize: "1.1em",
-                      fontWeight: 600,
-                    }}
-                    variant="h6"
-                  >
-                    {!batting
-                      ? getInitials(aiTeam?.name || "Robo")
-                      : getInitials(userTeam?.name || "Robo")}{" "}
-                  </Typography>
                 </Box>
-
-                <Box
+                <Typography
                   sx={{
-                    //   backgroundColor: "#fa208e",
-                    //   borderRadius: "8px",
-                    padding: "2px 0px",
-                    width: "100px",
+                    textTransform: "uppercase",
+                    fontSize: "1.4em !important",
+                    fontWeight: 600,
+                    color: "#02c208",
+                  }}
+                  variant="h6"
+                >
+                  {!batting
+                    ? getInitials(aiTeam?.name || "Bot2")
+                    : getInitials(userTeam?.name || "Bot1")}{" "}
+                </Typography>
+              </Box>
+
+              <Box
+                sx={{
+                  backgroundColor: "#ffffff",
+                  borderRadius: "8px",
+                  width: "100px",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "#171822",
+                    fontSize: "0.9em",
+                    fontWeight: 600,
+                    textAlign: "center",
                   }}
                 >
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      color: "#FFFFFF",
-                      fontSize: "0.9em",
-                      fontWeight: "600",
-                      // fontfamily: "Rubik",
-                      textAlign: "center",
-                    }}
-                  >
-                    {batting ? userTeam?.score || 0 : aiTeam?.score || 0} -{" "}
-                    {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
-                  </Typography>
-                </Box>
+                  {batting ? userTeam?.score || 0 : aiTeam?.score || 0} -{" "}
+                  {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
+                </Typography>
               </Box>
 
               <Box
@@ -303,13 +282,12 @@ export default function Wc19({
               >
                 <Typography
                   sx={{
-                    color: "#faf8fb",
-                    // fontfamily: "Rubik",
                     textTransform: "uppercase",
                     fontWeight: 600,
                     fontSize: "0.9em",
                     width: "30px",
                     textAlign: "center",
+                    color: "#02c208",
                   }}
                   variant="body1"
                 >
@@ -321,12 +299,11 @@ export default function Wc19({
                   sx={{
                     fontSize: "0.7em",
                     fontWeight: 400,
-                    color: "#faf8fb",
-                    minWidth : "65px",
+                    color: "#02c208",
                   }}
                   component="span"
                 >
-                  overs ({totalOvers == 100 ? "∞" : totalOvers})
+                  overs ({totalOvers == 100 ? "∞" : totalOvers || 20})
                 </Box>
               </Box>
             </Box>
@@ -343,8 +320,6 @@ export default function Wc19({
               <Fade in={show == 0} timeout={500}>
                 <Typography
                   sx={{
-                    color: "#faf8fb",
-                    // fontfamily: "Rubik",
                     textTransform: "uppercase",
                     fontWeight: 600,
                     position: "absolute",
@@ -364,8 +339,6 @@ export default function Wc19({
               <Fade in={show == 1} timeout={500}>
                 <Typography
                   sx={{
-                    color: "#faf8fb",
-                    // fontfamily: "Rubik",
                     textTransform: "uppercase",
                     fontWeight: 600,
                     position: "absolute",
@@ -379,8 +352,6 @@ export default function Wc19({
               <Fade in={show == 2} timeout={500}>
                 <Typography
                   sx={{
-                    color: "#faf8fb",
-                    // fontfamily: "Rubik",
                     textTransform: "uppercase",
                     fontWeight: 600,
                     position: "absolute",
@@ -412,17 +383,18 @@ export default function Wc19({
             <Typography
               variant="body1"
               sx={{
-                color: "#12174c",
+                color: "#ffffff",
                 textTransform: "uppercase",
-                // fontFamily: "Poppins ,sans-serif , Rubik",
                 position: "absolute",
                 top: "-50px",
                 left: 0,
                 fontSize: "0.8em",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "#090533",
                 padding: "10px 20px",
                 borderRadius: "32px",
                 fontWeight: 600,
+                borderBottom : "3px solid #02c208",
+                borderRight : "3px solid #02c208"
               }}
             >
               wkt % :{" "}
@@ -449,7 +421,7 @@ export default function Wc19({
                   textTransform: "uppercase",
                   color: "#12174c",
                   fontSize: "0.9em",
-                  // fontfamily: "Rubik",
+                  fontWeight: 600,
                 }}
                 variant="body1"
               >
@@ -465,7 +437,7 @@ export default function Wc19({
                 <Typography
                   sx={{
                     color: "#12174c",
-                    // fontfamily: "Rubik",
+                    fontWeight: 600,
                     width: "50px",
                     textAlign: "center",
                   }}
@@ -509,7 +481,7 @@ export default function Wc19({
                                 : aiTeam?.ballHistory[index]
                             ]
                           }`
-                        : "2px solid #12174c"
+                        : "2px solid #090533"
                       : aiTeam?.ballHistory[index] > 3 ||
                         aiTeam?.ballHistory[index] == "W"
                       ? `2px solid ${
@@ -519,7 +491,7 @@ export default function Wc19({
                               : aiTeam?.ballHistory[index]
                           ]
                         }`
-                      : "2px solid #12174c",
+                      : "2px solid #090533",
 
                     color: batting
                       ? userTeam?.ballHistory[index] > 3 ||
@@ -538,12 +510,12 @@ export default function Wc19({
                     justifyContent: "center",
                     fontSize: "0.9em",
                     fontWeight: 900,
-                    backgroundColor:
+                    background:
                       colors[
                         batting
                           ? userTeam?.ballHistory[index]
                           : aiTeam?.ballHistory[index]
-                      ] || "#faf8fb",
+                      ] || "radial-gradient( #fdfffc , #d7d8df)",
                   }}
                 >
                   {/* {ballHistory[index] ?? ""} */}
@@ -553,16 +525,16 @@ export default function Wc19({
                 </Box>
               ))}
             </Box>
-            
           </Box>
         </Box>
 
         <Box
           sx={{
             alignContent: "center",
-            padding: "0px 100px 0 20px",
-            backgroundColor: "#faf8fb",
+            padding: "0px 90px 0 30px",
+            background: "linear-gradient(to right , #00af06 , #04c802)",
             borderRadius: "32px 0px 0px 32px",
+            boxShadow: "-3px 0px 25px -3px #000000",
           }}
         >
           <img
