@@ -44,13 +44,13 @@ export default function Wc19({
           minHeight: "50px",
           display: "flex",
           justifyContent: "center",
-          boxShadow: `0 0 6px 2px #12174c`,
+          transform: { xs: "scale(0.6)", md: "scale(0.8)", lg: "scale(1.0)" },
         }}
       >
         <Box
           sx={{
             alignContent: "center",
-            padding: "0px 20px",
+            padding: "0px 20px 0 100px",
             backgroundColor: "#faf8fb",
             borderRadius: "0 32px 32px 0",
           }}
@@ -557,7 +557,7 @@ export default function Wc19({
         <Box
           sx={{
             alignContent: "center",
-            padding: "0px 20px",
+            padding: "0px 100px 0 20px",
             backgroundColor: "#faf8fb",
             borderRadius: "32px 0px 0px 32px",
           }}

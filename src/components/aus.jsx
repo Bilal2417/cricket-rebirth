@@ -30,7 +30,7 @@ export default function AUS({
             "radial-gradient(circle, rgba(255,255,255) -400%, #141517 100%)",
           display: "flex",
           gap: "20px",
-          padding: "10px 20px 20px",
+          padding: "20px",
           alignItems: "flex-start",
           // mt: "100px",
           borderRadius: "64px",
@@ -203,7 +203,7 @@ export default function AUS({
               alignItems: "center",
               justifyContent: "center",
               minHeight: "24px",
-              mt: "10px",
+              mt: "12px",
             }}
           >
             <Fade in={show == 0} timeout={500}>

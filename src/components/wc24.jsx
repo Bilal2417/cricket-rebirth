@@ -34,7 +34,6 @@ export default function Wc24({
     return (words[0][0] + words[1][0]).toUpperCase();
   }
 
-
   return (
     <>
       <Box
@@ -43,8 +42,9 @@ export default function Wc24({
           backgroundColor: "#faf8fb",
           minHeight: "50px",
           display: "flex",
-          justifyContent: "center",        
-            boxShadow: `0 0 6px 2px black`,
+          justifyContent: "center",
+          boxShadow: `0 0 6px 2px black`,
+          transform: { xs: "scale(0.6)", md: "scale(0.8)", lg: "scale(1.0)" },
         }}
       >
         <Box
@@ -324,8 +324,8 @@ export default function Wc24({
                 {over === 0 && balls === 0
                   ? "0.00"
                   : (
-                     ( (batting ? userTeam?.score : aiTeam?.score) /
-                      (over + balls / 6)) || 0
+                      (batting ? userTeam?.score : aiTeam?.score) /
+                        (over + balls / 6) || 0
                     ).toFixed(2)}
               </Typography>
             </Fade>
@@ -368,7 +368,6 @@ export default function Wc24({
               </Typography>
             </Fade>
           </Box>
-          
         </Box>
 
         <Box

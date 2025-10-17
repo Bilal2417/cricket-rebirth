@@ -58,6 +58,20 @@ export default function ScoreCard() {
   const [partnership, setPartnership] = useState(0);
   const [partnershipBalls, setPartnershipBalls] = useState(0);
 
+  const colors = {
+    aus: "#141517",
+    ban: "#005601",
+    wc19: "#12174c",
+    wc24: "#0f0648",
+  };
+
+  const borderColors = {
+    aus: batting ? userTeam?.primary : aiTeam?.primary,
+    ban: "#8b0605",
+    wc19: "#8b0605",
+    wc24: "#fa208e",
+  };
+
   const handleBall = (run, Wkt = false, aiRun) => {
     setBalls((prevBalls) => {
       const isOverComplete = prevBalls === 5;
@@ -630,7 +644,7 @@ export default function ScoreCard() {
               return (
                 <Button
                   sx={{
-                    backgroundColor: board == "aus" ? "#141517" :"#0f0648",
+                    backgroundColor: colors[board],
                     color: "#FFFFFF",
                     width: "60px",
                     height: "60px",
@@ -638,13 +652,13 @@ export default function ScoreCard() {
                     borderRadius: "50%",
                     fontWeight: 600,
                     fontSize: "1em",
-                    borderBottom: board == "aus" ? `4px solid ${batting ? userTeam?.primary : aiTeam?.primary}` :`4px solid #53489a`,
-                    borderRight: board == "aus" ? `4px solid ${batting ? userTeam?.primary : aiTeam?.primary}` :`4px solid #53489a`,
+                    borderBottom: `4px solid ${borderColors[board]}`,
+                    borderRight: `4px solid ${borderColors[board]}`,
                     ":hover": {
-                      backgroundColor: board == "aus" ? "#141517cc" :"#0f0648cc",
+                      backgroundColor: colors[board],
                       transform: "scale(1.05)",
-                      borderBottom: board == "aus" ? `4px solid ${batting ? userTeam?.primary : aiTeam?.primary}` :`4px solid #53489a`,
-                      borderRight: board == "aus" ? `3px solid ${batting ? userTeam?.primary : aiTeam?.primary}` :`3px solid #53489a`,
+                      borderBottom: `4px solid ${borderColors[board]}`,
+                      borderRight: `3px solid ${borderColors[board]}`,
                       transition: "all 0.3s",
                     },
                     ":focus": {

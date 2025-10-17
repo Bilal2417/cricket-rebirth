@@ -36,6 +36,7 @@ export default function BAN({
           display: "flex",
           alignItems: "center",
           gap: "10px",
+          transform: { xs: "scale(0.6)", md: "scale(0.8)", lg: "scale(1.0)" },
         }}
       >
         <Box
@@ -76,7 +77,7 @@ export default function BAN({
                   textTransform: "uppercase",
                   background:
                     "linear-gradient(to bottom , #005601 , #006700 , #005601 )",
-                  padding: "4px 20px",
+                  padding: "4px 25px",
                 }}
                 variant="body1"
               >
@@ -86,7 +87,7 @@ export default function BAN({
                 sx={{
                   background:
                     "linear-gradient(to bottom , #8b0605 , #9a0001 , #8b0605 )",
-                  padding: "4px 15px",
+                  padding: "4px 20px",
                   textTransform: "uppercase",
                 }}
                 variant="body1"
@@ -97,7 +98,7 @@ export default function BAN({
               <Typography
                 sx={{
                   background: "linear-gradient(to bottom , #e0dee0 , #cbcbcb )",
-                  padding: "4px 15px",
+                  padding: "4px 20px",
                   textTransform: "uppercase",
                   color: "#000000",
                 }}
@@ -117,7 +118,7 @@ export default function BAN({
                   alignItems: "center",
                   justifyContent: "center",
                   minHeight: "32px",
-                  minWidth: "300px",
+                  minWidth: "350px",
                   flexGrow: 2,
                 }}
               >
@@ -187,7 +188,7 @@ export default function BAN({
                     "linear-gradient(to bottom , #8b0605 , #9a0001 , #8b0605 )",
                   padding: "4px 10px",
                   textTransform: "uppercase",
-                  minWidth: "150px",
+                  minWidth: "200px",
                   textAlign: "center",
                   position: "relative",
                 }}
@@ -266,7 +267,7 @@ export default function BAN({
                   sx={{
                     display: "flex",
                     alignItems: "baseline",
-                    gap: "15px",
+                    gap: "5px",
                     width: "50px",
                     justifyContent: "center",
                   }}
@@ -275,15 +276,17 @@ export default function BAN({
                     sx={{
                       color: "#000000",
                       fontWeight: 600,
+                      minWidth : "20px"
                     }}
                     variant="body1"
-                  >
+                    >
                     {striker?.score || 0}
                   </Typography>
                   <Typography
                     sx={{
                       color: "#000000",
                       fontSize: "0.75em",
+                      minWidth : "20px"
                     }}
                     variant="body1"
                   >
@@ -297,7 +300,7 @@ export default function BAN({
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  gap : "10px"
+                  gap : "15px"
                 }}
               >
                 <Typography
@@ -307,8 +310,7 @@ export default function BAN({
                     color: "#000000",
                     gap: "5px",
                     minWidth: "80px",
-                    fontWeight: 600,
-                    
+                    fontWeight: 600,                    
                     textAlign : "right"
                   }}
                 >
@@ -318,7 +320,7 @@ export default function BAN({
                   sx={{
                     display: "flex",
                     alignItems: "baseline",
-                    gap: "15px",
+                    gap: "5px",
                     width: "50px",
                     justifyContent: "center",
                   }}
@@ -327,6 +329,7 @@ export default function BAN({
                     sx={{
                       color: "#000000",
                       fontWeight: 600,
+                      minWidth : "20px"
                     }}
                     variant="body1"
                   >
@@ -336,6 +339,7 @@ export default function BAN({
                     sx={{
                       color: "#000000",
                       fontSize: "0.75em",
+                      minWidth : "20px"
                     }}
                     variant="body1"
                   >
@@ -355,6 +359,7 @@ export default function BAN({
                   sx={{
                     textTransform: "uppercase",
                     color: "#000000",
+                     fontSize: "0.9em",
                     fontWeight: 600,
                     minWidth: "80px",
                     textAlign : "right"
@@ -373,7 +378,6 @@ export default function BAN({
                   <Typography
                     sx={{
                       color: "#000000",
-                      // fontfamily: "Rubik",
                       minWidth: "80px",
                       textAlign: "center",
                     }}
