@@ -240,7 +240,7 @@ export default function BAN({
                     {/* {ballHistory[index] ?? ""} */}
                     {batting
                       ? userTeam?.ballHistory[index]
-                      : aiTeam?.ballHistory[index] || 0}
+                      : aiTeam?.ballHistory[index]}
                   </Box>
                 ))}
                 <Typography
