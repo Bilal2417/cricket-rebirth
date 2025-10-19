@@ -89,12 +89,14 @@ export default function BAN({
                     "linear-gradient(to bottom , #8b0605 , #9a0001 , #8b0605 )",
                   padding: "4px 20px",
                   textTransform: "uppercase",
-                  textAlign : "center",
-                  minWidth : "120px",
+                  textAlign: "center",
+                  minWidth: "120px",
+                  fontWeight: 600,
                 }}
                 variant="body1"
               >
-                {batting ? userTeam?.score || 0 : aiTeam?.score || 0} - {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
+                {batting ? userTeam?.score || 0 : aiTeam?.score || 0} -{" "}
+                {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
               </Typography>
               <Typography
                 sx={{
@@ -187,29 +189,74 @@ export default function BAN({
                 sx={{
                   background:
                     "linear-gradient(to bottom , #8b0605 , #9a0001 , #8b0605 )",
-                  padding: "4px 10px",
+                  padding: "8px 10px",
                   textTransform: "uppercase",
                   minWidth: "180px",
                   textAlign: "center",
                   position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  justifyContent: "center",
                 }}
               >
-                {getInitials(userTeam?.name || "Bot1")} v{" "}
-                {getInitials(aiTeam?.name || "Bot2")}
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      width: "15px",
+                      height: "15px",
+                      color: batting
+                        ? userTeam?.ballHistory[index] == "W"
+                          ? "#ffffff"
+                          : userTeam?.ballHistory[index] < 4
+                          ? "#000000"
+                          : "#ffffff"
+                        : aiTeam?.ballHistory[index] == "W"
+                        ? "#ffffff"
+                        : aiTeam?.ballHistory[index] < 4
+                        ? "#000000"
+                        : "#ffffff",
+                      padding: "8px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.9em",
+                      fontWeight: 900,
+                      outline: "2px solid #000",
+                      background: batting
+                        ? userTeam?.ballHistory[index] == "W"
+                          ? "none"
+                          : userTeam?.ballHistory[index] < 4
+                          ? "#ffffff"
+                          : "#005601"
+                        : aiTeam?.ballHistory[index] == "W"
+                        ? "none"
+                        : aiTeam?.ballHistory[index] < 4
+                        ? "#ffffff"
+                        : "#005601",
+                    }}
+                  >
+                    {/* {ballHistory[index] ?? ""} */}
+                    {batting
+                      ? userTeam?.ballHistory[index]
+                      : aiTeam?.ballHistory[index] || 0}
+                  </Box>
+                ))}
                 <Typography
                   variant="body1"
                   sx={{
                     color: "#FFFFFF",
                     textTransform: "uppercase",
-                    // fontFamily: "Poppins ,sans-serif , Rubik",
                     position: "absolute",
                     top: -70,
-                    left: -10,
+                    left: 0,
                     fontSize: "0.8em",
                     background:
                       "linear-gradient(to bottom , #8b0605 , #9a0001 , #8b0605 )",
                     padding: "6px 12px",
-                    border : "4px solid #000000"
+                    border: "4px solid #000000",
+                    minWidth: "180px",
                   }}
                 >
                   wkt % :{" "}
@@ -239,7 +286,7 @@ export default function BAN({
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  gap : "10px"
+                  gap: "10px",
                 }}
               >
                 <Box
@@ -277,17 +324,17 @@ export default function BAN({
                     sx={{
                       color: "#000000",
                       fontWeight: 600,
-                      minWidth : "20px"
+                      minWidth: "20px",
                     }}
                     variant="body1"
-                    >
+                  >
                     {striker?.score || 0}
                   </Typography>
                   <Typography
                     sx={{
                       color: "#000000",
                       fontSize: "0.75em",
-                      minWidth : "20px"
+                      minWidth: "20px",
                     }}
                     variant="body1"
                   >
@@ -301,18 +348,18 @@ export default function BAN({
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  gap : "15px"
+                  gap: "15px",
                 }}
               >
                 <Typography
-                variant="body1"
+                  variant="body1"
                   sx={{
                     textTransform: "uppercase",
                     color: "#000000",
                     gap: "5px",
                     minWidth: "80px",
-                    fontWeight: 600,                    
-                    textAlign : "right"
+                    fontWeight: 600,
+                    textAlign: "right",
                   }}
                 >
                   {nonStriker?.name || "Bot1"}
@@ -330,7 +377,7 @@ export default function BAN({
                     sx={{
                       color: "#000000",
                       fontWeight: 600,
-                      minWidth : "20px"
+                      minWidth: "20px",
                     }}
                     variant="body1"
                   >
@@ -340,7 +387,7 @@ export default function BAN({
                     sx={{
                       color: "#000000",
                       fontSize: "0.75em",
-                      minWidth : "20px"
+                      minWidth: "20px",
                     }}
                     variant="body1"
                   >
@@ -360,10 +407,10 @@ export default function BAN({
                   sx={{
                     textTransform: "uppercase",
                     color: "#000000",
-                     fontSize: "0.9em",
+                    fontSize: "0.9em",
                     fontWeight: 600,
                     minWidth: "80px",
-                    textAlign : "right"
+                    textAlign: "right",
                   }}
                   variant="body1"
                 >

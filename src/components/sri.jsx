@@ -35,7 +35,7 @@ export default function SRI({
     return (words[0][0] + words[1][0]).toUpperCase();
   }
 
-  const teams = ["Australia", "UAE"];
+  const teams = ["Australia", "UAE" , "Sri Lanka" , "India"];
   return (
     <>
       <Box

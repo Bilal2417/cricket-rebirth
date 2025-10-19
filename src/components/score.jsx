@@ -12,6 +12,7 @@ import SRI from "./sri";
 import Wc21 from "./wc21";
 import Wc22 from "./wc22";
 import Ct25 from "./ct25";
+import NZ from "./nz";
 
 export default function ScoreCard() {
   const storedData = localStorage.getItem("cricketData");
@@ -71,8 +72,11 @@ export default function ScoreCard() {
     wc24: "#0f0648",
     ct25: "#090533",
     sri: userTeam?.primary,
+      nz: batting
+    ? `radial-gradient(${userTeam?.secondary || "#000"}, ${userTeam?.primary || "#333"})`
+    : `radial-gradient(${aiTeam?.secondary || "#000"}, ${aiTeam?.primary || "#333"})`,
   };
-  
+
   const borderColors = {
     aus: batting ? userTeam?.primary : aiTeam?.primary,
     ban: "#8b0605",
@@ -82,6 +86,7 @@ export default function ScoreCard() {
     wc24: "#fa208e",
     ct25: "#02c208",
     sri: "black",
+    nz : "#c00050"
   };
 
   const handleBall = (run, Wkt = false, aiRun) => {
@@ -659,6 +664,24 @@ export default function ScoreCard() {
               isSix={isSix}
               randomBowler={randomBowler}
             />
+          ) : board == "nz" ? (
+            <NZ
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
           ) : board == "wc21" ? (
             <Wc21
               batting={batting}
@@ -732,7 +755,7 @@ export default function ScoreCard() {
               return (
                 <Button
                   sx={{
-                    backgroundColor: colors[board],
+                    background: colors[board],
                     color: "#FFFFFF",
                     width: "60px",
                     height: "60px",

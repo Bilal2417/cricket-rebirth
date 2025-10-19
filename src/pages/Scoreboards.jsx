@@ -10,6 +10,7 @@ import SRI from "../components/sri";
 import Wc21 from "../components/wc21";
 import Wc22 from "../components/wc22";
 import Ct25 from "../components/ct25";
+import NZ from "../components/nz";
 
 export default function ScoreBoards() {
   const [active, setActive] = useState();
@@ -22,6 +23,10 @@ export default function ScoreBoards() {
     {
       key: "sri",
       board: <SRI />,
+    },
+    {
+      key: "nz",
+      board: <NZ />,
     },
     {
       key: "aus",
@@ -109,6 +114,8 @@ export default function ScoreBoards() {
                   />
                 )}
                 {score.key}
+                <br/>
+                <br/>
                 {score.board}
               </Box>
             </>

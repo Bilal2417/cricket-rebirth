@@ -39,21 +39,22 @@ export default function Ct25({
     <>
       <Box
         sx={{
-            width: { xs: "auto", md: "100%" },
+          width: { xs: "auto", md: "100%" },
           minHeight: "50px",
           display: "flex",
           transform: { xs: "scale(0.7)", md: "scale(0.8)", lg: "scale(1.0)" },
           background: "linear-gradient(to bottom , #fffdfe , #e8e7f0)",
-          justifyContent : "space-between"
+          justifyContent: "center",
         }}
       >
         <Box
           sx={{
             alignContent: "center",
-            padding: "0px 30px 0 90px",
+            padding: "0px 30px",
             background: "linear-gradient(to left , #00af06 , #04c802)",
             borderRadius: "0 32px 32px 0",
             boxShadow: "3px 0px 25px -3px #000000",
+            width: "100%",
           }}
         >
           <img
@@ -61,6 +62,8 @@ export default function Ct25({
               width: "60px",
               height: "40px",
               boxShadow: "3px 3px 8px -2px #12174c",
+              display: "block",
+              marginLeft: "auto",
             }}
             src={!batting ? aiTeam?.flag : userTeam?.flag}
             alt={!batting ? aiTeam?.name : userTeam?.name}
@@ -78,7 +81,7 @@ export default function Ct25({
         >
           <Box
             sx={{
-              width: "200px",
+              width: "210px",
               minHeight: "40px",
               padding: "10px 15px",
             }}
@@ -99,7 +102,7 @@ export default function Ct25({
                   alignItems: "center",
                   gap: "5px",
                   width: "80px",
-                  fontWeight : 600
+                  fontWeight: 600,
                 }}
               >
                 <Box
@@ -155,7 +158,7 @@ export default function Ct25({
                   color: "#0f0648",
                   fontSize: "0.9em",
                   width: "80px",
-                  fontWeight : 600
+                  fontWeight: 600,
                 }}
                 variant="body1"
               >
@@ -197,7 +200,7 @@ export default function Ct25({
             sx={{
               background: "linear-gradient(to bottom , #16004c , #090533)",
               padding: " 4px 8px",
-              minWidth: "300px",
+              minWidth: "320px",
               borderRadius: "100px",
             }}
           >
@@ -374,7 +377,7 @@ export default function Ct25({
 
           <Box
             sx={{
-              width: "200px",
+              width: "210px",
               minHeight: "40px",
               padding: "10px 15px",
               position: "relative",
@@ -393,8 +396,8 @@ export default function Ct25({
                 padding: "10px 20px",
                 borderRadius: "32px",
                 fontWeight: 600,
-                borderBottom : "3px solid #02c208",
-                borderRight : "3px solid #02c208"
+                borderBottom: "3px solid #02c208",
+                borderRight: "3px solid #02c208",
               }}
             >
               wkt % :{" "}
@@ -531,10 +534,11 @@ export default function Ct25({
         <Box
           sx={{
             alignContent: "center",
-            padding: "0px 90px 0 30px",
+            padding: "0px 30px",
             background: "linear-gradient(to right , #00af06 , #04c802)",
             borderRadius: "32px 0px 0px 32px",
             boxShadow: "-3px 0px 25px -3px #000000",
+            width : "100%"
           }}
         >
           <img
@@ -542,6 +546,8 @@ export default function Ct25({
               width: "60px",
               height: "40px",
               boxShadow: "3px 3px 8px -2px #12174c",
+              display: "block",
+              marginRight: "auto",
             }}
             src={batting ? aiTeam?.flag : userTeam?.flag}
           />

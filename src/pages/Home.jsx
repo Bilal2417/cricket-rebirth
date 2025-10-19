@@ -141,7 +141,7 @@ export default function Home() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          py: 8,
+          py: 4,
           px: 2,
           boxSizing: "border-box",
           gap: "50px",
@@ -234,7 +234,7 @@ export default function Home() {
 
             <Box
               sx={{
-                maxHeight: "280px",
+                maxHeight: "200px",
                 overflowY: "scroll", // Change from "auto" to "scroll"
                 overflowX: "hidden",
                 paddingRight: "10px",

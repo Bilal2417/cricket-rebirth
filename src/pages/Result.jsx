@@ -101,11 +101,13 @@ export default function Result() {
       trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
       if (matchType === 2) {
         trophyIncrement *= 2;
-        coinsIncrement = wkts === 100 ? trophyIncrement*1 : trophyIncrement*10 
+        coinsIncrement =
+          wkts === 100 ? trophyIncrement * 1 : trophyIncrement * 10;
       }
       if (matchType === 1) {
         trophyIncrement = Math.ceil(wkts / 2);
-        coinsIncrement = wkts === 100 ? trophyIncrement*1 : trophyIncrement*5 
+        coinsIncrement =
+          wkts === 100 ? trophyIncrement * 1 : trophyIncrement * 5;
       }
     }
 
@@ -114,8 +116,7 @@ export default function Result() {
       id: profileId || Profile?.id,
       victories: win ? Profile.victories + 1 : Profile.victories,
       trophies: Profile.trophies + trophyIncrement,
-      coins:
-        Profile.coins + coinsIncrement
+      coins: Profile.coins + coinsIncrement,
     };
 
     console.log(updatedProfile, "Profile that is sending");
@@ -133,7 +134,7 @@ export default function Result() {
         setProfile(data.profile);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
         sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
-        
+
         window.dispatchEvent(new Event("profileUpdated"));
       } else {
         console.error("Failed to update trophies in database");
@@ -234,9 +235,9 @@ export default function Result() {
             borderRadius: "12px",
             width: "100%",
             // overflow: "hidden",
-            alignContent: "center",            
-            marginTop : { xs : "50px" },
-            paddingBottom : { xs : "50px" },
+            alignContent: "center",
+            marginTop: { xs: "50px" },
+            paddingBottom: { xs: "50px" },
           }}
         >
           <Box
@@ -357,7 +358,10 @@ export default function Result() {
 
             <Typography
               sx={{
-                display: currentMode == "KNOCKOUT" || currentMode == "TOURNAMENT"  ? "none" : "flex",
+                display:
+                  currentMode == "KNOCKOUT" || currentMode == "TOURNAMENT"
+                    ? "none"
+                    : "flex",
                 alignItems: "center",
                 gap: "5px",
                 fontWeight: 600,
@@ -907,7 +911,6 @@ export default function Result() {
                 },
               }}
               disabled={buttonDisabled}
-
               onClick={async () => {
                 setButtonDisabled(true);
                 setLoading(true);
@@ -917,20 +920,25 @@ export default function Result() {
 
                 const userWon = userTeam.score > aiTeam.score;
                 const tie = userTeam.score === aiTeam.score;
-                
-                
+
                 if (isTour) {
                   const tieBreaker =
                     Math.random() < 0.5 ? userTeam?.name : aiTeam?.name;
-                    const looser = tieBreaker == userTeam?.name ? aiTeam?.name : userTeam?.name
+                  const looser =
+                    tieBreaker == userTeam?.name
+                      ? aiTeam?.name
+                      : userTeam?.name;
                   const storedMatch =
                     JSON.parse(sessionStorage.getItem("latestUserMatch")) || {};
-                    
-                  
+
                   const updatedMatch = {
                     ...storedMatch,
-                    winner:tie ? tieBreaker : (userWon ? userTeam.name : aiTeam.name),
-                    loser: tie ? looser :(userWon ? aiTeam.name : userTeam.name),
+                    winner: tie
+                      ? tieBreaker
+                      : userWon
+                      ? userTeam.name
+                      : aiTeam.name,
+                    loser: tie ? looser : userWon ? aiTeam.name : userTeam.name,
                   };
                   sessionStorage.setItem(
                     "latestUserMatch",
