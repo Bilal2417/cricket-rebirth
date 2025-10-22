@@ -23,7 +23,7 @@ export default function Toss() {
     if (winner === "ai") {
       const innings = Math.random() < 0.5 ? "Bat" : "Ball";
       localStorage.setItem("Innings", innings);
-      localStorage.setItem("FirstInnings", "1");
+      localStorage.setItem("currentInnings", 1);
       setInningsChoice(innings);
       navigate("/gamePlay");
     } else {
@@ -33,7 +33,7 @@ export default function Toss() {
 
   const handleInnings = (choice) => {
     localStorage.setItem("Innings", choice);
-    localStorage.setItem("FirstInnings", "1");
+    localStorage.setItem("currentInnings", 1);
     navigate("/gamePlay");
     // window.location.reload();
   };

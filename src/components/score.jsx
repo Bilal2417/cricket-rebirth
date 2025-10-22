@@ -39,10 +39,13 @@ export default function ScoreCard() {
   ];
 
   const [over, setOver] = useState(0);
+
   const [totalOvers, setTotalOvers] = useState(() => {
-    const fixedOvers = localStorage.getItem("Overs");
-    return fixedOvers ? fixedOvers : 10;
+    const fixedOvers = localStorage.getItem("Overs")
+    
+    return fixedOvers ? Number(fixedOvers) : 10;
   });
+
   const [inningsOver, setInningsOver] = useState(false);
   const [overRun, setOverRun] = useState(0);
 
@@ -62,12 +65,12 @@ export default function ScoreCard() {
   const [balls, setBalls] = useState(0);
   const [target, setTarget] = useState(() => {
     return Number(localStorage.getItem("target")) || 0;
-  });;
+  });
   const [partnership, setPartnership] = useState(0);
   const [partnershipBalls, setPartnershipBalls] = useState(0);
 
   const colors = {
-    starter : "#FFF",
+    starter: "#FFF",
     aus: "#141517",
     ban: "#005601",
     wc19: "#12174c",
@@ -81,12 +84,12 @@ export default function ScoreCard() {
           userTeam?.primary || "#333"
         })`
       : `radial-gradient(${aiTeam?.secondary || "#000"}, ${
-        aiTeam?.primary || "#333"
+          aiTeam?.primary || "#333"
         })`,
   };
 
   const borderColors = {
-    starter : "#000",
+    starter: "#000",
     aus: batting ? userTeam?.primary : aiTeam?.primary,
     ban: "#8b0605",
     wc19: "#8b0605",
@@ -541,7 +544,6 @@ export default function ScoreCard() {
   }, [userTeam, aiTeam, batting]);
 
   useEffect(() => {
-
     console.log("First innings:", firstInnings);
     console.log("Bat/Ball:", localStorage.getItem("Innings"));
   }, []);
