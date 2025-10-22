@@ -21,6 +21,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { toast } from "react-toastify";
 import LoadingPage from "../components/loading";
+import imageCompression from "browser-image-compression";
 
 export default function Profile() {
   const location = useLocation();
@@ -52,7 +53,7 @@ export default function Profile() {
         if (data.success) {
           const profileData = {
             ...data.profile,
-            img: data.profile.img || "/assets/img/pak.png",
+            img: data.profile.img,
           };
           setProfile(profileData);
           setName(profileData.name);
@@ -74,17 +75,33 @@ export default function Profile() {
   };
   const handleClose = () => setOpen(false);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
 
+  const handleFileChange = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  try {
+    // 🔹 Compression options
+    const options = {
+      maxSizeMB: 0.1,          // target under 100KB
+      maxWidthOrHeight: 300,   // resize if too large
+      useWebWorker: true,      // for performance
+    };
+
+    // 🔹 Compress image
+    const compressedFile = await imageCompression(file, options);
+
+    // 🔹 Convert compressed image to Base64
     const reader = new FileReader();
     reader.onloadend = () => {
-      // Update preview only, not save
       setProfile((prev) => ({ ...prev, img: reader.result }));
     };
-    reader.readAsDataURL(file);
-  };
+    reader.readAsDataURL(compressedFile);
+  } catch (err) {
+    console.error("Image compression failed:", err);
+  }
+};
+
 
   const handleSave = async () => {
     if (!profile) return;
@@ -124,34 +141,7 @@ export default function Profile() {
     }
   };
 
-  const updateTitle = async (newTitle) => {
-    if (!profile) return;
 
-    const profileId = localStorage.getItem("MyId");
-    if (!profileId) return console.error("No profile ID found");
-
-    const updatedProfile = {
-      id: profileId,
-      selected_title: newTitle,
-    };
-
-    fetch("/.netlify/functions/updateProfile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedProfile),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setProfile(data.profile);
-          sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-          toast.success("Title Updated Successfully!");
-        } else {
-          toast.error(data.error || "Failed to update title");
-        }
-      })
-      .catch((err) => console.error("Error updating title:", err));
-  };
 
   const [save, setSave] = useState(false);
 
