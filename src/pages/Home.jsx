@@ -28,6 +28,7 @@ export default function Home() {
   const [profiles, setProfiles] = useState([]);
   const [userProfile, setUserProfile] = useState();
   const [loading, setLoading] = useState(true);
+  const [scoreBoard, setScoreBoard] = useState(false);
 
   useEffect(() => {
     const keysToClear = [
@@ -46,7 +47,7 @@ export default function Home() {
 
     const keysToClearLocally = [
       "Ai",
-      // "User",
+      "target",
       "CurrentBowler",
       "FirstInnings",
       "Innings",
@@ -147,11 +148,13 @@ export default function Home() {
           gap: "50px",
         }}
       >
-        <Box sx={{
-          display : "flex",
-          justifyContent : "space-between",
-          alignItems : "flex-start"
-        }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+          }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -199,6 +202,21 @@ export default function Home() {
                 clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
                 color: "#ffffff",
                 transition: "all 0.3s",
+                animation: scoreBoard ? "pulse 1.3s infinite" : "none",
+                "@keyframes pulse": {
+                  "0%": {
+                    backgroundColor: "#343c53",
+                    boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                  },
+                  "50%": {
+                    backgroundColor: "#f6c401",
+                    boxShadow: "inset 0px -8px 8px -4px #b7560f",
+                  },
+                  "100%": {
+                    backgroundColor: "#343c53",
+                    boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                  },
+                },
                 ":hover": {
                   cursor: "pointer",
                   transform: "scale(1.1)",
@@ -207,7 +225,10 @@ export default function Home() {
                   transform: "scale(1)",
                 },
               }}
-              onClick={() => navigate("/scoreboards")}
+              onClick={() => {
+                setScoreBoard(false);
+                navigate("/scoreboards");
+              }}
             >
               <ScoreboardRounded size={30} />
             </Box>
@@ -426,7 +447,7 @@ export default function Home() {
               })}
 
               {loading
-                ? ["1", "2", "3", "4",'5'].map((index) => {
+                ? ["1", "2", "3", "4", "5"].map((index) => {
                     return (
                       <Box
                         key={index}
@@ -529,109 +550,110 @@ export default function Home() {
             justifyContent: "flex-end",
           }}
         >
-            <Button
-              sx={{
-                // fontfamily: "Rubik",
-                backgroundColor: "#343c53",
-                color: "#FFFFFF",
-                textShadow: `
+          <Button
+            sx={{
+              // fontfamily: "Rubik",
+              backgroundColor: "#343c53",
+              color: "#FFFFFF",
+              textShadow: `
           -1px -1px 0 #000,  
            1px -1px 0 #000,
           -1px  1px 0 #000,
            2px  1.5px 0 #000
         `,
-                padding: "10px 40px",
-                fontSize: "1.1em",
-                position: "relative",
-                px: 4,
-                py: 1.5,
-                overflow: "hidden",
+              padding: "10px 40px",
+              fontSize: "1.1em",
+              position: "relative",
+              px: 4,
+              py: 1.5,
+              overflow: "hidden",
+              clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
+              boxShadow: "inset 0px -8px 8px -4px #262e40",
+              borderRadius: "4px",
+              transition: "all 0.3s",
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                inset: 0,
+                border: "2px solid black",
                 clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
-                boxShadow: "inset 0px -8px 8px -4px #262e40",
-                borderRadius: "4px",
-                transition: "all 0.3s",
-                "&::before": {
-                  content: '""',
-                  position: "absolute",
-                  inset: 0,
-                  border: "2px solid black",
-                  clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
-                  pointerEvents: "none",
-                },
-                ":hover": {
-                  transform: "scale(1.02)",
-                },
-              }}
-              onClick={() => {
-                navigate("/modes");
-              }}
-            >
-              {/* <HighlightOff /> */}
-              {mode || "Select"}
-            </Button>
+                pointerEvents: "none",
+              },
+              ":hover": {
+                transform: "scale(1.02)",
+              },
+            }}
+            onClick={() => {
+              navigate("/modes");
+            }}
+          >
+            {/* <HighlightOff /> */}
+            {mode || "Select"}
+          </Button>
 
-            <Button
-              sx={{
-                // fontfamily: "Rubik",
-                backgroundColor: "#f6c401",
-                color: "#FFFFFF",
-                textShadow: `
+          <Button
+            sx={{
+              // fontfamily: "Rubik",
+              backgroundColor: "#f6c401",
+              color: "#FFFFFF",
+              textShadow: `
       -1px -1px 0 #000,  
        1px -1px 0 #000,
       -1px  1px 0 #000,
        2px  1.5px 0 #000
     `,
-                padding: "10px 40px",
-                fontSize: "1.4em",
-                position: "relative",
-                px: 4,
-                py: 1.5,
-                overflow: "hidden",
+              padding: "10px 40px",
+              fontSize: "1.4em",
+              position: "relative",
+              px: 4,
+              py: 1.5,
+              overflow: "hidden",
+              clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
+              boxShadow: "inset 0px -8px 8px -4px #b7560f",
+              borderRadius: "4px",
+              transition: "all 0.3s",
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                inset: 0,
+                border: "2px solid black",
                 clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
-                boxShadow: "inset 0px -8px 8px -4px #b7560f",
-                borderRadius: "4px",
-                transition: "all 0.3s",
-                "&::before": {
-                  content: '""',
-                  position: "absolute",
-                  inset: 0,
-                  border: "2px solid black",
-                  clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
-                  pointerEvents: "none",
-                },
-                ":hover": {
-                  transform: loading ? "none" : "scale(1.02)",
-                  cursor: loading ? "not-allowed" : "pointer",
-                },
-              }}
-              disabled={loading}
-              onClick={() => {
-                if (!profileId) {
-                  showDescToast("Create Profile first!");
-                  return;
-                }
-                if (!mode) {
-                  showDescToast("Select Game Mode first!");
-                  return;
-                }
-                if (!board) {
-                  showDescToast("Select Scoreboard first!");
-                  return;
-                }
+                pointerEvents: "none",
+              },
+              ":hover": {
+                transform: loading ? "none" : "scale(1.02)",
+                cursor: loading ? "not-allowed" : "pointer",
+              },
+            }}
+            disabled={loading}
+            onClick={() => {
+              if (!profileId) {
+                showDescToast("Create Profile first!");
+                return;
+              }
+              if (!mode) {
+                showDescToast("Select Game Mode first!");
+                return;
+              }
+              if (!board) {
+                showDescToast("Select Scoreboard first!");
+                setScoreBoard(true);
+                return;
+              }
 
-                if (save && mode == "TOURNAMENT") {
-                  navigate("/tournament");
-                } else {
-                  navigate("/team");
-                }
-              }}
-            >
-              {loading ? (
-                <CircularProgress size={24} sx={{ color: "#fff" }} />
-              ) : (
-                "Play"
-              )}
-            </Button>
+              if (save && mode == "TOURNAMENT") {
+                navigate("/tournament");
+              } else {
+                navigate("/team");
+              }
+            }}
+          >
+            {loading ? (
+              <CircularProgress size={24} sx={{ color: "#fff" }} />
+            ) : (
+              "Play"
+            )}
+          </Button>
         </Box>
       </Box>
     </>

@@ -11,11 +11,16 @@ import Wc21 from "../components/wc21";
 import Wc22 from "../components/wc22";
 import Ct25 from "../components/ct25";
 import NZ from "../components/nz";
+import StarterScoreboard from "../components/starter";
 
 export default function ScoreBoards() {
   const [active, setActive] = useState();
 
   const scoreCards = [
+    {
+      key: "starter",
+      board: <StarterScoreboard />,
+    },
     {
       key: "ban",
       board: <BAN />,
@@ -54,6 +59,7 @@ export default function ScoreBoards() {
     },
   ];
 
+  const Board = localStorage.getItem("Board")
   const storedProfile = sessionStorage.getItem("UserProfile");
   const [Profile, setProfile] = useState(
     storedProfile ? JSON.parse(storedProfile) : ""
@@ -81,8 +87,8 @@ export default function ScoreBoards() {
                   p: 2,
                   backdropFilter: "blur(10px)",
                   borderRadius: "24px",
-                  outline: index == active ? "8px solid #fff" : null,
-                  filter: active == index ? "grayscale(0%" : "grayscale(100%)",
+                  outline: index == active || Board == score.key ? "8px solid #fff" : null,
+                  filter: active == index || Board == score.key ? "grayscale(0%" : "grayscale(100%)",
                   transition: "all 0.3s",
                   textTransform: "uppercase",
                   pt : "100px",

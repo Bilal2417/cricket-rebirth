@@ -915,6 +915,8 @@ export default function Result() {
                 setButtonDisabled(true);
                 setLoading(true);
 
+                localStorage.setItem("currentInnings", 1);
+
                 const isKO = sessionStorage.getItem("mode") === "KNOCKOUT";
                 const isTour = sessionStorage.getItem("mode") === "TOURNAMENT";
 

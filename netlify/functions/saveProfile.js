@@ -30,7 +30,7 @@ export async function handler(event) {
         img TEXT,
         coins INT DEFAULT 0,
         unlocked_teams JSONB DEFAULT '[]'::jsonb,
-        unlocked_items JSONB DEFAULT '["ban"]'::jsonb,
+        unlocked_items JSONB DEFAULT '["starter"]'::jsonb,
         titles JSONB DEFAULT '[]'::jsonb,
         selected_title TEXT,
         last_active TIMESTAMP DEFAULT NOW()

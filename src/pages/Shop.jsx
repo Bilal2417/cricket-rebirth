@@ -53,7 +53,6 @@ export default function Shop({ profile }) {
           title="WORLD CUP ACCESS"
           value="worldcup"
           price={5000}
-          // unlocked={false}
           icon={<EmojiEvents sx={{ fontSize: 50, color: "#fff" }} />}
           gradient="linear-gradient(180deg, #0f0648 0%, #1b1063 40%, #fa208e 100%)"
           isFocused={focused === "world"}
@@ -65,7 +64,6 @@ export default function Shop({ profile }) {
           title="KNOCKOUT ACCESS"
           value="knockout"
           price={2500}
-          // unlocked={false}
           icon={<SportsKabaddiOutlined sx={{ fontSize: 50, color: "#fff" }} />}
           gradient="linear-gradient(180deg, #061c48 0%, #102b63 40%, #20faf0 100%)"
           isFocused={focused === "knockout"}
@@ -73,7 +71,8 @@ export default function Shop({ profile }) {
           description="Unlock the Knockout Mode — play quarterfinals to finals for massive rewards!"
         />
 
-        <ScoreCardShop/>
+        {/* <ScoreCardShop/> */}
+        score boards coming soon...
       </Box>
     </>
   );

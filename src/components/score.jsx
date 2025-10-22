@@ -13,6 +13,7 @@ import Wc21 from "./wc21";
 import Wc22 from "./wc22";
 import Ct25 from "./ct25";
 import NZ from "./nz";
+import StarterScoreboard from "./starter";
 
 export default function ScoreCard() {
   const storedData = localStorage.getItem("cricketData");
@@ -55,15 +56,18 @@ export default function ScoreCard() {
 
   const [battingWicket, setBattingWicket] = useState(0);
   const [firstInnings, setFirstInnings] = useState(() => {
-    return Number(localStorage.getItem("FirstInnings")) || 1;
+    return Number(localStorage.getItem("currentInnings")) || 1;
   });
 
   const [balls, setBalls] = useState(0);
-  const [target, setTarget] = useState(0);
+  const [target, setTarget] = useState(() => {
+    return Number(localStorage.getItem("target")) || 0;
+  });;
   const [partnership, setPartnership] = useState(0);
   const [partnershipBalls, setPartnershipBalls] = useState(0);
 
   const colors = {
+    starter : "#FFF",
     aus: "#141517",
     ban: "#005601",
     wc19: "#12174c",
@@ -72,12 +76,17 @@ export default function ScoreCard() {
     wc24: "#0f0648",
     ct25: "#090533",
     sri: userTeam?.primary,
-      nz: batting
-    ? `radial-gradient(${userTeam?.secondary || "#000"}, ${userTeam?.primary || "#333"})`
-    : `radial-gradient(${aiTeam?.secondary || "#000"}, ${aiTeam?.primary || "#333"})`,
+    nz: batting
+      ? `radial-gradient(${userTeam?.secondary || "#000"}, ${
+          userTeam?.primary || "#333"
+        })`
+      : `radial-gradient(${aiTeam?.secondary || "#000"}, ${
+        aiTeam?.primary || "#333"
+        })`,
   };
 
   const borderColors = {
+    starter : "#000",
     aus: batting ? userTeam?.primary : aiTeam?.primary,
     ban: "#8b0605",
     wc19: "#8b0605",
@@ -86,7 +95,7 @@ export default function ScoreCard() {
     wc24: "#fa208e",
     ct25: "#02c208",
     sri: "black",
-    nz : "#c00050"
+    nz: "#c00050",
   };
 
   const handleBall = (run, Wkt = false, aiRun) => {
@@ -201,6 +210,7 @@ export default function ScoreCard() {
       const correct = localStorage.getItem("Innings");
       localStorage.setItem("Innings", correct === "Bat" ? "Ball" : "Bat");
       localStorage.setItem("currentInnings", "2");
+      localStorage.setItem("target", finalScore + 1);
       setFirstInnings(2);
     }
   };
@@ -531,7 +541,6 @@ export default function ScoreCard() {
   }, [userTeam, aiTeam, batting]);
 
   useEffect(() => {
-    localStorage.setItem("currentInnings", "1");
 
     console.log("First innings:", firstInnings);
     console.log("Bat/Ball:", localStorage.getItem("Innings"));
@@ -573,6 +582,25 @@ export default function ScoreCard() {
         >
           {board == "wc24" ? (
             <Wc24
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              // getInitials={getInitials}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
+          ) : board == "starter" ? (
+            <StarterScoreboard
               batting={batting}
               aiTeam={aiTeam}
               userTeam={userTeam}
@@ -756,7 +784,7 @@ export default function ScoreCard() {
                 <Button
                   sx={{
                     background: colors[board],
-                    color: "#FFFFFF",
+                    color: board == "starter" ? "#000" : "#FFFFFF",
                     width: "60px",
                     height: "60px",
                     padding: "4px 8px",

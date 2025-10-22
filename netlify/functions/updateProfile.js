@@ -2,10 +2,11 @@ import { Client } from "pg";
 
 export async function handler(event) {
   try {
-    // Parse body safely
+    // --- Parse body safely ---
     let body = {};
     try {
-      body = typeof event.body === "string" ? JSON.parse(event.body) : event.body;
+      body =
+        typeof event.body === "string" ? JSON.parse(event.body) : event.body;
     } catch (err) {
       console.error("Error parsing body:", event.body, err);
     }
@@ -21,7 +22,7 @@ export async function handler(event) {
       unlocked_teams,
       titles,
       selected_title,
-      unlocked_items
+      unlocked_items,
     } = body;
 
     if (!id) {
@@ -38,7 +39,7 @@ export async function handler(event) {
 
     await client.connect();
 
-    // Fetch existing profile
+    // --- Fetch existing profile ---
     const existingProfile = await client.query(
       `SELECT * FROM profiles WHERE id=$1`,
       [id]
@@ -54,7 +55,7 @@ export async function handler(event) {
 
     const current = existingProfile.rows[0];
 
-    // Check if new name is unique
+    // --- Check if new name is unique ---
     if (name && name !== current.name) {
       const check = await client.query(
         "SELECT id FROM profiles WHERE name = $1 AND id <> $2",
@@ -72,30 +73,65 @@ export async function handler(event) {
       }
     }
 
-    // Ensure unlocked_teams is always JSON array/object
+    // --- Merge unlocked_teams ---
     const safeUnlockedTeams =
       unlocked_teams != null
-        ? Array.isArray(unlocked_teams)
-          ? unlocked_teams
-          : [unlocked_teams]
-        : null;
+        ? Array.from(
+            new Set([
+              ...(
+                Array.isArray(current.unlocked_teams)
+                  ? current.unlocked_teams
+                  : typeof current.unlocked_teams === "string"
+                  ? JSON.parse(current.unlocked_teams || "[]")
+                  : current.unlocked_teams || []
+              ),
+              ...(Array.isArray(unlocked_teams)
+                ? unlocked_teams
+                : [unlocked_teams]),
+            ])
+          )
+        : current.unlocked_teams;
 
+    // --- Merge unlocked_items ---
     const safeUnlockedItems =
       unlocked_items != null
-        ? Array.isArray(unlocked_items)
-          ? unlocked_items
-          : [unlocked_items]
-        : null;
+        ? Array.from(
+            new Set([
+              ...(
+                Array.isArray(current.unlocked_items)
+                  ? current.unlocked_items
+                  : typeof current.unlocked_items === "string"
+                  ? JSON.parse(current.unlocked_items || "[]")
+                  : current.unlocked_items || []
+              ),
+              ...(Array.isArray(unlocked_items)
+                ? unlocked_items
+                : [unlocked_items]),
+            ])
+          )
+        : current.unlocked_items;
 
-    // Ensure titles is always JSON array
+    // Ensure "starter" always stays
+    if (!safeUnlockedItems.includes("starter")) safeUnlockedItems.push("starter");
+
+    // --- Merge titles ---
     const safeTitles =
       titles != null
-        ? Array.isArray(titles)
-          ? titles
-          : [titles]
-        : null;
+        ? Array.from(
+            new Set([
+              ...(
+                Array.isArray(current.titles)
+                  ? current.titles
+                  : typeof current.titles === "string"
+                  ? JSON.parse(current.titles || "[]")
+                  : current.titles || []
+              ),
+              ...(Array.isArray(titles) ? titles : [titles]),
+            ])
+          )
+        : current.titles;
 
-    // Update profile
+    // --- Update profile ---
     const result = await client.query(
       `UPDATE profiles
        SET name = COALESCE($1, name),
@@ -117,10 +153,10 @@ export async function handler(event) {
         trophies ?? null,
         victories ?? null,
         coins ?? null,
-        safeUnlockedTeams != null ? JSON.stringify(safeUnlockedTeams) : null,
-        safeTitles != null ? JSON.stringify(safeTitles) : null,
+        JSON.stringify(safeUnlockedTeams ?? []),
+        JSON.stringify(safeTitles ?? []),
         selected_title ?? null,
-        safeUnlockedItems != null ? JSON.stringify(safeUnlockedItems) : null,
+        JSON.stringify(safeUnlockedItems ?? []),
         id,
       ]
     );
