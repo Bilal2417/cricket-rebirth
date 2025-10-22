@@ -78,13 +78,11 @@ export async function handler(event) {
       unlocked_teams != null
         ? Array.from(
             new Set([
-              ...(
-                Array.isArray(current.unlocked_teams)
-                  ? current.unlocked_teams
-                  : typeof current.unlocked_teams === "string"
-                  ? JSON.parse(current.unlocked_teams || "[]")
-                  : current.unlocked_teams || []
-              ),
+              ...(Array.isArray(current.unlocked_teams)
+                ? current.unlocked_teams
+                : typeof current.unlocked_teams === "string"
+                ? JSON.parse(current.unlocked_teams || "[]")
+                : current.unlocked_teams || []),
               ...(Array.isArray(unlocked_teams)
                 ? unlocked_teams
                 : [unlocked_teams]),
@@ -97,13 +95,11 @@ export async function handler(event) {
       unlocked_items != null
         ? Array.from(
             new Set([
-              ...(
-                Array.isArray(current.unlocked_items)
-                  ? current.unlocked_items
-                  : typeof current.unlocked_items === "string"
-                  ? JSON.parse(current.unlocked_items || "[]")
-                  : current.unlocked_items || []
-              ),
+              ...(Array.isArray(current.unlocked_items)
+                ? current.unlocked_items
+                : typeof current.unlocked_items === "string"
+                ? JSON.parse(current.unlocked_items || "[]")
+                : current.unlocked_items || []),
               ...(Array.isArray(unlocked_items)
                 ? unlocked_items
                 : [unlocked_items]),
@@ -112,24 +108,28 @@ export async function handler(event) {
         : current.unlocked_items;
 
     // Ensure "starter" always stays
-    if (!safeUnlockedItems.includes("starter")) safeUnlockedItems.push("starter");
+    if (!safeUnlockedItems.includes("starter"))
+      safeUnlockedItems.push("starter");
 
     // --- Merge titles ---
     const safeTitles =
       titles != null
         ? Array.from(
             new Set([
-              ...(
-                Array.isArray(current.titles)
-                  ? current.titles
-                  : typeof current.titles === "string"
-                  ? JSON.parse(current.titles || "[]")
-                  : current.titles || []
-              ),
+              ...(Array.isArray(current.titles)
+                ? current.titles
+                : typeof current.titles === "string"
+                ? JSON.parse(current.titles || "[]")
+                : current.titles || []),
               ...(Array.isArray(titles) ? titles : [titles]),
             ])
           )
         : current.titles;
+
+    let safeTrophies = 0;
+    if (typeof trophies === "number") {
+      safeTrophies = trophies < 0 ? 0 : trophies;
+    }
 
     // --- Update profile ---
     const result = await client.query(
@@ -150,7 +150,7 @@ export async function handler(event) {
         name ?? null,
         img ?? null,
         tournaments ?? null,
-        trophies ?? null,
+        safeTrophies ?? null,
         victories ?? null,
         coins ?? null,
         JSON.stringify(safeUnlockedTeams ?? []),

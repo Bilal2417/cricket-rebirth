@@ -53,13 +53,24 @@ export default function Toss() {
   const decrementTrophies = async () => {
     if (!Profile) return;
 
-    const penalty = Number(totalWkts) === 100 ? 5 : Math.ceil(totalWkts / 2);
-    // const originalTrophies = Profile.trophies
+    const trophyMap = {
+      1: 1,
+      3: 3,
+      5: 5,
+      10: 10,
+      20: 15,
+      100: 5,
+    };
+
+    const penalty = trophyMap[totalWkts];
+
     const updatedProfile = {
       ...Profile,
-      trophies: Math.max(Profile.trophies - Math.ceil(penalty/2), 0),
+
+      trophies:
+        Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
     };
-    // sessionStorage.setItem("original",originalTrophies)
+
     setProfile(updatedProfile);
 
     try {

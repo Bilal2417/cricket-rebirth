@@ -15,6 +15,15 @@ import { GiSkullCrossedBones } from "react-icons/gi";
 export default function Modes() {
   const navigate = useNavigate();
 
+  const trophyMap = {
+    1: 1,
+    3: 3,
+    5: 5,
+    10: 10,
+    20: 15,
+    100: 5,
+  };
+
   const overs = [
     {
       value: 1,
@@ -42,8 +51,8 @@ export default function Modes() {
       <span>
         This mode allows <strong>{over.wkt}</strong> wicket(s) in{" "}
         <strong>{over.value}</strong> over(s), with{" "}
-        <strong>{Math.ceil(over.value / 2)}</strong> trophies gained or{" "}
-        <strong>{Math.ceil(over.value / 4)}</strong> trophies lost per game.
+        <strong>{trophyMap[over.value]}</strong> trophies gained or{" "}
+        <strong>{Math.ceil((trophyMap[over.value]/2))}</strong> trophies lost per game.
       </span>
     ),
   }));

@@ -87,7 +87,7 @@ export default function Result() {
 
   const incrementTrophies = async (win, matchType, isKO = false) => {
     const profileId = localStorage.getItem("MyId");
-    // const originalTrophies = Number(sessionStorage.getItem("original"));
+
     console.log(profileId, Profile, "all");
     if (!Profile) return;
 
@@ -97,15 +97,25 @@ export default function Result() {
     let trophyIncrement = 0;
     let coinsIncrement = 0;
 
+    const trophyMap = {
+      1: 1,
+      3: 3,
+      5: 5,
+      10: 10,
+      20: 15,
+      100: 5,
+    };
+
     if (win && !isKO) {
-      trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
+      trophyIncrement = trophyMap[wkts];
+      // trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
       if (matchType === 2) {
         trophyIncrement *= 2;
         coinsIncrement =
-          wkts === 100 ? trophyIncrement * 1 : trophyIncrement * 10;
+          wkts === 100 ? trophyIncrement * 2 : trophyIncrement * 10;
       }
       if (matchType === 1) {
-        trophyIncrement = Math.ceil(wkts / 2);
+        trophyIncrement = Math.ceil(trophyMap[wkts] / 2);
         coinsIncrement =
           wkts === 100 ? trophyIncrement * 1 : trophyIncrement * 5;
       }
@@ -949,7 +959,6 @@ export default function Result() {
 
                   navigate("/tournament");
                 } else if (isKO) {
-                  // Store winner/tie for tournament fixtures
                   const id = sessionStorage.getItem("lastMatchId");
                   if (tie) {
                     const tieBreaker =
@@ -962,8 +971,8 @@ export default function Result() {
                     );
                   }
                   navigate("/fixtures");
-                  // Call incrementTrophies but only increment victories
-                  await incrementTrophies(userWon, 0, true); // pass "true" for isKO
+
+                  await incrementTrophies(userWon, 0, true);
                 } else {
                   if (userWon) await incrementTrophies(true, 2, false);
                   else if (aiTeam.score > userTeam.score)
