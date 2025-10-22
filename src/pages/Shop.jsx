@@ -17,6 +17,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ModePack from "../components/modePacks";
 import ScoreCardShop from "../components/scoreCardShop";
+import { GiTrophy, GiWorld } from "react-icons/gi";
 
 export default function Shop({ profile }) {
   const [unlocked, setUnlocked] = useState(false);
@@ -53,19 +54,21 @@ export default function Shop({ profile }) {
           title="WORLD CUP ACCESS"
           value="worldcup"
           price={5000}
-          icon={<EmojiEvents sx={{ fontSize: 50, color: "#fff" }} />}
-          gradient="linear-gradient(180deg, #0f0648 0%, #1b1063 40%, #fa208e 100%)"
+          icon={<GiWorld size={40} sx={{  color: "#fff" }} />}
+          iconGrad="radial-gradient(circle at center, #00b894, #55efc4)"
+          gradient="linear-gradient(135deg, #00b894, #55efc4)"
           isFocused={focused === "world"}
           onClick={() => setFocused(focused === "world" ? null : "world")}
           description="Unlock the exclusive World Cup Mode — face 10 teams in the grand tournament."
-        />
+          />
 
         <ModePack
           title="KNOCKOUT ACCESS"
           value="knockout"
           price={2500}
-          icon={<SportsKabaddiOutlined sx={{ fontSize: 50, color: "#fff" }} />}
-          gradient="linear-gradient(180deg, #061c48 0%, #102b63 40%, #20faf0 100%)"
+          icon={<GiTrophy size={40} sx={{ color: "#fff" }} />}
+          iconGrad="radial-gradient(circle at center, #ff6b6b, #f06595)"
+          gradient="linear-gradient(135deg, #ff6b6b, #f06595)"
           isFocused={focused === "knockout"}
           onClick={() => setFocused(focused === "knockout" ? null : "knockout")}
           description="Unlock the Knockout Mode — play quarterfinals to finals for massive rewards!"

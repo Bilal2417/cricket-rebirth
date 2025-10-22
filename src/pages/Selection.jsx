@@ -5,14 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function Selection() {
-  const mode = sessionStorage.getItem("mode")
-  const [teams] = useState(()=>{
-     if(mode == "TOURNAMENT"){
-    return  Data.filter((team)=> team.category !== "Bronze" && team.name !== "Netherlands")
-  } else if( mode == "KNOCKOUT"){
-      return  Data.filter((team)=> team.category !== "Bronze")
-    }else{
-      return  Data
+  const mode = sessionStorage.getItem("mode");
+  const [teams] = useState(() => {
+    if (mode == "TOURNAMENT") {
+      return Data.filter(
+        (team) => team.category !== "Bronze" && team.name !== "Netherlands"
+      );
+    } else if (mode == "KNOCKOUT") {
+      return Data.filter((team) => team.category !== "Bronze");
+    } else {
+      return Data;
     }
   });
   const navigate = useNavigate();
@@ -43,7 +45,7 @@ export default function Selection() {
     localStorage.removeItem("cricketData");
   }, []);
 
-    const getCardBackground = (rarity) => {
+  const getCardBackground = (rarity) => {
     switch (rarity) {
       case "Bronze":
         return "linear-gradient(135deg, #8d5524, #d2691e)";
@@ -75,10 +77,10 @@ export default function Selection() {
           <Grid
             item
             key={index}
-            xs={6}  
-            sm={4} 
-            md={3} 
-            lg={2} 
+            xs={6}
+            sm={4}
+            md={3}
+            lg={2}
             sx={{
               ":hover": {
                 cursor: "pointer",
@@ -89,31 +91,36 @@ export default function Selection() {
               textAlign: "center",
             }}
             onClick={() => {
-              Profile?.unlocked_teams?.includes(team?.name) ? AiTeamSelection(team?.name) : toast.error("Unlock team from Packs!")
+              Profile?.unlocked_teams?.includes(team?.name)
+                ? AiTeamSelection(team?.name)
+                : toast.error("Unlock team from Packs!");
             }}
           >
-
-            <Box sx={{
-              background : getCardBackground(team?.category) ,
-              borderRadius : '6px',
-              height : "fit-content"
-            }}>
-              <Typography variant="body1">{team?.category}</Typography>
-            <img
-              src={team?.flag}
-              alt={team?.name}
-              title={team?.name}
-              style={{
-                // width: "100%",
-                height: "auto",
+            <Box
+              sx={{
+                background: getCardBackground(team?.category),
                 borderRadius: "6px",
-                boxShadow: "3px 3px 8px -2px #000000",
-                width: "100px",
-                objectFit : "cover",
-                filter: Profile?.unlocked_teams?.includes(team?.name) ? "none" : "grayscale(100%)",
+                height: "fit-content",
               }}
+            >
+              <Typography variant="body1">{team?.category}</Typography>
+              <img
+                src={team?.flag}
+                alt={team?.name}
+                title={team?.name}
+                style={{
+                  // width: "100%",
+                  height: "auto",
+                  borderRadius: "6px",
+                  boxShadow: "3px 3px 8px -2px #000000",
+                  width: "100px",
+                  objectFit: "cover",
+                  filter: Profile?.unlocked_teams?.includes(team?.name)
+                    ? "none"
+                    : "grayscale(100%)",
+                }}
               />
-              </Box>
+            </Box>
           </Grid>
         ))}
       </Grid>

@@ -29,6 +29,7 @@ import Shop from "./pages/Shop";
 import ScoreBoards from "./pages/Scoreboards";
 import Wc21 from "./components/wc21";
 import Wc22 from "./components/wc22";
+import ScorecardWheel from "./pages/scoreCardOpening";
 
 function App() {
   useEffect(() => {
@@ -138,6 +139,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/wc22" element={<Wc22 />} />
+          <Route path="/open" element={<ScorecardWheel />} />
           <Route path="/shop" element={<Shop profile={profile} />} />
           <Route path="/tournament" element={<Tournament />} />
           <Route path="/open-pack/:packKey" element={<CardOpening />} />

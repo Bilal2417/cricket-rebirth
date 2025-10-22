@@ -9,6 +9,7 @@ export default function ModePack({
   price,
   // unlocked,
   icon,
+  iconGrad,
   gradient,
   description,
 }) {
@@ -130,10 +131,13 @@ export default function ModePack({
           >
             <Box
               sx={{
+                color : Profile?.unlocked_items?.includes(value)
+                  ? " rgba(255, 255, 255, 0.8)"
+                  : "rgba(0, 0, 0, 0.3)",
                 width: "90px",
                 height: "90px",
                 background:
-                  "radial-gradient(circle at center, #fa208e, #8b0ef0)",
+                  iconGrad || "radial-gradient(circle at center, #fa208e, #8b0ef0)",
                 borderRadius: "50%",
                 display: "flex",
                 alignItems: "center",
@@ -141,8 +145,8 @@ export default function ModePack({
                 mx: "auto",
                 mb: 3,
                 boxShadow: Profile?.unlocked_items?.includes(value)
-                  ? "0 0 25px 6px rgba(21, 218, 171, 0.8)"
-                  : "0 0 25px 6px rgba(250, 32, 142, 0.6)",
+                  ? "0 0 25px 6px rgba(255, 255, 255, 0.8)"
+                  : "0 0 25px 6px rgba(0, 0, 0, 0.3)",
               }}
             >
               {icon}
@@ -169,8 +173,6 @@ export default function ModePack({
             {!Profile?.unlocked_items?.includes(value) ? (
               <Box
                 sx={{
-                  background:
-                    "linear-gradient(90deg, #15daab, #fa208e, #bd2f7f)",
                   borderRadius: "20px",
                   p: "1px",
                   width: "200px",
@@ -180,12 +182,12 @@ export default function ModePack({
               >
                 <Button
                   sx={{
-                    background: "#0f0648",
+                    background: "#00000090",
                     borderRadius: "20px",
                     px: 4,
                     py: 1,
                     width: "100%",
-                    color: "#15daab",
+                    color: "#ffffff",
                     fontWeight: 600,
                   }}
                   onClick={() => Profile?.unlocked_items?.includes(value) ? null : handleCardClick(price, isActive ,value)}
