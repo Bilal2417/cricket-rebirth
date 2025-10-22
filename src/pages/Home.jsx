@@ -91,34 +91,46 @@ export default function Home() {
 
   const board = localStorage.getItem("Board");
 
-  useEffect(() => {
-    const fetchProfiles = () => {
-      fetch("/.netlify/functions/getProfile")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.success && data.profiles) {
-            setProfiles(data.profiles);
+useEffect(() => {
+  let isMounted = true; // ✅ Prevents state updates if component unmounts
 
-            const matchedProfile = data.profiles.find(
-              (profile) => profile.id === profileId
-            );
+  const fetchProfiles = async () => {
+    try {
+      const res = await fetch("/.netlify/functions/getProfile");
+      const data = await res.json();
 
-            if (matchedProfile) {
-              setUserProfile(matchedProfile);
-              sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
-            }
-          }
-        })
-        .catch((err) => console.error("Error fetching profiles:", err))
-        .finally(() => setLoading(false));
-    };
+      if (isMounted && data?.success && data.profiles) {
+        setProfiles(data.profiles);
 
-    fetchProfiles();
+        const matchedProfile = data.profiles.find(
+          (profile) => profile.id === profileId
+        );
 
-    const interval = setInterval(fetchProfiles, 10000);
+        if (matchedProfile) {
+          setUserProfile(matchedProfile);
+          sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching profiles:", err);
+    } finally {
+      if (isMounted) setLoading(false);
+    }
+  };
 
-    return () => clearInterval(interval);
-  }, [profileId]);
+  
+  fetchProfiles();
+
+  
+  const interval = setInterval(fetchProfiles, 150000);
+
+  
+  return () => {
+    isMounted = false;
+    clearInterval(interval);
+  };
+}, [profileId]);
+
 
   const [mode, setMode] = useState(null);
   const [save, setSave] = useState(false);
