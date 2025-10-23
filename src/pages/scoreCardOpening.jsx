@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 const flagGroups = [
   {
     value: 100,
+    price: 1000,
     unlocks: [
       { country: "Pakistan", img: "/img/pak.png", key: "pak" },
       { country: "India", img: "/img/ind.png", key: "ind" },
@@ -17,6 +18,7 @@ const flagGroups = [
   },
   {
     value: 200,
+    price: 2000,
     unlocks: [
       { country: "South Africa", img: "/img/sa.png", key: "sa" },
       { country: "England", img: "/img/eng.png", key: "eng" },
@@ -26,6 +28,7 @@ const flagGroups = [
   },
   {
     value: 300,
+    price: 5000,
     unlocks: [
       { country: "World Cup 2019", img: "/img/wc19.png", key: "wc19" },
       { country: "World Cup 2021", img: "/img/wc21.png", key: "wc21" },
@@ -38,16 +41,33 @@ const flagGroups = [
 
 export default function ScoreCardOpening() {
   const navigate = useNavigate();
+  const [ show , setShow] = useState(()=>{
+    const val = sessionStorage.getItem("value");
+    if(val){
+      return false
+    }
+    return true
+  })
   useEffect(() => {
-    const val = localStorage.getItem("value");
+    const val = sessionStorage.getItem("value");
     if (!val) {
       navigate("/");
     }
     setGroupValue(Number(val));
   }, []);
 
+  const storedProfile = sessionStorage.getItem("UserProfile");
+  const [Profile, setProfile] = useState(
+    storedProfile ? JSON.parse(storedProfile) : ""
+  );
+
   const [groupValue, setGroupValue] = useState(null);
-  const flags = flagGroups.find((f) => f.value === groupValue)?.unlocks || [];
+  const updatedflags =
+    flagGroups.find((f) => f.value === groupValue)?.unlocks || [];
+
+  const flags = updatedflags.filter(
+    (f) => !Profile?.unlocked_items?.includes(f.key)
+  );
 
   const [selected, setSelected] = useState(null);
   const [spinning, setSpinning] = useState(false);
@@ -87,6 +107,7 @@ export default function ScoreCardOpening() {
   const startSpin = () => {
     if (spinning) return;
 
+    setShow(false)
     setSpinning(true);
     setShowConfetti(false);
     setSelected(null);
@@ -101,7 +122,7 @@ export default function ScoreCardOpening() {
     }, 1500 + Math.random() * 3500);
   };
 
-  const finishSpin = () => {
+  const finishSpin = async () => {
     cancelAnimationFrame(requestRef.current);
 
     // normalize position to positive
@@ -117,9 +138,48 @@ export default function ScoreCardOpening() {
     setShowConfetti(true);
     setSpinning(false);
 
-    localStorage.removeItem("value");
+    const unlockedFlagGroup = flagGroups.find((group) =>
+      group.unlocks.some((flag) => flag.country === finalFlag?.country)
+    );
+
+    const updatedflag = unlockedFlagGroup?.unlocks.find(
+      (f) => f.country === finalFlag?.country
+    );
+
+    const currentItems = Profile.unlocked_items || [];
+
+    const updatedProfile = {
+      ...Profile,
+      id: Profile?.id,
+      coins: Profile.coins - unlockedFlagGroup?.price,
+      unlocked_items: [...currentItems, updatedflag?.key],
+    };
+
+    try {
+      const res = await fetch("/.netlify/functions/updateProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProfile),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setProfile(data.profile);
+        console.log(data.profile);
+        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+
+        window.dispatchEvent(new Event("profileUpdated"));
+      } else {
+        console.error("Failed to update tournaments in database:", data.error);
+      }
+    } catch (err) {
+      console.error("Error updating tournaments:", err);
+    }
+
+    sessionStorage.removeItem("value");
 
     toast.success(`🎉 ${finalFlag.country} Unlocked!`);
+    setShow(true)
   };
 
   useEffect(() => {
@@ -211,19 +271,25 @@ export default function ScoreCardOpening() {
         />
       </Box>
 
+      {(show && !spinning )?
+        <Button
+          onClick={()=> navigate("/")}
+          variant="contained"
+          sx={{
+            mt: 3,
+            bgcolor: "#ff684d",
+            color: "white",
+            "&:hover": { bgcolor: "#ff684dff" },
+          }}
+        >
+          Finish
+        </Button>
+      :
       <Button
-        onClick={startSpin}
-        disabled={spinning}
+      onClick={startSpin}
+      disabled={spinning}
         variant="contained"
         sx={{
-          display: () => {
-            const val = localStorage.getItem("value");
-            if (!val) {
-             return "none"
-            } else {
-             return "block"
-            }
-          },
           mt: 3,
           bgcolor: "gold",
           color: "black",
@@ -232,6 +298,7 @@ export default function ScoreCardOpening() {
       >
         {spinning ? "Spinning..." : "Spin"}
       </Button>
+  }
     </Box>
   );
 }

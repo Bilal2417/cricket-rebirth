@@ -1,46 +1,46 @@
 import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { GiCricketBat, GiTrophy, GiWorld } from "react-icons/gi";
+import { useNavigate } from "react-router-dom";
 
 export default function ScoreCardShop() {
-const modePacks = [
-  {
-    id: 1,
-    title: "Asian ScoreCard",
-    value: 100,
-    price: 50,
-    description:
-      "A beginner-friendly scorecard for quick matches and practice. Ideal to get started and track your progress.",
-    icon: <GiCricketBat size={40} />,
-    color: "#ff6b6b",
-    borderColor: "#ff8787",
-  },
-  {
-    id: 2,
-    title: "SENA ScoreCard",
-    value: 200,
-    price: 120,
-    description:
-      "Advanced scorecard for longer matches and detailed stats. Perfect for competitive players wanting deeper insights.",
-    icon: <GiTrophy size={40} />,
-    color: "#54a0ff",
-    borderColor: "#74c0fc",
-  },
-  {
-    id: 3,
-    title: "World Cup ScoreCard",
-    value: 300,
-    price: 250,
-    description:
-      "Premium scorecard to record epic tournaments. Track top performances and unlock special achievements globally.",
-    icon: <GiWorld size={40} />,
-    color: "#00b894",
-    borderColor: "#55efc4",
-  },
-];
-
+  const modePacks = [
+    {
+      id: 1,
+      title: "Asian ScoreCard",
+      value: 100,
+      price: 1000,
+      description:
+        "A beginner-friendly scorecard for quick matches and practice. Ideal to get started and track your progress.",
+      icon: <GiCricketBat size={40} />,
+      color: "#ff6b6b",
+      borderColor: "#ff8787",
+    },
+    {
+      id: 2,
+      title: "SENA ScoreCard",
+      value: 200,
+      price: 2000,
+      description:
+        "Advanced scorecard for longer matches and detailed stats. Perfect for competitive players wanting deeper insights.",
+      icon: <GiTrophy size={40} />,
+      color: "#54a0ff",
+      borderColor: "#74c0fc",
+    },
+    {
+      id: 3,
+      title: "World Cup ScoreCard",
+      value: 300,
+      price: 5000,
+      description:
+        "Premium scorecard to record epic tournaments. Track top performances and unlock special achievements globally.",
+      icon: <GiWorld size={40} />,
+      color: "#00b894",
+      borderColor: "#55efc4",
+    },
+  ];
 
   const [Profile, setProfile] = useState(() => {
     const storedProfile = sessionStorage.getItem("UserProfile");
@@ -49,139 +49,173 @@ const modePacks = [
       : { coins: 500, unlocked_items: [] };
   });
 
+  const navigate = useNavigate();
   const handleUnlock = (pack) => {
-    if (Profile.unlocked_items.includes(pack.value)) return;
+    if (!Profile) return;
 
     if (Profile.coins >= pack.price) {
-      const updatedProfile = {
-        ...Profile,
-        coins: Profile.coins - pack.price,
-        unlocked_items: [...Profile.unlocked_items, pack.value],
-      };
-      setProfile(updatedProfile);
-      sessionStorage.setItem("UserProfile", JSON.stringify(updatedProfile));
-      toast.success(`🎉 ${pack.title} unlocked!`);
+      sessionStorage.setItem("value", pack?.value);
+      navigate("/scoreBoardOpening");
     } else {
       toast.error("Not enough coins!");
     }
   };
 
-  const CardDesign = ({ pack }) => {
-    const unlocked = Profile.unlocked_items.includes(pack.value);
+  const [activeCard, setActiveCard] = useState(null);
+  const [cardPosition, setCardPosition] = useState({ top: 0, left: 0 });
+  const packRefs = useRef([]);
 
-    return (
-      <motion.div
-        whileHover={{ scale: 1.03, y: -5 }}
-        whileTap={{ scale: 0.97 }}
-        style={{
-          cursor: "pointer",
+  const handleClick = (index) => {
+    const rect = packRefs.current[index].getBoundingClientRect();
+    setCardPosition({ top: rect.top, left: rect.left });
+    setActiveCard(index);
+  };
+
+  const handleClose = () => setActiveCard(null);
+
+  const CardDesign = ({ pack, index, isActive = false }) => (
+    <motion.div
+      whileHover={!isActive ? { scale: 1.03, y: -5 } : {}}
+      whileTap={!isActive ? { scale: 0.97 } : {}}
+      style={{
+        cursor: "pointer",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+      ref={(el) => (packRefs.current[index] = el)}
+      onClick={() => !isActive && handleClick(index)}
+    >
+      <Card
+        sx={{
+          width: 300,
+          height: 380,
+          borderRadius: "20px",
+          backgroundColor: "#fff",
+          border: `2px solid ${pack?.borderColor}`,
+          color: "#000",
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
+          overflow: "hidden",
+          position: "relative",
+          transform: isActive ? "scale(1.05)" : "none",
+          transition: "transform 0.3s ease",
         }}
       >
-        <Card
+        {/* Top Icon */}
+        <Box
           sx={{
-            width: 300,
-            height: 380,
-            borderRadius: "20px",
-            backgroundColor: "#fff",
-            border: `2px solid ${pack.borderColor}`,
-            color: "#000",
+            height: "140px",
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
-            overflow: "hidden",
-            position: "relative",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: pack?.color,
           }}
         >
-          {/* Top Icon */}
           <Box
             sx={{
-              height: "140px",
+              width: 90,
+              height: 90,
+              borderRadius: "50%",
+              backgroundColor: "rgba(255,255,255,0.25)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: pack.color,
             }}
           >
-            <Box
-              sx={{
-                width: 90,
-                height: 90,
-                borderRadius: "50%",
-                backgroundColor: "rgba(255,255,255,0.25)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {pack.icon}
-            </Box>
+            {pack?.icon}
           </Box>
+        </Box>
 
-          <CardContent sx={{ textAlign: "center", p: 3 }}>
-            <Typography
-              variant="h5"
-              sx={{ fontWeight: 700, mb: 1, color: pack.color }}
-            >
-              {pack.title}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ opacity: 0.9, mb: 3, color: "#333" }}
-            >
-              {pack.description}
-            </Typography>
+        <CardContent sx={{ textAlign: "center", p: 3 }}>
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: 700, mb: 1, color: pack?.color }}
+          >
+            {pack?.title}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{ opacity: 0.9, mb: 3, color: "#333" }}
+          >
+            {pack?.description}
+          </Typography>
 
-            {!unlocked ? (
-              <Button
-                sx={{
-                  backgroundColor: pack.color,
-                  color: "#fff",
-                  borderRadius: "16px",
-                  px: 3,
-                  py: 1,
-                  fontWeight: 600,
-                  width: "100%",
-                  "&:hover": { backgroundColor: pack.borderColor },
-                }}
-                onClick={() => handleUnlock(pack)}
-              >
-                {pack.price} Coins
-              </Button>
-            ) : (
-              <Box
-                sx={{
-                  backgroundColor: "#333",
-                  color: "#fff",
-                  fontWeight: 700,
-                  borderRadius: "12px",
-                  py: 1.3,
-                  mt: 2,
-                }}
-              >
-                ✅ Unlocked
-              </Box>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
-    );
-  };
+          <Button
+            sx={{
+              backgroundColor: pack?.color,
+              color: "#fff",
+              borderRadius: "16px",
+              px: 3,
+              py: 1,
+              fontWeight: 600,
+              width: "100%",
+              "&:hover": { backgroundColor: pack?.borderColor },
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isActive) {
+                handleUnlock(pack);
+              }
+            }}
+          >
+            {pack?.price} Coins
+          </Button>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        gap: 5,
-        justifyContent: "center",
-      }}
-    >
-      {modePacks.map((pack) => (
-        <CardDesign key={pack.id} pack={pack} />
-      ))}
-    </Box>
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 5,
+          justifyContent: "center",
+        }}
+      >
+        {modePacks.map((pack, index) => (
+          <CardDesign key={pack.id} pack={pack} index={index} />
+        ))}
+      </Box>
+
+      {activeCard !== null && (
+        <Box
+          sx={{
+            position: "fixed",
+            inset: 0,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+            backgroundColor: "rgba(0,0,0,0.6)",
+          }}
+          onClick={handleClose}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: cardPosition.top,
+              left: cardPosition.left,
+              width: 300,
+              transition: "all 0.4s ease-in-out",
+              transform: `translate(${
+                window.innerWidth / 2 - cardPosition.left - 150
+              }px, ${window.innerHeight / 2 - cardPosition.top - 190}px)`,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CardDesign
+              pack={modePacks[activeCard]}
+              index={activeCard}
+              isActive={true}
+            />
+          </Box>
+        </Box>
+      )}
+    </>
   );
 }

@@ -139,7 +139,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/wc22" element={<Wc22 />} />
-          <Route path="/open" element={<ScorecardWheel />} />
+          <Route path="/scoreBoardOpening" element={<ScorecardWheel />} />
           <Route path="/shop" element={<Shop profile={profile} />} />
           <Route path="/tournament" element={<Tournament />} />
           <Route path="/open-pack/:packKey" element={<CardOpening />} />

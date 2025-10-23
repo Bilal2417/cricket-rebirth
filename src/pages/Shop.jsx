@@ -74,8 +74,8 @@ export default function Shop({ profile }) {
           description="Unlock the Knockout Mode — play quarterfinals to finals for massive rewards!"
         />
 
-        {/* <ScoreCardShop/> */}
-        score boards coming soon...
+        <ScoreCardShop/>
+        {/* score boards coming soon... */}
       </Box>
     </>
   );
