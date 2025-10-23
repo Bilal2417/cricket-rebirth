@@ -187,6 +187,21 @@ export default function Home() {
     }
   }, []);
 
+  function timeAgo(dateString) {
+    const now = new Date();
+    const last = new Date(dateString);
+    const diff = now - last;
+    const minutes = diff / (1000 * 60);
+    const hours = diff / (1000 * 60 * 60);
+    const days = diff / (1000 * 60 * 60 * 24);
+
+    if (minutes < 1) return "just now";
+    if (minutes < 60) return `${Math.floor(minutes)} min ago`;
+    if (hours < 24) return `${Math.floor(hours)} hr ago`;
+    return `${Math.floor(days)} days ago`;
+  }
+
+
   return (
     <>
       <Box
@@ -434,9 +449,19 @@ export default function Home() {
                         </Typography>
                         <Typography
                           sx={{
-                            fontWeight: 600,
-                            // fontfamily: "Rubik",
+                            fontWeight: 600,                            
                             color: "rgb(255 196 107)",
+                            fontSize: "0.7em",
+                          }}
+                          variant="body2"
+                        >
+                          {profile?.selected_title}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontWeight: 600,
+                            display : timeAgo(profile?.last_active) !== "just now" ? "block" : "none",
+                            color: "#514e4e",
                             fontSize: "0.7em",
                           }}
                           variant="body2"
@@ -449,7 +474,7 @@ export default function Home() {
                           display: "inline-block",
                           width: "10px",
                           height: "10px",
-                          backgroundColor: profile?.is_active
+                          backgroundColor: timeAgo(profile?.last_active) == "just now"
                             ? "green"
                             : "#514e4e",
                           borderRadius: "50%",

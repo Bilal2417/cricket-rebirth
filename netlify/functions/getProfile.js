@@ -16,7 +16,7 @@ export async function handler() {
         trophies,
         unlocked_teams,
         selected_title,
-        (NOW() - last_active) < interval '1 minutes' AS is_active,
+        last_active ,
         COALESCE(img, '/assets/img/pak.png') AS img
       FROM profiles
       ORDER BY trophies DESC

@@ -41,13 +41,13 @@ const flagGroups = [
 
 export default function ScoreCardOpening() {
   const navigate = useNavigate();
-  const [ show , setShow] = useState(()=>{
+  const [show, setShow] = useState(() => {
     const val = sessionStorage.getItem("value");
-    if(val){
-      return false
+    if (val) {
+      return false;
     }
-    return true
-  })
+    return true;
+  });
   useEffect(() => {
     const val = sessionStorage.getItem("value");
     if (!val) {
@@ -65,8 +65,9 @@ export default function ScoreCardOpening() {
   const updatedflags =
     flagGroups.find((f) => f.value === groupValue)?.unlocks || [];
 
+  const newProf = Profile;
   const flags = updatedflags.filter(
-    (f) => !Profile?.unlocked_items?.includes(f.key)
+    (f) => !newProf?.unlocked_items?.includes(f.key)
   );
 
   const [selected, setSelected] = useState(null);
@@ -107,7 +108,7 @@ export default function ScoreCardOpening() {
   const startSpin = () => {
     if (spinning) return;
 
-    setShow(false)
+    setShow(false);
     setSpinning(true);
     setShowConfetti(false);
     setSelected(null);
@@ -179,7 +180,7 @@ export default function ScoreCardOpening() {
     sessionStorage.removeItem("value");
 
     toast.success(`🎉 ${finalFlag.country} Unlocked!`);
-    setShow(true)
+    setShow(true);
   };
 
   useEffect(() => {
@@ -271,9 +272,9 @@ export default function ScoreCardOpening() {
         />
       </Box>
 
-      {(show && !spinning )?
+      {show && !spinning ? (
         <Button
-          onClick={()=> navigate("/")}
+          onClick={() => navigate("/")}
           variant="contained"
           sx={{
             mt: 3,
@@ -284,21 +285,21 @@ export default function ScoreCardOpening() {
         >
           Finish
         </Button>
-      :
-      <Button
-      onClick={startSpin}
-      disabled={spinning}
-        variant="contained"
-        sx={{
-          mt: 3,
-          bgcolor: "gold",
-          color: "black",
-          "&:hover": { bgcolor: "#ffda4d" },
-        }}
-      >
-        {spinning ? "Spinning..." : "Spin"}
-      </Button>
-  }
+      ) : (
+        <Button
+          onClick={startSpin}
+          disabled={spinning}
+          variant="contained"
+          sx={{
+            mt: 3,
+            bgcolor: "gold",
+            color: "black",
+            "&:hover": { bgcolor: "#ffda4d" },
+          }}
+        >
+          {spinning ? "Spinning..." : "Spin"}
+        </Button>
+      )}
     </Box>
   );
 }
