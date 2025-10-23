@@ -8,6 +8,7 @@ import App from "./App";
 let theme = createTheme({
   typography: {
     fontFamily: "'Share Tech Mono', cursive",
+    //  fontFamily: "'Baloo Bhai 2', cursive",
     h1: { fontWeight: 700, fontSize: "3rem" },
     h2: { fontWeight: 600, fontSize: "2.5rem" },
     h3: { fontWeight: 600, fontSize: "2rem" },

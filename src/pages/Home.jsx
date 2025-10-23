@@ -91,46 +91,88 @@ export default function Home() {
 
   const board = localStorage.getItem("Board");
 
-useEffect(() => {
-  let isMounted = true; // ✅ Prevents state updates if component unmounts
+  // useEffect(() => {
+  //   let isMounted = true; // ✅ Prevents state updates if component unmounts
 
-  const fetchProfiles = async () => {
-    try {
-      const res = await fetch("/.netlify/functions/getProfile");
-      const data = await res.json();
+  //   const fetchProfiles = async () => {
+  //     try {
+  //       const res = await fetch("/.netlify/functions/getProfile");
+  //       const data = await res.json();
 
-      if (isMounted && data?.success && data.profiles) {
-        setProfiles(data.profiles);
+  //       if (isMounted && data?.success && data.profiles) {
+  //         setProfiles(data.profiles);
 
-        const matchedProfile = data.profiles.find(
-          (profile) => profile.id === profileId
+  //         const matchedProfile = data.profiles.find(
+  //           (profile) => profile.id === profileId
+  //         );
+
+  //         if (matchedProfile) {
+  //           setUserProfile(matchedProfile);
+  //           sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+  //         }
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching profiles:", err);
+  //     } finally {
+  //       if (isMounted) setLoading(false);
+  //     }
+  //   };
+
+  //   fetchProfiles();
+
+  //   const interval = setInterval(fetchProfiles, 150000);
+
+  //   return () => {
+  //     isMounted = false;
+  //     clearInterval(interval);
+  //   };
+  // }, [profileId]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchProfiles = async () => {
+      try {
+        const cached = JSON.parse(
+          sessionStorage.getItem("profilesData") || "{}"
         );
+        const now = Date.now();
 
-        if (matchedProfile) {
-          setUserProfile(matchedProfile);
-          sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+        // ✅ Only fetch again after 5 minutes
+        if (cached.timestamp && now - cached.timestamp < 5 * 60 * 1000) {
+          setProfiles(cached.data);
+          const matchedProfile = cached.data.find((p) => p.id === profileId);
+          if (matchedProfile) setUserProfile(matchedProfile);
+          setLoading(false);
+          return;
         }
+
+        const res = await fetch("/.netlify/functions/getProfile");
+        const data = await res.json();
+
+        if (isMounted && data?.success && data.profiles) {
+          setProfiles(data.profiles);
+          sessionStorage.setItem(
+            "profilesData",
+            JSON.stringify({ data: data.profiles, timestamp: now })
+          );
+
+          const matchedProfile = data.profiles.find((p) => p.id === profileId);
+          if (matchedProfile) setUserProfile(matchedProfile);
+        }
+      } catch (err) {
+        console.error("Error fetching profiles:", err);
+      } finally {
+        if (isMounted) setLoading(false);
       }
-    } catch (err) {
-      console.error("Error fetching profiles:", err);
-    } finally {
-      if (isMounted) setLoading(false);
-    }
-  };
+    };
 
-  
-  fetchProfiles();
+    fetchProfiles();
 
-  
-  const interval = setInterval(fetchProfiles, 150000);
-
-  
-  return () => {
-    isMounted = false;
-    clearInterval(interval);
-  };
-}, [profileId]);
-
+    return () => {
+      isMounted = false;
+    };
+  }, [profileId]);
 
   const [mode, setMode] = useState(null);
   const [save, setSave] = useState(false);
@@ -219,14 +261,17 @@ useEffect(() => {
                   "0%": {
                     backgroundColor: "#343c53",
                     boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                    border: "2px solid #000000",
                   },
                   "50%": {
                     backgroundColor: "#f6c401",
                     boxShadow: "inset 0px -8px 8px -4px #b7560f",
+                    border: "2px solid #f6c401",
                   },
                   "100%": {
                     backgroundColor: "#343c53",
                     boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                    border: "2px solid #000000",
                   },
                 },
                 ":hover": {

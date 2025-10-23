@@ -52,7 +52,7 @@ export default function Ct25({
             alignContent: "center",
             padding: "0px 30px",
             background: "linear-gradient(to left , #00af06 , #04c802)",
-            borderRadius: "0 32px 32px 0",
+            borderRadius: "0 132px 132px 0",
             boxShadow: "3px 0px 25px -3px #000000",
             width: "100%",
           }}
@@ -536,7 +536,7 @@ export default function Ct25({
             alignContent: "center",
             padding: "0px 30px",
             background: "linear-gradient(to right , #00af06 , #04c802)",
-            borderRadius: "32px 0px 0px 32px",
+            borderRadius: "132px 0px 0px 132px",
             boxShadow: "-3px 0px 25px -3px #000000",
             width : "100%"
           }}

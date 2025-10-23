@@ -51,7 +51,7 @@ export default function Wc22({
             alignContent: "center",
             padding: "0px 20px 0 100px",
             background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
-            borderRadius: "0 32px 32px 0",
+            borderRadius: "0 132px 132px 0",
           }}
         >
           <img
@@ -563,7 +563,7 @@ export default function Wc22({
             alignContent: "center",
             padding: "0px 100px 0 20px",
             background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
-            borderRadius: "32px 0px 0px 32px",
+            borderRadius: "132px 0px 0px 132px",
           }}
         >
           <img

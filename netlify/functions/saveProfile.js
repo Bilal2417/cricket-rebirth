@@ -18,7 +18,7 @@ export async function handler(event) {
   try {
     await client.connect();
 
-    // Ensure table exists
+    // ✅ Ensure table exists (now includes starter)
     await client.query(`
       CREATE TABLE IF NOT EXISTS profiles (
         id TEXT PRIMARY KEY,
@@ -33,6 +33,7 @@ export async function handler(event) {
         unlocked_items JSONB DEFAULT '["starter"]'::jsonb,
         titles JSONB DEFAULT '[]'::jsonb,
         selected_title TEXT,
+        starter BOOLEAN NOT NULL DEFAULT false,
         last_active TIMESTAMP DEFAULT NOW()
       )
     `);
@@ -43,9 +44,13 @@ export async function handler(event) {
 
     let profile;
     if (existing.rows.length === 0) {
+      // ✅ Insert default profile including starter
       const result = await client.query(
-        `INSERT INTO profiles (id, name, tournaments, trophies, victories, coins, img, unlocked_teams, unlocked_items, titles, selected_title)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10 , $11)
+        `INSERT INTO profiles (
+           id, name, tournaments, trophies, victories, coins, img,
+           unlocked_teams, unlocked_items, titles, selected_title, starter
+         )
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
          RETURNING *`,
         [
           profileId,
@@ -56,9 +61,10 @@ export async function handler(event) {
           0,
           "/assets/img/pak.png",
           JSON.stringify([]),
-          JSON.stringify([]),
+          JSON.stringify(["starter"]),
           JSON.stringify([]),
           null,
+          false,
         ]
       );
       profile = result.rows[0];
@@ -72,10 +78,11 @@ export async function handler(event) {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        profile: profile,
+        profile,
       }),
     };
   } catch (err) {
+    console.error("Error in getProfile:", err.message);
     return {
       statusCode: 500,
       body: JSON.stringify({ success: false, error: err.message }),

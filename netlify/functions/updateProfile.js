@@ -23,6 +23,7 @@ export async function handler(event) {
       titles,
       selected_title,
       unlocked_items,
+      starter
     } = body;
 
     if (!id) {
@@ -143,20 +144,22 @@ export async function handler(event) {
            unlocked_teams = COALESCE($7::jsonb, unlocked_teams),
            titles = COALESCE($8::jsonb, titles),
            selected_title = COALESCE($9, selected_title),
-           unlocked_items = COALESCE($10::jsonb, unlocked_items)
-       WHERE id = $11
+           unlocked_items = COALESCE($10::jsonb, unlocked_items),
+           starter = COALESCE($11, starter)
+       WHERE id = $12
        RETURNING *`,
       [
         name ?? null,
         img ?? null,
         tournaments ?? null,
-        safeTrophies ?? null,
+        safeTrophies ?? current.trophies,
         victories ?? null,
         coins ?? null,
         JSON.stringify(safeUnlockedTeams ?? []),
         JSON.stringify(safeTitles ?? []),
         selected_title ?? null,
         JSON.stringify(safeUnlockedItems ?? []),
+        starter,
         id,
       ]
     );

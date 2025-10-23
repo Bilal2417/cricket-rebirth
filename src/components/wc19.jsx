@@ -52,7 +52,7 @@ export default function Wc19({
             alignContent: "center",
             padding: "0px 20px 0 100px",
             backgroundColor: "#faf8fb",
-            borderRadius: "0 32px 32px 0",
+            borderRadius: "0 132px 132px 0",
           }}
         >
           <img
@@ -562,7 +562,7 @@ export default function Wc19({
             alignContent: "center",
             padding: "0px 100px 0 20px",
             backgroundColor: "#faf8fb",
-            borderRadius: "32px 0px 0px 32px",
+            borderRadius: "132px 0px 0px 132px",
           }}
         >
           <img

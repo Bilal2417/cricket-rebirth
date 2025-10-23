@@ -65,13 +65,14 @@ export default function CardPacksShop() {
   ];
 
   const [packs, setPacks] = useState([]);
-  const [starter, setStarter] = useState(
-    localStorage.getItem("collectedStarter")
-  );
+  const [starter, setStarter] = useState(()=>{
+    if (!Profile?.starter) return false
+    return true
+});
 
   useEffect(() => {
     // const starter = ;
-    if (!starter) {
+    if (Profile?.starter) {
       setPacks(allPacks.filter((pack) => pack.packKey !== "Starter"));
     } else {
       setPacks(allPacks);
@@ -118,7 +119,6 @@ export default function CardPacksShop() {
 
         navigate(`/open-pack/${packKey}`);
         localStorage.removeItem("collectedStarter");
-        setStarter(false);
       } else if (isActive && (price > Profile.coins || Profile.coins == null))
         [toast.error("Not enough coins!")];
     };
@@ -249,7 +249,7 @@ export default function CardPacksShop() {
           >
             <CardPack
               isActive={true}
-              starter={true}
+              starter={false}
               coins={Profile?.coins}
               {...packs[activeCard]}
             />

@@ -161,6 +161,8 @@ export default function CardOpening() {
 
   useEffect(() => {
     const yes = sessionStorage.getItem("canOpen");
+    let collected = false
+   
     if (!yes) return;
     setShow(true);
 
@@ -189,9 +191,7 @@ export default function CardOpening() {
       );
 
       if (guaranteedCards.length > 0) {
-        // const randomCard =
-        //   guaranteedCards[Math.floor(Math.random() * guaranteedCards.length)];
-
+        collected = true
         const randomCard = getWeightedRandomCard(guaranteedCards);
 
         const teamUnlocks = randomCard.unlocks.filter((u) => u.type === "team");
@@ -331,7 +331,8 @@ export default function CardOpening() {
       updatedProfile = {
         ...updatedProfile,
         id: Profile?.id || updatedProfile.id,
-        coins: (updatedProfile?.coins || 0) - pack.price
+        coins: (updatedProfile?.coins || 0) - pack.price,
+        starter : collected ? true : Profile?.starter
       };
 
       try {
