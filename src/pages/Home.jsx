@@ -460,7 +460,7 @@ export default function Home() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            display : timeAgo(profile?.last_active) !== "just now" ? "block" : "none",
+                            display : timeAgo(profile?.last_active) !== "just now" && profile?.id !== profileId ? "block" : "none",
                             color: "rgb(202 186 186)",
                             fontSize: "0.7em",
                           }}
