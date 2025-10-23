@@ -461,12 +461,12 @@ export default function Home() {
                           sx={{
                             fontWeight: 600,
                             display : timeAgo(profile?.last_active) !== "just now" ? "block" : "none",
-                            color: "#514e4e",
+                            color: "rgb(202 186 186)",
                             fontSize: "0.7em",
                           }}
                           variant="body2"
                         >
-                          {profile?.selected_title}
+                         Last Online {timeAgo(profile?.last_active)}
                         </Typography>
                       </Box>
                       <span
