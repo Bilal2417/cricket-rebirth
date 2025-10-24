@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { keyframes } from "@emotion/react";
-import { GiShoppingCart, GiTrophy } from "react-icons/gi";
+import { GiCardboardBox, GiShoppingCart, GiTrophy } from "react-icons/gi";
 
 export default function Home() {
   const shimmer = keyframes`
@@ -172,8 +172,15 @@ export default function Home() {
 
     fetchProfiles();
 
+    const handleEvent = () => {
+      fetchProfiles();
+    };
+
+    window.addEventListener("refreshProfiles", handleEvent);
+
     return () => {
       isMounted = false;
+      window.removeEventListener("refreshProfiles", handleEvent);
     };
   }, [profileId]);
 
@@ -304,7 +311,7 @@ export default function Home() {
                 navigate("/scoreboards");
               }}
             >
-              <ScoreboardRounded size={30} />
+              <ScoreboardRounded sx={{fontSize : "1.6em"}} />
             </Box>
           </Box>
 
@@ -508,10 +515,10 @@ export default function Home() {
                       variant="body1"
                     >
                       <GiTrophy
-                        size={30}
+                        size={25}
                         style={{
                           color:
-                            profile?.id == profileId ? "#FFFFFF" : "#FFD700",
+                            profile?.id == profileId ? "#dc5425" : "#665963",
                         }}
                       />
                       <Box

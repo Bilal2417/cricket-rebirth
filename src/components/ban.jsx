@@ -121,7 +121,7 @@ export default function BAN({
                   alignItems: "center",
                   justifyContent: "center",
                   minHeight: "32px",
-                  minWidth: "350px",
+                  minWidth: { xs : "280px" , lg : "350px"},
                   flexGrow: 2,
                 }}
               >

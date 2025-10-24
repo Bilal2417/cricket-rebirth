@@ -1,34 +1,28 @@
 import { Box, Fade, Typography } from "@mui/material";
+import { use } from "react";
+import {
+  GiArcheryTarget,
+  GiConvergenceTarget,
+  GiTargetPoster,
+} from "react-icons/gi";
 
-export default function PAK({
+export default function WI({
   batting,
   aiTeam,
   userTeam,
   striker,
   nonStriker,
-  // getInitials,
   totalOvers,
   over,
   balls,
   show = 0,
   partnership,
   partnershipBalls,
-  firstInnings,
+  firstInnings = 2,
   target,
   isSix,
   randomBowler,
 }) {
-  function getInitials(name) {
-    if (!name) return "";
-    const words = name.trim().split(" ").filter(Boolean);
-
-    if (words.length === 1) {
-      return words[0].substring(0, 3).toUpperCase();
-    }
-
-    return (words[0][0] + words[1][0]).toUpperCase();
-  }
-
   const teams = ["Australia", "UAE", "Sri Lanka", "India"];
   return (
     <>
@@ -36,7 +30,7 @@ export default function PAK({
         sx={{
           display: "flex",
           justifyContent: "center",
-          transform: { xs: "scale(0.7)", md: "scale(0.9)", lg: "scale(1.0)" },
+          transform: { xs: "scale(0.65)", md: "scale(0.9)", lg: "scale(1.0)" },
           // gap: "40px",
         }}
       >
@@ -46,104 +40,56 @@ export default function PAK({
           sx={{
             display: "flex",
             alignItems: "center",
-            paddingLeft: "8px",
-            // background: `linear-gradient(to bottom, ${
-            //   batting ? userTeam?.secondary : aiTeam?.secondary || "#163c8c"
-            // }, ${batting ? userTeam?.primary : aiTeam?.primary || "#0e306f"})`,
-            background: batting ? userTeam?.primary : aiTeam?.primary || "#01411c",
+            background: `linear-gradient(to bottom, ${
+              batting ? userTeam?.secondary : aiTeam?.secondary || "#163c8c"
+            }, ${batting ? userTeam?.primary : aiTeam?.primary || "#0e306f"})`,
             overflow: "hidden",
           }}
         >
-          <img
-            style={{
-              width: "45px",
-              height: "30px",
-              boxShadow: "3px 3px 8px -2px #000000",
-            }}
-            src={!batting ? aiTeam?.flag : userTeam?.flag}
-            alt={!batting ? aiTeam?.name : userTeam?.name}
-          />
-          <Typography
+          <Box
             sx={{
-              textTransform: "uppercase",
-                padding: { xs : "4px 5px" , lg : "4px 15px"},
-              //   color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
-              //     ? "#000000"
-              //     : "#FFFFFF",
-              color: batting ? userTeam?.secondary : aiTeam?.secondary ||"#03a65a",
+              padding: "0px 20px",
             }}
-            variant="h3"
           >
-            {batting
-              ? getInitials(userTeam?.name) || "Dum"
-              : getInitials(aiTeam?.name) || "Dum"}
-          </Typography>
-
+            <img
+              style={{
+                width: "45px",
+                height: "30px",
+                boxShadow: "3px 3px 8px -2px #000000",
+              }}
+              src={!batting ? aiTeam?.flag : userTeam?.flag}
+              alt={!batting ? aiTeam?.name : userTeam?.name}
+            />
+          </Box>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              // padding: "4px",
-              height: "100%",
-              justifyContent: "space-evenly",
-              gap: "5px",
-            }}
-          >
-            <Typography
-              sx={{
-                textTransform: "uppercase",
-                color: "#FFFFFF",
-                fontWeight: 600,
-                textAlign: "center",
-                minWidth: "100px",
-              }}
-              variant="h6"
-            >
-              {batting ? userTeam?.score || 0 : aiTeam?.score || 0} -{" "}
-              {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
-            </Typography>
-
-            <Typography
-              sx={{
-                textTransform: "uppercase",
-                color: "#FFFFFF",
-                opacity: 0.8,
-              }}
-              variant="body2"
-            >
-              {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
-              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0} (3)
-            </Typography>
-          </Box>
-
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
+              boxShadow: "-4px 0 6px -2px rgba(0,0,0,0.1)",
             }}
           >
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                flexDirection: "column",
-                padding: { xs : "6px 10px" , lg : "6px 20px"},
-                gap: "5px",
-                minWidth: { xs: "130px", lg: "200px" },
-                background:
-                  "linear-gradient(to bottom , #bec2b5 , #b6b8b4 , #929587 )",
-                borderRight: "2px solid #000000",
+                justifyContent: "space-between",
+                padding: "4px 20px",
+                gap: "15px",
+                boxShadow: "3px 8px 20px -14px #000000",
+                minWidth: "225px",
               }}
             >
               <Box
                 sx={{
                   textTransform: "uppercase",
-                  color: "#000000",
+                  color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                    ? "#000000"
+                    : "#FFFFFF",
                   display: "flex",
                   alignItems: "center",
                   gap: "5px",
-                  //   minWidth: "80px",
+                  minWidth: "80px",
                   fontWeight: 600,
                 }}
               >
@@ -151,7 +97,7 @@ export default function PAK({
                   sx={{
                     width: "5px",
                     height: "5px",
-                    backgroundColor: "#000000",
+                    backgroundColor: "#fff",
                     borderRadius: "50%",
                     marginLeft: "-12px",
                   }}
@@ -163,16 +109,20 @@ export default function PAK({
                 sx={{
                   display: "flex",
                   alignItems: "baseline",
-                  gap: "2px",
+                  gap: "5px",
+                  width: "50px",
                   justifyContent: "center",
                 }}
               >
                 <Typography
                   sx={{
-                    color: "#000000",
+                    color: teams.includes(
+                      batting ? userTeam?.name : aiTeam?.name
+                    )
+                      ? "#000000"
+                      : "#FFFFFF",
                     fontWeight: 600,
                     minWidth: "20px",
-                    textAlign: "center",
                   }}
                   variant="body1"
                 >
@@ -180,10 +130,13 @@ export default function PAK({
                 </Typography>
                 <Typography
                   sx={{
-                    color: "#000000",
+                    color: teams.includes(
+                      batting ? userTeam?.name : aiTeam?.name
+                    )
+                      ? "#000000"
+                      : "#FFFFFF",
                     fontSize: "0.75em",
                     minWidth: "20px",
-                    textAlign: "center",
                   }}
                   variant="body1"
                 >
@@ -196,42 +149,44 @@ export default function PAK({
               sx={{
                 display: "flex",
                 alignItems: "center",
-                flexDirection: "column",
-                padding: { xs : "6px 10px" , lg : "6px 20px"},
-                gap: "5px",
-                minWidth: { xs: "130px", lg: "200px" },
-                background:
-                  "linear-gradient(to bottom , #bec2b5 , #b6b8b4 , #929587 )",
+                justifyContent: "space-between",
+                gap: "15px",
+                padding: "4px 20px",
+                minWidth: "225px",
               }}
             >
-              <Box
+              <Typography
+                variant="body1"
                 sx={{
                   textTransform: "uppercase",
-                  color: "#000000",
-                  display: "flex",
-                  alignItems: "center",
+                  color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                    ? "#000000"
+                    : "#FFFFFF",
                   gap: "5px",
-                  //   minWidth: "80px",
+                  minWidth: "80px",
                   fontWeight: 600,
                 }}
               >
                 {nonStriker?.name || "Bot1"}
-              </Box>
-
+              </Typography>
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "baseline",
-                  gap: "2px",
+                  gap: "5px",
+                  width: "50px",
                   justifyContent: "center",
                 }}
               >
                 <Typography
                   sx={{
-                    color: "#000000",
+                    color: teams.includes(
+                      batting ? userTeam?.name : aiTeam?.name
+                    )
+                      ? "#000000"
+                      : "#FFFFFF",
                     fontWeight: 600,
                     minWidth: "20px",
-                    textAlign: "center",
                   }}
                   variant="body1"
                 >
@@ -239,10 +194,13 @@ export default function PAK({
                 </Typography>
                 <Typography
                   sx={{
-                    color: "#000000",
+                    color: teams.includes(
+                      batting ? userTeam?.name : aiTeam?.name
+                    )
+                      ? "#000000"
+                      : "#FFFFFF",
                     fontSize: "0.75em",
                     minWidth: "20px",
-                    textAlign: "center",
                   }}
                   variant="body1"
                 >
@@ -251,22 +209,107 @@ export default function PAK({
               </Box>
             </Box>
           </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "start",
+              padding: "4px 0 4px 10px",
+              height: "100%",
+              justifyContent: "space-evenly",
+              boxShadow: "-4px 0 6px 2px rgba(0,0,0,0.1)",
+            }}
+          >
+            <Typography
+              sx={{
+                textTransform: "uppercase",
+                color: "#FFFFFF",
+                opacity: 0.8,
+              }}
+              variant="body2"
+            >
+              {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
+              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0} (3)
+            </Typography>
+            <Typography
+              sx={{
+                textTransform: "uppercase",
+                color: "#FFFFFF",
+                fontWeight: 600,
+                textAlign: "left",
+                minWidth: { xs: "80px", lg: "100px" },
+              }}
+              variant="body1"
+            >
+              {batting ? userTeam?.score || 0 : aiTeam?.score || 0} -{" "}
+              {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
+            </Typography>
+          </Box>
         </Box>
 
         <Box
           sx={{
-            // background:
-            //   "linear-gradient(to bottom , #bec2b5 , #b6b8b4 , #929587 )",
-            background: `linear-gradient(to bottom, ${
-              batting ? userTeam?.secondary : aiTeam?.secondary || "#03a65a"
-            }, ${batting ? userTeam?.primary : aiTeam?.primary || "#01411c"})`,
-            // background : batting ? userTeam?.secondary : aiTeam?.primary,
+            background: "linear-gradient(to bottom , #f9fbfa , #929f97 )",
+            position: "relative",
+            display: firstInnings == 2 ? "flex" : "none",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "32px",
+            minWidth: { xs: "80px", lg: "100px" },
+          }}
+        >
+          <Fade in={show >= 0} timeout={500}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                position: "absolute",
+                alignItems: "center",
+                width: "100%",
+                gap: "3px",
+              }}
+            >
+              <Typography
+                sx={{
+                  color: "#000",
+                  textTransform: "uppercase",
+                  fontWeight: 600,
+                  boxShadow: "0px 3px 8px -6px #929f97",
+                  width: "100%",
+                  textAlign: "center",
+                }}
+                variant="body1"
+              >
+                Target
+              </Typography>
+              <Typography
+                sx={{
+                  color: "#000",
+                  textTransform: "uppercase",
+                  fontWeight: 600,
+                }}
+                variant="body1"
+              >
+                {target || 0}
+              </Typography>
+            </Box>
+          </Fade>
+        </Box>
+
+        <Box
+          sx={{
+            background: "linear-gradient(to bottom , #f9fbfa , #929f97 )",
             position: "relative",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             minHeight: "32px",
-            minWidth: { xs: "120px", lg: "150px" },
+            minWidth: {
+              xs: firstInnings !== 2 ? "100px" :"150px",
+              lg: firstInnings !== 2 ? "280px" : "200px",
+            },
+            boxShadow: "-4px 0 6px 2px rgba(0,0,0,0.1)",
           }}
         >
           <Fade in={show == 0} timeout={500}>
@@ -282,10 +325,10 @@ export default function PAK({
             >
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: "#000",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                //   boxShadow: "0px 3px 8px -2px #929f97",
+                  boxShadow: "0px 3px 8px -6px #929f97",
                   width: "100%",
                   textAlign: "center",
                 }}
@@ -295,7 +338,7 @@ export default function PAK({
               </Typography>
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: "#000",
                   textTransform: "uppercase",
                   fontWeight: 600,
                 }}
@@ -311,7 +354,7 @@ export default function PAK({
             </Box>
           </Fade>
 
-          <Fade in={show == 1} timeout={500}>
+          <Fade in={firstInnings !== 2 ? show == 1 : show > 0} timeout={500}>
             <Box
               sx={{
                 display: "flex",
@@ -324,10 +367,10 @@ export default function PAK({
             >
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: "#000",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                //   boxShadow: "0px 3px 8px -2px #929f97",
+                  boxShadow: "0px 3px 8px -6px #929f97",
                   width: "100%",
                   textAlign: "center",
                 }}
@@ -337,7 +380,7 @@ export default function PAK({
               </Typography>
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: "#000",
                   textTransform: "uppercase",
                   fontWeight: 600,
                 }}
@@ -348,7 +391,7 @@ export default function PAK({
             </Box>
           </Fade>
 
-          <Fade in={show == 2} timeout={500}>
+          <Fade in={firstInnings !== 2 ? show == 2 : show > 10} timeout={500}>
             <Box
               sx={{
                 display: "flex",
@@ -361,10 +404,10 @@ export default function PAK({
             >
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: "#000",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                //   boxShadow: "0px 3px 8px -2px #929f97",
+                  boxShadow: "0px 3px 8px -6px #929f97",
                   width: "100%",
                   textAlign: "center",
                 }}
@@ -374,7 +417,7 @@ export default function PAK({
               </Typography>
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: "#000",
                   textTransform: "uppercase",
                   fontWeight: 600,
                 }}
@@ -394,12 +437,11 @@ export default function PAK({
 
         <Box
           sx={{
-            // background: `linear-gradient(to top, ${
-            //   batting ? aiTeam?.secondary : userTeam?.secondary || "#888888"
-            // }, ${batting ? aiTeam?.primary : userTeam?.primary || "#555555"})`,
-            background: !batting ? userTeam?.primary|| "#c1ab11" : aiTeam?.primary ,
+            background: `linear-gradient(to bottom, ${
+              batting ? aiTeam?.secondary : userTeam?.secondary || "#e04b7f"
+            }, ${batting ? aiTeam?.primary : userTeam?.primary || "#9c1444"})`,
             display: "flex",
-            padding: { xs : "8px 10px" , lg : "8px 20px"},
+            padding: "8px 20px",
             position: "relative",
           }}
         >
@@ -496,9 +538,9 @@ export default function PAK({
                   background: `linear-gradient(to bottom, ${
                     batting
                       ? userTeam?.secondary
-                      : aiTeam?.secondary || "#03a65a"
+                      : aiTeam?.secondary || "#163c8c"
                   }, ${
-                    batting ? userTeam?.primary : aiTeam?.primary || "#01411c"
+                    batting ? userTeam?.primary : aiTeam?.primary || "#0e306f"
                   })`,
                   padding: "6px 12px",
                 }}
@@ -522,6 +564,7 @@ export default function PAK({
                     color: (() => {
                       const isBatting = batting;
                       const team = isBatting ? userTeam : aiTeam;
+                      const opponent = isBatting ? aiTeam : userTeam;
                       const ball = team?.ballHistory[index];
 
                       if (ball === "W" || ball > 3) return "#FFFFFF";
@@ -533,6 +576,7 @@ export default function PAK({
 
                       return "#FFFFFF";
                     })(),
+
                     padding: "4px",
                     display: "flex",
                     alignItems: "center",
@@ -541,12 +585,12 @@ export default function PAK({
                     fontWeight: 900,
                     background: batting
                       ? userTeam?.ballHistory[index] == "W"
-                        ? "#cd0001"
+                        ? "#c00050"
                         : userTeam?.ballHistory[index] > 3
                         ? userTeam?.primary
                         : aiTeam?.secondary
                       : aiTeam?.ballHistory[index] == "W"
-                      ? "#cd0001"
+                      ? "#c00050"
                       : aiTeam?.ballHistory[index] > 3
                       ? aiTeam?.primary
                       : userTeam?.secondary,
@@ -566,23 +610,9 @@ export default function PAK({
             sx={{
               display: "flex",
               alignItems: "center",
+              paddingLeft: "20px",
             }}
           >
-            <Typography
-              sx={{
-                textTransform: "uppercase",
-                padding: { xs : "4px 5px" , lg : "4px 15px"},
-                // color: teams.includes(!batting ? userTeam?.name : aiTeam?.name)
-                //   ? "#000000"
-                //   : "#FFFFFF",
-                color: !batting ? userTeam?.secondary : aiTeam?.secondary,
-              }}
-              variant="h3"
-            >
-              {!batting
-                ? getInitials(userTeam?.name) || "Dum"
-                : getInitials(aiTeam?.name) || "Dum"}
-            </Typography>
             <img
               style={{
                 width: "45px",

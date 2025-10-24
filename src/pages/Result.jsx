@@ -113,6 +113,7 @@ export default function Result() {
         sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
 
         window.dispatchEvent(new Event("profileUpdated"));
+        window.dispatchEvent(new Event("refreshProfiles"));
       } else {
         console.error("Failed to update trophies in database");
       }

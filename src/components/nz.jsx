@@ -100,7 +100,7 @@ export default function NZ({
                 color: "#FFFFFF",
                 fontWeight: 600,
                 textAlign: "center",
-                minWidth: "120px",
+                minWidth: { xs : "100px" , lg : "120px"}
               }}
               variant="body1"
             >
@@ -278,7 +278,7 @@ export default function NZ({
             alignItems: "center",
             justifyContent: "center",
             minHeight: "32px",
-            minWidth: { xs: "200px", lg: "280px" },
+            minWidth: { xs: "150px", lg: "280px" },
           }}
         >
           <Fade in={show == 0} timeout={500}>

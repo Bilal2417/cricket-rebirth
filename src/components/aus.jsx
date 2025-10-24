@@ -43,7 +43,7 @@ export default function AUS({
           sx={{
             display: "flex",
             alignItems: "flex-end",
-            gap: "20px",
+            gap: { xs : "15px" , lg : "20px"},
           }}
         >
           <Box
@@ -268,7 +268,7 @@ export default function AUS({
           sx={{
             display: "flex",
             alignItems: "flex-end",
-            gap: "30px",
+            gap: { xs : "15px" , lg : "30px"},
             position: "relative",
           }}
         >

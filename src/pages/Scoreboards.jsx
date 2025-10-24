@@ -13,6 +13,8 @@ import Ct25 from "../components/ct25";
 import NZ from "../components/nz";
 import StarterScoreboard from "../components/starter";
 import PAK from "../components/pak";
+import ENG from "../components/eng";
+import WI from "../components/wi";
 
 export default function ScoreBoards() {
   const [active, setActive] = useState();
@@ -31,12 +33,20 @@ export default function ScoreBoards() {
       board: <SRI />,
     },
     {
+      key: "wi",
+      board: <WI />,
+    },
+    {
       key: "nz",
       board: <NZ />,
     },
     {
       key: "pak",
       board: <PAK />,
+    },
+    {
+      key: "eng",
+      board: <ENG />,
     },
     {
       key: "aus",

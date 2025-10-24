@@ -15,6 +15,8 @@ import Ct25 from "./ct25";
 import NZ from "./nz";
 import StarterScoreboard from "./starter";
 import PAK from "./pak";
+import ENG from "./eng";
+import WI from "./wi";
 
 export default function ScoreCard() {
   const storedData = localStorage.getItem("cricketData");
@@ -82,18 +84,18 @@ export default function ScoreCard() {
     pak: `radial-gradient( #b6b8b4, 
           #929587
         )`,
-    // pak: userTeam?.secondary,
+    eng: "#019cd2",
     sri: userTeam?.primary,
     nz: batting
-      ? `radial-gradient(${userTeam?.secondary || "#000"}, ${
+    ? `radial-gradient(${userTeam?.secondary || "#000"}, ${
           userTeam?.primary || "#333"
         })`
-      : `radial-gradient(${aiTeam?.secondary || "#000"}, ${
+        : `radial-gradient(${aiTeam?.secondary || "#000"}, ${
           aiTeam?.primary || "#333"
         })`,
-  };
+      };
 
-  const borderColors = {
+      const borderColors = {
     starter: "#000",
     aus: batting ? userTeam?.primary : aiTeam?.primary,
     ban: "#8b0605",
@@ -103,6 +105,7 @@ export default function ScoreCard() {
     wc24: "#fa208e",
     ct25: "#02c208",
     pak: "#00000060",
+    eng: "#005b85",
     sri: "black",
     nz: "#c00050",
   };
@@ -700,6 +703,25 @@ export default function ScoreCard() {
               isSix={isSix}
               randomBowler={randomBowler}
             />
+          ) : board == "eng" ? (
+            <ENG
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              // getInitials={getInitials}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
           ) : board == "nz" ? (
             <NZ
               batting={batting}
@@ -718,7 +740,25 @@ export default function ScoreCard() {
               isSix={isSix}
               randomBowler={randomBowler}
             />
-          ) : board == "pak" ? (
+          ) : board == "wi" ? (
+            <WI
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
+          ): board == "pak" ? (
             <PAK
               batting={batting}
               aiTeam={aiTeam}
@@ -810,7 +850,8 @@ export default function ScoreCard() {
                 <Button
                   sx={{
                     background: colors[board],
-                    color: board == "starter" || board == "pak" ? "#000" : "#FFFFFF",
+                    color:
+                      board == "starter" || board == "pak" ? "#000" : "#FFFFFF",
                     width: "60px",
                     height: "60px",
                     padding: "4px 8px",
