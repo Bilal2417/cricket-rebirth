@@ -230,7 +230,8 @@ export default function WI({
               variant="body2"
             >
               {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
-              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0} (3)
+              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0}{" "}(
+              {totalOvers == 100 ? "∞" : totalOvers || 0})
             </Typography>
             <Typography
               sx={{
@@ -306,7 +307,7 @@ export default function WI({
             justifyContent: "center",
             minHeight: "32px",
             minWidth: {
-              xs: firstInnings !== 2 ? "100px" :"150px",
+              xs: firstInnings !== 2 ? "100px" : "150px",
               lg: firstInnings !== 2 ? "280px" : "200px",
             },
             boxShadow: "-4px 0 6px 2px rgba(0,0,0,0.1)",

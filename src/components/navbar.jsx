@@ -37,7 +37,7 @@ export default function Navbar({ profile }) {
               border: "2px solid #000000",
               borderRadius: "4px",
               boxShadow: "inset 0px -8px 8px -4px #2a3043",
-              clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+              transform: "skew(-5deg)",
               color: "#ffffff",
               transition: "all 0.3s",
               ":hover": {
@@ -69,15 +69,12 @@ export default function Navbar({ profile }) {
               border: "2px solid #000000",
               borderRadius: "4px",
               boxShadow: "inset 0px -8px 8px -4px #2a3043",
-              clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+              transform: "skew(-5deg)",
               color: "#ffffff",
               transition: "all 0.3s",
               ":hover": {
                 cursor: "pointer",
                 transform: "scale(1.1)",
-              },
-              ":active": {
-                transform: "scale(1)",
               },
             }}
           >

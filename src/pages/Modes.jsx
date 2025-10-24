@@ -52,7 +52,8 @@ export default function Modes() {
         This mode allows <strong>{over.wkt}</strong> wicket(s) in{" "}
         <strong>{over.value}</strong> over(s), with{" "}
         <strong>{trophyMap[over.value]}</strong> trophies gained or{" "}
-        <strong>{Math.ceil((trophyMap[over.value]/2))}</strong> trophies lost per game.
+        <strong>{Math.ceil(trophyMap[over.value] / 2)}</strong> trophies lost
+        per game.
       </span>
     ),
   }));
@@ -117,25 +118,15 @@ export default function Modes() {
         `,
             padding: "10px 40px",
             fontSize: "1.1em",
-            position: "relative",
-            px: 4,
-            py: 1.5,
-            overflow: "hidden",
-            clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
+            transform: "skew(-20deg)",
             boxShadow: `
       inset 0px -8px 8px -4px #262e40,   
       inset 0px 8px 8px -4px rgb(193 193 193)       
     `,
             borderRadius: "4px",
             transition: "all 0.3s",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              inset: 0,
-              border: "2px solid black",
-              clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
-              pointerEvents: "none",
-            },
+            overflow: "hidden",
+            border: "2px solid black",
             ":hover": {
               transform: "scale(1.02)",
               cursor: unlocked ? "pointer" : "not-allowed",
@@ -242,27 +233,17 @@ export default function Modes() {
           -1px  1px 0 #000,
            2px  1.5px 0 #000
         `,
+                  overflow: "hidden",
                   padding: "10px 40px",
                   fontSize: "1.1em",
-                  position: "relative",
-                  px: 4,
-                  py: 1.5,
-                  overflow: "hidden",
-                  clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
                   boxShadow: `
       inset 0px -8px 8px -4px #262e40,   
       inset 0px 8px 8px -4px rgb(193 193 193)       
     `,
                   borderRadius: "4px",
                   transition: "all 0.3s",
-                  "&::before": {
-                    content: '""',
-                    position: "absolute",
-                    inset: 0,
-                    border: "2px solid black",
-                    clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
-                    pointerEvents: "none",
-                  },
+                  border: "2px solid black",
+                  transform: "skew(-20deg)",
                   ":hover": {
                     transform: "scale(1.02)",
                   },
@@ -324,25 +305,16 @@ export default function Modes() {
         `,
               padding: "10px 40px",
               fontSize: "1.1em",
-              position: "relative",
-              px: 4,
-              py: 1.5,
-              overflow: "hidden",
-              clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
+
+              transform: "skew(-20deg)",
               boxShadow: `
       inset 0px -8px 8px -4px #262e40,   
       inset 0px 8px 8px -4px rgb(193 193 193)       
     `,
+              overflow: "hidden",
               borderRadius: "4px",
               transition: "all 0.3s",
-              "&::before": {
-                content: '""',
-                position: "absolute",
-                inset: 0,
-                border: "2px solid black",
-                clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
-                pointerEvents: "none",
-              },
+              border: "2px solid black",
               ":hover": {
                 transform: "scale(1.02)",
               },
@@ -399,25 +371,15 @@ export default function Modes() {
         `,
             padding: "10px 40px",
             fontSize: "1.1em",
-            position: "relative",
-            px: 4,
-            py: 1.5,
-            overflow: "hidden",
-            clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
+            transform: "skew(-20deg)",
             boxShadow: `
       inset 0px -8px 8px -4px #262e40,   
       inset 0px 8px 8px -4px rgb(193 193 193)       
     `,
+            overflow: "hidden",
             borderRadius: "4px",
             transition: "all 0.3s",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              inset: 0,
-              border: "2px solid black",
-              clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
-              pointerEvents: "none",
-            },
+            border: "2px solid black",
             ":hover": {
               transform: "scale(1.02)",
               cursor: unlocked ? "pointer" : "not-allowed",

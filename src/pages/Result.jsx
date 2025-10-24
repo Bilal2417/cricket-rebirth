@@ -24,8 +24,8 @@ export default function Result() {
   const colors = {
     // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
     wc19: "#222589  ",
-    wc21: "#f83059 ",//f83059 
-    wc22: "#d71c59",//de265c 
+    wc21: "#f83059 ", //f83059
+    wc22: "#d71c59", //de265c
     ct25: "#02c208",
   };
 
@@ -201,13 +201,12 @@ export default function Result() {
   let coinsInc = 0;
   if (currentMode !== "KNOCKOUT" && currentMode !== "TOURNAMENT") {
     if (winner == userTeam?.name) {
-      trophyInc *= 2;
       coinsInc =
         totalWkts === 100
           ? trophyMap[totalWkts] * 3
           : trophyMap[totalWkts] * 15;
     } else if (winner == aiTeam?.name) {
-      trophyInc *= 1;
+      trophyInc /= 2;
       coinsInc =
         totalWkts === 100 ? trophyMap[totalWkts] * 1 : trophyMap[totalWkts] * 5;
     } else {
@@ -371,7 +370,7 @@ export default function Result() {
                 justifyContent: "center",
                 color: "rgb(255 196 107)",
                 position: "absolute",
-                right: 80,
+                right: 90,
                 top: -10,
               }}
               variant="body1"
@@ -401,7 +400,7 @@ export default function Result() {
             >
               {winner == aiTeam?.name ? "-" : "+"}
               <GiTrophy size={30} style={{ color: "#f6c401" }} />
-              {trophyInc}
+              {Math.ceil(trophyInc)}
             </Typography>
           </Box>
 
@@ -913,7 +912,7 @@ export default function Result() {
                 justifyContent: "center",
                 ":hover": {
                   cursor: buttonDisabled ? "not-allowed" : "pointer",
-                  opacity : 0.8,
+                  opacity: 0.8,
                   transition: "all 0.3s",
                 },
               }}

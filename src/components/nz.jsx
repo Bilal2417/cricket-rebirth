@@ -100,7 +100,7 @@ export default function NZ({
                 color: "#FFFFFF",
                 fontWeight: 600,
                 textAlign: "center",
-                minWidth: { xs : "100px" , lg : "120px"}
+                minWidth: { xs: "100px", lg: "120px" },
               }}
               variant="body1"
             >
@@ -117,7 +117,8 @@ export default function NZ({
               variant="body2"
             >
               {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
-              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0} (3)
+              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0}(
+              {totalOvers == 100 ? "∞" : totalOvers || 0})
             </Typography>
           </Box>
 
@@ -211,7 +212,7 @@ export default function NZ({
                 justifyContent: "space-between",
                 gap: "15px",
                 padding: "4px 20px",
-                minWidth: "225px",                
+                minWidth: "225px",
               }}
             >
               <Typography
@@ -466,7 +467,7 @@ export default function NZ({
                     textAlign: "center",
                   }}
                   variant="body1"
-                  >
+                >
                   {randomBowler?.wickets || 0}-{randomBowler?.conceded || 0}
                 </Typography>
                 <Typography
@@ -474,8 +475,8 @@ export default function NZ({
                     color: teams.includes(
                       !batting ? userTeam?.name : aiTeam?.name
                     )
-                    ? "#000000"
-                    : "#FFFFFF",
+                      ? "#000000"
+                      : "#FFFFFF",
                     fontSize: "0.8em",
                     minWidth: "20px",
                   }}

@@ -92,7 +92,7 @@ export default function ProfileData() {
                 border: "2px solid #000000",
                 borderRadius: "4px",
                 boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                transform: "skew(-10deg)",
                 m: "50px 0",
                 color: "#ffffff",
                 ":hover": { cursor: "pointer" },
@@ -113,11 +113,15 @@ export default function ProfileData() {
                 border: "2px solid #000000",
                 borderRadius: "4px",
                 boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                transform: "skew(-5deg)",
                 color: "#ffffff",
                 ":hover": { cursor: "pointer" },
               }}
-              onClick={() => profile?.unlocked_teams?.length > 0 ? setTeams(!teams) : toast.error("No teams unlocked yet!")} 
+              onClick={() =>
+                profile?.unlocked_teams?.length > 0
+                  ? setTeams(!teams)
+                  : toast.error("No teams unlocked yet!")
+              }
             >
               <Typography sx={{ textAlign: "center" }} variant="h6">
                 Teams {profile?.unlocked_teams?.length || 0}/20
@@ -135,7 +139,7 @@ export default function ProfileData() {
                     alignItems: "center",
                     gap: "120px",
                     position: "relative",
-                    ml : "50px"
+                    ml: "50px",
                   }}
                 >
                   <Box
@@ -162,7 +166,7 @@ export default function ProfileData() {
                       textTransform: "uppercase",
                       cursor: "pointer",
                       fontFamily: "Rubik , Poppins , sans-serif",
-                      clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
+                      transform: "skew(-10deg)",
                       "& .MuiOutlinedInput-input": {
                         textAlign: "center",
                         fontWeight: 600,
@@ -187,7 +191,7 @@ export default function ProfileData() {
                       border: "2px solid #000000",
                       borderRadius: "4px",
                       boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                      clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                      transform: "skew(-5deg)",
                       color: "#ffffff",
                       ":hover": { cursor: "pointer" },
                     }}
@@ -213,8 +217,7 @@ export default function ProfileData() {
                             border: "2px solid #000000",
                             borderRadius: "4px",
                             boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                            clipPath:
-                              "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                            transform: "skew(-5deg)",
                             m: "50px 0",
                             color: "#ffffff",
                             ":hover": { cursor: "pointer" },
@@ -249,26 +252,26 @@ export default function ProfileData() {
 
                 <Grid container sx={{ margin: "20px 0" }}>
                   {[
-                    {
-                      label: "Trophies",
-                      icon: <GiTrophy />,
-                      value: profile?.trophies || 0,
-                    },
-                    {
-                      label: "Victories",
-                      icon: <GiStarMedal />,
-                      value: profile?.victories || 0,
-                    },
-                    {
-                      label: "World Cup",
-                      icon: <GiAchievement />,
-                      value: profile?.tournaments || 0,
-                    },
-                    {
-                      label: "KnockOut",
-                      icon: <WhatshotTwoTone />,
-                      value: profile?.knockout || 0,
-                    },
+                       {
+                         label: "Trophies",
+                         icon: <GiTrophy size={25}/>,
+                         value: profile.trophies,
+                       },
+                       {
+                         label: "Victories",
+                         icon: <GiStarMedal size={25} />,
+                         value: profile.victories,
+                       },
+                       {
+                         label: "World Cup",
+                         icon: <GiAchievement size={25}/>,
+                         value: profile.tournaments,
+                       },
+                    // {
+                    //   label: "KnockOut",
+                    //   icon: <WhatshotTwoTone />,
+                    //   value: profile?.knockout || 0,
+                    // },
                   ].map((stat) => (
                     <Box
                       key={stat.label}
@@ -303,7 +306,8 @@ export default function ProfileData() {
                           color: "#fff",
                           display: "flex",
                           gap: 1,
-                          clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
+                          transform: "skew(-5deg)",
+                          alignItems : "center"
                         }}
                       >
                         {stat.icon} {stat.value}

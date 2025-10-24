@@ -15,6 +15,7 @@ import StarterScoreboard from "../components/starter";
 import PAK from "../components/pak";
 import ENG from "../components/eng";
 import WI from "../components/wi";
+import SA from "../components/sa";
 
 export default function ScoreBoards() {
   const [active, setActive] = useState();
@@ -51,6 +52,10 @@ export default function ScoreBoards() {
     {
       key: "aus",
       board: <AUS />,
+    },
+    {
+      key: "sa",
+      board: <SA />,
     },
     {
       key: "wc19",
@@ -102,10 +107,10 @@ export default function ScoreBoards() {
                   p: 2,
                   backdropFilter: "blur(10px)",
                   borderRadius: "24px",
+                  textTransform: "uppercase",
                   outline: index == active || Board == score.key ? "8px solid #fff" : null,
                   filter: active == index || Board == score.key ? "grayscale(0%" : "grayscale(100%)",
                   transition: "all 0.3s",
-                  textTransform: "uppercase",
                   pt : "100px",
                   ":hover": {
                     transition: "all 0.3s",

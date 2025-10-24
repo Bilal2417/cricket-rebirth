@@ -17,6 +17,7 @@ import StarterScoreboard from "./starter";
 import PAK from "./pak";
 import ENG from "./eng";
 import WI from "./wi";
+import SA from "./sa";
 
 export default function ScoreCard() {
   const storedData = localStorage.getItem("cricketData");
@@ -88,14 +89,16 @@ export default function ScoreCard() {
     sri: userTeam?.primary,
     nz: batting
     ? `radial-gradient(${userTeam?.secondary || "#000"}, ${
-          userTeam?.primary || "#333"
-        })`
-        : `radial-gradient(${aiTeam?.secondary || "#000"}, ${
-          aiTeam?.primary || "#333"
-        })`,
-      };
-
-      const borderColors = {
+      userTeam?.primary || "#333"
+    })`
+    : `radial-gradient(${aiTeam?.secondary || "#000"}, ${
+      aiTeam?.primary || "#333"
+    })`,
+    wi: "#9c1444",
+    sa: "#308bcb",
+  };
+  
+  const borderColors = {
     starter: "#000",
     aus: batting ? userTeam?.primary : aiTeam?.primary,
     ban: "#8b0605",
@@ -108,6 +111,8 @@ export default function ScoreCard() {
     eng: "#005b85",
     sri: "black",
     nz: "#c00050",
+    wi: "#e04b7f",
+    sa: "#1a528c",
   };
 
   const handleBall = (run, Wkt = false, aiRun) => {
@@ -740,6 +745,24 @@ export default function ScoreCard() {
               isSix={isSix}
               randomBowler={randomBowler}
             />
+          ) : board == "sa" ? (
+            <SA
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
           ) : board == "wi" ? (
             <WI
               batting={batting}
@@ -758,7 +781,7 @@ export default function ScoreCard() {
               isSix={isSix}
               randomBowler={randomBowler}
             />
-          ): board == "pak" ? (
+          ) : board == "pak" ? (
             <PAK
               batting={batting}
               aiTeam={aiTeam}

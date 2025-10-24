@@ -131,15 +131,18 @@ export default function Home() {
   useEffect(() => {
     let isMounted = true;
 
-    const fetchProfiles = async () => {
+    const fetchProfiles = async (force = false) => {
       try {
         const cached = JSON.parse(
           sessionStorage.getItem("profilesData") || "{}"
         );
         const now = Date.now();
 
-        // ✅ Only fetch again after 5 minutes
-        if (cached.timestamp && now - cached.timestamp < 5 * 60 * 1000) {
+        if (
+          !force &&
+          cached.timestamp &&
+          now - cached.timestamp < 5 * 60 * 1000
+        ) {
           setProfiles(cached.data);
           const matchedProfile = cached.data.find((p) => p.id === profileId);
           if (matchedProfile) {
@@ -170,10 +173,11 @@ export default function Home() {
       }
     };
 
-    fetchProfiles();
+    fetchProfiles(); // initial fetch
 
     const handleEvent = () => {
-      fetchProfiles();
+      // ✅ force refetch on event
+      fetchProfiles(true);
     };
 
     window.addEventListener("refreshProfiles", handleEvent);
@@ -251,7 +255,7 @@ export default function Home() {
                 border: "2px solid #000000",
                 borderRadius: "4px",
                 boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                transform: "skew(-5deg)",
                 color: "#ffffff",
                 transition: "all 0.3s",
                 ":hover": {
@@ -277,7 +281,7 @@ export default function Home() {
                 border: "2px solid #000000",
                 borderRadius: "4px",
                 boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                transform: "skew(-5deg)",
                 color: "#ffffff",
                 transition: "all 0.3s",
                 animation: scoreBoard ? "pulse 1.3s infinite" : "none",
@@ -311,7 +315,7 @@ export default function Home() {
                 navigate("/scoreboards");
               }}
             >
-              <ScoreboardRounded sx={{fontSize : "1.6em"}} />
+              <ScoreboardRounded sx={{ fontSize: "1.6em" }} />
             </Box>
           </Box>
 
@@ -339,7 +343,7 @@ export default function Home() {
                 maxHeight: "200px",
                 overflowY: "scroll", // Change from "auto" to "scroll"
                 overflowX: "hidden",
-                paddingRight: "10px",
+                padding: "0 15px",
                 WebkitOverflowScrolling: "touch",
                 touchAction: "pan-y",
                 overscrollBehavior: "contain",
@@ -386,7 +390,7 @@ export default function Home() {
                         profile?.id == profileId
                           ? "inset 0px -8px 8px -4px #c16a2f"
                           : "inset 0px -8px 8px -4px #655b67",
-                      clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                      transform: "skew(-5deg)",
                       transition: "all 0.3s",
                       "@media (hover: hover)": {
                         cursor: "pointer",
@@ -517,8 +521,7 @@ export default function Home() {
                       <GiTrophy
                         size={25}
                         style={{
-                          color:
-                            profile?.id == profileId ? "#dc5425" : "#665963",
+                          color: "rgb(255 196 107)",
                         }}
                       />
                       <Box
@@ -547,7 +550,7 @@ export default function Home() {
                           border: "2px solid #000000",
                           borderRadius: "4px",
                           boxShadow: "inset 0px -8px 8px -4px #655b67",
-                          clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                          transform: "skew(-5deg)",
                           position: "relative",
                           overflow: "hidden",
                           "&::after": {
@@ -611,7 +614,12 @@ export default function Home() {
                           }}
                           variant="body1"
                         >
-                          <EmojiEventsTwoTone />
+                          <GiTrophy
+                            size={20}
+                            style={{
+                              color: "#897689",
+                            }}
+                          />
                           <Box
                             sx={{
                               minHeight: "25px",
@@ -634,11 +642,11 @@ export default function Home() {
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
+            gap: "20px",
           }}
         >
           <Button
             sx={{
-              // fontfamily: "Rubik",
               backgroundColor: "#343c53",
               color: "#FFFFFF",
               textShadow: `
@@ -648,25 +656,14 @@ export default function Home() {
            2px  1.5px 0 #000
         `,
               padding: "10px 40px",
-              fontSize: "1.1em",
-              position: "relative",
-              px: 4,
-              py: 1.5,
-              overflow: "hidden",
-              clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
+              fontSize: "1.2em",
+              transform: "skew(-10deg)",
               boxShadow: "inset 0px -8px 8px -4px #262e40",
               borderRadius: "4px",
               transition: "all 0.3s",
-              "&::before": {
-                content: '""',
-                position: "absolute",
-                inset: 0,
-                border: "2px solid black",
-                clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
-                pointerEvents: "none",
-              },
+              border: "2px solid black",
               ":hover": {
-                transform: "scale(1.02)",
+                backgroundColor: "#454b5fff",
               },
             }}
             onClick={() => {
@@ -689,26 +686,15 @@ export default function Home() {
        2px  1.5px 0 #000
     `,
               padding: "10px 40px",
-              fontSize: "1.4em",
-              position: "relative",
-              px: 4,
-              py: 1.5,
-              overflow: "hidden",
-              clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
+              fontSize: "1.2em",
+              transform: "skew(-10deg)",
               boxShadow: "inset 0px -8px 8px -4px #b7560f",
               borderRadius: "4px",
               transition: "all 0.3s",
-              "&::before": {
-                content: '""',
-                position: "absolute",
-                inset: 0,
-                border: "2px solid black",
-                clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
-                pointerEvents: "none",
-              },
+              border: "2px solid black",
               ":hover": {
-                transform: loading ? "none" : "scale(1.02)",
                 cursor: loading ? "not-allowed" : "pointer",
+                background: "#c59e04ff",
               },
             }}
             disabled={loading}

@@ -50,7 +50,9 @@ export default function PAK({
             // background: `linear-gradient(to bottom, ${
             //   batting ? userTeam?.secondary : aiTeam?.secondary || "#163c8c"
             // }, ${batting ? userTeam?.primary : aiTeam?.primary || "#0e306f"})`,
-            background: batting ? userTeam?.primary : aiTeam?.primary || "#01411c",
+            background: batting
+              ? userTeam?.primary
+              : aiTeam?.primary || "#01411c",
             overflow: "hidden",
           }}
         >
@@ -66,11 +68,13 @@ export default function PAK({
           <Typography
             sx={{
               textTransform: "uppercase",
-                padding: { xs : "4px 5px" , lg : "4px 15px"},
+              padding: { xs: "4px 5px", lg: "4px 15px" },
               //   color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
               //     ? "#000000"
               //     : "#FFFFFF",
-              color: batting ? userTeam?.secondary : aiTeam?.secondary ||"#03a65a",
+              color: batting
+                ? userTeam?.secondary
+                : aiTeam?.secondary || "#03a65a",
             }}
             variant="h3"
           >
@@ -113,7 +117,8 @@ export default function PAK({
               variant="body2"
             >
               {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
-              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0} (3)
+              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0}(
+              {totalOvers == 100 ? "∞" : totalOvers || 0})
             </Typography>
           </Box>
 
@@ -128,7 +133,7 @@ export default function PAK({
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "column",
-                padding: { xs : "6px 10px" , lg : "6px 20px"},
+                padding: { xs: "6px 10px", lg: "6px 20px" },
                 gap: "5px",
                 minWidth: { xs: "130px", lg: "200px" },
                 background:
@@ -197,7 +202,7 @@ export default function PAK({
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "column",
-                padding: { xs : "6px 10px" , lg : "6px 20px"},
+                padding: { xs: "6px 10px", lg: "6px 20px" },
                 gap: "5px",
                 minWidth: { xs: "130px", lg: "200px" },
                 background:
@@ -285,7 +290,7 @@ export default function PAK({
                   color: "#fff",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                //   boxShadow: "0px 3px 8px -2px #929f97",
+                  //   boxShadow: "0px 3px 8px -2px #929f97",
                   width: "100%",
                   textAlign: "center",
                 }}
@@ -327,7 +332,7 @@ export default function PAK({
                   color: "#fff",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                //   boxShadow: "0px 3px 8px -2px #929f97",
+                  //   boxShadow: "0px 3px 8px -2px #929f97",
                   width: "100%",
                   textAlign: "center",
                 }}
@@ -364,7 +369,7 @@ export default function PAK({
                   color: "#fff",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                //   boxShadow: "0px 3px 8px -2px #929f97",
+                  //   boxShadow: "0px 3px 8px -2px #929f97",
                   width: "100%",
                   textAlign: "center",
                 }}
@@ -397,9 +402,11 @@ export default function PAK({
             // background: `linear-gradient(to top, ${
             //   batting ? aiTeam?.secondary : userTeam?.secondary || "#888888"
             // }, ${batting ? aiTeam?.primary : userTeam?.primary || "#555555"})`,
-            background: !batting ? userTeam?.primary|| "#c1ab11" : aiTeam?.primary ,
+            background: !batting
+              ? userTeam?.primary || "#c1ab11"
+              : aiTeam?.primary,
             display: "flex",
-            padding: { xs : "8px 10px" , lg : "8px 20px"},
+            padding: { xs: "8px 10px", lg: "8px 20px" },
             position: "relative",
           }}
         >
@@ -571,7 +578,7 @@ export default function PAK({
             <Typography
               sx={{
                 textTransform: "uppercase",
-                padding: { xs : "4px 5px" , lg : "4px 15px"},
+                padding: { xs: "4px 5px", lg: "4px 15px" },
                 // color: teams.includes(!batting ? userTeam?.name : aiTeam?.name)
                 //   ? "#000000"
                 //   : "#FFFFFF",

@@ -76,33 +76,31 @@ export default function Profile() {
   };
   const handleClose = () => setOpen(false);
 
-
   const handleFileChange = async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
+    const file = event.target.files[0];
+    if (!file) return;
 
-  try {
-    // 🔹 Compression options
-    const options = {
-      maxSizeMB: 0.1,          // target under 100KB
-      maxWidthOrHeight: 300,   // resize if too large
-      useWebWorker: true,      // for performance
-    };
+    try {
+      // 🔹 Compression options
+      const options = {
+        maxSizeMB: 0.1, // target under 100KB
+        maxWidthOrHeight: 300, // resize if too large
+        useWebWorker: true, // for performance
+      };
 
-    // 🔹 Compress image
-    const compressedFile = await imageCompression(file, options);
+      // 🔹 Compress image
+      const compressedFile = await imageCompression(file, options);
 
-    // 🔹 Convert compressed image to Base64
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setProfile((prev) => ({ ...prev, img: reader.result }));
-    };
-    reader.readAsDataURL(compressedFile);
-  } catch (err) {
-    console.error("Image compression failed:", err);
-  }
-};
-
+      // 🔹 Convert compressed image to Base64
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfile((prev) => ({ ...prev, img: reader.result }));
+      };
+      reader.readAsDataURL(compressedFile);
+    } catch (err) {
+      console.error("Image compression failed:", err);
+    }
+  };
 
   const handleSave = async () => {
     if (!profile) return;
@@ -142,8 +140,6 @@ export default function Profile() {
     }
   };
 
-
-
   const [save, setSave] = useState(false);
 
   return (
@@ -168,7 +164,7 @@ export default function Profile() {
               border: "2px solid #000000",
               borderRadius: "4px",
               boxShadow: "inset 0px -8px 8px -4px #2a3043",
-              clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+              transform: "skew(-10deg)",
               m: "50px 0",
               color: "#ffffff",
               ":hover": { cursor: "pointer" },
@@ -221,7 +217,7 @@ export default function Profile() {
                 textTransform: "uppercase",
                 cursor: "pointer",
                 fontFamily: "Rubik , Poppins , sans-serif",
-                clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
+                transform: "skew(-10deg)",
                 "& .MuiOutlinedInput-input": {
                   textAlign: "center",
                   fontWeight: 600,
@@ -246,7 +242,8 @@ export default function Profile() {
                 border: "2px solid #000000",
                 borderRadius: "4px",
                 boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                
+                    transform: "skew(-5deg)",
                 color: "#ffffff",
                 ":hover": { cursor: "pointer" },
               }}
@@ -272,7 +269,7 @@ export default function Profile() {
                       border: "2px solid #000000",
                       borderRadius: "4px",
                       boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                      clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                    transform: "skew(-5deg)",
                       m: "50px 0",
                       color: "#ffffff",
                       ":hover": { cursor: "pointer" },
@@ -312,7 +309,7 @@ export default function Profile() {
               mt: 2,
               width: "100%",
               padding: "5px",
-              clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                    transform: "skew(-10deg)",
               boxShadow: `
                 inset 0px -8px 8px -4px #0248df,
                 inset 0px 8px 8px -4px #009aff
@@ -380,7 +377,7 @@ export default function Profile() {
                   color: "#FFFFFF",
                   fontFamily: "sans-serif",
                   width: "100%",
-                  clipPath: "polygon(2% 0, 100% 0, 98% 100%, 0% 100%)",
+                    transform: "skew(-10deg)",
                   boxShadow: `
                     inset 0px -8px 8px -4px #0248df,
                     inset 0px 8px 8px -4px #009aff
@@ -398,24 +395,24 @@ export default function Profile() {
             {[
               {
                 label: "Trophies",
-                icon: <GiTrophy />,
+                icon: <GiTrophy size={25}/>,
                 value: profile.trophies,
               },
               {
                 label: "Victories",
-                icon: <GiStarMedal />,
+                icon: <GiStarMedal size={25} />,
                 value: profile.victories,
               },
               {
                 label: "World Cup",
-                icon: <GiAchievement />,
+                icon: <GiAchievement size={25}/>,
                 value: profile.tournaments,
               },
-              {
-                label: "KnockOut",
-                icon: <WhatshotTwoTone />,
-                value: profile.knockout,
-              },
+              // {
+              //   label: "KnockOut",
+              //   icon: <WhatshotTwoTone style={{fontSize : "1.2em"}} />,
+              //   value: profile.knockout,
+              // },
             ].map((stat) => (
               <Box
                 key={stat.label}
@@ -434,14 +431,12 @@ export default function Profile() {
                     fontSize: "1.4em",
                     fontWeight: 900,
                     textTransform: "uppercase",
-                    fontFamily: "Rubik , Poppins , sans-serif",
                   }}
                 >
                   {stat.label}
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: "Rubik , Poppins , sans-serif",
                     padding: "10px 70px",
                     backgroundColor: "#073575",
                     textAlign: "center",
@@ -450,7 +445,8 @@ export default function Profile() {
                     color: "#fff",
                     display: "flex",
                     gap: 1,
-                    clipPath: "polygon(5% 0, 100% 0, 95% 100%, 0% 100%)",
+                    transform: "skew(-5deg)",
+                    alignItems : "center"
                   }}
                 >
                   {stat.icon} {stat.value}
