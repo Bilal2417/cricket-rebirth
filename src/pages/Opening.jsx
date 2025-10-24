@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
 import Data from "../components/data";
 import LoadingPage from "../components/loading";
+import { GiCash, GiCoins, GiCoinsPile, GiTrophy, GiTwoCoins } from "react-icons/gi";
 
 const team = Data;
 
@@ -161,8 +162,8 @@ export default function CardOpening() {
 
   useEffect(() => {
     const yes = sessionStorage.getItem("canOpen");
-    let collected = false
-   
+    let collected = false;
+
     if (!yes) return;
     setShow(true);
 
@@ -191,7 +192,7 @@ export default function CardOpening() {
       );
 
       if (guaranteedCards.length > 0) {
-        collected = true
+        collected = true;
         const randomCard = getWeightedRandomCard(guaranteedCards);
 
         const teamUnlocks = randomCard.unlocks.filter((u) => u.type === "team");
@@ -307,7 +308,8 @@ export default function CardOpening() {
           updatedProfile = {
             ...updatedProfile,
             id: Profile?.id || updatedProfile.id,
-            coins: (updatedProfile?.coins || 0) + rewards.selectedUnlock.resource,
+            coins:
+              (updatedProfile?.coins || 0) + rewards.selectedUnlock.resource,
           };
         } else if (rewards.selectedUnlock.type == "team") {
           const currentTeams = updatedProfile.unlocked_teams || [];
@@ -332,7 +334,7 @@ export default function CardOpening() {
         ...updatedProfile,
         id: Profile?.id || updatedProfile.id,
         coins: (updatedProfile?.coins || 0) - pack.price,
-        starter : collected ? true : Profile?.starter
+        starter: collected ? true : Profile?.starter,
       };
 
       try {
@@ -450,18 +452,33 @@ export default function CardOpening() {
                   >
                     {rewards[currentIndex]?.selectedUnlock?.type}
                   </Typography>
-                  <Box
-                    sx={{
-                      width: 90,
-                      height: 60,
-                      display:
-                        rewards[currentIndex]?.selectedUnlock?.type == "team"
-                          ? "block"
-                          : "none",
-                    }}
-                    src={selectedTeam?.flag}
-                    component="img"
-                  />
+
+                  {rewards[currentIndex]?.selectedUnlock?.type == "coins" ? (
+                    rewards[currentIndex]?.selectedUnlock?.resource < 450 ? (
+                      <GiTwoCoins size={50} style={{ color: rewards[currentIndex]?.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                    ) : rewards[currentIndex]?.selectedUnlock?.resource <
+                      900 ? (
+                      <GiCash size={50} style={{ color: rewards[currentIndex]?.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                    ) : rewards[currentIndex]?.selectedUnlock?.resource <
+                      1350 ? (
+                      <GiCoins size={50} style={{ color: rewards[currentIndex]?.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                    ) : (
+                      <GiCoinsPile size={50} style={{ color: rewards[currentIndex]?.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                    )
+                  ) : rewards[currentIndex]?.selectedUnlock?.type ==
+                    "trophy 2x" ? (
+                    <GiTrophy size={50} style={{ color: rewards[currentIndex]?.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                  ) : (
+                    <Box
+                      sx={{
+                        width: 90,
+                        height: 60,
+                      }}
+                      src={selectedTeam?.flag}
+                      component="img"
+                    />
+                  )}
+
                   <Typography variant="h4" sx={{ fontWeight: "bold", m: 2 }}>
                     {rewards[currentIndex]?.selectedUnlock?.resource}
                   </Typography>
@@ -565,18 +582,30 @@ export default function CardOpening() {
                     >
                       {card?.selectedUnlock?.type}
                     </Typography>
-                    <Box
-                      sx={{
-                        width: 75,
-                        height: 50,
-                        display:
-                          card?.selectedUnlock?.type == "team"
-                            ? "block"
-                            : "none",
-                      }}
-                      src={matchTeam?.flag}
-                      component="img"
-                    />
+                    {card?.selectedUnlock?.type == "coins" ? (
+                      card?.selectedUnlock?.resource < 450 ? (
+                        <GiTwoCoins size={35} style={{ color: card.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                      ) : card?.selectedUnlock?.resource <
+                        900 ? (
+                        <GiCash size={35} style={{ color: card.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                      ) : card?.selectedUnlock?.resource <
+                        1350 ? (
+                        <GiCoins size={35} style={{ color: card.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                      ) : (
+                        <GiCoinsPile size={35} style={{ color: card.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                      )
+                    ) : card?.selectedUnlock?.type == "trophy 2x" ? (
+                      <GiTrophy size={35} style={{ color: card.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                    ) : (
+                      <Box
+                        sx={{
+                          width: 55,
+                          height: 35,
+                        }}
+                        src={matchTeam?.flag}
+                        component="img"
+                      />
+                    )}
                     <Typography variant="h6" sx={{ fontWeight: "bold", m: 2 }}>
                       {card?.selectedUnlock?.resource}
                     </Typography>

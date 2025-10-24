@@ -6,7 +6,15 @@ export default function Batting(squad) {
 
   const batting = squad.data;
 
+  const colors = {
+    // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
+    wc19: "#222589  ",
+    wc21: "#f83059 ",//f83059 
+    wc22: "#d71c59",//de265c 
+    ct25: "#02c208",
+  };
 
+  const board = localStorage.getItem("Board");
   const location = useLocation()
 
   return (
@@ -19,7 +27,7 @@ export default function Batting(squad) {
             alignItems: "center",
             justifyContent: "space-between",
             color: data.notout ? "#FFFFFF" : "#0f0648",
-            backgroundColor: data.notout ? "#fa208e" : "#FFFFFF",
+            background: data.notout ? colors[board] ||"#fa208e" : "#FFFFFF",
             boxShadow: "0px 0px 9px -7px #000000",
             // borderRadius: data.notout ? "12px" : "0px",
             // padding: data.notout ? "0 5px" : "0px",

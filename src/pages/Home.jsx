@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { keyframes } from "@emotion/react";
-import { GiShoppingCart } from "react-icons/gi";
+import { GiShoppingCart, GiTrophy } from "react-icons/gi";
 
 export default function Home() {
   const shimmer = keyframes`
@@ -507,21 +507,11 @@ export default function Home() {
                       }}
                       variant="body1"
                     >
-                      <EmojiEventsTwoTone
-                        sx={{
-                          "& .MuiSvgIcon-root": {
-                            fill: "none",
-                          },
-                          "& path:first-of-type": {
-                            fill:
-                              profile?.id == profileId ? "#FFFFFF" : "#FFD700",
-                          },
-                          "& path:last-of-type": {
-                            fill:
-                              profile?.id == profileId
-                                ? "rgb(255 196 107)"
-                                : "#DAA520",
-                          },
+                      <GiTrophy
+                        size={30}
+                        style={{
+                          color:
+                            profile?.id == profileId ? "#FFFFFF" : "#FFD700",
                         }}
                       />
                       <Box

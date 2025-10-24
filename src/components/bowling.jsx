@@ -1,14 +1,23 @@
 import { Box, Typography } from "@mui/material";
 
 export default function Bowling(squad) {
-  console.log("ashgakjhkjhjhkhjhjkhjc", squad);
+  const colors = {
+    // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
+    wc19: "#222589  ",
+    wc21: "#f83059 ", //f83059
+    wc22: "#d71c59", //de265c
+    ct25: "#02c208",
+  };
+
+  const board = localStorage.getItem("Board");
+
   const bowling = squad.data;
   return (
     <>
       <Box>
         <Box
           sx={{
-            color: "#fa208e",
+            color:  colors[board] || "#fa208e",
             backgroundColor: "#FFFFFF",
             boxShadow: "0px 4px 4px -3px #0003",
             width: "100%",
@@ -21,13 +30,12 @@ export default function Bowling(squad) {
               paddingRight: "35px",
               gap: "20px",
               justifyContent: "flex-end",
-              borderBottom: "2px solid #fa208e",
+              borderBottom: `2px solid ${colors[board] || "#fa208e"}`,
             }}
           >
             <Typography
               sx={{
                 fontWeight: 600,
-                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "8px 16px",
                 width: "75px",
@@ -41,7 +49,6 @@ export default function Bowling(squad) {
             <Typography
               sx={{
                 fontWeight: 600,
-                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
                 width: "75px",
@@ -54,7 +61,6 @@ export default function Bowling(squad) {
             <Typography
               sx={{
                 fontWeight: 600,
-                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
                 width: "75px",
@@ -67,7 +73,6 @@ export default function Bowling(squad) {
             <Typography
               sx={{
                 fontWeight: 600,
-                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
                 width: "75px",
@@ -80,7 +85,6 @@ export default function Bowling(squad) {
             <Typography
               sx={{
                 fontWeight: 600,
-                // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "10px 20px",
                 width: "75px",
@@ -114,7 +118,6 @@ export default function Bowling(squad) {
                 <Typography
                   sx={{
                     fontWeight: 600,
-                    // fontfamily: "Rubik",
                     textTransform: "uppercase",
                     padding: "8px 16px",
                   }}
@@ -134,7 +137,6 @@ export default function Bowling(squad) {
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
                       padding: { xs: "4px 16px", md: "8px 16px" },
                       width: "75px",
@@ -147,9 +149,8 @@ export default function Bowling(squad) {
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
-                  padding: { xs: "4px 16px", md: "8px 16px" },
+                      padding: { xs: "4px 16px", md: "8px 16px" },
                       width: "75px",
                       textAlign: "center",
                     }}
@@ -160,9 +161,8 @@ export default function Bowling(squad) {
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
-                  padding: { xs: "4px 16px", md: "8px 16px" },
+                      padding: { xs: "4px 16px", md: "8px 16px" },
                       width: "75px",
                       textAlign: "center",
                     }}
@@ -173,9 +173,8 @@ export default function Bowling(squad) {
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
-                  padding: { xs: "4px 16px", md: "8px 16px" },
+                      padding: { xs: "4px 16px", md: "8px 16px" },
                       width: "75px",
                       textAlign: "center",
                     }}
@@ -186,9 +185,8 @@ export default function Bowling(squad) {
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      // fontfamily: "Rubik",
                       textTransform: "uppercase",
-                  padding: { xs: "4px 16px", md: "8px 16px" },
+                      padding: { xs: "4px 16px", md: "8px 16px" },
                       width: "75px",
                       textAlign: "center",
                     }}
@@ -228,7 +226,7 @@ export default function Bowling(squad) {
         <Box>
           <Box
             sx={{
-              backgroundColor: "#4126ff",
+              background: colors[board] ||"#4126ff",
               display: "flex",
               alignItems: "center",
               gap: "50px",
@@ -242,7 +240,6 @@ export default function Bowling(squad) {
                 color: "#FFFFFF",
                 textTransform: "uppercase",
                 fontWeight: 600,
-                // fontfamily: "Rubik",
                 padding: "0px 15px",
                 width: "220px",
               }}

@@ -130,6 +130,8 @@ export async function handler(event) {
     let safeTrophies = 0;
     if (typeof trophies === "number" && coins > 0) {
       safeTrophies = trophies < 0 ? 0 : trophies;
+    }else{      
+      safeTrophies = trophies 
     }
 
     // --- Update profile ---

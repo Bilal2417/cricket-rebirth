@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import {
   ArrowBackIosNew,
   EmojiEventsTwoTone,
@@ -9,9 +7,9 @@ import {
   Person,
 } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
+import {  GiTwoCoins } from "react-icons/gi";
 
 export default function Navbar({ profile }) {
-  const [coins] = useState(1200); // Example coin balance
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -117,7 +115,8 @@ export default function Navbar({ profile }) {
 
         {/* Right: Coins display */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <MonetizationOnIcon sx={{ color: "#f6c401" }} />
+          {/* <MonetizationOnIcon sx={{ color: "#f6c401" }} /> */}
+          <GiTwoCoins size={30} style={{color : "#f6c401"}}/>
           <Typography variant="body1">{profile?.coins || "0"}</Typography>
         </Box>
       </Toolbar>

@@ -22,6 +22,7 @@ import { nanoid } from "nanoid";
 import { toast } from "react-toastify";
 import LoadingPage from "../components/loading";
 import imageCompression from "browser-image-compression";
+import { GiAchievement, GiStarMedal, GiTrophy } from "react-icons/gi";
 
 export default function Profile() {
   const location = useLocation();
@@ -397,17 +398,17 @@ export default function Profile() {
             {[
               {
                 label: "Trophies",
-                icon: <EmojiEventsTwoTone />,
+                icon: <GiTrophy />,
                 value: profile.trophies,
               },
               {
                 label: "Victories",
-                icon: <StarTwoTone />,
+                icon: <GiStarMedal />,
                 value: profile.victories,
               },
               {
                 label: "World Cup",
-                icon: <WhatshotTwoTone />,
+                icon: <GiAchievement />,
                 value: profile.tournaments,
               },
               {

@@ -5,6 +5,7 @@ import Batting from "../components/batting";
 import Bowling from "../components/bowling";
 import { useNavigate } from "react-router-dom";
 import { EmojiEventsTwoTone } from "@mui/icons-material";
+import { GiTrophy, GiTwoCoins } from "react-icons/gi";
 
 export default function Result() {
   const [winner, setWinner] = useState(null);
@@ -17,7 +18,16 @@ export default function Result() {
     }
   });
 
+  const board = localStorage.getItem("Board");
   const navigate = useNavigate();
+
+  const colors = {
+    // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
+    wc19: "#222589  ",
+    wc21: "#f83059 ",//f83059 
+    wc22: "#d71c59",//de265c 
+    ct25: "#02c208",
+  };
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -67,16 +77,15 @@ export default function Result() {
       if (matchType === 2) {
         trophyIncrement *= 2;
         coinsIncrement =
-          wkts === 100 ? trophyIncrement * 3 : trophyIncrement * 15;
+          wkts === 100 ? trophyMap[wkts] * 3 : trophyMap[wkts] * 15;
       }
       if (matchType === 1) {
         trophyIncrement = Math.ceil(trophyMap[wkts] / 2);
         coinsIncrement =
-          wkts === 100 ? trophyIncrement * 2 : trophyIncrement * 10;
-      } else {
-        coinsIncrement =
-          wkts === 100 ? trophyIncrement * 1 : trophyIncrement * 5;
+          wkts === 100 ? trophyMap[wkts] * 2 : trophyMap[wkts] * 10;
       }
+    } else if (!win && !isKO) {
+      coinsIncrement = wkts === 100 ? trophyMap[wkts] * 1 : trophyMap[wkts] * 5;
     }
 
     const updatedProfile = {
@@ -188,12 +197,23 @@ export default function Result() {
   };
 
   let trophyInc = trophyMap[totalWkts];
+  let coinsInc = 0;
   if (currentMode !== "KNOCKOUT" && currentMode !== "TOURNAMENT") {
     if (winner == userTeam?.name) {
       trophyInc *= 2;
+      coinsInc =
+        totalWkts === 100
+          ? trophyMap[totalWkts] * 3
+          : trophyMap[totalWkts] * 15;
     } else if (winner == aiTeam?.name) {
       trophyInc *= 1;
+      coinsInc =
+        totalWkts === 100 ? trophyMap[totalWkts] * 1 : trophyMap[totalWkts] * 5;
     } else {
+      coinsInc =
+        totalWkts === 100
+          ? trophyMap[totalWkts] * 2
+          : trophyMap[totalWkts] * 10;
       trophyInc = 0;
     }
   }
@@ -350,32 +370,37 @@ export default function Result() {
                 justifyContent: "center",
                 color: "rgb(255 196 107)",
                 position: "absolute",
+                right: 80,
+                top: -10,
+              }}
+              variant="body1"
+            >
+              +
+              <GiTwoCoins size={30} style={{ color: "#f6c401" }} />
+              {coinsInc} |
+            </Typography>
+            <Typography
+              sx={{
+                display:
+                  currentMode == "KNOCKOUT" || currentMode == "TOURNAMENT"
+                    ? "none"
+                    : "flex",
+                alignItems: "center",
+                gap: "5px",
+                fontWeight: 600,
+                padding: "15px 30px",
+                clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)",
+                justifyContent: "center",
+                color: "rgb(255 196 107)",
+                position: "absolute",
                 right: 10,
-                top: -5,
+                top: -10,
               }}
               variant="body1"
             >
               {winner == aiTeam?.name ? "-" : "+"}
-              <EmojiEventsTwoTone
-                sx={{
-                  "& .MuiSvgIcon-root": {
-                    fill: "none",
-                  },
-                  "& path:first-of-type": {
-                    fill: "#FFD700",
-                  },
-                  "& path:last-of-type": {
-                    fill: "#DAA520",
-                  },
-                }}
-              />
+              <GiTrophy size={30} style={{ color: "#f6c401" }} />
               {trophyInc}
-              {/* <Box
-                                    sx={{ minWidth: "30px", textAlign: "center" }}
-                                    component="span"
-                                  >
-                                    trophies
-                                  </Box> */}
             </Typography>
           </Box>
 
@@ -394,7 +419,7 @@ export default function Result() {
                 sx={{
                   //   width: "100%",
                   padding: { xs: "5px 0px", md: "10px 0px" },
-                  backgroundColor: "#fa208e",
+                  background: colors[board] || "#fa208e",
                   boxShadow: "inset -4px 0 6px -2px rgba(0,0,0,0.1)",
                   display: "flex",
                   justifyContent: "center",
@@ -513,7 +538,8 @@ export default function Result() {
                 sx={{
                   width: "100%",
                   padding: { xs: "5px 0px", md: "10px 0px" },
-                  backgroundColor: "#fa208e",
+                  background: colors[board] || "#fa208e",
+                  boxShadow: "inset -4px 0 6px -2px rgba(0,0,0,0.1)",
                   display: "flex",
                   justifyContent: "center",
                 }}
@@ -637,7 +663,7 @@ export default function Result() {
                 sx={{
                   width: "100%",
                   padding: { xs: "5px 0px", md: "10px 0px" },
-                  backgroundColor: "#fa208e",
+                  background: colors[board] || "#fa208e",
                   boxShadow: "inset -4px 0 6px -2px rgba(0,0,0,0.1)",
                   display: "flex",
                   justifyContent: "center",
@@ -752,7 +778,7 @@ export default function Result() {
                 sx={{
                   width: "100%",
                   padding: { xs: "5px 0px", md: "10px 0px" },
-                  backgroundColor: "#fa208e",
+                  background: colors[board] || "#fa208e",
                   display: "flex",
                   justifyContent: "center",
                 }}
@@ -874,7 +900,7 @@ export default function Result() {
               sx={{
                 // fontfamily: "Rubik",
                 color: "#FFFFFF",
-                backgroundColor: "#fa208e",
+                background: colors[board] || "#fa208e",
                 padding: "8px 16px",
                 borderRadius: "8px",
                 position: "absolute",
@@ -886,7 +912,7 @@ export default function Result() {
                 justifyContent: "center",
                 ":hover": {
                   cursor: buttonDisabled ? "not-allowed" : "pointer",
-                  backgroundColor: buttonDisabled ? "#fa208e" : "#db1d7d",
+                  opacity : 0.8,
                   transition: "all 0.3s",
                 },
               }}

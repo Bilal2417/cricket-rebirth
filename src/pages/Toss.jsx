@@ -6,8 +6,19 @@ export default function Toss() {
   const [result, setResult] = useState(null);
   const [tossWin, setTossWin] = useState(false);
   const [inningsChoice, setInningsChoice] = useState(null);
-  const navigate = useNavigate();
+
   const isTournament = sessionStorage.getItem("mode");
+
+  const board = localStorage.getItem("Board");
+  const navigate = useNavigate();
+
+  const colors = {
+    // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
+    wc19: "#222589  ",
+    wc21: "#f83059 ", //f83059
+    wc22: "#d71c59", //de265c
+    ct25: "#02c208",
+  };
 
   const handleToss = (choice) => {
     const coinFlip = Math.random() < 0.5 ? "Heads" : "Tails";
@@ -121,10 +132,10 @@ export default function Toss() {
                   sx={{
                     color: "#FFFFFF",
                     backgroundColor: "#0f0648",
-                    borderBottom: "2px solid #fa208e",
-                    borderRight: "2px solid #fa208e",
+                    borderBottom: `4px solid ${colors[board] || "#fa208e"}`,
+                    borderRight: `4px solid ${colors[board] || "#fa208e"}`,
                     borderRadius: "12px",
-                    // fontfamily: "Rubik",
+                    width: "120px",
                     fontWeight: 600,
                     padding: "12px 16px",
                     fontSize: { xs: "14px", sm: "16px", md: "18px" },
@@ -155,10 +166,10 @@ export default function Toss() {
                   sx={{
                     color: "#FFFFFF",
                     backgroundColor: "#0f0648",
-                    borderBottom: "2px solid #fa208e",
-                    borderRight: "2px solid #fa208e",
+                    borderBottom: `4px solid ${colors[board] || "#fa208e"}`,
+                    borderRight: `4px solid ${colors[board] || "#fa208e"}`,
                     borderRadius: "12px",
-                    // fontfamily: "Rubik",
+                    width : "120px",
                     fontWeight: 600,
                     padding: "12px 16px",
                     fontSize: { xs: "14px", sm: "16px", md: "18px" },

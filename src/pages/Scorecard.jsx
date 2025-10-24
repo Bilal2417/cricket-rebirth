@@ -17,9 +17,17 @@ export default function Scorecard() {
   const [userTeam, setUserTeam] = useState(null);
   const [aiTeam, setAiTeam] = useState(null);
 
-  // const data = Data;
-
+  const board = localStorage.getItem("Board");
   const navigate = useNavigate();
+
+  const colors = {
+    // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
+    wc19: "#222589  ",
+    wc21: "#f83059 ", //f83059
+    wc22: "#d71c59", //de265c
+    ct25: "#02c208",
+  };
+
   const [batting, setBatting] = useState(null);
   const [battingScore, setBattingScore] = useState(true);
   const [bowlingLeft, setBowlingLeft] = useState(false);
@@ -61,8 +69,8 @@ export default function Scorecard() {
           sx={{
             borderRadius: "12px",
             width: "100%",
-            marginTop : { xs : "50px"},
-            paddingBottom : { xs : "50px"}
+            marginTop: { xs: "50px" },
+            paddingBottom: { xs: "50px" },
           }}
         >
           <Box
@@ -327,7 +335,7 @@ export default function Scorecard() {
                   sx={{
                     // fontfamily: "Rubik",
                     color: "#FFFFFF",
-                    backgroundColor: "#fa208e",
+                    background:  colors[board] || "#fa208e",
                     padding: "8px 32px",
                     borderRadius: "8px",
                     position: "absolute",
@@ -336,7 +344,7 @@ export default function Scorecard() {
                     textTransform: "uppercase",
                     ":hover": {
                       cursor: "pointer",
-                      backgroundColor: "#db1d7d",
+                      opacity : 0.8,
                       transition: "all 0.3s",
                     },
                   }}
@@ -388,10 +396,10 @@ export default function Scorecard() {
               </Box>
               <Box
                 sx={{
-                  backgroundColor: "#fa208e",
+                  background: colors[board] || "#fa208e",
                   color: "#FFFFFF",
                   padding: { xs: "4px 16px", md: "8px 16px" },
-                  width: "100px",
+                  minWidth: "150px",
                 }}
               >
                 <Typography
