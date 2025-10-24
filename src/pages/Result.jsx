@@ -53,12 +53,12 @@ export default function Result() {
     let coinsIncrement = 0;
 
     const trophyMap = {
-      1: 1,
-      3: 3,
-      5: 5,
-      10: 10,
-      20: 15,
-      100: 5,
+      1: 1, // 15 :10 : 5
+      3: 3, //45 :30 : 15
+      5: 5, //75 :50 : 25
+      10: 10, //150 :100 : 50
+      20: 15, //225 :150 : 75
+      100: 5, //15 : 10 : 5
     };
 
     if (win && !isKO) {
@@ -67,10 +67,13 @@ export default function Result() {
       if (matchType === 2) {
         trophyIncrement *= 2;
         coinsIncrement =
-          wkts === 100 ? trophyIncrement * 2 : trophyIncrement * 10;
+          wkts === 100 ? trophyIncrement * 3 : trophyIncrement * 15;
       }
       if (matchType === 1) {
         trophyIncrement = Math.ceil(trophyMap[wkts] / 2);
+        coinsIncrement =
+          wkts === 100 ? trophyIncrement * 2 : trophyIncrement * 10;
+      } else {
         coinsIncrement =
           wkts === 100 ? trophyIncrement * 1 : trophyIncrement * 5;
       }
@@ -173,14 +176,26 @@ export default function Result() {
     })
     .slice(0, 4);
 
-  console.log(topScorerFirst, "oopppo");
-
   const currentMode = sessionStorage.getItem("mode");
 
-  let trophyIncrement = 0;
+  const trophyMap = {
+    1: 1, // 15 :10 : 5
+    3: 3, //45 :30 : 15
+    5: 5, //75 :50 : 25
+    10: 10, //150 :100 : 50
+    20: 15, //225 :150 : 75
+    100: 5, //15 : 10 : 5
+  };
 
-  if (currentMode !== "KNOCKOUT") {
-    trophyIncrement = totalWkts === 100 ? 5 : Math.ceil(totalWkts / 2);
+  let trophyInc = trophyMap[totalWkts];
+  if (currentMode !== "KNOCKOUT" && currentMode !== "TOURNAMENT") {
+    if (winner == userTeam?.name) {
+      trophyInc *= 2;
+    } else if (winner == aiTeam?.name) {
+      trophyInc *= 1;
+    } else {
+      trophyInc = 0;
+    }
   }
 
   return (
@@ -340,7 +355,7 @@ export default function Result() {
               }}
               variant="body1"
             >
-              {winner == userTeam?.name ? "+" : "-"}
+              {winner == aiTeam?.name ? "-" : "+"}
               <EmojiEventsTwoTone
                 sx={{
                   "& .MuiSvgIcon-root": {
@@ -354,7 +369,7 @@ export default function Result() {
                   },
                 }}
               />
-              {trophyIncrement}
+              {trophyInc}
               {/* <Box
                                     sx={{ minWidth: "30px", textAlign: "center" }}
                                     component="span"

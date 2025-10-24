@@ -14,6 +14,7 @@ import Wc22 from "./wc22";
 import Ct25 from "./ct25";
 import NZ from "./nz";
 import StarterScoreboard from "./starter";
+import PAK from "./pak";
 
 export default function ScoreCard() {
   const storedData = localStorage.getItem("cricketData");
@@ -41,8 +42,8 @@ export default function ScoreCard() {
   const [over, setOver] = useState(0);
 
   const [totalOvers, setTotalOvers] = useState(() => {
-    const fixedOvers = localStorage.getItem("Overs")
-    
+    const fixedOvers = localStorage.getItem("Overs");
+
     return fixedOvers ? Number(fixedOvers) : 10;
   });
 
@@ -78,6 +79,10 @@ export default function ScoreCard() {
     wc22: "#0f044a",
     wc24: "#0f0648",
     ct25: "#090533",
+    pak: `radial-gradient( #b6b8b4, 
+          #929587
+        )`,
+    // pak: userTeam?.secondary,
     sri: userTeam?.primary,
     nz: batting
       ? `radial-gradient(${userTeam?.secondary || "#000"}, ${
@@ -97,6 +102,7 @@ export default function ScoreCard() {
     wc22: "#d71c59",
     wc24: "#fa208e",
     ct25: "#02c208",
+    pak: "#00000060",
     sri: "black",
     nz: "#c00050",
   };
@@ -712,6 +718,24 @@ export default function ScoreCard() {
               isSix={isSix}
               randomBowler={randomBowler}
             />
+          ) : board == "pak" ? (
+            <PAK
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
           ) : board == "wc21" ? (
             <Wc21
               batting={batting}
@@ -786,7 +810,7 @@ export default function ScoreCard() {
                 <Button
                   sx={{
                     background: colors[board],
-                    color: board == "starter" ? "#000" : "#FFFFFF",
+                    color: board == "starter" || board == "pak" ? "#000" : "#FFFFFF",
                     width: "60px",
                     height: "60px",
                     padding: "4px 8px",

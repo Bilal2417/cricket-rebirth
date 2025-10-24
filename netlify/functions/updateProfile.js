@@ -128,7 +128,7 @@ export async function handler(event) {
         : current.titles;
 
     let safeTrophies = 0;
-    if (typeof trophies === "number") {
+    if (typeof trophies === "number" && coins > 0) {
       safeTrophies = trophies < 0 ? 0 : trophies;
     }
 

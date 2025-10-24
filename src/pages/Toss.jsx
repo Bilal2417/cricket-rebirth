@@ -66,7 +66,7 @@ export default function Toss() {
 
     const updatedProfile = {
       ...Profile,
-
+      id: Profile?.id,
       trophies:
         Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
     };

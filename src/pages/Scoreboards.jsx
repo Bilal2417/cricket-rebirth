@@ -12,6 +12,7 @@ import Wc22 from "../components/wc22";
 import Ct25 from "../components/ct25";
 import NZ from "../components/nz";
 import StarterScoreboard from "../components/starter";
+import PAK from "../components/pak";
 
 export default function ScoreBoards() {
   const [active, setActive] = useState();
@@ -32,6 +33,10 @@ export default function ScoreBoards() {
     {
       key: "nz",
       board: <NZ />,
+    },
+    {
+      key: "pak",
+      board: <PAK />,
     },
     {
       key: "aus",

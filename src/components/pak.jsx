@@ -1,12 +1,6 @@
 import { Box, Fade, Typography } from "@mui/material";
-import { use } from "react";
-import {
-  GiArcheryTarget,
-  GiConvergenceTarget,
-  GiTargetPoster,
-} from "react-icons/gi";
 
-export default function NZ({
+export default function PAK({
   batting,
   aiTeam,
   userTeam,
@@ -42,7 +36,7 @@ export default function NZ({
         sx={{
           display: "flex",
           justifyContent: "center",
-          transform: { xs: "scale(0.65)", md: "scale(0.9)", lg: "scale(1.0)" },
+          transform: { xs: "scale(0.6)", md: "scale(0.8)", lg: "scale(1.0)" },
           // gap: "40px",
         }}
       >
@@ -53,9 +47,10 @@ export default function NZ({
             display: "flex",
             alignItems: "center",
             paddingLeft: "8px",
-            background: `linear-gradient(to left, ${
-              batting ? userTeam?.secondary : aiTeam?.secondary || "#163c8c"
-            }, ${batting ? userTeam?.primary : aiTeam?.primary || "#0e306f"})`,
+            // background: `linear-gradient(to bottom, ${
+            //   batting ? userTeam?.secondary : aiTeam?.secondary || "#163c8c"
+            // }, ${batting ? userTeam?.primary : aiTeam?.primary || "#0e306f"})`,
+            background: batting ? userTeam?.primary : aiTeam?.primary || "#01411c",
             overflow: "hidden",
           }}
         >
@@ -72,9 +67,10 @@ export default function NZ({
             sx={{
               textTransform: "uppercase",
               padding: "4px 15px",
-              color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
-                ? "#000000"
-                : "#FFFFFF",
+              //   color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+              //     ? "#000000"
+              //     : "#FFFFFF",
+              color: batting ? userTeam?.secondary : aiTeam?.secondary ||"#03a65a",
             }}
             variant="h3"
           >
@@ -87,11 +83,11 @@ export default function NZ({
             sx={{
               display: "flex",
               flexDirection: "column",
-              background: "linear-gradient(to bottom , #c00050 , #c60e56 )",
               alignItems: "center",
-              padding: "4px 0",
+              padding: "4px",
               height: "100%",
               justifyContent: "space-evenly",
+              gap: "5px",
             }}
           >
             <Typography
@@ -100,9 +96,9 @@ export default function NZ({
                 color: "#FFFFFF",
                 fontWeight: 600,
                 textAlign: "center",
-                minWidth: "120px",
+                minWidth: "100px",
               }}
-              variant="body1"
+              variant="h6"
             >
               {batting ? userTeam?.score || 0 : aiTeam?.score || 0} -{" "}
               {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
@@ -124,7 +120,6 @@ export default function NZ({
           <Box
             sx={{
               display: "flex",
-              flexDirection: "column",
               alignItems: "center",
             }}
           >
@@ -132,23 +127,23 @@ export default function NZ({
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
-                padding: "4px 20px",
-                gap: "15px",
-                boxShadow: "3px 4px 10px -2px #ffffff",
-                minWidth: "225px",
+                flexDirection: "column",
+                padding: "6px 20px",
+                gap: "5px",
+                minWidth: { xs: "175px", lg: "200px" },
+                background:
+                  "linear-gradient(to bottom , #bec2b5 , #b6b8b4 , #929587 )",
+                borderRight: "2px solid #000000",
               }}
             >
               <Box
                 sx={{
                   textTransform: "uppercase",
-                  color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
-                    ? "#000000"
-                    : "#FFFFFF",
+                  color: "#000000",
                   display: "flex",
                   alignItems: "center",
                   gap: "5px",
-                  minWidth: "80px",
+                  //   minWidth: "80px",
                   fontWeight: 600,
                 }}
               >
@@ -156,7 +151,7 @@ export default function NZ({
                   sx={{
                     width: "5px",
                     height: "5px",
-                    backgroundColor: "#fff",
+                    backgroundColor: "#000000",
                     borderRadius: "50%",
                     marginLeft: "-12px",
                   }}
@@ -168,20 +163,16 @@ export default function NZ({
                 sx={{
                   display: "flex",
                   alignItems: "baseline",
-                  gap: "5px",
-                  width: "50px",
+                  gap: "2px",
                   justifyContent: "center",
                 }}
               >
                 <Typography
                   sx={{
-                    color: teams.includes(
-                      batting ? userTeam?.name : aiTeam?.name
-                    )
-                      ? "#000000"
-                      : "#FFFFFF",
+                    color: "#000000",
                     fontWeight: 600,
                     minWidth: "20px",
+                    textAlign: "center",
                   }}
                   variant="body1"
                 >
@@ -189,13 +180,10 @@ export default function NZ({
                 </Typography>
                 <Typography
                   sx={{
-                    color: teams.includes(
-                      batting ? userTeam?.name : aiTeam?.name
-                    )
-                      ? "#000000"
-                      : "#FFFFFF",
+                    color: "#000000",
                     fontSize: "0.75em",
                     minWidth: "20px",
+                    textAlign: "center",
                   }}
                   variant="body1"
                 >
@@ -208,44 +196,43 @@ export default function NZ({
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
-                gap: "15px",
-                padding: "4px 20px",
-                minWidth: "225px",                
+                flexDirection: "column",
+                padding: "6px 20px",
+                gap: "5px",
+                minWidth: { xs: "175px", lg: "200px" },
+                borderRight: "2px solid #000000",
+                background:
+                  "linear-gradient(to bottom , #bec2b5 , #b6b8b4 , #929587 )",
               }}
             >
-              <Typography
-                variant="body1"
+              <Box
                 sx={{
                   textTransform: "uppercase",
-                  color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
-                    ? "#000000"
-                    : "#FFFFFF",
+                  color: "#000000",
+                  display: "flex",
+                  alignItems: "center",
                   gap: "5px",
-                  minWidth: "80px",
+                  //   minWidth: "80px",
                   fontWeight: 600,
                 }}
               >
                 {nonStriker?.name || "Bot1"}
-              </Typography>
+              </Box>
+
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "baseline",
-                  gap: "5px",
-                  width: "50px",
+                  gap: "2px",
                   justifyContent: "center",
                 }}
               >
                 <Typography
                   sx={{
-                    color: teams.includes(
-                      batting ? userTeam?.name : aiTeam?.name
-                    )
-                      ? "#000000"
-                      : "#FFFFFF",
+                    color: "#000000",
                     fontWeight: 600,
                     minWidth: "20px",
+                    textAlign: "center",
                   }}
                   variant="body1"
                 >
@@ -253,13 +240,10 @@ export default function NZ({
                 </Typography>
                 <Typography
                   sx={{
-                    color: teams.includes(
-                      batting ? userTeam?.name : aiTeam?.name
-                    )
-                      ? "#000000"
-                      : "#FFFFFF",
+                    color: "#000000",
                     fontSize: "0.75em",
                     minWidth: "20px",
+                    textAlign: "center",
                   }}
                   variant="body1"
                 >
@@ -272,13 +256,18 @@ export default function NZ({
 
         <Box
           sx={{
-            background: "linear-gradient(to bottom , #f9fbfa , #929f97 )",
+            // background:
+            //   "linear-gradient(to bottom , #bec2b5 , #b6b8b4 , #929587 )",
+            background: `linear-gradient(to bottom, ${
+              batting ? userTeam?.secondary : aiTeam?.secondary || "#03a65a"
+            }, ${batting ? userTeam?.primary : aiTeam?.primary || "#01411c"})`,
+            // background : batting ? userTeam?.secondary : aiTeam?.primary,
             position: "relative",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             minHeight: "32px",
-            minWidth: { xs: "200px", lg: "280px" },
+            minWidth: { xs: "150px", lg: "150px" },
           }}
         >
           <Fade in={show == 0} timeout={500}>
@@ -294,10 +283,10 @@ export default function NZ({
             >
               <Typography
                 sx={{
-                  color: "#000",
+                  color: "#fff",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                  boxShadow: "0px 3px 8px -6px #929f97",
+                //   boxShadow: "0px 3px 8px -2px #929f97",
                   width: "100%",
                   textAlign: "center",
                 }}
@@ -307,7 +296,7 @@ export default function NZ({
               </Typography>
               <Typography
                 sx={{
-                  color: "#000",
+                  color: "#fff",
                   textTransform: "uppercase",
                   fontWeight: 600,
                 }}
@@ -336,10 +325,10 @@ export default function NZ({
             >
               <Typography
                 sx={{
-                  color: "#000",
+                  color: "#fff",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                  boxShadow: "0px 3px 8px -6px #929f97",
+                //   boxShadow: "0px 3px 8px -2px #929f97",
                   width: "100%",
                   textAlign: "center",
                 }}
@@ -349,7 +338,7 @@ export default function NZ({
               </Typography>
               <Typography
                 sx={{
-                  color: "#000",
+                  color: "#fff",
                   textTransform: "uppercase",
                   fontWeight: 600,
                 }}
@@ -373,10 +362,10 @@ export default function NZ({
             >
               <Typography
                 sx={{
-                  color: "#000",
+                  color: "#fff",
                   textTransform: "uppercase",
                   fontWeight: 600,
-                  boxShadow: "0px 3px 8px -6px #929f97",
+                //   boxShadow: "0px 3px 8px -2px #929f97",
                   width: "100%",
                   textAlign: "center",
                 }}
@@ -386,7 +375,7 @@ export default function NZ({
               </Typography>
               <Typography
                 sx={{
-                  color: "#000",
+                  color: "#fff",
                   textTransform: "uppercase",
                   fontWeight: 600,
                 }}
@@ -406,9 +395,10 @@ export default function NZ({
 
         <Box
           sx={{
-            background: `linear-gradient(to right, ${
-              batting ? aiTeam?.secondary : userTeam?.secondary || "#888888"
-            }, ${batting ? aiTeam?.primary : userTeam?.primary || "#555555"})`,
+            // background: `linear-gradient(to top, ${
+            //   batting ? aiTeam?.secondary : userTeam?.secondary || "#888888"
+            // }, ${batting ? aiTeam?.primary : userTeam?.primary || "#555555"})`,
+            background: !batting ? userTeam?.primary|| "#c1ab11" : aiTeam?.primary ,
             display: "flex",
             padding: "8px 20px",
             position: "relative",
@@ -466,7 +456,7 @@ export default function NZ({
                     textAlign: "center",
                   }}
                   variant="body1"
-                  >
+                >
                   {randomBowler?.wickets || 0}-{randomBowler?.conceded || 0}
                 </Typography>
                 <Typography
@@ -474,8 +464,8 @@ export default function NZ({
                     color: teams.includes(
                       !batting ? userTeam?.name : aiTeam?.name
                     )
-                    ? "#000000"
-                    : "#FFFFFF",
+                      ? "#000000"
+                      : "#FFFFFF",
                     fontSize: "0.8em",
                     minWidth: "20px",
                   }}
@@ -504,7 +494,7 @@ export default function NZ({
                   top: -40,
                   left: 0,
                   fontSize: "0.8em",
-                  background: `linear-gradient(to bottom, ${
+                  background: `linear-gradient(to left, ${
                     batting
                       ? userTeam?.secondary
                       : aiTeam?.secondary || "#163c8c"
@@ -533,7 +523,6 @@ export default function NZ({
                     color: (() => {
                       const isBatting = batting;
                       const team = isBatting ? userTeam : aiTeam;
-                      const opponent = isBatting ? aiTeam : userTeam;
                       const ball = team?.ballHistory[index];
 
                       if (ball === "W" || ball > 3) return "#FFFFFF";
@@ -545,12 +534,6 @@ export default function NZ({
 
                       return "#FFFFFF";
                     })(),
-
-                    // color: teams.includes(
-                    //   !batting ? userTeam?.name : aiTeam?.name
-                    // )
-                    //   ? "#000000"
-                    //   : "#FFFFFF",
                     padding: "4px",
                     display: "flex",
                     alignItems: "center",
@@ -559,15 +542,15 @@ export default function NZ({
                     fontWeight: 900,
                     background: batting
                       ? userTeam?.ballHistory[index] == "W"
-                        ? "#c00050"
+                        ? "#cd0001"
                         : userTeam?.ballHistory[index] > 3
                         ? userTeam?.primary
-                        : aiTeam?.primary
+                        : aiTeam?.secondary
                       : aiTeam?.ballHistory[index] == "W"
-                      ? "#c00050"
+                      ? "#cd0001"
                       : aiTeam?.ballHistory[index] > 3
                       ? aiTeam?.primary
-                      : userTeam?.primary,
+                      : userTeam?.secondary,
                     borderRadius: "50%",
                   }}
                 >
@@ -590,9 +573,10 @@ export default function NZ({
               sx={{
                 textTransform: "uppercase",
                 padding: "4px 15px",
-                color: teams.includes(!batting ? userTeam?.name : aiTeam?.name)
-                  ? "#000000"
-                  : "#FFFFFF",
+                // color: teams.includes(!batting ? userTeam?.name : aiTeam?.name)
+                //   ? "#000000"
+                //   : "#FFFFFF",
+                color: !batting ? userTeam?.secondary : aiTeam?.secondary,
               }}
               variant="h3"
             >
