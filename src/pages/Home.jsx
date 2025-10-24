@@ -142,7 +142,10 @@ export default function Home() {
         if (cached.timestamp && now - cached.timestamp < 5 * 60 * 1000) {
           setProfiles(cached.data);
           const matchedProfile = cached.data.find((p) => p.id === profileId);
-          if (matchedProfile) setUserProfile(matchedProfile);
+          if (matchedProfile) {
+            setUserProfile(matchedProfile);
+            sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+          }
           setLoading(false);
           return;
         }
@@ -200,7 +203,6 @@ export default function Home() {
     if (hours < 24) return `${Math.floor(hours)} hr ago`;
     return `${Math.floor(days)} days ago`;
   }
-
 
   return (
     <>
@@ -449,7 +451,7 @@ export default function Home() {
                         </Typography>
                         <Typography
                           sx={{
-                            fontWeight: 600,                            
+                            fontWeight: 600,
                             color: "rgb(255 196 107)",
                             fontSize: "0.7em",
                           }}
@@ -460,13 +462,17 @@ export default function Home() {
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            display : timeAgo(profile?.last_active) !== "just now" && profile?.id !== profileId ? "block" : "none",
+                            display:
+                              timeAgo(profile?.last_active) !== "just now" &&
+                              profile?.id !== profileId
+                                ? "block"
+                                : "none",
                             color: "rgb(202 186 186)",
                             fontSize: "0.7em",
                           }}
                           variant="body2"
                         >
-                         Last Online {timeAgo(profile?.last_active)}
+                          Last Online {timeAgo(profile?.last_active)}
                         </Typography>
                       </Box>
                       <span
@@ -474,9 +480,10 @@ export default function Home() {
                           display: "inline-block",
                           width: "10px",
                           height: "10px",
-                          backgroundColor: timeAgo(profile?.last_active) == "just now"
-                            ? "green"
-                            : "#514e4e",
+                          backgroundColor:
+                            timeAgo(profile?.last_active) == "just now"
+                              ? "green"
+                              : "#514e4e",
                           borderRadius: "50%",
                           position: "absolute",
                           top: 7,

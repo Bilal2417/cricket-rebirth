@@ -35,6 +35,8 @@ export async function handler(event) {
         trophydoubler,
         unlocked_teams,
         unlocked_items,
+        victories,
+        titles,
         starter
       FROM profiles
       WHERE id = $1

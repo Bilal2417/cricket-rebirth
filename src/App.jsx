@@ -79,9 +79,9 @@ function App() {
       .then((data) => {
         if (data.success && data.profile) {
           setProfile(data.profile);
-          if(data.profile.name == "Billy" || data.profile.name == "Bilal" || data.profile.name == "Arsal 84" || data.profile.name == "Pak|Frozen"){
-            localStorage.setItem("FirstVisit", true)
-          }
+          // if(data.profile.name == "Billy" || data.profile.name == "Bilal" || data.profile.name == "Arsal 84" || data.profile.name == "Pak|Frozen"){
+          //   localStorage.setItem("FirstVisit", true)
+          // }
           sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
         }
       })

@@ -40,51 +40,6 @@ export default function Result() {
     console.log("hehe", overs);
   }, []);
 
-  // const incrementTrophies = async (win, matchType) => {
-  //   if (!Profile) return;
-
-  //   const overs = localStorage.getItem("Overs");
-  //   const wkts = Number(totalWkts) || Number(overs);
-
-  //   let trophyIncrement = 0;
-
-  //   if (win) {
-  //     // Always calculate trophies for the winner
-  //     trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
-
-  //     if (matchType === 2) trophyIncrement *= 2; // bonus for full win
-  //     if (matchType === 1) trophyIncrement = Math.ceil(trophyIncrement / 2); // tie
-  //   }
-
-  //   const updatedProfile = {
-  //     ...Profile,
-  //     victories: win ? Profile.victories + 1 : Profile.victories,
-  //     trophies: Profile.trophies + trophyIncrement,
-  //   };
-
-  //   setProfile(updatedProfile);
-
-  //   try {
-  //     const res = await fetch("/.netlify/functions/updateProfile", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(updatedProfile),
-  //     });
-
-  //     const data = await res.json();
-  //     if (data.success) {
-  //       setProfile(data.profile);
-  //       sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-  //     } else {
-  //       console.error("Failed to update trophies in database");
-  //     }
-
-  //     navigate("/");
-  //   } catch (err) {
-  //     console.error("Error updating trophies:", err);
-  //   }
-  // };
-
   const incrementTrophies = async (win, matchType, isKO = false) => {
     const profileId = localStorage.getItem("MyId");
 

@@ -70,7 +70,7 @@ export default function Fixtures() {
     // }
   }, []);
 
-  const storedProfile = sessionStorage.getItem("Profile");
+  const storedProfile = sessionStorage.getItem("UserProfile");
   const [Profile, setProfile] = useState(
     storedProfile ? JSON.parse(storedProfile) : ""
   );
@@ -111,7 +111,7 @@ export default function Fixtures() {
     const updatedProfile = {
       ...Profile,
       id: profileId || Profile?.id,
-      knockOut: (Profile.knockout || 0) + 1,
+      // knockOut: (Profile.knockout || 0) + 1,
       titles: newTitles,
     };
 
