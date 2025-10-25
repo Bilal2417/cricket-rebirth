@@ -67,10 +67,10 @@ function App() {
     return () => window.removeEventListener("BackUpdated", handleBackUpdate);
   }, [location.pathname, finalist]);
 
-  let profileId = localStorage.getItem("MyId");
-
+  
   const [profile, setProfile] = useState(null);
   useEffect(() => {
+    let profileId = localStorage.getItem("MyId");
     if (!profileId) return;
 
     // initial fetch
