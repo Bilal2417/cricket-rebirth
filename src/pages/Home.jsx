@@ -175,17 +175,27 @@ export default function Home() {
 
     fetchProfiles(); // initial fetch
 
-    const handleEvent = () => {
-      // ✅ force refetch on event
-      console.log("It runs in home")
-      fetchProfiles( true );
+    const handleStorageChange = (e) => {
+      if (e.key === "refreshProfiles" && e.newValue === "true") {
+        console.log("♻️ It runs in home (storage event)");
+        fetchProfiles(true);
+        localStorage.removeItem("refreshProfiles"); // reset after use
+      }
     };
 
-    window.addEventListener("refreshProfiles", handleEvent);
+    // ✅ Listen to localStorage changes (cross-page)
+    window.addEventListener("storage", handleStorageChange);
+
+    // ✅ Also handle direct page navigation case (when flag is already set)
+    if (localStorage.getItem("refreshProfiles") === "true") {
+      console.log("♻️ It runs in home (flag detected on mount)");
+      fetchProfiles(true);
+      localStorage.removeItem("refreshProfiles");
+    }
 
     return () => {
       isMounted = false;
-      window.removeEventListener("refreshProfiles", handleEvent);
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, [profileId]);
 
