@@ -65,18 +65,20 @@ export default function ScoreCardOpening() {
 
   const updatedflags = flagGroups?.find((f) => f.value === groupValue) || {};
 
+  const flags =
+    updatedflags?.unlocks?.filter(
+      (f) => !Profile?.unlocked_items?.includes(f.key)
+    ) || [];
 
-  const flags = updatedflags?.unlocks?.filter(
-    (f) => !Profile?.unlocked_items?.includes(f.key)
-  );
-
+  // useEffect(() => {
   if (flags?.length <= 0) {
     const pack = localStorage.getItem("packs");
     const updatedPack = JSON.parse(pack || "[]");
-    updatedPack.push(updatedflags.price);
-    navigate("/");
+    updatedPack.push(updatedflags?.price);
     localStorage.setItem("packs", JSON.stringify(updatedPack));
+    navigate("/");
   }
+  // }, [flags]);
 
   const [selected, setSelected] = useState(null);
   const [spinning, setSpinning] = useState(false);
@@ -235,7 +237,7 @@ export default function ScoreCardOpening() {
             willChange: "transform",
           }}
         >
-          {[...flags, ...flags].map((flag, i) => (
+          {[...flags, ...flags]?.map((flag, i) => (
             <Box
               key={i}
               sx={{
