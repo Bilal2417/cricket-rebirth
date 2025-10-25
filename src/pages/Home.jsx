@@ -212,6 +212,14 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProfiles((prev) => [...prev]); // forces re-render without changing data
+    }, 60 * 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   function timeAgo(dateString) {
     const now = new Date();
     const last = new Date(dateString);
@@ -223,7 +231,7 @@ export default function Home() {
     if (minutes < 2) return "just now";
     if (minutes < 60) return `${Math.floor(minutes)} min ago`;
     if (hours < 24) return `${Math.floor(hours)} hr ago`;
-    return `${Math.floor(days)} days ago`;
+    return `${Math.floor(days)} day${Math.floor(days) > 1 ? "s" : ""} ago`;
   }
 
   return (
@@ -729,7 +737,7 @@ export default function Home() {
             {loading ? (
               <CircularProgress size={24} sx={{ color: "#fff" }} />
             ) : (
-              `Play` 
+              `Play`
             )}
           </Button>
         </Box>

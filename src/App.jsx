@@ -30,8 +30,10 @@ import ScoreBoards from "./pages/Scoreboards";
 import Wc21 from "./components/wc21";
 import Wc22 from "./components/wc22";
 import ScorecardWheel from "./pages/scoreCardOpening";
+import useDisableBackButton from "./components/disableBack";
 
 function App() {
+  useDisableBackButton()
   useEffect(() => {
     const profileId = localStorage.getItem("MyId");
     if (!profileId) return;
@@ -116,8 +118,6 @@ function App() {
     >
       <Box
         sx={{
-          // transform: { xs: "rotate(90deg)", md: "none" },
-
           overflowX: { xs: "auto", md: "unset" },
           overflowY: { xs: "auto", md: "unset" },
           maxWidth: "100vw",
