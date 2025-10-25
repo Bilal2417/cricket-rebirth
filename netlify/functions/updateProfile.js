@@ -23,7 +23,7 @@ export async function handler(event) {
       titles,
       selected_title,
       unlocked_items,
-      starter
+      starter,
     } = body;
 
     if (!id) {
@@ -33,6 +33,7 @@ export async function handler(event) {
       };
     }
 
+    // --- DB Connection ---
     const client = new Client({
       connectionString: process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false },
@@ -40,9 +41,23 @@ export async function handler(event) {
 
     await client.connect();
 
+    // --- Helper function to safely parse arrays ---
+    const parseSafe = (data) => {
+      if (!data) return [];
+      if (Array.isArray(data)) return data;
+      if (typeof data === "string") {
+        try {
+          return JSON.parse(data);
+        } catch {
+          return [];
+        }
+      }
+      return [];
+    };
+
     // --- Fetch existing profile ---
     const existingProfile = await client.query(
-      `SELECT * FROM profiles WHERE id=$1`,
+      `SELECT * FROM profiles WHERE id = $1`,
       [id]
     );
 
@@ -79,36 +94,24 @@ export async function handler(event) {
       unlocked_teams != null
         ? Array.from(
             new Set([
-              ...(Array.isArray(current.unlocked_teams)
-                ? current.unlocked_teams
-                : typeof current.unlocked_teams === "string"
-                ? JSON.parse(current.unlocked_teams || "[]")
-                : current.unlocked_teams || []),
-              ...(Array.isArray(unlocked_teams)
-                ? unlocked_teams
-                : [unlocked_teams]),
+              ...parseSafe(current.unlocked_teams),
+              ...parseSafe(unlocked_teams),
             ])
           )
-        : current.unlocked_teams;
+        : parseSafe(current.unlocked_teams);
 
     // --- Merge unlocked_items ---
     const safeUnlockedItems =
       unlocked_items != null
         ? Array.from(
             new Set([
-              ...(Array.isArray(current.unlocked_items)
-                ? current.unlocked_items
-                : typeof current.unlocked_items === "string"
-                ? JSON.parse(current.unlocked_items || "[]")
-                : current.unlocked_items || []),
-              ...(Array.isArray(unlocked_items)
-                ? unlocked_items
-                : [unlocked_items]),
+              ...parseSafe(current.unlocked_items),
+              ...parseSafe(unlocked_items),
             ])
           )
-        : current.unlocked_items;
+        : parseSafe(current.unlocked_items);
 
-    // Ensure "starter" always stays
+    // Always keep "starter"
     if (!safeUnlockedItems.includes("starter"))
       safeUnlockedItems.push("starter");
 
@@ -116,22 +119,19 @@ export async function handler(event) {
     const safeTitles =
       titles != null
         ? Array.from(
-            new Set([
-              ...(Array.isArray(current.titles)
-                ? current.titles
-                : typeof current.titles === "string"
-                ? JSON.parse(current.titles || "[]")
-                : current.titles || []),
-              ...(Array.isArray(titles) ? titles : [titles]),
-            ])
+            new Set([...parseSafe(current.titles), ...parseSafe(titles)])
           )
-        : current.titles;
+        : parseSafe(current.titles);
+
+    // --- Safe trophies ---
+    // const safeTrophies =
+    //   typeof trophies === "number" ? Math.max(0, trophies) : current.trophies;
 
     let safeTrophies = 0;
     if (typeof trophies === "number" && coins > 0) {
       safeTrophies = trophies < 0 ? 0 : trophies;
-    }else{      
-      safeTrophies = trophies 
+    } else {
+      safeTrophies = trophies;
     }
 
     // --- Update profile ---
@@ -154,14 +154,14 @@ export async function handler(event) {
         name ?? null,
         img ?? null,
         tournaments ?? null,
-        safeTrophies ?? current.trophies,
+        safeTrophies,
         victories ?? null,
         coins ?? null,
-        JSON.stringify(safeUnlockedTeams ?? []),
-        JSON.stringify(safeTitles ?? []),
+        JSON.stringify(safeUnlockedTeams),
+        JSON.stringify(safeTitles),
         selected_title ?? null,
-        JSON.stringify(safeUnlockedItems ?? []),
-        starter,
+        JSON.stringify(safeUnlockedItems),
+        starter ?? current.starter,
         id,
       ]
     );

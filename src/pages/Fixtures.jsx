@@ -44,7 +44,7 @@ export default function Fixtures() {
       window.dispatchEvent(new Event("finalistUpdated"));
     }
     console.log(semi1, userTeam?.name, "see");
-  }, [ userTeam, semi2]);
+  }, [userTeam, semi2]);
 
   useEffect(() => {
     // const lastWinner = sessionStorage.getItem("lastMatchWinner");
@@ -107,12 +107,21 @@ export default function Fixtures() {
         newTitles.push({ value: 1, name: userTeam.name });
       }
     }
+    const uniqueTitles = [];
+    newTitles.forEach((t) => {
+      const existing = uniqueTitles.find((u) => u.name === t.name);
+      if (!existing) {
+        uniqueTitles.push(t);
+      } else {
+        existing.value = Math.max(existing.value, t.value);
+      }
+    });
 
     const updatedProfile = {
       ...Profile,
       id: profileId || Profile?.id,
       // knockOut: (Profile.knockout || 0) + 1,
-      titles: newTitles,
+      titles: uniqueTitles,
     };
 
     setProfile(updatedProfile);
