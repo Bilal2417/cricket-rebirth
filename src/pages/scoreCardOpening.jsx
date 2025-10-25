@@ -88,7 +88,7 @@ export default function ScoreCardOpening() {
   const deceleratingRef = useRef(false);
 
   const itemWidth = 120;
-  const totalWidth = flags.length * itemWidth;
+  const totalWidth = flags?.length * itemWidth;
   const viewWidth = 450;
   const centerOffset = viewWidth / 2;
 
@@ -139,7 +139,7 @@ export default function ScoreCardOpening() {
       (((-positionRef.current + centerOffset) % totalWidth) + totalWidth) %
       totalWidth;
 
-    const index = Math.floor(normalizedPosition / itemWidth) % flags.length;
+    const index = Math.floor(normalizedPosition / itemWidth) % flags?.length;
 
     const finalFlag = flags[index] || flags[0];
 
