@@ -177,7 +177,8 @@ export default function Home() {
 
     const handleEvent = () => {
       // ✅ force refetch on event
-      fetchProfiles(true);
+      console.log("It runs in home")
+      fetchProfiles( true );
     };
 
     window.addEventListener("refreshProfiles", handleEvent);
