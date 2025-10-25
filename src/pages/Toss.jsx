@@ -49,7 +49,7 @@ export default function Toss() {
     // window.location.reload();
   };
 
-  const storedProfile = sessionStorage.getItem("Profile");
+  const storedProfile = sessionStorage.getItem("UserProfile");
   const [Profile, setProfile] = useState(
     storedProfile ? JSON.parse(storedProfile) : ""
   );
@@ -96,7 +96,8 @@ export default function Toss() {
       if (data.success) {
         setProfile(data.profile);
         console.log(data.profile,"/toss");
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+        window.dispatchEvent(new Event("profileUpdated"));
       } else {
         console.error("Failed to update trophies in database");
       }

@@ -38,7 +38,7 @@ export default function Result() {
   });
 
   const [Profile, setProfile] = useState(() => {
-    const storedProfile = sessionStorage.getItem("Profile");
+    const storedProfile = sessionStorage.getItem("UserProfile");
     return storedProfile ? JSON.parse(storedProfile) : "";
   });
 

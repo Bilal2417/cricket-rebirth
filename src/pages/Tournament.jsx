@@ -700,6 +700,7 @@ export default function Tournament() {
     const updatedProfile = {
       ...Profile,
       id: profileId || Profile?.id,
+      tournaments : coinsIncrement == 3000 ?  Profile?.tournaments + 1 : Profile?.tournaments,
       // victories: win ? Profile.victories + 1 : Profile.victories,
       coins: Profile.coins + coinsIncrement,
     };

@@ -137,6 +137,7 @@ export default function Home() {
           sessionStorage.getItem("profilesData") || "{}"
         );
         const now = Date.now();
+        const myProfile = JSON.parse(sessionStorage.getItem("UserProfile"));
 
         if (
           !force &&
@@ -144,11 +145,10 @@ export default function Home() {
           now - cached.timestamp < 5 * 60 * 1000
         ) {
           setProfiles(cached.data);
-          const matchedProfile = cached.data.find((p) => p.id === profileId);
-          if (matchedProfile) {
-            setUserProfile(matchedProfile);
-            sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
-          }
+
+          // const matchedProfile = data.profiles.find((p) => p.id === profileId);
+          if (myProfile) setUserProfile(myProfile);
+
           setLoading(false);
           return;
         }
@@ -163,8 +163,8 @@ export default function Home() {
             JSON.stringify({ data: data.profiles, timestamp: now })
           );
 
-          const matchedProfile = data.profiles.find((p) => p.id === profileId);
-          if (matchedProfile) setUserProfile(matchedProfile);
+          // const matchedProfile = data.profiles.find((p) => p.id === profileId);
+          if (myProfile) setUserProfile(myProfile);
         }
       } catch (err) {
         console.error("Error fetching profiles:", err);

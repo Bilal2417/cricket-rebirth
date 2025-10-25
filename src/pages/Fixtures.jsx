@@ -137,7 +137,8 @@ export default function Fixtures() {
       if (data.success) {
         setProfile(data.profile);
         console.log(data.profile);
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+        window.dispatchEvent(new Event("profileUpdated"));
       } else {
         console.error("Failed to update tournaments in database:", data.error);
       }
