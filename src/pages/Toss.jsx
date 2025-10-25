@@ -83,6 +83,7 @@ export default function Toss() {
     };
 
     setProfile(updatedProfile);
+    console.log(updatedProfile,"/toss before");
 
     try {
       const res = await fetch("/.netlify/functions/updateProfile", {
@@ -94,7 +95,7 @@ export default function Toss() {
       const data = await res.json();
       if (data.success) {
         setProfile(data.profile);
-        console.log(data.profile);
+        console.log(data.profile,"/toss");
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
       } else {
         console.error("Failed to update trophies in database");

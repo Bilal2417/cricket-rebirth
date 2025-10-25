@@ -184,16 +184,6 @@
 //   }
 // }
 
-
-
-
-
-
-
-
-
-
-
 import { Client } from "pg";
 
 export async function handler(event) {
@@ -219,7 +209,7 @@ export async function handler(event) {
       titles,
       selected_title,
       unlocked_items,
-      starter
+      starter,
     } = body;
 
     if (!id) {
@@ -323,11 +313,21 @@ export async function handler(event) {
           )
         : current.titles;
 
-    let safeTrophies = 0;
-    if (typeof trophies === "number" && coins > 0) {
-      safeTrophies = trophies < 0 ? 0 : trophies;
-    }else{      
-      safeTrophies = trophies 
+    // --- Safe trophies handling ---
+    let safeTrophies;
+
+    if (typeof trophies === "number") {
+      // If this is match-end update (coins > 0)
+      if (coins > 0) {
+        // Prevent negative trophies at match end
+        safeTrophies = trophies < 0 ? 0 : trophies;
+      } else {
+        // Pre-match or other updates: just take given trophies
+        safeTrophies = trophies;
+      }
+    } else {
+      // If trophies not provided, keep current
+      safeTrophies = current.trophies;
     }
 
     // --- Update profile ---
