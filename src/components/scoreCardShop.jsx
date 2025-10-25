@@ -158,6 +158,8 @@ export default function ScoreCardShop() {
               e.stopPropagation();
               if (isActive) {
                 handleUnlock(pack);
+              }else{
+                handleClick(index)
               }
             }}
           >
@@ -186,7 +188,7 @@ export default function ScoreCardShop() {
         }}
       >
         {modePacks
-          .filter((f) => !pack.includes(f.price))
+          .filter((f) => !pack?.includes(f.price))
           .map((pack, index) => (
             <CardDesign key={pack.id} pack={pack} index={index} />
           ))}
