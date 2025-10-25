@@ -1,6 +1,6 @@
 import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { GiCricketBat, GiTrophy, GiWorld } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
@@ -168,6 +168,14 @@ export default function ScoreCardShop() {
     </motion.div>
   );
 
+  useEffect(() => {
+    if (!localStorage.getItem("packs")) {
+      localStorage.setItem("packs", JSON.stringify([]));
+    }
+  }, []);
+
+  const pack = JSON.parse(localStorage.getItem("packs"));
+
   return (
     <>
       <Box
@@ -177,9 +185,11 @@ export default function ScoreCardShop() {
           justifyContent: "center",
         }}
       >
-        {modePacks.map((pack, index) => (
-          <CardDesign key={pack.id} pack={pack} index={index} />
-        ))}
+        {modePacks
+          .filter((f) => !pack.includes(f.price))
+          .map((pack, index) => (
+            <CardDesign key={pack.id} pack={pack} index={index} />
+          ))}
       </Box>
 
       {activeCard !== null && (

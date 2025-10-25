@@ -401,11 +401,10 @@ export default function Home() {
                         profile?.id == profileId
                           ? "inset 0px -8px 8px -4px #c16a2f"
                           : "inset 0px -8px 8px -4px #655b67",
-                      transform: "skew(-5deg)",
                       transition: "all 0.3s",
+                      transform: "skew(-5deg)",
                       "@media (hover: hover)": {
                         cursor: "pointer",
-                        // transform: "scale(1.025)",
                         opacity: 0.9,
                       },
                       ":active": {
@@ -523,7 +522,6 @@ export default function Home() {
                         backgroundColor:
                           profile?.id == profileId ? "#dc5425" : "#665963",
                         padding: "15px 30px",
-                        clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)",
                         justifyContent: "center",
                         color: "rgb(255 196 107)",
                       }}
@@ -614,12 +612,9 @@ export default function Home() {
                             display: "flex",
                             alignItems: "center",
                             gap: "5px",
-                            // fontfamily: "Rubik",
                             fontWeight: 600,
                             backgroundColor: "#665963",
                             padding: "10px 30px",
-                            clipPath:
-                              "polygon(5% 0, 100% 0, 100% 100%, 0% 100%)",
                             justifyContent: "center",
                             color: "#897689",
                           }}

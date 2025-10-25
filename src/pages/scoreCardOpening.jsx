@@ -48,6 +48,8 @@ export default function ScoreCardOpening() {
     }
     return true;
   });
+  const [groupValue, setGroupValue] = useState(null);
+
   useEffect(() => {
     const val = sessionStorage.getItem("value");
     if (!val) {
@@ -61,20 +63,26 @@ export default function ScoreCardOpening() {
     storedProfile ? JSON.parse(storedProfile) : ""
   );
 
-  const [groupValue, setGroupValue] = useState(null);
-  const updatedflags =
-    flagGroups.find((f) => f.value === groupValue)?.unlocks || [];
+  const updatedflags = flagGroups?.find((f) => f.value === groupValue) || {};
 
-  const newProf = Profile;
-  const flags = updatedflags.filter(
-    (f) => !newProf?.unlocked_items?.includes(f.key)
+
+  const flags = updatedflags?.unlocks?.filter(
+    (f) => !Profile?.unlocked_items?.includes(f.key)
   );
+
+  if (flags?.length <= 0) {
+    const pack = localStorage.getItem("packs");
+    const updatedPack = JSON.parse(pack || "[]");
+    updatedPack.push(updatedflags.price);
+    navigate("/");
+    localStorage.setItem("packs", JSON.stringify(updatedPack));
+  }
 
   const [selected, setSelected] = useState(null);
   const [spinning, setSpinning] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
-  const speedRef = useRef(8);
+  const speedRef = useRef(10);
   const positionRef = useRef(0);
   const requestRef = useRef(null);
   const deceleratingRef = useRef(false);
@@ -96,7 +104,7 @@ export default function ScoreCardOpening() {
 
     if (deceleratingRef.current) {
       speedRef.current *= 0.97;
-      if (speedRef.current < 0.5) {
+      if (speedRef.current < 0.2) {
         finishSpin();
         return;
       }
@@ -120,7 +128,7 @@ export default function ScoreCardOpening() {
 
     setTimeout(() => {
       deceleratingRef.current = true;
-    }, 1500 + Math.random() * 3500);
+    }, 2000 + Math.random() * 3500);
   };
 
   const finishSpin = async () => {
@@ -165,7 +173,7 @@ export default function ScoreCardOpening() {
 
       const data = await res.json();
       if (data.success) {
-        setProfile(data.profile);
+        // setProfile(data.profile);
         console.log(data.profile);
         sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
 
