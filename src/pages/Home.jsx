@@ -729,7 +729,7 @@ export default function Home() {
             {loading ? (
               <CircularProgress size={24} sx={{ color: "#fff" }} />
             ) : (
-              `Play ${profileId}` 
+              `Play` 
             )}
           </Button>
         </Box>
