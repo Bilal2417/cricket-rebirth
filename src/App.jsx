@@ -70,7 +70,7 @@ function App() {
   
   const [profile, setProfile] = useState(null);
   useEffect(() => {
-    let profileId = localStorage.getItem("MyId");
+    const profileId = localStorage.getItem("MyId");
     if (!profileId) return;
 
     // initial fetch
@@ -98,7 +98,7 @@ function App() {
 
     return () =>
       window.removeEventListener("profileUpdated", handleProfileUpdate);
-  }, []);
+}, [localStorage.getItem("MyId")]);
 
   useEffect(() => {
     const handleFinalistUpdate = () =>

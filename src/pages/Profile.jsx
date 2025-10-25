@@ -179,9 +179,8 @@ export default function Profile() {
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: "120px",
+              gap: "50px",
               position: "relative",
-              ml: "50px",
             }}
           >
             <Box
@@ -231,7 +230,7 @@ export default function Profile() {
             <Box
               sx={{
                 position: "absolute",
-                left: "100%",
+                left: "110%",
                 top: 0,
                 backgroundColor: "#073575",
                 width: "200px",
@@ -427,7 +426,6 @@ export default function Profile() {
                 <Typography
                   sx={{
                     color: "#fff",
-                    WebkitTextStroke: "1px black",
                     fontSize: "1.4em",
                     fontWeight: 900,
                     textTransform: "uppercase",
