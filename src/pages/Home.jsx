@@ -220,7 +220,7 @@ export default function Home() {
     const hours = diff / (1000 * 60 * 60);
     const days = diff / (1000 * 60 * 60 * 24);
 
-    if (minutes < 1) return "just now";
+    if (minutes < 2) return "just now";
     if (minutes < 60) return `${Math.floor(minutes)} min ago`;
     if (hours < 24) return `${Math.floor(hours)} hr ago`;
     return `${Math.floor(days)} days ago`;

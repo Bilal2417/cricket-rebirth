@@ -63,25 +63,26 @@ export default function ScoreCardOpening() {
     storedProfile ? JSON.parse(storedProfile) : ""
   );
 
-  const updatedflags = flagGroups?.find((f) => f.value === groupValue) || {};
+  const updatedflags =
+    flagGroups?.find((f) => f.value === groupValue)?.unlocks || [];
 
   const flags =
-    updatedflags?.unlocks?.filter(
-      (f) => !Profile?.unlocked_items?.includes(f.key)
-    ) || [];
+    updatedflags?.filter((f) => !Profile?.unlocked_items?.includes(f.key)) ||
+    [];
 
-  // useEffect(() => {
-  if (flags?.length <= 0) {
-    const pack = localStorage.getItem("packs");
-    const updatedPack = JSON.parse(pack || "[]");
-    updatedPack.push(updatedflags?.price);
-    localStorage.setItem("packs", JSON.stringify(updatedPack));
-    navigate("/");
-  }
-  // }, [flags]);
+  useEffect(() => {
+    if (flags?.length == 1) {
+      const val = sessionStorage.getItem("value");      
+      const pack = localStorage.getItem("packs");
+      const updatedPack = JSON.parse(pack || "[]");
+      updatedPack.push(Number(val));
+      localStorage.setItem("packs", JSON.stringify(updatedPack));
+    }
+  }, [flags]);
 
   const [selected, setSelected] = useState(null);
   const [spinning, setSpinning] = useState(false);
+  const [work, setWork] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
   const speedRef = useRef(10);
@@ -148,6 +149,8 @@ export default function ScoreCardOpening() {
     setSelected(finalFlag);
     setShowConfetti(true);
     setSpinning(false);
+    toast.success(`🎉 ${finalFlag.country} Unlocked!`);
+    setShow(true);
 
     const unlockedFlagGroup = flagGroups.find((group) =>
       group.unlocks.some((flag) => flag.country === finalFlag?.country)
@@ -187,10 +190,8 @@ export default function ScoreCardOpening() {
       console.error("Error updating tournaments:", err);
     }
 
+    setWork(true);
     sessionStorage.removeItem("value");
-
-    toast.success(`🎉 ${finalFlag.country} Unlocked!`);
-    setShow(true);
   };
 
   useEffect(() => {
@@ -286,6 +287,7 @@ export default function ScoreCardOpening() {
         <Button
           onClick={() => navigate("/")}
           variant="contained"
+          disabled={!work}
           sx={{
             mt: 3,
             bgcolor: "#ff684d",
