@@ -213,6 +213,7 @@ export default function CardOpening() {
               ...randomCard,
               selectedUnlock: { ...randomUnlock, resource: randomTeam },
             };
+            unlockedTeams?.push(randomTeam);
           }
         }
       }
@@ -245,6 +246,7 @@ export default function CardOpening() {
               ...randomCard,
               selectedUnlock: { ...randomUnlock, resource: randomTeam },
             };
+            unlockedTeams?.push(randomTeam);
           }
         }
       }
