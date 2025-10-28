@@ -17,6 +17,7 @@ export default function Toss() {
     wc19: "#222589  ",
     wc21: "#f83059 ", //f83059
     wc22: "#d71c59", //de265c
+    wc24: "#fa208e", 
     ct25: "#02c208",
   };
 
@@ -134,8 +135,8 @@ export default function Toss() {
                   sx={{
                     color: "#FFFFFF",
                     backgroundColor: "#0f0648",
-                    borderBottom: `4px solid ${colors[board] || "#fa208e"}`,
-                    borderRight: `4px solid ${colors[board] || "#fa208e"}`,
+                    borderBottom: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
+                    borderRight: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
                     borderRadius: "12px",
                     transform: "skew(-5deg)",
                     width: "120px",
@@ -169,8 +170,8 @@ export default function Toss() {
                   sx={{
                     color: "#FFFFFF",
                     backgroundColor: "#0f0648",
-                    borderBottom: `4px solid ${colors[board] || "#fa208e"}`,
-                    borderRight: `4px solid ${colors[board] || "#fa208e"}`,
+                    borderBottom: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
+                    borderRight: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
                     borderRadius: "12px",
                     width: "120px",
                     transform: "skew(-5deg)",

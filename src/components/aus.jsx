@@ -102,7 +102,7 @@ export default function AUS({
             </Typography>
             <Typography fontWeight={600} variant="body1">
               {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
-              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0}
+              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0} (totalOvers)
             </Typography>
           </Box>
         </Box>

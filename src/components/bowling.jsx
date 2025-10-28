@@ -6,6 +6,7 @@ export default function Bowling(squad) {
     wc19: "#222589  ",
     wc21: "#f83059 ", //f83059
     wc22: "#d71c59", //de265c
+    wc24: "#fa208e", 
     ct25: "#02c208",
   };
 
@@ -17,7 +18,7 @@ export default function Bowling(squad) {
       <Box>
         <Box
           sx={{
-            color:  colors[board] || "#fa208e",
+            color:  colors[board] || "rgb(65, 38, 255)",
             backgroundColor: "#FFFFFF",
             boxShadow: "0px 4px 4px -3px #0003",
             width: "100%",
@@ -30,7 +31,7 @@ export default function Bowling(squad) {
               paddingRight: "35px",
               gap: "20px",
               justifyContent: "flex-end",
-              borderBottom: `2px solid ${colors[board] || "#fa208e"}`,
+              borderBottom: `2px solid ${colors[board] || "rgb(65, 38, 255)"}`,
             }}
           >
             <Typography

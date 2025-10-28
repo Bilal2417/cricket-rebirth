@@ -11,6 +11,7 @@ export default function Batting(squad) {
     wc19: "#222589  ",
     wc21: "#f83059 ",//f83059 
     wc22: "#d71c59",//de265c 
+    wc24: "#fa208e",//de265c 
     ct25: "#02c208",
   };
 
@@ -27,7 +28,7 @@ export default function Batting(squad) {
             alignItems: "center",
             justifyContent: "space-between",
             color: data.notout ? "#FFFFFF" : "#0f0648",
-            background: data.notout ? colors[board] ||"#fa208e" : "#FFFFFF",
+            background: data.notout ? colors[board] ||"rgb(65, 38, 255)" : "#FFFFFF",
             boxShadow: "0px 0px 9px -7px #000000",
             // borderRadius: data.notout ? "12px" : "0px",
             // padding: data.notout ? "0 5px" : "0px",

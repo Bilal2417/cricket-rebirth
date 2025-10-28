@@ -26,6 +26,7 @@ export default function Result() {
     wc19: "#222589  ",
     wc21: "#f83059 ", //f83059
     wc22: "#d71c59", //de265c
+    wc24: "#fa208e", 
     ct25: "#02c208",
   };
 
@@ -419,7 +420,7 @@ export default function Result() {
                 sx={{
                   //   width: "100%",
                   padding: { xs: "5px 0px", md: "10px 0px" },
-                  background: colors[board] || "#fa208e",
+                  background: colors[board] || "rgb(65, 38, 255)",
                   boxShadow: "inset -4px 0 6px -2px rgba(0,0,0,0.1)",
                   display: "flex",
                   justifyContent: "center",
@@ -538,7 +539,7 @@ export default function Result() {
                 sx={{
                   width: "100%",
                   padding: { xs: "5px 0px", md: "10px 0px" },
-                  background: colors[board] || "#fa208e",
+                  background: colors[board] || "rgb(65, 38, 255)",
                   boxShadow: "inset -4px 0 6px -2px rgba(0,0,0,0.1)",
                   display: "flex",
                   justifyContent: "center",
@@ -663,7 +664,7 @@ export default function Result() {
                 sx={{
                   width: "100%",
                   padding: { xs: "5px 0px", md: "10px 0px" },
-                  background: colors[board] || "#fa208e",
+                  background: colors[board] || "rgb(65, 38, 255)",
                   boxShadow: "inset -4px 0 6px -2px rgba(0,0,0,0.1)",
                   display: "flex",
                   justifyContent: "center",
@@ -778,7 +779,7 @@ export default function Result() {
                 sx={{
                   width: "100%",
                   padding: { xs: "5px 0px", md: "10px 0px" },
-                  background: colors[board] || "#fa208e",
+                  background: colors[board] || "rgb(65, 38, 255)",
                   display: "flex",
                   justifyContent: "center",
                 }}
@@ -900,7 +901,7 @@ export default function Result() {
               sx={{
                 // fontfamily: "Rubik",
                 color: "#FFFFFF",
-                background: colors[board] || "#fa208e",
+                background: colors[board] || "rgb(65, 38, 255)",
                 padding: "8px 16px",
                 borderRadius: "8px",
                 position: "absolute",
