@@ -17,7 +17,7 @@ export async function handler() {
         unlocked_teams,
         selected_title,
         last_active ,
-        COALESCE(img, '/assets/img/pak.png') AS img
+      img
       FROM profiles
       ORDER BY trophies DESC
     `);
@@ -29,7 +29,10 @@ export async function handler() {
         if (Array.isArray(row.unlocked_teams)) {
           // ✅ Already parsed JSONB array
           unlockedTeams = row.unlocked_teams;
-        } else if (typeof row.unlocked_teams === "string" && row.unlocked_teams.trim() !== "") {
+        } else if (
+          typeof row.unlocked_teams === "string" &&
+          row.unlocked_teams.trim() !== ""
+        ) {
           // ✅ Stored as JSON string
           unlockedTeams = JSON.parse(row.unlocked_teams);
         }
@@ -44,12 +47,11 @@ export async function handler() {
       };
     });
 
-
     return {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-         profiles,
+        profiles,
       }),
     };
   } catch (err) {

@@ -137,9 +137,8 @@ export default function ProfileData() {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    gap: "120px",
+                    gap: "50px",
                     position: "relative",
-                    ml: "50px",
                   }}
                 >
                   <Box
@@ -180,7 +179,7 @@ export default function ProfileData() {
                   <Box
                     sx={{
                       position: "absolute",
-                      left: "100%",
+                      left: "110%",
                       top: 0,
                       backgroundColor: "#073575",
                       width: "200px",

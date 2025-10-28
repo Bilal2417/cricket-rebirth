@@ -59,7 +59,7 @@ export async function handler(event) {
           0,
           0,
           0,
-          "/assets/img/pak.png",
+          null,
           JSON.stringify([]),
           JSON.stringify(["starter"]),
           JSON.stringify([]),
