@@ -130,6 +130,10 @@ export default function Profile() {
         setProfile(data.profile);
         setName(data.profile.name);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+
+        window.dispatchEvent(new Event("profileUpdated"));
+        localStorage.setItem("refreshProfiles", "true");
+
         toast.success("Profile Updated Successfully!");
         setOpen(false);
       } else {
@@ -241,8 +245,8 @@ export default function Profile() {
                 border: "2px solid #000000",
                 borderRadius: "4px",
                 boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                
-                    transform: "skew(-5deg)",
+
+                transform: "skew(-5deg)",
                 color: "#ffffff",
                 ":hover": { cursor: "pointer" },
               }}
@@ -268,7 +272,7 @@ export default function Profile() {
                       border: "2px solid #000000",
                       borderRadius: "4px",
                       boxShadow: "inset 0px -8px 8px -4px #2a3043",
-                    transform: "skew(-5deg)",
+                      transform: "skew(-5deg)",
                       m: "50px 0",
                       color: "#ffffff",
                       ":hover": { cursor: "pointer" },
@@ -308,7 +312,7 @@ export default function Profile() {
               mt: 2,
               width: "100%",
               padding: "5px",
-                    transform: "skew(-10deg)",
+              transform: "skew(-10deg)",
               boxShadow: `
                 inset 0px -8px 8px -4px #0248df,
                 inset 0px 8px 8px -4px #009aff
@@ -376,7 +380,7 @@ export default function Profile() {
                   color: "#FFFFFF",
                   fontFamily: "sans-serif",
                   width: "100%",
-                    transform: "skew(-10deg)",
+                  transform: "skew(-10deg)",
                   boxShadow: `
                     inset 0px -8px 8px -4px #0248df,
                     inset 0px 8px 8px -4px #009aff
@@ -394,7 +398,7 @@ export default function Profile() {
             {[
               {
                 label: "Trophies",
-                icon: <GiTrophy size={25}/>,
+                icon: <GiTrophy size={25} />,
                 value: profile.trophies,
               },
               {
@@ -404,7 +408,7 @@ export default function Profile() {
               },
               {
                 label: "World Cup",
-                icon: <GiAchievement size={25}/>,
+                icon: <GiAchievement size={25} />,
                 value: profile.tournaments,
               },
               // {
@@ -444,7 +448,7 @@ export default function Profile() {
                     display: "flex",
                     gap: 1,
                     transform: "skew(-5deg)",
-                    alignItems : "center"
+                    alignItems: "center",
                   }}
                 >
                   {stat.icon} {stat.value}

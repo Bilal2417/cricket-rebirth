@@ -1,4 +1,3 @@
-// components/disableBack.js
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,7 +11,6 @@ export default function useDisableBackButton() {
       "/toss",
       "/gamePlay",
       "/score",
-      "/",
       "/scoreBoardOpening",
       "/fixtures",
       "/shop",
@@ -20,14 +18,17 @@ export default function useDisableBackButton() {
       "/open-pack",
     ];
 
-    if (restrictedPaths.some((path) => location.pathname.startsWith(path))) {
-      // Push a dummy history state so the user can't go back
+    const isRestricted =
+      restrictedPaths.some((path) => location.pathname.startsWith(path)) ||
+      location.pathname === "/";
+
+    if (isRestricted) {
+      // Push dummy history state so the user can't go back
       window.history.pushState(null, "", window.location.href);
 
       const handlePopState = () => {
-        // Stay on same page
         window.history.pushState(null, "", window.location.href);
-        toast.error("Back navigation is disabled!!");
+        toast.error("Back navigation is disabled!");
       };
 
       window.addEventListener("popstate", handlePopState);

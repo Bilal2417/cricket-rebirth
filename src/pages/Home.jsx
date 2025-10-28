@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { keyframes } from "@emotion/react";
 import { GiCardboardBox, GiShoppingCart, GiTrophy } from "react-icons/gi";
+import avatar from "/img/dummy.png"
 
 export default function Home() {
   const shimmer = keyframes`
@@ -448,7 +449,7 @@ export default function Home() {
                       </Typography>
                       <Box
                         component="img"
-                        src={profile?.img}
+                        src={profile?.img || avatar}
                         alt={profile?.name}
                         sx={{
                           width: 45,
@@ -510,7 +511,7 @@ export default function Home() {
                           width: "10px",
                           height: "10px",
                           backgroundColor:
-                            timeAgo(profile?.last_active) == "just now"
+                            timeAgo(profile?.last_active) == "just now" || profile?.id == profileId
                               ? "green"
                               : "#514e4e",
                           borderRadius: "50%",

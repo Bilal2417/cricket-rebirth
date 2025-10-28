@@ -176,7 +176,7 @@ export default function ScoreCardShop() {
     }
   }, []);
 
-  const pack = JSON.parse(localStorage.getItem("packs"));
+  const boardData = JSON.parse(localStorage.getItem("boardData")) || [];
 
   return (
     <>
@@ -188,7 +188,7 @@ export default function ScoreCardShop() {
         }}
       >
         {modePacks
-          .filter((f) => !pack?.includes(f.price))
+          .filter((f) => !boardData?.includes(f.price))
           .map((pack, index) => (
             <CardDesign key={pack.id} pack={pack} index={index} />
           ))}

@@ -69,16 +69,17 @@ export default function ScoreCardOpening() {
   const flags =
     updatedflags?.filter((f) => !Profile?.unlocked_items?.includes(f.key)) ||
     [];
+    
 
-  useEffect(() => {
-    if (flags?.length == 1) {
-      const val = sessionStorage.getItem("value");      
-      const pack = localStorage.getItem("packs");
-      const updatedPack = JSON.parse(pack || "[]");
-      updatedPack.push(Number(val));
-      localStorage.setItem("packs", JSON.stringify(updatedPack));
-    }
-  }, [flags]);
+  // useEffect(() => {
+  //   if (flags?.length == 1) {
+  //     const val = sessionStorage.getItem("value");
+  //     const pack = localStorage.getItem("packs");
+  //     const updatedPack = JSON.parse(pack || "[]");
+  //     updatedPack.push(Number(val));
+  //     localStorage.setItem("packs", JSON.stringify(updatedPack));
+  //   }
+  // }, [flags]);
 
   const [selected, setSelected] = useState(null);
   const [spinning, setSpinning] = useState(false);
@@ -181,6 +182,43 @@ export default function ScoreCardOpening() {
         // setProfile(data.profile);
         console.log(data.profile);
         sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+
+        const val = sessionStorage.getItem("value");
+
+        const lockedFlags = flags.filter(
+          (item) => !data?.profile?.unlocked_items?.includes(item.key)
+        );
+
+        if (lockedFlags.length === 0) {
+          console.log("ALL unlocked");
+
+          
+          const existing =
+            JSON.parse(localStorage.getItem("boardData")) || {};
+
+            
+          const existingValues = existing.values || [];
+
+          
+          if (!existingValues.includes(val)) {
+            existingValues.push(val);
+          }
+
+          
+          localStorage.setItem(
+            "boardData",
+            JSON.stringify({
+              ...existing,
+              values: existingValues,
+            })
+          );
+
+          console.log("Updated boardData:", {
+            ...existing,
+            values: existingValues,
+            allFlagsUnlocked: true,
+          });
+        }
 
         window.dispatchEvent(new Event("profileUpdated"));
       } else {

@@ -75,7 +75,6 @@ export default function Result() {
       trophyIncrement = trophyMap[wkts];
       // trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
       if (matchType === 2) {
-        trophyIncrement *= 2;
         coinsIncrement =
           wkts === 100 ? trophyMap[wkts] * 3 : trophyMap[wkts] * 15;
       }
