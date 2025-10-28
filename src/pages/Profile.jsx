@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 import LoadingPage from "../components/loading";
 import imageCompression from "browser-image-compression";
 import { GiAchievement, GiStarMedal, GiTrophy } from "react-icons/gi";
+import avatar from "/img/dummy.png"
 
 export default function Profile() {
   const location = useLocation();
@@ -189,7 +190,7 @@ export default function Profile() {
           >
             <Box
               component="img"
-              src={profile.img}
+              src={profile.img || avatar}
               alt="profile"
               sx={{
                 width: 120,

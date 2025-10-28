@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 import LoadingPage from "../components/loading";
 import Data from "../components/data";
 import { GiAchievement, GiStarMedal, GiTrophy } from "react-icons/gi";
+import avatar from "/img/dummy.png"
 
 export default function ProfileData() {
   const { state } = useLocation();
@@ -143,7 +144,7 @@ export default function ProfileData() {
                 >
                   <Box
                     component="img"
-                    src={profile?.img}
+                    src={profile?.img || avatar}
                     alt="profile"
                     sx={{
                       width: 120,
