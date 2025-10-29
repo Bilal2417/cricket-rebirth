@@ -31,6 +31,7 @@ import Wc21 from "./components/wc21";
 import Wc22 from "./components/wc22";
 import ScorecardWheel from "./pages/scoreCardOpening";
 import useDisableBackButton from "./components/disableBack";
+import Log from "./pages/Log";
 
 function App() {
   useDisableBackButton()
@@ -138,6 +139,7 @@ function App() {
         )}
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/log" element={<Log />} />
           <Route path="/scoreBoardOpening" element={<ScorecardWheel />} />
           <Route path="/shop" element={<Shop profile={profile} />} />
           <Route path="/tournament" element={<Tournament />} />

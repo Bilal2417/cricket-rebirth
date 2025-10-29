@@ -1,6 +1,6 @@
 import { Box, Fade, Typography } from "@mui/material";
 
-export default function Wc22({
+export default function Wtc({
   batting,
   aiTeam,
   userTeam,
@@ -19,9 +19,9 @@ export default function Wc22({
   randomBowler,
 }) {
   const colors = {
-    6: "#222589",
+    6: batting ? userTeam?.primary : aiTeam?.primary,
     W: "#e00244",
-    4: "#222589",
+    4: batting ? userTeam?.primary : aiTeam?.primary,
   };
 
   function getInitials(name) {
@@ -35,6 +35,7 @@ export default function Wc22({
     return (words[0][0] + words[1][0]).toUpperCase();
   }
 
+  const teams = ["Australia", "UAE", "Zimbabwe"];
   return (
     <>
       <Box
@@ -50,7 +51,8 @@ export default function Wc22({
           sx={{
             alignContent: "center",
             padding: "0px 20px 0 100px",
-            background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
+            background:
+              "linear-gradient(to bottom , #a99981 , #ece5d3 , #a99981)",
             borderRadius: "0 132px 132px 0",
           }}
         >
@@ -68,8 +70,8 @@ export default function Wc22({
         <Box
           sx={{
             display: "flex",
-            background: "linear-gradient(to bottom , #fefefe , #dcdce5)",
-            // background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
+            background:
+              "linear-gradient(to bottom , #a99981 , #ece5d3 , #a99981)",
             borderRadius: "64px",
             padding: "2px 15px",
           }}
@@ -122,6 +124,7 @@ export default function Wc22({
                 <Typography
                   sx={{
                     color: "#0f0648",
+                    fontWeight: 600,
                   }}
                   variant="body1"
                 >
@@ -169,6 +172,7 @@ export default function Wc22({
                 <Typography
                   sx={{
                     color: "#0f0648",
+                    fontWeight: 600,
                   }}
                   variant="body1"
                 >
@@ -189,7 +193,7 @@ export default function Wc22({
 
           <Box
             sx={{
-              backgroundColor: "#0f044a",
+              background: "linear-gradient( to right , #928271 , #4a4237 )",
               //   padding: " 0px 16px 0px 0",
               minWidth: "300px",
               borderRadius: "100px",
@@ -202,65 +206,47 @@ export default function Wc22({
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "10px",
-                background: "linear-gradient(to right , #047eb0 , #009fd2)",
+                background: "linear-gradient(to right , #2f5e84 , #113f63)",
                 paddingRight: "10px",
               }}
             >
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "baseline",
+                  alignItems: "center",
                   gap: "10px",
-                  background: "linear-gradient(to bottom , #de265c , #d71c59 )",
                   borderRadius: "0 32px 32px 0",
-                  padding: "0 10px",
+                  paddingRight: "10px",
                   boxShadow: "3px 2px 10px -3px #000000",
+                  background:
+                    "linear-gradient(to bottom , #a99981 , #ece5d3 , #a99981)",
                 }}
               >
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "baseline",
-                    gap: "3px",
+                    gap: "10px",
+                    // background: batting ? userTeam?.primary : aiTeam?.primary,
+                    background: `linear-gradient(to right, ${
+                      batting
+                        ? userTeam?.secondary
+                        : aiTeam?.secondary || "#163c8c"
+                    }, ${
+                      batting ? userTeam?.primary : aiTeam?.primary || "#0e306f"
+                    })`,
+                    borderRadius: "0 32px 32px 0",
+                    padding: "0 10px 0 20px",
+                    boxShadow: "3px 2px 10px -3px #000000",
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: "5px",
-                      color: "#faf8fb",
-                      // fontfamily: "Rubik",
-                      textTransform: "uppercase",
-                    }}
-                    variant="body1"
-                  >
-                    <Typography
-                      sx={{
-                        color: "#faf8fb",
-                        textTransform: "uppercase",
-                        // fontSize: "1.1em",
-                        opacity: 0.8,
-                      }}
-                      variant="body1"
-                    >
-                      {!batting
-                        ? getInitials(userTeam?.name || "Robo")
-                        : getInitials(aiTeam?.name || "Robo")}{" "}
-                    </Typography>
-                    <Box
-                      sx={{
-                        fontSize: "0.7em",
-                      }}
-                      variant="span"
-                    >
-                      v
-                    </Box>
-                  </Box>
                   <Typography
                     sx={{
-                      color: "#faf8fb",
-                      // fontfamily: "Rubik",
+                      color: teams.includes(
+                        batting ? userTeam?.name : aiTeam?.name
+                      )
+                        ? "#000000"
+                        : "#faf8fb",
                       textTransform: "uppercase",
                       fontSize: "1.4em !important",
                       fontWeight: 600,
@@ -271,29 +257,54 @@ export default function Wc22({
                       ? getInitials(aiTeam?.name || "Robo")
                       : getInitials(userTeam?.name || "Robo")}{" "}
                   </Typography>
-                </Box>
 
-                <Box
-                  sx={{
-                    //   backgroundColor: "#fa208e",
-                    //   borderRadius: "8px",
-                    padding: "2px 0px",
-                    width: "100px",
-                  }}
-                >
-                  <Typography
-                    variant="h6"
+                  <Box
                     sx={{
-                      color: "#FFFFFF",
-                      fontSize: "0.9em",
-                      fontWeight: "600",
-                      // fontfamily: "Rubik",
-                      textAlign: "center",
+                      padding: "2px 0px",
+                      width: "100px",
                     }}
                   >
-                    {batting ? userTeam?.score || 0 : aiTeam?.score || 0} -{" "}
-                    {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
-                  </Typography>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        color: teams.includes(
+                          batting ? userTeam?.name : aiTeam?.name
+                        )
+                          ? "#000000"
+                          : "#faf8fb",
+                        fontSize: "0.9em",
+                        fontWeight: "600",
+                        width: "100px",
+                        textAlign: "center",
+                      }}
+                    >
+                      {batting ? userTeam?.score || 0 : aiTeam?.score || 0} -{" "}
+                      {batting ? userTeam?.wicket || 0 : aiTeam?.wicket || 0}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: "5px",
+                    color: "#0e0a20",
+                    // fontfamily: "Rubik",
+                    textTransform: "uppercase",
+                  }}
+                  variant="body1"
+                >
+                  <Box
+                    sx={{
+                      fontSize: "0.7em",
+                    }}
+                    variant="span"
+                  >
+                    v
+                  </Box>
+                  {!batting
+                    ? getInitials(userTeam?.name || "Bot1")
+                    : getInitials(aiTeam?.name || "Bot2")}{" "}
                 </Box>
               </Box>
 
@@ -421,7 +432,8 @@ export default function Wc22({
                 top: "-50px",
                 left: 0,
                 fontSize: "0.8em",
-                backgroundColor: "#FFFFFF",
+                background:
+                  "linear-gradient(to bottom , #a99981 , #ece5d3 , #a99981)",
                 padding: "10px 20px",
                 borderRadius: "32px",
                 fontWeight: 600,
@@ -511,7 +523,7 @@ export default function Wc22({
                                 : aiTeam?.ballHistory[index]
                             ]
                           }`
-                        : "2px solid #12174c"
+                        : "2px solid #53473a"
                       : aiTeam?.ballHistory[index] > 3 ||
                         aiTeam?.ballHistory[index] == "W"
                       ? `2px solid ${
@@ -521,18 +533,20 @@ export default function Wc22({
                               : aiTeam?.ballHistory[index]
                           ]
                         }`
-                      : "2px solid #12174c",
-
+                      : "2px solid #53473a",
                     color: batting
-                      ? userTeam?.ballHistory[index] > 3 ||
-                        userTeam?.ballHistory[index] == "W"
-                        ? "#FFFFFF"
-                        : "#12174c"
-                      : aiTeam?.ballHistory[index] > 3 ||
-                        aiTeam?.ballHistory[index] == "W"
-                      ? "#FFFFFF"
-                      : "#12174c",
-
+                      ? userTeam?.ballHistory[index] > 3
+                        ? teams.includes(
+                            batting ? userTeam?.name : aiTeam?.name
+                          )
+                          ? "#000000"
+                          : "#FFFFFF"
+                        : "#FFFFFF"
+                      : aiTeam?.ballHistory[index] > 3
+                      ? teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                        ? "#000000"
+                        : "#FFFFFF"
+                      : "#FFFFFF",
                     borderRadius: "50%",
                     padding: "2px",
                     display: "flex",
@@ -545,7 +559,7 @@ export default function Wc22({
                         batting
                           ? userTeam?.ballHistory[index]
                           : aiTeam?.ballHistory[index]
-                      ] || "radial-gradient( #fdfffc , #d7d8df)",
+                      ] || "radial-gradient( #6c6054 , #53473a)",
                   }}
                 >
                   {/* {ballHistory[index] ?? ""} */}
@@ -562,7 +576,9 @@ export default function Wc22({
           sx={{
             alignContent: "center",
             padding: "0px 100px 0 20px",
-            background: "linear-gradient(to bottom , #fdfffc , #d7d8df)",
+
+            background:
+              "linear-gradient(to bottom , #a99981 , #ece5d3 , #a99981)",
             borderRadius: "132px 0px 0px 132px",
           }}
         >

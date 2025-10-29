@@ -401,8 +401,8 @@ export default function Result() {
               variant="body1"
             >
               {winner == aiTeam?.name ? "-" : "+"}
-              <GiTrophy size={30} style={{ color: "#f6c401" }} />
               {Math.ceil(trophyInc)}
+              <GiTrophy size={30} style={{ color: "#f6c401" }} />
             </Typography>
           </Box>
 

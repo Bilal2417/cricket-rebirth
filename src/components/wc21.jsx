@@ -115,7 +115,7 @@ export default function Wc21({
                   alignItems: "baseline",
                   gap: "10px",
                   width: "50px",
-                  justifyContent: "center",
+                  justifyContent: "end",
                 }}
               >
                 <Typography
@@ -162,7 +162,7 @@ export default function Wc21({
                   alignItems: "baseline",
                   gap: "10px",
                   width: "50px",
-                  justifyContent: "center",
+                  justifyContent: "end",
                 }}
               >
                 <Typography

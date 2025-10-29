@@ -87,12 +87,12 @@ export default function ENG({
             <Typography
               sx={{
                 background: "linear-gradient(to bottom , #f9fbfa , #929f97 )",
-                padding: { xs : "7px 10px" , lg : "7px 20px"},
+                padding: "7px 10px" ,
                 textTransform: "uppercase",
                 color: "#2f3d56",
                 fontWeight: 600,
                 textAlign: "center",
-                minWidth: "80px",
+                minWidth: "100px",
                 boxShadow: "inset -4px 0 6px -2px rgba(0,0,0,0.1)",
               }}
               variant="body1"
@@ -109,13 +109,13 @@ export default function ENG({
                 }, ${
                   batting ? aiTeam?.primary : userTeam?.primary || "#c1ab11"
                 })`,
-                padding: "0px 10px",
+                paddingRight: "10px",
               }}
             >
               <Typography
                 sx={{
                   width: "90px",
-                  padding: "9px 0px",
+                  padding: "9px 0px 9px 10px",
                   textTransform: "uppercase",
                   color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
                     ? "#2f3d56"

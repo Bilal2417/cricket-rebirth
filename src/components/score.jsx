@@ -18,6 +18,7 @@ import PAK from "./pak";
 import ENG from "./eng";
 import WI from "./wi";
 import SA from "./sa";
+import Wtc from "./wtc";
 
 export default function ScoreCard() {
   const storedData = localStorage.getItem("cricketData");
@@ -96,6 +97,7 @@ export default function ScoreCard() {
     })`,
     wi: "#9c1444",
     sa: "#308bcb",
+    wtc: "#a99981",
   };
   
   const borderColors = {
@@ -113,6 +115,7 @@ export default function ScoreCard() {
     nz: "#c00050",
     wi: "#e04b7f",
     sa: "#1a528c",
+    wtc : "#ece5d3"
   };
 
   const handleBall = (run, Wkt = false, aiRun) => {
@@ -837,6 +840,25 @@ export default function ScoreCard() {
               isSix={isSix}
               randomBowler={randomBowler}
             />
+          ) : board == "wtc" ? (
+            <Wtc
+              batting={batting}
+              aiTeam={aiTeam}
+              userTeam={userTeam}
+              striker={striker}
+              nonStriker={nonStriker}
+              // getInitials={getInitials}
+              totalOvers={totalOvers}
+              over={over}
+              balls={balls}
+              show={show}
+              partnership={partnership}
+              partnershipBalls={partnershipBalls}
+              firstInnings={firstInnings}
+              target={target}
+              isSix={isSix}
+              randomBowler={randomBowler}
+            />
           ) : board == "ct25" ? (
             <Ct25
               batting={batting}
@@ -874,7 +896,7 @@ export default function ScoreCard() {
                   sx={{
                     background: colors[board],
                     color:
-                      board == "starter" || board == "pak" ? "#000" : "#FFFFFF",
+                      board == "starter" || board == "pak"  ? "#000" : "#FFFFFF",
                     width: "60px",
                     height: "60px",
                     padding: "4px 8px",

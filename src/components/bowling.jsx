@@ -1,6 +1,8 @@
 import { Box, Typography } from "@mui/material";
 
 export default function Bowling(squad) {
+  const bowling = squad.data;
+  
   const colors = {
     // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
     wc19: "#222589  ",
@@ -8,11 +10,10 @@ export default function Bowling(squad) {
     wc22: "#d71c59", //de265c
     wc24: "#fa208e", 
     ct25: "#02c208",
+    wtc: bowling?.primary,
   };
-
   const board = localStorage.getItem("Board");
 
-  const bowling = squad.data;
   return (
     <>
       <Box>

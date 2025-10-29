@@ -38,7 +38,7 @@ export default function Wc24({
     <>
       <Box
         sx={{
-          width: { xs : 'auto' , md : "100%"},
+          width: { xs: "auto", md: "100%" },
           backgroundColor: "#faf8fb",
           minHeight: "50px",
           display: "flex",
@@ -109,12 +109,13 @@ export default function Wc24({
                 alignItems: "baseline",
                 gap: "10px",
                 width: "50px",
-                justifyContent: "center",
+                justifyContent: "end",
               }}
             >
               <Typography
                 sx={{
                   color: "#e7d58d",
+                  fontWeight: 600,
                 }}
                 variant="body1"
               >
@@ -157,12 +158,13 @@ export default function Wc24({
                 alignItems: "baseline",
                 gap: "10px",
                 width: "50px",
-                justifyContent: "center",
+                justifyContent: "end",
               }}
             >
               <Typography
                 sx={{
                   color: "#e7d58d",
+                  fontWeight: 600,
                 }}
                 variant="body1"
               >
@@ -180,7 +182,6 @@ export default function Wc24({
             </Box>
           </Box>
         </Box>
-
 
         <Box
           sx={{
