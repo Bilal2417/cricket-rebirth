@@ -192,7 +192,7 @@ export default function Log() {
                           boxShadow: "3px 3px 8px -2px #000000",
                           borderRadius: "6px",
                         }}
-                        src={log.team1.flag}
+                        src={log.team1.flags}
                       />
                     </Box>
 
@@ -270,7 +270,7 @@ export default function Log() {
                           boxShadow: "3px 3px 8px -2px #000000",
                           borderRadius: "6px",
                         }}
-                        src={log.team2.flag}
+                        src={log.team2.flags}
                       />
                     </Box>
                   </Box>
