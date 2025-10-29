@@ -35,7 +35,7 @@ export default function NZ({
     return (words[0][0] + words[1][0]).toUpperCase();
   }
 
-  const teams = ["Australia", "UAE", "Sri Lanka", "India"];
+  const teams = ["Australia", "UAE", "Zimbabwe", "India"];
   return (
     <>
       <Box

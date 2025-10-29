@@ -22,6 +22,8 @@ export default function AUS({
     W: !batting ? userTeam?.primary : aiTeam?.primary,
     4: "#FFFFFF",
   };
+
+  const teams = ["Australia", "UAE", "Sri Lanka", "India", "Zimbabwe"];
   return (
     <>
       <Box
@@ -34,7 +36,7 @@ export default function AUS({
           alignItems: "flex-start",
           // mt: "100px",
           borderRadius: "64px",
-          width: { xs : "auto" , lg : "100%"},
+          width: { xs: "auto", lg: "100%" },
           boxShadow: `0 0 6px 2px black`,
           transform: { xs: "scale(0.7)", md: "scale(0.9)", lg: "scale(1.0)" },
         }}
@@ -43,7 +45,7 @@ export default function AUS({
           sx={{
             display: "flex",
             alignItems: "flex-end",
-            gap: { xs : "15px" , lg : "20px"},
+            gap: { xs: "15px", lg: "20px" },
           }}
         >
           <Box
@@ -82,7 +84,7 @@ export default function AUS({
                 fontSize: "1.8em !important",
                 transform: "scaleY(1.8)",
                 transformOrigin: "center",
-                color: batting ? userTeam?.primary : aiTeam?.primary,
+                color: batting ? userTeam?.secondary : aiTeam?.secondary,
               }}
               variant="h6"
             >
@@ -102,7 +104,7 @@ export default function AUS({
             </Typography>
             <Typography fontWeight={600} variant="body1">
               {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
-              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0} (totalOvers)
+              {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0} ({totalOvers})
             </Typography>
           </Box>
         </Box>
@@ -268,7 +270,7 @@ export default function AUS({
           sx={{
             display: "flex",
             alignItems: "flex-end",
-            gap: { xs : "15px" , lg : "30px"},
+            gap: { xs: "15px", lg: "30px" },
             position: "relative",
           }}
         >
@@ -324,10 +326,10 @@ export default function AUS({
               <Typography
                 sx={{
                   textTransform: "uppercase",
-                  color: !batting ? userTeam?.primary : aiTeam?.primary,
+                  color: !batting ? userTeam?.secondary : aiTeam?.secondary,
                   fontSize: "0.9em",
                   fontWeight: 600,
-                  minWidth : "80px"
+                  minWidth: "80px",
                 }}
                 variant="body1"
               >
@@ -342,7 +344,7 @@ export default function AUS({
               >
                 <Typography
                   sx={{
-                    color: !batting ? userTeam?.primary : aiTeam?.primary,
+                    color: !batting ? userTeam?.secondary : aiTeam?.secondary,
                     width: "50px",
                     textAlign: "center",
                   }}
@@ -352,7 +354,7 @@ export default function AUS({
                 </Typography>
                 <Typography
                   sx={{
-                    color: !batting ? userTeam?.primary : aiTeam?.primary,
+                    color: !batting ? userTeam?.secondary : aiTeam?.secondary,
                     fontSize: "0.75em",
                   }}
                   variant="body1"
@@ -396,14 +398,33 @@ export default function AUS({
                           ]
                         }`
                       : "2px solid #FFFFFF",
+                    color: (() => {
+                      const battingTeam = batting ? userTeam : aiTeam;
+                      const bowlingTeam = batting ? aiTeam : userTeam;
+                      const currentBall = battingTeam?.ballHistory[index];
 
-                    color: batting
-                      ? userTeam?.ballHistory[index] == 4
-                        ? "#000000"
-                        : "#FFFFFF"
-                      : aiTeam?.ballHistory[index] == 4
-                      ? "#0f0648"
-                      : "#FFFFFF",
+                      if (batting) {
+                        if (currentBall === "W") {
+                          if (teams.includes(bowlingTeam?.name))
+                            return "#000000";
+                          return "#FFFFFF";
+                        }
+                        if (currentBall === 4) return "#0f0648";
+                        if (currentBall < 4) return "#ffffff";
+                        if (teams.includes(battingTeam?.name)) return "#000000";
+                        return "#FFFFFF";
+                      } else {
+                        if (currentBall === "W") {
+                          if (teams.includes(bowlingTeam?.name))
+                            return "#000000";
+                          return "#FFFFFF";
+                        }
+                        if (currentBall === 4) return "#0f0648";
+                        if (currentBall < 4) return "#ffffff";
+                        if (teams.includes(battingTeam?.name)) return "#000000";
+                        return "#FFFFFF";
+                      }
+                    })(),
 
                     borderRadius: "50%",
                     padding: "2px",

@@ -29,7 +29,7 @@ export default function PAK({
     return (words[0][0] + words[1][0]).toUpperCase();
   }
 
-  const teams = ["Australia", "UAE", "Sri Lanka", "India"];
+  const teams = ["Australia", "UAE", "Sri Lanka", "India" , "Zimbabwe"];
   return (
     <>
       <Box
@@ -262,10 +262,10 @@ export default function PAK({
           sx={{
             // background:
             //   "linear-gradient(to bottom , #bec2b5 , #b6b8b4 , #929587 )",
-            background: `linear-gradient(to bottom, ${
-              batting ? userTeam?.secondary : aiTeam?.secondary || "#03a65a"
-            }, ${batting ? userTeam?.primary : aiTeam?.primary || "#01411c"})`,
-            // background : batting ? userTeam?.secondary : aiTeam?.primary,
+            // background: `linear-gradient(to bottom, ${
+            //   batting ? userTeam?.secondary : aiTeam?.secondary || "#03a65a"
+            // }, ${batting ? userTeam?.primary : aiTeam?.primary || "#01411c"})`,
+            background: batting ? userTeam?.secondary : aiTeam?.primary,
             position: "relative",
             display: "flex",
             alignItems: "center",
@@ -287,7 +287,9 @@ export default function PAK({
             >
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                    ? "#000000"
+                    : "#FFFFFF",
                   textTransform: "uppercase",
                   fontWeight: 600,
                   //   boxShadow: "0px 3px 8px -2px #929f97",
@@ -300,7 +302,9 @@ export default function PAK({
               </Typography>
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                    ? "#000000"
+                    : "#FFFFFF",
                   textTransform: "uppercase",
                   fontWeight: 600,
                 }}
@@ -329,7 +333,9 @@ export default function PAK({
             >
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                    ? "#000000"
+                    : "#FFFFFF",
                   textTransform: "uppercase",
                   fontWeight: 600,
                   //   boxShadow: "0px 3px 8px -2px #929f97",
@@ -342,7 +348,9 @@ export default function PAK({
               </Typography>
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                    ? "#000000"
+                    : "#FFFFFF",
                   textTransform: "uppercase",
                   fontWeight: 600,
                 }}
@@ -366,7 +374,9 @@ export default function PAK({
             >
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                    ? "#000000"
+                    : "#FFFFFF",
                   textTransform: "uppercase",
                   fontWeight: 600,
                   //   boxShadow: "0px 3px 8px -2px #929f97",
@@ -379,7 +389,9 @@ export default function PAK({
               </Typography>
               <Typography
                 sx={{
-                  color: "#fff",
+                  color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                    ? "#000000"
+                    : "#FFFFFF",
                   textTransform: "uppercase",
                   fontWeight: 600,
                 }}
@@ -500,13 +512,14 @@ export default function PAK({
                   top: -40,
                   left: 0,
                   fontSize: "0.8em",
-                  background: `linear-gradient(to bottom, ${
-                    batting
-                      ? userTeam?.secondary
-                      : aiTeam?.secondary || "#03a65a"
-                  }, ${
-                    batting ? userTeam?.primary : aiTeam?.primary || "#01411c"
-                  })`,
+                  // background: `linear-gradient(to bottom, ${
+                  //   batting
+                  //     ? userTeam?.secondary
+                  //     : aiTeam?.secondary || "#03a65a"
+                  // }, ${
+                  //   batting ? userTeam?.primary : aiTeam?.primary || "#01411c"
+                  // })`,
+                  background: batting ? userTeam?.primary : aiTeam?.primary,
                   padding: "6px 12px",
                 }}
               >

@@ -26,7 +26,7 @@ export default function Result() {
     wc19: "#222589  ",
     wc21: "#f83059 ", //f83059
     wc22: "#d71c59", //de265c
-    wc24: "#fa208e", 
+    wc24: "#fa208e",
     ct25: "#02c208",
   };
 
@@ -76,6 +76,7 @@ export default function Result() {
       trophyIncrement = trophyMap[wkts];
       // trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
       if (matchType === 2) {
+        trophyIncrement *= wkts === 100 ? 2 : 1.5;
         coinsIncrement =
           wkts === 100 ? trophyMap[wkts] * 3 : trophyMap[wkts] * 15;
       }
