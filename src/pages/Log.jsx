@@ -70,7 +70,7 @@ export default function Log() {
                 >
                   {(() => {
                     const now = new Date();
-                    const logTime = new Date(log.time);
+                    const logTime = new Date(log?.time);
                     const diffMs = now - logTime; // difference in milliseconds
 
                     const diffMins = Math.floor(diffMs / (1000 * 60));
@@ -104,16 +104,16 @@ export default function Log() {
                     }}
                     variant="h6"
                   >
-                    {isNaN(log.mode) ? log.mode : `${log.mode} overs`}
+                    {isNaN(log?.mode) ? log?.mode : `${log?.mode} overs`}
                   </Typography>
                   <Typography
                     sx={{
                       fontWeight: 600,
                       textTransform: "uppercase",
                       color:
-                        log.result == "Victory"
+                        log?.result == "Victory"
                           ? "#0ff110"
-                          : log.result == "Defeat"
+                          : log?.result == "Defeat"
                           ? "#c70400"
                           : "grey",
                       textShadow: `
@@ -125,7 +125,7 @@ export default function Log() {
                     }}
                     variant="h5"
                   >
-                    {log.result}
+                    {log?.result}
                   </Typography>
 
                   <Box
@@ -144,8 +144,8 @@ export default function Log() {
                       }}
                       variant="h6"
                     >
-                      {log.result == "Victory" ? "+" : "-"}
-                      {log.trophies}
+                      {log?.result == "Victory" ? "+" : "-"}
+                      {log?.trophies}
                     </Typography>
                     <GiTrophy size={30} style={{ color: "#f6c401" }} />
                   </Box>
@@ -182,7 +182,7 @@ export default function Log() {
                         }}
                         variant="h6"
                       >
-                        {log.team1.name}
+                        {log?.team1?.name}
                       </Typography>
                       <Box
                         component="img"
@@ -192,19 +192,19 @@ export default function Log() {
                           boxShadow: "3px 3px 8px -2px #000000",
                           borderRadius: "6px",
                         }}
-                        src={log.team1.flags}
+                        src={log?.team1?.flags}
                       />
                     </Box>
 
                     <Box>
                       <Typography variant="h4">
-                        {log.team1.runs}{" "}
-                        {log.team1.wickets == 10
+                        {log?.team1?.runs}{" "}
+                        {log?.team1?.wickets == 10
                           ? null
-                          : "/" + log.team1.wickets}
+                          : "/" + log?.team1?.wickets}
                       </Typography>
                       <Typography variant="body2">
-                        {log.team1.overs}.{log.team1.balls} overs
+                        {log?.team1?.overs}.{log?.team1?.balls} overs
                       </Typography>
                     </Box>
                   </Box>
@@ -237,13 +237,13 @@ export default function Log() {
                   >
                     <Box>
                       <Typography variant="h4">
-                        {log.team2.runs}{" "}
-                        {log.team2.wickets == 10
+                        {log?.team2?.runs}{" "}
+                        {log?.team2?.wickets == 10
                           ? null
-                          : "/" + log.team2.wickets}
+                          : "/" + log?.team2?.wickets}
                       </Typography>
                       <Typography variant="body2">
-                        {log.team2.overs}.{log.team2.balls} overs
+                        {log?.team2?.overs}.{log?.team2?.balls} overs
                       </Typography>
                     </Box>
                     <Box
@@ -260,7 +260,7 @@ export default function Log() {
                         }}
                         variant="h6"
                       >
-                        {log.team2.name}
+                        {log?.team2?.name}
                       </Typography>
                       <Box
                         component="img"
@@ -270,7 +270,7 @@ export default function Log() {
                           boxShadow: "3px 3px 8px -2px #000000",
                           borderRadius: "6px",
                         }}
-                        src={log.team2.flags}
+                        src={log?.team2?.flags}
                       />
                     </Box>
                   </Box>
