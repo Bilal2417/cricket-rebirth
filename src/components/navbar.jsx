@@ -12,7 +12,12 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Home, Person, Menu as MenuIcon } from "@mui/icons-material";
-import { GiNotebook, GiTrophy, GiTwoCoins } from "react-icons/gi";
+import {
+  GiHamburgerMenu,
+  GiNotebook,
+  GiTrophy,
+  GiTwoCoins,
+} from "react-icons/gi";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Navbar({ profile }) {
@@ -113,12 +118,30 @@ export default function Navbar({ profile }) {
             </Box>
 
             {/* Drawer Button */}
-            <IconButton
-              onClick={() => setOpenDrawer(true)}
-              sx={{ color: "#fff" }}
+
+            <Box
+              sx={{
+                ml : "20px",
+                backgroundColor: "#343c53",
+                padding: "5px 20px 0",
+                border: "2px solid #000000",
+                borderRadius: "4px",
+                boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                transform: "skew(-5deg)",
+                color: "#ffffff",
+                transition: "all 0.3s",
+                textAlign: "center",
+                ":hover": {
+                  cursor: "pointer",
+                  transform: "scale(1.1)",
+                },
+                ":active": { transform: "scale(1)" },
+              }}
+              onClick={() => setOpenDrawer(true)} 
             >
-              <MenuIcon />
-            </IconButton>
+              <GiHamburgerMenu size={25}
+               />
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
@@ -129,7 +152,14 @@ export default function Navbar({ profile }) {
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
       >
-        <Box sx={{ width: 250, backgroundColor: "#18171f", height: "100%" , padding : '50px 20px' }}>
+        <Box
+          sx={{
+            width: 250,
+            backgroundColor: "#18171f",
+            height: "100%",
+            padding: "50px 20px",
+          }}
+        >
           <List>
             {menuItems.map((item, index) => (
               <ListItem key={index} disablePadding>
@@ -144,15 +174,14 @@ export default function Navbar({ profile }) {
                     transform: "skew(-5deg)",
                     color: "#ffffff",
                     transition: "all 0.3s",
-                    textAlign : "center",
+                    textAlign: "center",
                     ":hover": {
                       cursor: "pointer",
-                      transform: "scale(1.1)",
                     },
                     ":active": { transform: "scale(1)" },
                   }}
                 >
-                  <GiNotebook size={30}/>
+                  <GiNotebook size={30} />
                   <ListItemText primary={item.label} />
                 </ListItemButton>
               </ListItem>
