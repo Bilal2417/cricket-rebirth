@@ -18,7 +18,7 @@ export async function handler(event) {
   try {
     await client.connect();
 
-    // ✅ Ensure table exists (now includes starter)
+    // ✅ Ensure table exists and includes battle_log
     await client.query(`
       CREATE TABLE IF NOT EXISTS profiles (
         id TEXT PRIMARY KEY,
@@ -34,8 +34,15 @@ export async function handler(event) {
         titles JSONB DEFAULT '[]'::jsonb,
         selected_title TEXT,
         starter BOOLEAN NOT NULL DEFAULT false,
-        last_active TIMESTAMP DEFAULT NOW()
+        last_active TIMESTAMP DEFAULT NOW(),
+        battle_log JSONB DEFAULT '[]'::jsonb   -- ✅ added column for logs
       )
+    `);
+
+    // ✅ Make sure battle_log exists for old rows too
+    await client.query(`
+      ALTER TABLE profiles
+      ADD COLUMN IF NOT EXISTS battle_log JSONB DEFAULT '[]'::jsonb
     `);
 
     let existing = await client.query(`SELECT * FROM profiles WHERE id=$1`, [
@@ -44,27 +51,28 @@ export async function handler(event) {
 
     let profile;
     if (existing.rows.length === 0) {
-      // ✅ Insert default profile including starter
+      // ✅ Insert default profile including battle_log
       const result = await client.query(
         `INSERT INTO profiles (
            id, name, tournaments, trophies, victories, coins, img,
-           unlocked_teams, unlocked_items, titles, selected_title, starter
+           unlocked_teams, unlocked_items, titles, selected_title, starter, battle_log
          )
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
          RETURNING *`,
         [
           profileId,
           "Dummy",
-          0,
-          0,
-          0,
-          0,
-          null,
-          JSON.stringify([]),
-          JSON.stringify(["starter"]),
-          JSON.stringify([]),
-          null,
-          false,
+          0, // tournaments
+          0, // trophies
+          0, // victories
+          0, // coins
+          null, // img
+          JSON.stringify([]), // unlocked_teams
+          JSON.stringify(["starter"]), // unlocked_items
+          JSON.stringify([]), // titles
+          null, // selected_title
+          false, // starter
+          JSON.stringify([]), // battle_log
         ]
       );
       profile = result.rows[0];
