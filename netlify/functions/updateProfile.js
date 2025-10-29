@@ -112,13 +112,16 @@ export async function handler(event) {
     let updatedBattleLog = currentBattleLog;
 
     if (battle_log) {
-      // Push new entry at the start
-      updatedBattleLog = [battle_log, ...currentBattleLog];
+      // Ensure we always add plain objects, never arrays
+      const newLogs = Array.isArray(battle_log) ? battle_log : [battle_log];
 
-      // Limit to last 10
-      if (updatedBattleLog.length > 10)
-        // updatedBattleLog = updatedBattleLog.slice(0, 10);
-        updatedBattleLog.pop();
+      // Flatten current logs and new ones (prevents nested arrays)
+      updatedBattleLog = [...newLogs, ...currentBattleLog].flat();
+
+      // Keep only 10 most recent logs
+      if (updatedBattleLog.length > 10) {
+        updatedBattleLog = updatedBattleLog.slice(0, 10);
+      }
     }
 
     // --- Update profile ---
