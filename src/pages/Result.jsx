@@ -205,12 +205,12 @@ export default function Result() {
         balls: bowlingTeam?.Ball,
         flags: bowlingTeam?.flag,
       },
-      result: winner == userTeam?.name ? "Victory" : "Defeat",
+      result: winner == userTeam?.name ? "Victory" : winner == aiTeam?.name ? "Defeat" : "Draw",
       trophies:
         matchType == 1
           ? 0
           : matchType == 2
-          ? Math.ceil(trophyMap[wkts] * 1.5)
+          ? (trophyMap[wkts])
           : Math.ceil(trophyMap[wkts] / 2),
       mode: wkts,
       time: new Date().toISOString(),
