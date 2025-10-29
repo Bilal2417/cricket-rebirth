@@ -1,8 +1,29 @@
 import { Box, Typography } from "@mui/material";
 import { GiTrophy } from "react-icons/gi";
 import bat from "/img/pak.png";
+import { useEffect, useState } from "react";
 export default function Log() {
   const ok = 10;
+
+  
+    const [profile, setProfile] = useState(null);
+
+    useEffect(() => {
+      const profileId = localStorage.getItem("MyId");
+      if (!profileId) return;
+  
+      // initial fetch
+      fetch(`/.netlify/functions/log?profileId=${profileId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.profile) {
+            setProfile(data.profile);
+            console.log(data.profile)
+          }
+        })
+        .catch((err) => console.error("Error fetching profile:", err));
+  }, []);
+
   return (
     <>
       <Box>

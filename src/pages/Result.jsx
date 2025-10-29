@@ -51,79 +51,6 @@ export default function Result() {
     console.log("hehe", overs);
   }, []);
 
-  const incrementTrophies = async (win, matchType, isKO = false) => {
-    const profileId = localStorage.getItem("MyId");
-
-    console.log(profileId, Profile, "all");
-    if (!Profile) return;
-
-    const overs = localStorage.getItem("Overs");
-    const wkts = Number(totalWkts) || Number(overs);
-
-    let trophyIncrement = 0;
-    let coinsIncrement = 0;
-
-    const trophyMap = {
-      1: 1, // 15 :10 : 5
-      3: 3, //45 :30 : 15
-      5: 5, //75 :50 : 25
-      10: 10, //150 :100 : 50
-      20: 15, //225 :150 : 75
-      100: 5, //15 : 10 : 5
-    };
-
-    if (win && !isKO) {
-      trophyIncrement = trophyMap[wkts];
-      // trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
-      if (matchType === 2) {
-        trophyIncrement *= wkts === 100 ? 2 : 1.5;
-        coinsIncrement =
-          wkts === 100 ? trophyMap[wkts] * 3 : trophyMap[wkts] * 15;
-      }
-      if (matchType === 1) {
-        trophyIncrement = Math.ceil(trophyMap[wkts] / 2);
-        coinsIncrement =
-          wkts === 100 ? trophyMap[wkts] * 2 : trophyMap[wkts] * 10;
-      }
-    } else if (!win && !isKO) {
-      coinsIncrement = wkts === 100 ? trophyMap[wkts] * 1 : trophyMap[wkts] * 5;
-    }
-
-    const updatedProfile = {
-      ...Profile,
-      id: profileId || Profile?.id,
-      victories: win ? Profile.victories + 1 : Profile.victories,
-      trophies: Profile.trophies + trophyIncrement,
-      coins: Profile.coins + coinsIncrement,
-    };
-
-    console.log(updatedProfile, "Profile that is sending");
-    setProfile(updatedProfile);
-
-    try {
-      const res = await fetch("/.netlify/functions/updateProfile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProfile),
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        setProfile(data.profile);
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
-
-        console.log("It runs in result");
-        window.dispatchEvent(new Event("profileUpdated"));
-        localStorage.setItem("refreshProfiles", "true");
-      } else {
-        console.error("Failed to update trophies in database");
-      }
-    } catch (err) {
-      console.error("Error updating trophies:", err);
-    }
-  };
-
   const [userTeam, setUserTeam] = useState(null);
   const [aiTeam, setAiTeam] = useState(null);
 
@@ -219,6 +146,111 @@ export default function Result() {
       trophyInc = 0;
     }
   }
+
+  const battingTeam = batting ? aiTeam : userTeam;
+  const bowlingTeam = !batting ? aiTeam : userTeam;
+
+  const incrementTrophies = async (win, matchType, isKO = false) => {
+    const profileId = localStorage.getItem("MyId");
+
+    console.log(profileId, Profile, "all");
+    if (!Profile) return;
+
+    const overs = localStorage.getItem("Overs");
+    const wkts = Number(totalWkts) || Number(overs);
+
+    let trophyIncrement = 0;
+    let coinsIncrement = 0;
+
+    const trophyMap = {
+      1: 1, // 15 :10 : 5
+      3: 3, //45 :30 : 15
+      5: 5, //75 :50 : 25
+      10: 10, //150 :100 : 50
+      20: 15, //225 :150 : 75
+      100: 5, //15 : 10 : 5
+    };
+
+    if (win && !isKO) {
+      trophyIncrement = trophyMap[wkts];
+      // trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
+      if (matchType === 2) {
+        trophyIncrement = Math.ceil(trophyIncrement * (wkts === 100 ? 2 : 1.5));
+        coinsIncrement =
+          wkts === 100 ? trophyMap[wkts] * 3 : trophyMap[wkts] * 15;
+      }
+      if (matchType === 1) {
+        trophyIncrement = Math.ceil(trophyMap[wkts] / 2);
+        coinsIncrement =
+          wkts === 100 ? trophyMap[wkts] * 2 : trophyMap[wkts] * 10;
+      }
+    } else if (!win && !isKO) {
+      coinsIncrement = wkts === 100 ? trophyMap[wkts] * 1 : trophyMap[wkts] * 5;
+    }
+
+    const battleLog = {
+      team1: {
+        name: battingTeam?.name,
+        runs: battingTeam?.score,
+        wickets: battingTeam?.wicket,
+        overs: battingTeam?.Over,
+        balls: battingTeam?.Ball,
+        flags: battingTeam?.flag,
+      },
+      team2: {
+        name: bowlingTeam?.name,
+        runs: bowlingTeam?.score,
+        wickets: bowlingTeam?.wicket,
+        overs: bowlingTeam?.Over,
+        balls: bowlingTeam?.Ball,
+        flags: bowlingTeam?.flag,
+      },
+      result: winner == userTeam?.name ? "Victory" : "Defeat",
+      trophies:
+        matchType == 1
+          ? 0
+          : matchType == 2
+          ? Math.ceil(trophyMap[wkts] * 1.5)
+          : Math.ceil(trophyMap[wkts] / 2),
+      mode: wkts,
+      time: new Date().toISOString(),
+    };
+
+    const updatedProfile = {
+      ...Profile,
+      id: profileId || Profile?.id,
+      victories: win ? Profile.victories + 1 : Profile.victories,
+      trophies: Profile.trophies + trophyIncrement,
+      coins: Profile.coins + coinsIncrement,
+      battle_log: battleLog, // ✅ send it here
+    };
+
+    console.log(updatedProfile, "Profile that is sending");
+    setProfile(updatedProfile);
+
+    try {
+      const res = await fetch("/.netlify/functions/updateProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProfile),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setProfile(data.profile);
+        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+
+        console.log("It runs in result");
+        window.dispatchEvent(new Event("profileUpdated"));
+        localStorage.setItem("refreshProfiles", "true");
+      } else {
+        console.error("Failed to update trophies in database");
+      }
+    } catch (err) {
+      console.error("Error updating trophies:", err);
+    }
+  };
 
   return (
     <>
@@ -373,12 +405,12 @@ export default function Result() {
                 color: "rgb(255 196 107)",
                 position: "absolute",
                 right: 90,
-                top: -10,
+                top: -7,
               }}
               variant="body1"
             >
               +
-              <GiTwoCoins size={30} style={{ color: "#f6c401" }} />
+              <GiTwoCoins size={25} style={{ color: "#f6c401" }} />
               {coinsInc} |
             </Typography>
             <Typography
@@ -396,13 +428,13 @@ export default function Result() {
                 color: "rgb(255 196 107)",
                 position: "absolute",
                 right: 10,
-                top: -10,
+                top: -7,
               }}
               variant="body1"
             >
               {winner == aiTeam?.name ? "-" : "+"}
               {Math.ceil(trophyInc)}
-              <GiTrophy size={30} style={{ color: "#f6c401" }} />
+              <GiTrophy size={25} style={{ color: "#f6c401" }} />
             </Typography>
           </Box>
 
