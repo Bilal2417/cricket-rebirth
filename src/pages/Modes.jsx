@@ -166,7 +166,7 @@ export default function Modes() {
           scrollBehavior: "smooth",
           scrollSnapType: "x mandatory",
           "& > *": { scrollSnapAlign: "center" },
-          p: 8,
+          p: { xs : 1 , md : 4},
           mt: 4,
           "&::-webkit-scrollbar": {
             height: "8px",
@@ -317,6 +317,7 @@ export default function Modes() {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "flex-end",
+                padding : "0 20px"
               }}
             >
               <Typography
@@ -366,7 +367,8 @@ export default function Modes() {
                 flexDirection: "column",
                 gap: "5px",
                 mt: "20px",
-                overflow: "scroll",
+                overflowY: "scroll",
+                padding : "0 10px"
               }}
             >
               {profiles?.map((prof, index) => {

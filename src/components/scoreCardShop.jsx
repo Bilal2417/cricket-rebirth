@@ -180,8 +180,9 @@ export default function ScoreCardShop() {
     }
   }, []);
 
-  const boardData = JSON.parse(localStorage.getItem("boardData")) || [];
-  const data = Number(boardData)
+  const boardData = JSON.parse(localStorage.getItem("boardData")) || {
+    values: [],
+  };
   return (
     <>
       <Box
@@ -192,7 +193,7 @@ export default function ScoreCardShop() {
         }}
       >
         {modePacks
-          .filter((f) => !data?.values?.includes(f.value))
+          .filter((f) => !boardData?.values?.includes(String(f.value)))
           .map((pack, index) => (
             <CardDesign key={pack.id} pack={pack} index={index} />
           ))}
