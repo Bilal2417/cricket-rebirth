@@ -17,8 +17,13 @@ export default function Toss() {
     wc19: "#222589  ",
     wc21: "#f83059 ", //f83059
     wc22: "#d71c59", //de265c
-    wc24: "#fa208e", 
+    wc24: "#fa208e",
     ct25: "#02c208",
+  };
+
+  const backColor = {
+    wc21: "linear-gradient(to bottom , rgb(113 17 233) , rgb(83 6 189) ) ", //5221ba
+    wc22: "linear-gradient(to bottom , rgb(15 185 217) , rgb(17 143 166) ) ", //5221ba
   };
 
   const handleToss = (choice) => {
@@ -84,7 +89,7 @@ export default function Toss() {
     };
 
     setProfile(updatedProfile);
-    console.log(updatedProfile,"/toss before");
+    console.log(updatedProfile, "/toss before");
 
     try {
       const res = await fetch("/.netlify/functions/updateProfile", {
@@ -96,7 +101,7 @@ export default function Toss() {
       const data = await res.json();
       if (data.success) {
         setProfile(data.profile);
-        console.log(data.profile,"/toss");
+        console.log(data.profile, "/toss");
         sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
         window.dispatchEvent(new Event("profileUpdated"));
       } else {
@@ -134,9 +139,13 @@ export default function Toss() {
                   fullWidth
                   sx={{
                     color: "#FFFFFF",
-                    backgroundColor: "#0f0648",
-                    borderBottom: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
-                    borderRight: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
+                    background: backColor[board] || "#0f0648",
+                    borderBottom: `4px solid ${
+                      colors[board] || "rgb(65, 38, 255)"
+                    }`,
+                    borderRight: `4px solid ${
+                      colors[board] || "rgb(65, 38, 255)"
+                    }`,
                     borderRadius: "12px",
                     transform: "skew(-5deg)",
                     width: "120px",
@@ -169,9 +178,13 @@ export default function Toss() {
                   fullWidth
                   sx={{
                     color: "#FFFFFF",
-                    backgroundColor: "#0f0648",
-                    borderBottom: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
-                    borderRight: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
+                    background: backColor[board] || "#0f0648",
+                    borderBottom: `4px solid ${
+                      colors[board] || "rgb(65, 38, 255)"
+                    }`,
+                    borderRight: `4px solid ${
+                      colors[board] || "rgb(65, 38, 255)"
+                    }`,
                     borderRadius: "12px",
                     width: "120px",
                     transform: "skew(-5deg)",

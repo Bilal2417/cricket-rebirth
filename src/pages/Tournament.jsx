@@ -695,12 +695,12 @@ export default function Tournament() {
 
     let coinsIncrement = 0;
     if (winner == userTeam) {
-      coinsIncrement = 3000;
+      coinsIncrement = 5000;
     }
     const updatedProfile = {
       ...Profile,
       id: profileId || Profile?.id,
-      tournaments : coinsIncrement == 3000 ?  Profile?.tournaments + 1 : Profile?.tournaments,
+      tournaments : coinsIncrement == 5000 ?  Profile?.tournaments + 1 : Profile?.tournaments,
       // victories: win ? Profile.victories + 1 : Profile.victories,
       coins: Profile.coins + coinsIncrement,
     };

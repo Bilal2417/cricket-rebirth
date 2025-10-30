@@ -183,6 +183,10 @@ export default function Modes() {
                       <strong>REQUIRED : </strong>Teams higher than{" "}
                       <strong>BRONZE</strong> and not{" "}
                       <strong>NETHERLANDS</strong>
+                      <br />
+                      <strong>REWARD: </strong>
+                      <strong>5000 </strong>
+                      Coins
                     </span>
                   )
                 }
@@ -434,6 +438,10 @@ export default function Modes() {
                       <br />
                       <strong>REQUIRED : </strong>Teams higher than{" "}
                       <strong>BRONZE</strong>
+                      <br />
+                      <strong>REWARD: </strong>
+                      <strong>1500 </strong>
+                      Coins
                     </span>
                   )
                 }

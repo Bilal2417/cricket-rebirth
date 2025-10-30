@@ -8,7 +8,7 @@ export default function Batting(squad) {
   const colors = {
     // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
     wc19: "#222589  ",
-    wc21: "#f83059 ",//f83059 
+    wc21: "linear-gradient(to bottom , rgb(215 21 73) , rgb(233 25 85) ) ", 
     wc22: "#d71c59",//de265c 
     wc24: "#fa208e",//de265c 
     ct25: "#02c208",

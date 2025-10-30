@@ -24,12 +24,15 @@ export default function Result() {
   const colors = {
     // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
     wc19: "#222589  ",
-    wc21: "#f83059 ", //f83059
+    wc21: "linear-gradient(to bottom , rgb(215 21 73) , rgb(233 25 85) )",
     wc22: "#d71c59", //de265c
     wc24: "#fa208e",
     ct25: "#02c208",
   };
 
+  const backColor = {
+    wc21: "linear-gradient(to bottom , rgb(113 17 233) , rgb(83 6 189) ) ", //5221ba
+  };
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -205,12 +208,17 @@ export default function Result() {
         balls: bowlingTeam?.Ball,
         flags: bowlingTeam?.flag,
       },
-      result: winner == userTeam?.name ? "Victory" : winner == aiTeam?.name ? "Defeat" : "Draw",
+      result:
+        winner == userTeam?.name
+          ? "Victory"
+          : winner == aiTeam?.name
+          ? "Defeat"
+          : "Draw",
       trophies:
         matchType == 1
           ? 0
           : matchType == 2
-          ? (trophyMap[wkts])
+          ? trophyMap[wkts]
           : Math.ceil(trophyMap[wkts] / 2),
       mode: wkts,
       time: new Date().toISOString(),
@@ -280,7 +288,7 @@ export default function Result() {
               display: "flex",
               alignItems: "center",
               padding: { xs: "2px 16px", md: "8px 16px" },
-              backgroundColor: "#FFFFFF",
+              background: "#FFFFFF",
               borderRadius: "12px 12px 0 0",
               overflow: "hidden",
               position: "relative",
@@ -324,7 +332,7 @@ export default function Result() {
             <Typography
               variant="h6"
               sx={{
-                backgroundColor: "#0f0648",
+                background: "#0f0648",
                 color: "#FFFFFF",
                 padding: "9px 16px",
                 fontWeight: 900,
@@ -374,7 +382,7 @@ export default function Result() {
           <Box
             sx={{
               padding: { xs: "1px 0px", md: "5px 0px" },
-              backgroundColor: "#0f0648",
+              background: backColor[board] || "#0f0648",
               position: "relative",
             }}
           >
@@ -402,7 +410,7 @@ export default function Result() {
                 padding: "15px 30px",
                 clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)",
                 justifyContent: "center",
-                color: "rgb(255 196 107)",
+                color: board == "wc21" ? "#FFFFFF" : "#f6c401",
                 position: "absolute",
                 right: 90,
                 top: -7,
@@ -410,7 +418,12 @@ export default function Result() {
               variant="body1"
             >
               +
-              <GiTwoCoins size={25} style={{ color: "#f6c401" }} />
+              <GiTwoCoins
+                size={25}
+                style={{
+                  color: board == "wc21" ? "#FFFFFF" : "#f6c401",
+                }}
+              />
               {coinsInc} |
             </Typography>
             <Typography
@@ -425,7 +438,7 @@ export default function Result() {
                 padding: "15px 30px",
                 clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)",
                 justifyContent: "center",
-                color: "rgb(255 196 107)",
+                color: board == "wc21" ? "#FFFFFF" : "#f6c401",
                 position: "absolute",
                 right: 10,
                 top: -7,
@@ -434,7 +447,10 @@ export default function Result() {
             >
               {winner == aiTeam?.name ? "-" : "+"}
               {Math.ceil(trophyInc)}
-              <GiTrophy size={25} style={{ color: "#f6c401" }} />
+              <GiTrophy
+                size={25}
+                style={{ color: board == "wc21" ? "#FFFFFF" : "#f6c401" }}
+              />
             </Typography>
           </Box>
 
@@ -446,7 +462,7 @@ export default function Result() {
             <Box
               sx={{
                 width: "50%",
-                backgroundColor: "#FFFFFF",
+                background: "#FFFFFF",
               }}
             >
               <Box
@@ -495,7 +511,7 @@ export default function Result() {
                         alignItems: "center",
                         justifyContent: "space-between",
                         color: "#0f0648",
-                        backgroundColor: "#FFFFFF",
+                        background: "#FFFFFF",
                         boxShadow: "0px 0px 9px -7px #000000",
                         borderRadius: "0px",
                         width: "100%",
@@ -565,7 +581,7 @@ export default function Result() {
             <Box
               sx={{
                 width: "50%",
-                backgroundColor: "#FFFFFF",
+                background: "#FFFFFF",
               }}
             >
               <Box
@@ -614,7 +630,7 @@ export default function Result() {
                         alignItems: "center",
                         justifyContent: "space-between",
                         color: "#0f0648",
-                        backgroundColor: "#FFFFFF",
+                        background: "#FFFFFF",
                         boxShadow: "0px 0px 9px -7px #000000",
                         borderRadius: "0px",
                         width: "100%",
@@ -685,7 +701,7 @@ export default function Result() {
           <Box
             sx={{
               display: "flex",
-              backgroundColor: "#FFFFFF",
+              background: "#FFFFFF",
             }}
           >
             <Box
@@ -737,7 +753,7 @@ export default function Result() {
                         alignItems: "center",
                         justifyContent: "space-between",
                         color: "#0f0648",
-                        backgroundColor: "#FFFFFF",
+                        background: "#FFFFFF",
                         boxShadow: "0px 0px 9px -7px #000000",
                         borderRadius: "0px",
                         width: "100%",
@@ -851,7 +867,7 @@ export default function Result() {
                         alignItems: "center",
                         justifyContent: "space-between",
                         color: "#0f0648",
-                        backgroundColor: "#FFFFFF",
+                        background: "#FFFFFF",
                         boxShadow: "0px 0px 9px -7px #000000",
                         borderRadius: "0px",
                         width: "100%",
@@ -920,7 +936,7 @@ export default function Result() {
 
           <Box
             sx={{
-              backgroundColor: "#0f0648",
+              background: backColor[board] || "#0f0648",
               borderRadius: "0 0 12px 12px",
               width: "100%",
               display: "flex",
@@ -1024,7 +1040,7 @@ export default function Result() {
             <Typography
               sx={{
                 // fontfamily: "Rubik",
-                color: "#dece43",
+                color: board == "wc21" ? "#FFFFFF" : "#dece43",
                 textTransform: "uppercase",
               }}
               variant="h5"
@@ -1044,7 +1060,7 @@ export default function Result() {
               <Typography
                 sx={{
                   // fontfamily: "Rubik",
-                  color: "#dece43",
+                  color: board == "wc21" ? "#FFFFFF" : "#dece43",
                   textTransform: "uppercase",
                   ml: "5px",
                   display: winner == "Match Tied" ? "none" : "",
@@ -1060,7 +1076,7 @@ export default function Result() {
               <Typography
                 sx={{
                   // fontfamily: "Rubik",
-                  color: "#dece43",
+                  color: board == "wc21" ? "#FFFFFF" : "#dece43",
                   textTransform: "uppercase",
                   ml: "5px",
                   display: winner == "Match Tied" ? "none" : "",

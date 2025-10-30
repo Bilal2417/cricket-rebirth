@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const flagGroups = [
   {
     value: 100,
-    price: 1000,
+    price: 2500,
     unlocks: [
       { country: "Pakistan", img: "/img/pak.png", key: "pak" },
       { country: "India", img: "/img/ind.png", key: "ind" },
@@ -18,7 +18,7 @@ const flagGroups = [
   },
   {
     value: 200,
-    price: 2000,
+    price: 4000,
     unlocks: [
       { country: "South Africa", img: "/img/sa.png", key: "sa" },
       { country: "England", img: "/img/eng.png", key: "eng" },
@@ -28,7 +28,7 @@ const flagGroups = [
   },
   {
     value: 300,
-    price: 5000,
+    price: 7500,
     unlocks: [
       { country: "World Cup 2019", img: "/img/wc19.png", key: "wc19" },
       { country: "World Cup 2021", img: "/img/wc21.png", key: "wc21" },

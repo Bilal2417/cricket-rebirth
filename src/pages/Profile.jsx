@@ -23,7 +23,7 @@ import { toast } from "react-toastify";
 import LoadingPage from "../components/loading";
 import imageCompression from "browser-image-compression";
 import { GiAchievement, GiStarMedal, GiTrophy } from "react-icons/gi";
-import avatar from "/img/dummy.png"
+import avatar from "/img/dummy.png";
 
 export default function Profile() {
   const location = useLocation();
@@ -75,7 +75,12 @@ export default function Profile() {
     setTempName(name);
     setOpen(true);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setCanSave(true);
+  };
+
+  const [canSave, setCanSave] = useState(false);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -98,6 +103,8 @@ export default function Profile() {
         setProfile((prev) => ({ ...prev, img: reader.result }));
       };
       reader.readAsDataURL(compressedFile);
+
+      setCanSave(true);
     } catch (err) {
       console.error("Image compression failed:", err);
     }
@@ -132,6 +139,7 @@ export default function Profile() {
         setName(data.profile.name);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
 
+        sessionStorage.removeItem("UserProfile")
         window.dispatchEvent(new Event("profileUpdated"));
         localStorage.setItem("refreshProfiles", "true");
 
@@ -157,7 +165,15 @@ export default function Profile() {
       )}
 
       {!showLoadingPage && profile && (
-        <Box sx={{ width: "fit-content", margin: "auto" }}>
+        <Box
+          sx={{
+            width: "fit-content",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            justifyContent: "start",
+          }}
+        >
           {/* Back Button */}
           <Box
             sx={{
@@ -282,6 +298,7 @@ export default function Profile() {
                       setShow(false);
                       if (title.value >= 10) {
                         setActiveTitle(title.name);
+                        setCanSave(true);
                       } else {
                         toast.error("Win tournaments 10 times to unlock title");
                       }
@@ -305,13 +322,20 @@ export default function Profile() {
 
           {/* Save Button */}
           <Button
-            onClick={handleSave}
+            onClick={() => {
+              if (!canSave) {
+                toast.error("Already saved!");
+              } else {
+                handleSave();
+                setCanSave(false);
+              }
+            }}
             sx={{
               backgroundColor: "#0174fe",
               color: "#FFFFFF",
               fontFamily: "sans-serif",
-              mt: 2,
-              width: "100%",
+              marging : "16px auto 0",
+              width: "80%",
               padding: "5px",
               transform: "skew(-10deg)",
               boxShadow: `

@@ -9,8 +9,7 @@ export default function useDisableBackButton() {
   useEffect(() => {
     const restrictedPaths = [
       "/toss",
-      "/gamePlay",
-      "/score",
+      "/gamePlay",      
       "/scoreBoardOpening",
       "/fixtures",
       "/shop",
@@ -20,7 +19,7 @@ export default function useDisableBackButton() {
 
     const isRestricted =
       restrictedPaths.some((path) => location.pathname.startsWith(path)) ||
-      location.pathname === "/";
+      (location.pathname === "/" || location.pathname === "/score");
 
     if (isRestricted) {
       // Push dummy history state so the user can't go back

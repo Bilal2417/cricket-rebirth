@@ -87,7 +87,7 @@ export default function ENG({
             <Typography
               sx={{
                 background: "linear-gradient(to bottom , #f9fbfa , #929f97 )",
-                padding: "7px 10px" ,
+                padding: "7px 10px",
                 textTransform: "uppercase",
                 color: "#2f3d56",
                 fontWeight: 600,
@@ -114,10 +114,12 @@ export default function ENG({
             >
               <Typography
                 sx={{
-                  width: "90px",
+                  width: "120px",
                   padding: "9px 0px 9px 10px",
                   textTransform: "uppercase",
-                  color: teams.includes(batting ? userTeam?.name : aiTeam?.name)
+                  color: teams.includes(
+                    !batting ? userTeam?.name : aiTeam?.name
+                  )
                     ? "#2f3d56"
                     : "#FFFFFF",
                   boxShadow: "inset -4px 0 6px -2px rgba(0,0,0,0.1)",
@@ -125,7 +127,7 @@ export default function ENG({
                 variant="body2"
               >
                 ovrs {batting ? userTeam?.Over || 0 : aiTeam?.Over || 0}.
-                {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0}
+                {batting ? userTeam?.Ball || 0 : aiTeam?.Ball || 0} ({totalOvers})
               </Typography>
 
               <Box
@@ -140,7 +142,11 @@ export default function ENG({
                 <Fade in={show == 0} timeout={500}>
                   <Typography
                     sx={{
-                      color: "#ffffff",
+                      color: teams.includes(
+                        !batting ? userTeam?.name : aiTeam?.name
+                      )
+                        ? "#2f3d56"
+                        : "#FFFFFF",
                       // fontfamily: "Rubik",
                       textTransform: "uppercase",
                       fontWeight: 600,
@@ -161,7 +167,11 @@ export default function ENG({
                 <Fade in={show == 1} timeout={500}>
                   <Typography
                     sx={{
-                      color: "#ffffff",
+                      color: teams.includes(
+                        !batting ? userTeam?.name : aiTeam?.name
+                      )
+                        ? "#2f3d56"
+                        : "#FFFFFF",
                       textTransform: "uppercase",
                       fontWeight: 600,
                       position: "absolute",
@@ -175,7 +185,11 @@ export default function ENG({
                 <Fade in={show == 2} timeout={500}>
                   <Typography
                     sx={{
-                      color: "#ffffff",
+                      color: teams.includes(
+                        !batting ? userTeam?.name : aiTeam?.name
+                      )
+                        ? "#2f3d56"
+                        : "#FFFFFF",
                       textTransform: "uppercase",
                       fontWeight: 600,
                       position: "absolute",
@@ -371,13 +385,15 @@ export default function ENG({
                 sx={{
                   width: "15px",
                   height: "15px",
-                  color: batting
-                    ? userTeam?.ballHistory[index] <= 3
-                      ? "#2f3d56"
-                      : "#FFFFFF"
-                    : aiTeam?.ballHistory[index] <= 3
-                    ? "#2f3d56"
-                    : "#FFFFFF",
+                  color:
+                  //  batting
+                  //   ? userTeam?.ballHistory[index] <= 3
+                  //     ? "#2f3d56"
+                  //     : "#FFFFFF"
+                  //   : aiTeam?.ballHistory[index] <= 3
+                  //   ? "#2f3d56"
+                  //   : 
+                    "#FFFFFF",
                   padding: "12px",
                   display: "flex",
                   alignItems: "center",
@@ -386,11 +402,11 @@ export default function ENG({
                   fontWeight: 900,
                   background: batting
                     ? userTeam?.ballHistory[index] > 3
-                      ? userTeam?.secondary
-                      : aiTeam?.secondary
+                      ? userTeam?.primary
+                      : aiTeam?.primary
                     : aiTeam?.ballHistory[index] > 3
-                    ? aiTeam?.secondary
-                    : userTeam?.secondary,
+                    ? aiTeam?.primary
+                    : userTeam?.primary,
                 }}
               >
                 {/* {ballHistory[index] ?? ""} */}

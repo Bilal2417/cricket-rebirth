@@ -255,17 +255,17 @@ export default function ProfileData() {
                        {
                          label: "Trophies",
                          icon: <GiTrophy size={25}/>,
-                         value: profile.trophies,
+                         value: profile?.trophies,
                        },
                        {
                          label: "Victories",
                          icon: <GiStarMedal size={25} />,
-                         value: profile.victories,
+                         value: profile?.victories,
                        },
                        {
                          label: "World Cup",
                          icon: <GiAchievement size={25}/>,
-                         value: profile.tournaments,
+                         value: profile?.tournaments,
                        },
                     // {
                     //   label: "KnockOut",

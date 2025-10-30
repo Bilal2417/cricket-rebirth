@@ -57,7 +57,7 @@ export default function Shop({ profile }) {
         <ModePack
           title="WORLD CUP ACCESS"
           value="worldcup"
-          price={5000}
+          price={10000}
           icon={<GiWorld size={40} style={{ color: "#fff" }} />}
           iconGrad="radial-gradient(circle at center, #00b894, #55efc4)"
           gradient="linear-gradient(135deg, #00b894, #55efc4)"
@@ -69,7 +69,7 @@ export default function Shop({ profile }) {
         <ModePack
           title="KNOCKOUT ACCESS"
           value="knockout"
-          price={2500}
+          price={5000}
           icon={<GiTrophy size={40} style={{ color: "#fff" }} />}
           iconGrad="radial-gradient(circle at center, #ff6b6b, #f06595)"
           gradient="linear-gradient(135deg, #ff6b6b, #f06595)"

@@ -2,16 +2,19 @@ import { Box, Typography } from "@mui/material";
 
 export default function Bowling(squad) {
   const bowling = squad.data;
-  
+
   const colors = {
-    // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
-    wc19: "#222589  ",
-    wc21: "#f83059 ", //f83059
-    wc22: "#d71c59", //de265c
-    wc24: "#fa208e", 
-    ct25: "#02c208",
-    wtc: bowling?.primary,
+    wc19: { bg: "#222589", text: "#222589" },
+    wc21: {
+      bg: "linear-gradient(to bottom, rgb(215, 21, 73), rgb(233, 25, 85))",
+      text: "#f83059",
+    },
+    wc22: { bg: "#d71c59", text: "#d71c59" },
+    wc24: { bg: "#fa208e", text: "#fa208e" },
+    ct25: { bg: "#02c208", text: "#02c208" },
+    wtc: { bg: bowling?.primary, text: bowling?.primary },
   };
+
   const board = localStorage.getItem("Board");
 
   return (
@@ -19,7 +22,7 @@ export default function Bowling(squad) {
       <Box>
         <Box
           sx={{
-            color:  colors[board] || "rgb(65, 38, 255)",
+            color: colors[board].text || "rgb(65, 38, 255)",
             backgroundColor: "#FFFFFF",
             boxShadow: "0px 4px 4px -3px #0003",
             width: "100%",
@@ -32,7 +35,7 @@ export default function Bowling(squad) {
               paddingRight: "35px",
               gap: "20px",
               justifyContent: "flex-end",
-              borderBottom: `2px solid ${colors[board] || "rgb(65, 38, 255)"}`,
+              borderBottom: `2px solid ${colors[board].text || "rgb(65, 38, 255)"}`,
             }}
           >
             <Typography
@@ -228,7 +231,7 @@ export default function Bowling(squad) {
         <Box>
           <Box
             sx={{
-              background: colors[board] ||"#4126ff",
+              background: colors[board].bg || "#4126ff",
               display: "flex",
               alignItems: "center",
               gap: "50px",

@@ -11,7 +11,7 @@ export default function ScoreCardShop() {
       id: 1,
       title: "Asian ScoreCard",
       value: 100,
-      price: 1000,
+      price: 2500,
       description:
         // "A beginner-friendly scorecard for quick matches and practice. Ideal to get started and track your progress.",
         "Covers teams— Pakistan, India, Bangladesh, Sri Lanka and West Indies. You can open detailed scorecards for these teams and track every ball.",
@@ -23,7 +23,7 @@ export default function ScoreCardShop() {
       id: 2,
       title: "SENA ScoreCard",
       value: 200,
-      price: 2000,
+      price: 4000,
       description:
         // "Advanced scorecard for longer matches and detailed stats. Perfect for competitive players wanting deeper insights.",
         "Includes teams from SENA countries — South Africa, New Zealand, England, and Australia. Detailed scorecards available for these matches.",
@@ -36,10 +36,10 @@ export default function ScoreCardShop() {
       id: 3,
       title: "World Cup ScoreCard",
       value: 300,
-      price: 5000,
+      price: 7500,
       description:
         // "Premium scorecard to record epic tournaments. Track top performances and unlock special achievements globally.",
-        "World Cup mode — unlock ICC scorecards for global tournaments and relive legendary match moments in full details.",
+        "World Cup mode — unlock advance ICC tournament scorecards for global tournaments and relive legendary match moments in full details.",
       icon: <GiWorld size={40} />,
       color: "#00b894",
       borderColor: "#55efc4",

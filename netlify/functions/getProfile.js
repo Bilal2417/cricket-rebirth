@@ -16,6 +16,9 @@ export async function handler() {
         trophies,
         unlocked_teams,
         selected_title,
+        victories,
+        tournaments,
+        selected_title,
         last_active ,
       img
       FROM profiles

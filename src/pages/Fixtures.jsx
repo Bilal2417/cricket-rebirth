@@ -121,6 +121,7 @@ export default function Fixtures() {
       ...Profile,
       id: profileId || Profile?.id,
       // knockOut: (Profile.knockout || 0) + 1,
+      coins: Profile.coins + 1500,
       titles: uniqueTitles,
     };
 
