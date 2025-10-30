@@ -166,8 +166,7 @@ export default function Modes() {
           scrollBehavior: "smooth",
           scrollSnapType: "x mandatory",
           "& > *": { scrollSnapAlign: "center" },
-          p: { xs : 1 , md : 4},
-          mt: 4,
+          p: { xs : 1 , md : 6},
           "&::-webkit-scrollbar": {
             height: "8px",
           },
@@ -367,7 +366,7 @@ export default function Modes() {
                 flexDirection: "column",
                 gap: "5px",
                 mt: "20px",
-                overflowY: "scroll",
+                overflowY: "auto",
                 padding : "0 10px"
               }}
             >
