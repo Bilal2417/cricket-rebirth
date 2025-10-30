@@ -366,13 +366,15 @@ export default function Modes() {
                 flexDirection: "column",
                 gap: "5px",
                 mt: "20px",
+                overflow: "scroll",
               }}
             >
               {profiles?.map((prof, index) => {
                 return (
                   <Box
                     sx={{
-                      backgroundColor: prof?.id == profileId ? "#eae8fc" : "#00001d",
+                      backgroundColor:
+                        prof?.id == profileId ? "#eae8fc" : "#00001d",
                       minWidth: "415px",
                       paddingLeft: "15px",
                       display: "flex",
@@ -405,8 +407,7 @@ export default function Modes() {
                     >
                       <Typography
                         sx={{
-                          backgroundColor:
-                            prof?.id == profileId ? "#3aecfa" : null,
+                          backgroundColor: index < 3 ? "#3aecfa" : null,
                           color: prof?.id == profileId ? "#00001d" : "#FFFFFF",
                           padding: "4px 12px",
                           fontWeight: 600,
@@ -422,7 +423,10 @@ export default function Modes() {
                         sx={{
                           width: 45,
                           height: 45,
-                          border: "2px solid #000",
+                          border:
+                            prof?.id == profileId
+                              ? "2px solid #000"
+                              : "2px solid #fff",
                           borderRadius: "4px",
                           objectFit: "cover",
                           "&:hover": { cursor: "pointer" },
@@ -443,6 +447,7 @@ export default function Modes() {
                               prof?.id == profileId
                                 ? "#00001d"
                                 : "rgb(255 196 107)",
+                            width: "90px",
                           }}
                           variant="body1"
                         >
@@ -523,7 +528,7 @@ export default function Modes() {
                         gap: "5px",
                         fontWeight: 600,
                         backgroundColor: "#61616135",
-                        padding: "15px 30px 15px 0",
+                        padding: "15px",
                         justifyContent: "center",
                         color: prof?.id == profileId ? "#00001d" : "#dfe451",
                       }}
