@@ -19,11 +19,13 @@ export default function Toss() {
     wc22: "#d71c59", //de265c
     wc24: "#fa208e",
     ct25: "#02c208",
+    wtc: "#000",
   };
 
   const backColor = {
     wc21: "linear-gradient(to bottom , rgb(113 17 233) , rgb(83 6 189) ) ", //5221ba
     wc22: "linear-gradient(to bottom , rgb(15 185 217) , rgb(17 143 166) ) ", //5221ba
+    wtc: "linear-gradient(to bottom , #a99981 , #ece5d3 , #a99981)", //5221ba
   };
 
   const handleToss = (choice) => {
@@ -68,6 +70,16 @@ export default function Toss() {
   }, []);
 
   const decrementTrophies = async () => {
+    const userMatch = JSON.parse(sessionStorage.getItem("latestUserMatch"));
+    const aiTeam = localStorage.getItem("Ai");
+    const userTeam = localStorage.getItem("User");
+
+    const updatedMatch = {
+      ...userMatch,
+      winner: aiTeam,
+      loser: userTeam,
+    };
+    sessionStorage.setItem("latestUserMatch", JSON.stringify(updatedMatch));
     if (!Profile) return;
 
     const trophyMap = {
@@ -138,7 +150,7 @@ export default function Toss() {
                 <Button
                   fullWidth
                   sx={{
-                    color: "#FFFFFF",
+                    color: board == "wtc" ? "#000000" : "#FFFFFF",
                     background: backColor[board] || "#0f0648",
                     borderBottom: `4px solid ${
                       colors[board] || "rgb(65, 38, 255)"
@@ -177,7 +189,7 @@ export default function Toss() {
                 <Button
                   fullWidth
                   sx={{
-                    color: "#FFFFFF",
+                    color: board == "wtc" ? "#000000" : "#FFFFFF",
                     background: backColor[board] || "#0f0648",
                     borderBottom: `4px solid ${
                       colors[board] || "rgb(65, 38, 255)"

@@ -98,14 +98,14 @@ export default function Wtc({
                   display: "flex",
                   alignItems: "center",
                   gap: "5px",
-                  width: "80px",
+                  width: "120px",
                 }}
               >
                 <Box
                   sx={{
                     width: "5px",
                     height: "5px",
-                    backgroundColor: "#da2c4e",
+                    backgroundColor: "#000000",
                     borderRadius: "50%",
                     marginLeft: "-10px",
                   }}
@@ -154,7 +154,7 @@ export default function Wtc({
                   color: "#0f0648",
                   fontSize: "0.9em",
                   // fontfamily: "Rubik",
-                  width: "80px",
+                  width: "120px",
                 }}
                 variant="body1"
               >
@@ -206,7 +206,7 @@ export default function Wtc({
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "10px",
-                background: "linear-gradient(to right , #2f5e84 , #113f63)",
+                // background: "linear-gradient(to right , #2f5e84 , #113f63)",
                 paddingRight: "10px",
               }}
             >
@@ -225,8 +225,8 @@ export default function Wtc({
                 <Box
                   sx={{
                     display: "flex",
-                    alignItems: "baseline",
-                    gap: "10px",
+                    alignItems: "center",
+                    gap: "5px",
                     // background: batting ? userTeam?.primary : aiTeam?.primary,
                     background: `linear-gradient(to right, ${
                       batting
@@ -248,10 +248,10 @@ export default function Wtc({
                         ? "#000000"
                         : "#faf8fb",
                       textTransform: "uppercase",
-                      fontSize: "1.4em !important",
+                      // fontSize: "1.4em !important",
                       fontWeight: 600,
                     }}
-                    variant="h6"
+                    variant="h5"
                   >
                     {!batting
                       ? getInitials(aiTeam?.name || "Robo")
@@ -272,7 +272,6 @@ export default function Wtc({
                         )
                           ? "#000000"
                           : "#faf8fb",
-                        fontSize: "0.9em",
                         fontWeight: "600",
                         width: "100px",
                         textAlign: "center",

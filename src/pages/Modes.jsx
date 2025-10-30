@@ -1,19 +1,28 @@
 import { Box, Button, IconButton, Popover, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import OversThreeIcon from "../components/overIcon";
+import { EmojiEventsSharp, Help, Lock } from "@mui/icons-material";
+import { useEffect, useState } from "react";
 import {
-  EmojiEventsSharp,
-  Help,
-  Lock,
-  LockOutlined,
-  Security,
-} from "@mui/icons-material";
-import { useState } from "react";
-import { FaSkull } from "react-icons/fa";
-import { GiSkullCrossedBones } from "react-icons/gi";
+  GiPointySword,
+  GiSkullCrossedBones,
+  GiTicket,
+  GiTrophy,
+  GiTwoCoins,
+} from "react-icons/gi";
+import { keyframes } from "@emotion/react";
 
 export default function Modes() {
   const navigate = useNavigate();
+
+  const shimmer = keyframes`
+    0% {
+      background-position: -400px 0;
+    }
+    100% {
+      background-position: 400px 0;
+    }
+  `;
 
   const trophyMap = {
     1: 1,
@@ -25,26 +34,11 @@ export default function Modes() {
   };
 
   const overs = [
-    {
-      value: 1,
-      wkt: 1,
-    },
-    {
-      value: 3,
-      wkt: 3,
-    },
-    {
-      value: 5,
-      wkt: 5,
-    },
-    {
-      value: 10,
-      wkt: 10,
-    },
-    {
-      value: 20,
-      wkt: 10,
-    },
+    { value: 1, wkt: 1 },
+    { value: 3, wkt: 3 },
+    { value: 5, wkt: 5 },
+    { value: 10, wkt: 10 },
+    { value: 20, wkt: 10 },
   ].map((over) => ({
     ...over,
     desc: (
@@ -59,26 +53,25 @@ export default function Modes() {
   }));
 
   const storedProfile = sessionStorage.getItem("UserProfile");
-  const [Profile, setProfile] = useState(
-    storedProfile ? JSON.parse(storedProfile) : ""
-  );
+  const [Profile] = useState(storedProfile ? JSON.parse(storedProfile) : "");
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverDesc, setPopoverDesc] = useState("");
-  const [activeIndex, setActiveIndex] = useState(null);
 
-  const [unlocked, setUnlocked] = useState(
+  const [unlocked] = useState(
     () => !!Profile?.unlocked_items?.includes("worldcup")
   );
 
-  const [unlockedKO, setUnlockedKO] = useState(
+  const [unlockedKO] = useState(
     () => !!Profile?.unlocked_items?.includes("knockout")
   );
 
-  const [saved, setSaved] = useState(() => {
+  const [saved] = useState(() => {
     const storedCup = localStorage.getItem("tournamentData");
     return storedCup ? true : false;
   });
+
+  const [profiles, setProfiles] = useState([]);
 
   const handlePopoverOpen = (event, desc) => {
     event.stopPropagation();
@@ -91,44 +84,496 @@ export default function Modes() {
     setPopoverDesc("");
   };
 
+  const profileId = localStorage.getItem("MyId");
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchProfiles = async (force = false) => {
+      try {
+        const cached = JSON.parse(
+          sessionStorage.getItem("profilesData") || "{}"
+        );
+        const now = Date.now();
+        const myProfile = JSON.parse(sessionStorage.getItem("UserProfile"));
+
+        if (
+          !force &&
+          cached.timestamp &&
+          now - cached.timestamp < 2 * 60 * 1000
+        ) {
+          setProfiles(cached.data);
+
+          // const matchedProfile = data.profiles.find((p) => p.id === profileId);
+          // if (myProfile) setUserProfile(myProfile);
+
+          return;
+        }
+
+        const res = await fetch("/.netlify/functions/getProfile");
+        const data = await res.json();
+
+        if (isMounted && data?.success && data.profiles) {
+          setProfiles(data.profiles);
+          sessionStorage.setItem(
+            "profilesData",
+            JSON.stringify({ data: data.profiles, timestamp: now })
+          );
+
+          // const matchedProfile = data.profiles.find((p) => p.id === profileId);
+          // if (myProfile) setUserProfile(myProfile);
+        }
+      } catch (err) {
+        console.error("Error fetching profiles:", err);
+      }
+    };
+
+    fetchProfiles(); // initial fetch
+
+    const handleStorageChange = (e) => {
+      if (e.key === "refreshProfiles" && e.newValue === "true") {
+        console.log("♻️ It runs in home (storage event)");
+        fetchProfiles(true);
+        localStorage.removeItem("refreshContest"); // reset after use
+      }
+    };
+
+    // ✅ Listen to localStorage changes (cross-page)
+    window.addEventListener("storage", handleStorageChange);
+
+    // ✅ Also handle direct page navigation case (when flag is already set)
+    if (localStorage.getItem("refreshContest") === "true") {
+      console.log("♻️ It runs in home (flag detected on mount)");
+      fetchProfiles(true);
+      localStorage.removeItem("refreshContest");
+    }
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [profileId]);
+
   return (
     <>
       <Box
         sx={{
           minHeight: "100vh",
-          width: "100%",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          gap: "20px",
-          py: 8,
-          px: 2,
+          alignItems: "stretch",
+          gap: 8,
+          overflowX: "scroll",
+          overflowY: "hidden",
+          scrollBehavior: "smooth",
+          scrollSnapType: "x mandatory",
+          "& > *": { scrollSnapAlign: "center" },
+          p: 8,
+          mt: 4,
+          "&::-webkit-scrollbar": {
+            height: "8px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#444",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "transparent",
+          },
         }}
       >
+        <Box
+          sx={{
+            display: "flex",
+            gap: "20px",
+          }}
+        >
+          <Button
+            sx={{
+              height: "100%",
+              flexShrink: 0,
+              minWidth: 250,
+              background: !unlocked
+                ? "linear-gradient(to top, #f5214b, #8e0e2f)"
+                : "#f55c73",
+              color: !unlocked ? "#FFFFFF" : "#a0a0a0",
+              textShadow: `
+              -1px -1px 0 #000,  
+              1px -1px 0 #000,
+              -1px  1px 0 #000,
+              2px  1.5px 0 #000
+            `,
+              padding: "10px 40px",
+              fontSize: "1.1em",
+              // transform: "skew(-10deg)",
+              boxShadow: `
+              inset 0px -8px 8px -4px #262e40,   
+              inset 0px 8px 8px -4px rgb(193 193 193)       
+            `,
+              borderRadius: "4px",
+              transition: "all 0.3s",
+              overflow: "hidden",
+              position: "relative",
+              border: "2px solid black",
+              ":hover": {
+                cursor: unlocked ? "pointer" : "not-allowed",
+              },
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <Box>
+              {/* {!unlocked && (
+              <Lock
+                sx={{
+                  position: "absolute",
+                  top: "30%",
+                  left: "35%",
+                  fontSize: 75,
+                  color: "#000",
+                }}
+              />
+            )} */}
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+                variant="h5"
+              >
+                <EmojiEventsSharp />
+                Contest
+                <IconButton
+                  type="button"
+                  onClick={(e) =>
+                    handlePopoverOpen(
+                      e,
+                      <span>
+                        In Tournament mode, each match is <strong>10</strong>{" "}
+                        overs with <strong>10</strong> wickets.{" "}
+                        <strong>All teams</strong> face each other, and the{" "}
+                        <strong>strongest team</strong> wins the tournament.
+                        <br />
+                        <strong>REQUIRED:</strong> Teams higher than{" "}
+                        <strong>BRONZE</strong> and not{" "}
+                        <strong>NETHERLANDS</strong>
+                        <br />
+                        <strong>REWARD:</strong> <strong>5000</strong> Coins
+                      </span>
+                    )
+                  }
+                  sx={{
+                    position: "absolute",
+                    top: -4,
+                    right: -4,
+                    width: 32,
+                    height: 32,
+                    backgroundColor: "#fa208e",
+                    color: "#fff",
+                    "&:hover": { backgroundColor: "#ff4eb0" },
+                    boxShadow: "0px 2px 5px rgba(0,0,0,0.3)",
+                  }}
+                >
+                  <Help sx={{ fontSize: "18px", color: "#FFFFFF" }} />
+                </IconButton>
+              </Typography>
+              <Button
+                // onClick={() => {
+                //   navigate("/");
+                //   localStorage.setItem("Overs", 10);
+                //   sessionStorage.setItem("mode", `CONTEST`);
+                // }}
+                sx={{
+                  // fontfamily: "Rubik",
+                  backgroundColor: "#f6c401",
+                  color: "#FFFFFF",
+                  textShadow: `
+                  -1px -1px 0 #000,  
+                   1px -1px 0 #000,
+                  -1px  1px 0 #000,
+                   2px  1.5px 0 #000
+                `,
+                  padding: "10px 40px",
+                  fontSize: "1.2em",
+                  mt: "50px",
+                  boxShadow: "inset 0px -8px 8px -4px #b7560f",
+                  borderRadius: "4px",
+                  transition: "all 0.3s",
+                  border: "2px solid black",
+                  ":hover": {
+                    background: "#c59e04ff",
+                  },
+                }}
+              >
+                Play
+              </Button>
+            </Box>
+          </Button>
+
+          <Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+              }}
+            >
+              <Typography
+                sx={{
+                  textTransform: "uppercase",
+                  color: "#ffffff",
+                  fontWeight: 600,
+                  minWidth: "120px",
+                }}
+                variant="h3"
+              >
+                day 1/3
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "5px",
+                }}
+              >
+                <Typography
+                  sx={{
+                    textTransform: "uppercase",
+                    fontWeight: 600,
+                    color: "#dfe451",
+                  }}
+                  variant="body1"
+                >
+                  Score High
+                </Typography>
+                <Typography
+                  sx={{
+                    textTransform: "uppercase",
+                    fontWeight: 600,
+                    color: "#f6821b",
+                    minWidth: "120px",
+                  }}
+                  variant="h6"
+                >
+                  Win Rewards
+                </Typography>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "5px",
+                mt: "20px",
+              }}
+            >
+              {profiles?.map((prof, index) => {
+                return (
+                  <Box
+                    sx={{
+                      backgroundColor: prof?.id == profileId ? "#eae8fc" : "#00001d",
+                      minWidth: "415px",
+                      paddingLeft: "15px",
+                      display: "flex",
+                      alignContent: "center",
+                      justifyContent: "space-between",
+                      border: "2px solid #000000",
+                      borderRadius: "4px",
+                      boxShadow:
+                        prof?.id == profileId
+                          ? "inset 0px -8px 8px -4px #eae8fc"
+                          : "inset 0px -8px 8px -4px #00001d",
+                      transition: "all 0.3s",
+                      transform: "skew(-5deg)",
+                      "@media (hover: hover)": {
+                        cursor: "pointer",
+                        opacity: 0.9,
+                      },
+                      ":active": {
+                        transform: "scale(0.9)",
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        position: "relative",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          backgroundColor:
+                            prof?.id == profileId ? "#3aecfa" : null,
+                          color: prof?.id == profileId ? "#00001d" : "#FFFFFF",
+                          padding: "4px 12px",
+                          fontWeight: 600,
+                        }}
+                        variant="body1"
+                      >
+                        {index + 1}
+                      </Typography>
+                      <Box
+                        component="img"
+                        src={prof?.img}
+                        alt={prof?.name}
+                        sx={{
+                          width: 45,
+                          height: 45,
+                          border: "2px solid #000",
+                          borderRadius: "4px",
+                          objectFit: "cover",
+                          "&:hover": { cursor: "pointer" },
+                        }}
+                      />
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "flex-start",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 600,
+                            color:
+                              prof?.id == profileId
+                                ? "#00001d"
+                                : "rgb(255 196 107)",
+                          }}
+                          variant="body1"
+                        >
+                          {prof?.name}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    <Typography
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        fontWeight: 600,
+                        padding: "15px",
+                        justifyContent: "center",
+                        color: prof?.id == profileId ? "#d72c09ff" : "#FFFFFF",
+                      }}
+                      variant="body1"
+                    >
+                      <GiTicket
+                        size={25}
+                        style={{
+                          color:
+                            prof?.id == profileId ? "#d72c09ff" : "#FFFFFF",
+                        }}
+                      />
+                      <Box
+                        sx={{ minWidth: "30px", textAlign: "center" }}
+                        component="span"
+                      >
+                        3
+                      </Box>
+                    </Typography>
+
+                    <Typography
+                      sx={{
+                        display: index > 2 ? "none" : "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        fontWeight: 600,
+                        padding: "15px 15px 15px 0",
+                        justifyContent: "center",
+                        color:
+                          prof?.id == profileId
+                            ? "#f47909"
+                            : "rgb(255 196 107)",
+                      }}
+                      variant="body1"
+                    >
+                      <GiTwoCoins
+                        size={25}
+                        style={{
+                          color:
+                            prof?.id == profileId
+                              ? "#f47909"
+                              : "rgb(255 196 107)",
+                        }}
+                      />
+                      <Box
+                        sx={{ minWidth: "30px", textAlign: "center" }}
+                        component="span"
+                      >
+                        {index == 0
+                          ? 1000
+                          : index == 1
+                          ? 500
+                          : index == 2
+                          ? 300
+                          : null}
+                      </Box>
+                    </Typography>
+
+                    <Typography
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        fontWeight: 600,
+                        backgroundColor: "#61616135",
+                        padding: "15px 30px 15px 0",
+                        justifyContent: "center",
+                        color: prof?.id == profileId ? "#00001d" : "#dfe451",
+                      }}
+                      variant="body1"
+                    >
+                      <GiPointySword
+                        size={25}
+                        style={{
+                          color: prof?.id == profileId ? "#00001d" : "#dfe451",
+                        }}
+                      />
+                      <Box
+                        sx={{ minWidth: "30px", textAlign: "center" }}
+                        component="span"
+                      >
+                        30
+                      </Box>
+                    </Typography>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+        </Box>
+        {/* World Cup */}
         <Button
           sx={{
-            // fontfamily: "Rubik",
+            flexShrink: 0,
+            minWidth: 250,
             backgroundColor: unlocked ? "#f5214b" : "#f55c73",
             color: unlocked ? "#FFFFFF" : "#a0a0a0",
             textShadow: `
-          -1px -1px 0 #000,  
-          1px -1px 0 #000,
-          -1px  1px 0 #000,
-           2px  1.5px 0 #000
-        `,
+              -1px -1px 0 #000,  
+              1px -1px 0 #000,
+              -1px  1px 0 #000,
+              2px  1.5px 0 #000
+            `,
             padding: "10px 40px",
             fontSize: "1.1em",
-            transform: "skew(-20deg)",
+            transform: "skew(-10deg)",
             boxShadow: `
-      inset 0px -8px 8px -4px #262e40,   
-      inset 0px 8px 8px -4px rgb(193 193 193)       
-    `,
+              inset 0px -8px 8px -4px #262e40,   
+              inset 0px 8px 8px -4px rgb(193 193 193)       
+            `,
             borderRadius: "4px",
             transition: "all 0.3s",
             overflow: "hidden",
+            position: "relative",
             border: "2px solid black",
             ":hover": {
-              transform: "scale(1.02)",
               cursor: unlocked ? "pointer" : "not-allowed",
             },
             display: "flex",
@@ -144,22 +589,21 @@ export default function Modes() {
               handlePopoverOpen(e, <strong>Buy this item from shop</strong>);
             }
           }}
-          // disabled={!saved}
         >
           <Box>
             {!unlocked && (
               <Lock
                 sx={{
                   position: "absolute",
-                  top: 10,
-                  fontSize: 50,
+                  top: "30%",
+                  left: "35%",
+                  fontSize: 75,
                   color: "#000",
                 }}
               />
             )}
             <Typography
               sx={{
-                // fontfamily: "Rubik",
                 fontWeight: 600,
                 display: "flex",
                 alignItems: "center",
@@ -180,13 +624,11 @@ export default function Modes() {
                       <strong>All teams</strong> face each other, and the{" "}
                       <strong>strongest team</strong> wins the tournament.
                       <br />
-                      <strong>REQUIRED : </strong>Teams higher than{" "}
+                      <strong>REQUIRED:</strong> Teams higher than{" "}
                       <strong>BRONZE</strong> and not{" "}
                       <strong>NETHERLANDS</strong>
                       <br />
-                      <strong>REWARD: </strong>
-                      <strong>5000 </strong>
-                      Coins
+                      <strong>REWARD:</strong> <strong>5000</strong> Coins
                     </span>
                   )
                 }
@@ -207,8 +649,9 @@ export default function Modes() {
             </Typography>
             <Typography
               sx={{
-                // fontfamily: "Rubik",
+                minWidth: "165px",
                 fontWeight: 600,
+                mt: 1,
               }}
               variant={saved ? "h3" : "body1"}
             >
@@ -216,112 +659,94 @@ export default function Modes() {
             </Typography>
           </Box>
         </Button>
+
+        {/* Overs Modes */}
         <Box
           sx={{
             display: "grid",
             gridTemplateColumns: { xs: "repeat(2,1fr)", md: "repeat(3,1fr)" },
-            gap: "20px",
+            gap: "15px",
+            flexShrink: 0,
+            minWidth: "fit-content",
           }}
         >
-          {overs.map((over, index) => {
-            return (
-              <Button
-                key={index}
+          {overs.map((over, index) => (
+            <Button
+              key={index}
+              sx={{
+                background: "linear-gradient(#60da01 , #90e100)",
+                color: "#FFFFFF",
+                textShadow: `
+                  -1px -1px 0 #000,  
+                  1px -1px 0 #000,
+                  -1px  1px 0 #000,
+                  2px  1.5px 0 #000
+                `,
+                overflow: "hidden",
+                maxWidth: "210px",
+                fontSize: "1.1em",
+                boxShadow: `
+                  inset 0px -8px 8px -4px #262e40,   
+                  inset 0px 8px 8px -4px rgb(193 193 193)       
+                `,
+                borderRadius: "4px",
+                transition: "all 0.3s",
+                border: "2px solid black",
+                transform: "skew(-10deg)",
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                flexShrink: 0,
+              }}
+              onClick={() => {
+                navigate("/");
+                localStorage.setItem("Overs", over.value);
+                sessionStorage.setItem("mode", `${over.value} OVERS`);
+              }}
+            >
+              <OversThreeIcon value={over.value} />
+              Overs
+              <IconButton
+                type="button"
+                onClick={(e) => handlePopoverOpen(e, overs[index].desc)}
                 sx={{
-                  // fontfamily: "Rubik",
-                  background: "linear-gradient(#60da01 , #90e100)",
-                  color: "#FFFFFF",
-                  textShadow: `
-          -1px -1px 0 #000,  
-           1px -1px 0 #000,
-          -1px  1px 0 #000,
-           2px  1.5px 0 #000
-        `,
-                  overflow: "hidden",
-                  padding: "10px 40px",
-                  fontSize: "1.1em",
-                  boxShadow: `
-      inset 0px -8px 8px -4px #262e40,   
-      inset 0px 8px 8px -4px rgb(193 193 193)       
-    `,
-                  borderRadius: "4px",
-                  transition: "all 0.3s",
-                  border: "2px solid black",
-                  transform: "skew(-20deg)",
-                  ":hover": {
-                    transform: "scale(1.02)",
-                  },
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                }}
-                onClick={() => {
-                  navigate("/");
-                  localStorage.setItem("Overs", over.value);
-                  sessionStorage.setItem("mode", `${over.value} OVERS`);
+                  position: "absolute",
+                  top: -4,
+                  right: -4,
+                  width: 32,
+                  height: 32,
+                  backgroundColor: "#fa208e",
+                  color: "#fff",
+                  "&:hover": { backgroundColor: "#ff4eb0" },
+                  boxShadow: "0px 2px 5px rgba(0,0,0,0.3)",
                 }}
               >
-                <OversThreeIcon value={over.value} />
-                Overs
-                <IconButton
-                  type="button"
-                  onClick={(e) => handlePopoverOpen(e, overs[index].desc)}
-                  sx={{
-                    position: "absolute",
-                    top: -4,
-                    right: -4,
-                    width: 32,
-                    height: 32,
-                    backgroundColor: "#fa208e",
-                    color: "#fff",
-                    "&:hover": { backgroundColor: "#ff4eb0" },
-                    boxShadow: "0px 2px 5px rgba(0,0,0,0.3)",
-                  }}
-                >
-                  <Help sx={{ fontSize: "18px", color: "#FFFFFF" }} />
-                </IconButton>
-              </Button>
-            );
-          })}
-          <Popover
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            onClose={handlePopoverClose}
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            transformOrigin={{ vertical: "top", horizontal: "right" }}
-            disableRestoreFocus
-          >
-            <Typography sx={{ p: 1, fontSize: "0.85em", width: "200px" }}>
-              {popoverDesc}
-            </Typography>
-          </Popover>
-
+                <Help sx={{ fontSize: "18px", color: "#FFFFFF" }} />
+              </IconButton>
+            </Button>
+          ))}
           <Button
             sx={{
-              // fontfamily: "Rubik",
+              flexShrink: 0,
+              minWidth: 210,
               backgroundColor: "#8237ca",
               color: "#FFFFFF",
               textShadow: `
-          -1px -1px 0 #000,  
-           1px -1px 0 #000,
-          -1px  1px 0 #000,
-           2px  1.5px 0 #000
-        `,
+              -1px -1px 0 #000,  
+              1px -1px 0 #000,
+              -1px  1px 0 #000,
+              2px  1.5px 0 #000
+            `,
               padding: "10px 40px",
               fontSize: "1.1em",
-
-              transform: "skew(-20deg)",
+              transform: "skew(-10deg)",
               boxShadow: `
-      inset 0px -8px 8px -4px #262e40,   
-      inset 0px 8px 8px -4px rgb(193 193 193)       
-    `,
-              overflow: "hidden",
+              inset 0px -8px 8px -4px #262e40,   
+              inset 0px 8px 8px -4px rgb(193 193 193)       
+            `,
               borderRadius: "4px",
               transition: "all 0.3s",
               border: "2px solid black",
-              ":hover": {
-                transform: "scale(1.02)",
-              },
               display: "flex",
               alignItems: "center",
               gap: "10px",
@@ -362,38 +787,55 @@ export default function Modes() {
             </IconButton>
           </Button>
         </Box>
+
+        <Popover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={handlePopoverClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+          disableRestoreFocus
+        >
+          <Typography sx={{ p: 1, fontSize: "0.85em", width: "200px" }}>
+            {popoverDesc}
+          </Typography>
+        </Popover>
+
+        {/* Survival Mode */}
+
+        {/* Knockout Mode */}
         <Button
           sx={{
-            // fontfamily: "Rubik",
+            flexShrink: 0,
+            minWidth: 250,
             backgroundColor: unlockedKO ? "#f47909" : "#d69153",
             color: unlockedKO ? "#FFFFFF" : "#a0a0a0",
             textShadow: `
-          -1px -1px 0 #000,  
-           1px -1px 0 #000,
-          -1px  1px 0 #000,
-           2px  1.5px 0 #000
-        `,
+              -1px -1px 0 #000,  
+              1px -1px 0 #000,
+              -1px  1px 0 #000,
+              2px  1.5px 0 #000
+            `,
             padding: "10px 40px",
             fontSize: "1.1em",
-            transform: "skew(-20deg)",
+            transform: "skew(-10deg)",
             boxShadow: `
-      inset 0px -8px 8px -4px #262e40,   
-      inset 0px 8px 8px -4px rgb(193 193 193)       
-    `,
-            overflow: "hidden",
+              inset 0px -8px 8px -4px #262e40,   
+              inset 0px 8px 8px -4px rgb(193 193 193)       
+            `,
             borderRadius: "4px",
+            position: "relative",
             transition: "all 0.3s",
             border: "2px solid black",
             ":hover": {
-              transform: "scale(1.02)",
-              cursor: unlocked ? "pointer" : "not-allowed",
+              cursor: unlockedKO ? "pointer" : "not-allowed",
             },
             display: "flex",
             alignItems: "center",
             gap: "10px",
           }}
           onClick={(e) => {
-            if (unlocked) {
+            if (unlockedKO) {
               navigate("/");
               localStorage.setItem("Overs", 10);
               sessionStorage.setItem("mode", `KNOCKOUT`);
@@ -407,15 +849,15 @@ export default function Modes() {
               <Lock
                 sx={{
                   position: "absolute",
-                  top: 10,
-                  fontSize: 50,
+                  top: "30%",
+                  left: "35%",
+                  fontSize: 75,
                   color: "#000",
                 }}
               />
             )}
             <Typography
               sx={{
-                // fontfamily: "Rubik",
                 fontWeight: 600,
                 display: "flex",
                 alignItems: "center",
@@ -436,12 +878,10 @@ export default function Modes() {
                       teams face each other, and the{" "}
                       <strong>undefeated team</strong> wins the tournament.
                       <br />
-                      <strong>REQUIRED : </strong>Teams higher than{" "}
+                      <strong>REQUIRED:</strong> Teams higher than{" "}
                       <strong>BRONZE</strong>
                       <br />
-                      <strong>REWARD: </strong>
-                      <strong>1500 </strong>
-                      Coins
+                      <strong>REWARD:</strong> <strong>1500</strong> Coins
                     </span>
                   )
                 }
@@ -460,13 +900,7 @@ export default function Modes() {
                 <Help sx={{ fontSize: "18px", color: "#FFFFFF" }} />
               </IconButton>
             </Typography>
-            <Typography
-              sx={{
-                // fontfamily: "Rubik",
-                fontWeight: 600,
-              }}
-              variant="body1"
-            >
+            <Typography sx={{ fontWeight: 600 }} variant="body1">
               8 Teams
             </Typography>
           </Box>

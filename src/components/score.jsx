@@ -115,7 +115,7 @@ export default function ScoreCard() {
     nz: "#c00050",
     wi: "#e04b7f",
     sa: "#1a528c",
-    wtc : "#ece5d3"
+    wtc : "#000"
   };
 
   const handleBall = (run, Wkt = false, aiRun) => {

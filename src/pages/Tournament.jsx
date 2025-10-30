@@ -26,6 +26,9 @@ import {
 import Data from "../components/data"; // your Data with flag URLs
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Home from "./Home";
+import { GiHouse } from "react-icons/gi";
+import { HomeFilled } from "@mui/icons-material";
 
 
 const teamsData = Data.filter(
@@ -281,6 +284,7 @@ export default function Tournament() {
 
   useEffect(() => {
     const userMatch = JSON.parse(sessionStorage.getItem("latestUserMatch"));
+    localStorage.setItem("board" ,"wtc");
     localStorage.removeItem("cricketData");
     if (!userMatch) return;
 
@@ -732,9 +736,35 @@ export default function Tournament() {
   return (
     <Box>
       <Paper sx={{ p: 2, mb: 2 }}>
+
+        <Box sx={{display : "flex",
+          justifyContent : "center",
+          gap : "10px"
+        }}>
+                    <Box
+                      sx={{
+                        backgroundColor: "#343c53",
+                        padding: "5px 20px 0",
+                        border: "2px solid #000000",
+                        borderRadius: "4px",
+                        boxShadow: "inset 0px -8px 8px -4px #2a3043",
+                        transform: "skew(-5deg)",
+                        color: "#ffffff",
+                        transition: "all 0.3s",
+                        ":hover": {
+                          cursor: "pointer",
+                          transform: "scale(1.1)",
+                        },
+                        ":active": { transform: "scale(1)" },
+                      }}
+                      onClick={()=> navigate("/")}
+                    >
+                      <HomeFilled sx={{ color: "#FFFFFF" }} />
+                    </Box>
         <Typography variant="h4" align="center" gutterBottom>
           🏆 Cricket World Cup
         </Typography>
+                        </Box>
         <Typography variant="body2" align="center" color="text.secondary">
           {teamsData.length} Teams • League + Knockout
         </Typography>

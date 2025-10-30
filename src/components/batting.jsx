@@ -2,21 +2,20 @@ import { Box, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 export default function Batting(squad) {
-
-
   const batting = squad.data;
   const colors = {
     // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
     wc19: "#222589  ",
-    wc21: "linear-gradient(to bottom , rgb(215 21 73) , rgb(233 25 85) ) ", 
-    wc22: "#d71c59",//de265c 
-    wc24: "#fa208e",//de265c 
+    wc21: "linear-gradient(to bottom , rgb(215 21 73) , rgb(233 25 85) ) ",
+    wc22: "#d71c59", //de265c
+    wc24: "#fa208e", //de265c
     ct25: "#02c208",
-    wtc: batting?.secondary,
+    // wtc: `linear-gradient(to bottom , ${batting?.secondary} , ${batting?.primary} )`,
+  wtc : "#000"  
   };
 
   const board = localStorage.getItem("Board");
-  const location = useLocation()
+  const location = useLocation();
 
   return (
     <>
@@ -28,8 +27,10 @@ export default function Batting(squad) {
             alignItems: "center",
             justifyContent: "space-between",
             color: data.notout ? "#FFFFFF" : "#0f0648",
-            background: data.notout ? colors[board] ||"rgb(65, 38, 255)" : "#FFFFFF",
-            boxShadow: "0px 0px 9px -7px #000000",
+            background: data.notout
+              ? colors[board] || "rgb(65, 38, 255)"
+              : "#FFFFFF",
+            boxShadow: "0px 0px 20px -12px #000000",
             // borderRadius: data.notout ? "12px" : "0px",
             // padding: data.notout ? "0 5px" : "0px",
             // marginLeft: data.notout ? "-5px" : "0px",
@@ -55,7 +56,7 @@ export default function Batting(squad) {
             >
               {data.name}
             </Typography>
-            {data.out && location.pathname == "/score"? (
+            {data.out && location.pathname == "/score" ? (
               <Box
                 sx={{
                   // fontfamily: "Rubik",
@@ -90,10 +91,10 @@ export default function Batting(squad) {
                 fontWeight: 600,
                 // fontfamily: "Rubik",
                 textTransform: "uppercase",
-                padding: { xs : "2px 16px" , md : "6px 16px"},
-                boxShadow: "4px -4px 5px -3px #0003",
-                width : "50px",
-                textAlign : "center",
+                padding: { xs: "2px 16px", md: "6px 16px" },
+                boxShadow: "4px -4px 20px -10px #0003",
+                width: "50px",
+                textAlign: "center",
               }}
               variant="h6"
             >
@@ -104,8 +105,8 @@ export default function Batting(squad) {
                 // fontfamily: "Rubik",
                 textTransform: "uppercase",
                 padding: "0px 20px",
-                width : "50px",
-                textAlign : "center",
+                width: "50px",
+                textAlign: "center",
               }}
               variant="body1"
             >

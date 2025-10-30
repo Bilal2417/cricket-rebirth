@@ -89,7 +89,7 @@ export default function Wc24({
                 display: "flex",
                 alignItems: "center",
                 gap: "5px",
-                width: "80px",
+                width: "120px",
               }}
             >
               <Box
@@ -146,7 +146,7 @@ export default function Wc24({
                 color: "#e4dff9",
                 fontSize: "0.9em",
                 // fontfamily: "Rubik",
-                width: "80px",
+                width: "120px",
               }}
               variant="body1"
             >

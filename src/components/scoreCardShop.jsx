@@ -192,7 +192,7 @@ export default function ScoreCardShop() {
         }}
       >
         {modePacks
-          .filter((f) => !boardData?.includes(f.price))
+          .filter((f) => !boardData?.values?.includes(f.value))
           .map((pack, index) => (
             <CardDesign key={pack.id} pack={pack} index={index} />
           ))}

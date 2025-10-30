@@ -95,7 +95,7 @@ export default function Wc21({
                   display: "flex",
                   alignItems: "center",
                   gap: "5px",
-                  width: "80px",
+                  width: "120px",
                 }}
               >
                 <Box
@@ -150,7 +150,7 @@ export default function Wc21({
                   color: "#0f0648",
                   fontSize: "0.9em",
                   // fontfamily: "Rubik",
-                  width: "80px",
+                  width: "120px",
                 }}
                 variant="body1"
               >

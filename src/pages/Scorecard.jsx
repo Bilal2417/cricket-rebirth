@@ -31,15 +31,17 @@ export default function Scorecard() {
   const colors = {
     // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
     wc19: "#222589  ",
-    wc21: "linear-gradient(to bottom , rgb(215 21 73) , rgb(233 25 85) )", 
+    wc21: "linear-gradient(to bottom , rgb(215 21 73) , rgb(233 25 85) )",
     wc22: "#d71c59", //de265c
     wc24: "#fa208e",
     ct25: "#02c208",
-    wtc: Innings %2 !== 0? userTeam?.secondary : aiTeam?.primary,
+    // wtc:  `linear-gradient(to bottom , ${Innings == 1 || Innings == 4 ? !batting ?  userTeam?.secondary : aiTeam?.secondary : batting ?  userTeam?.secondary : aiTeam?.secondary} , ${Innings == 1 || Innings == 4 ? !batting ?  userTeam?.primary : aiTeam?.primary : batting ?  userTeam?.primary : aiTeam?.primary} )` ,
+    wtc: "#000",
   };
-  const backColor ={
+  const backColor = {
     wc21: "linear-gradient(to bottom , rgb(113 17 233) , rgb(83 6 189) ) ", //5221ba
-  }
+    wtc: "linear-gradient(to bottom , #a99981 , #ece5d3 , #a99981)", //5221ba
+  };
 
   useEffect(() => {
     const Inning = localStorage.getItem("Innings");
@@ -76,6 +78,7 @@ export default function Scorecard() {
             width: "100%",
             marginTop: { xs: "50px" },
             paddingBottom: { xs: "50px" },
+            overflow: "hidden",
           }}
         >
           <Box
@@ -153,9 +156,9 @@ export default function Scorecard() {
             <Typography
               variant="h6"
               sx={{
-                background:  backColor[board] || "#0f0648",
-                color: "#FFFFFF",
-                padding: "9px 16px",
+                background: backColor[board] || "#0f0648",
+                color: board == "wtc" ? "#000000" : "#FFFFFF",
+                padding: "8px 16px",
                 fontWeight: 900,
                 // fontfamily: "Rubik",
                 textTransform: "uppercase",
@@ -229,7 +232,7 @@ export default function Scorecard() {
           <Box
             sx={{
               padding: { xs: "1px 0px", md: "5px 0px" },
-                background:  backColor[board] || "#0f0648",
+              background: backColor[board] || "#0f0648",
               position: "relative",
             }}
           >
@@ -238,7 +241,7 @@ export default function Scorecard() {
                 // fontfamily: "Rubik",
                 fontWeight: 600,
                 textAlign: "center",
-                color: "#FFFFFF",
+                color: board == "wtc" ? "#000000" : "#FFFFFF",
               }}
               variant="h6"
             >
@@ -249,7 +252,7 @@ export default function Scorecard() {
                 // fontfamily: "Rubik",
                 fontWeight: 600,
                 textAlign: "center",
-                color: "#fff",
+                color: board == "wtc" ? "#000000" : "#FFFFFF",
                 position: "absolute",
                 top: 5,
                 ...(Innings % 2 === 1 ? { left: 16 } : { right: 16 }),
@@ -307,7 +310,7 @@ export default function Scorecard() {
           >
             <Box
               sx={{
-                background:  backColor[board] || "#0f0648",
+                background: backColor[board] || "#0f0648",
                 borderRadius: "0 0 12px 12px",
                 width: "100%",
                 display: "flex",
@@ -330,7 +333,7 @@ export default function Scorecard() {
                     // fontfamily: "Rubik",
                     fontWeight: 600,
                     textAlign: "center",
-                    color: "#FFFFFF",
+                    color: board == "wtc" ? "#000000" : "#FFFFFF",
                   }}
                   variant="h5"
                 >
@@ -363,7 +366,7 @@ export default function Scorecard() {
                       // fontfamily: "Rubik",
                       fontWeight: 600,
                       textAlign: "center",
-                      color: "#fff",
+                      color: board == "wtc" ? "#000000" : "#FFFFFF",
                       textTransform: "uppercase",
                       display: "flex",
                       alignItems: "baseline",

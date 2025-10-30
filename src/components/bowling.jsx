@@ -12,7 +12,8 @@ export default function Bowling(squad) {
     wc22: { bg: "#d71c59", text: "#d71c59" },
     wc24: { bg: "#fa208e", text: "#fa208e" },
     ct25: { bg: "#02c208", text: "#02c208" },
-    wtc: { bg: bowling?.primary, text: bowling?.primary },
+    // wtc: { bg: bowling?.primary, text: bowling?.primary },
+    wtc : { bg : "#000" , text : "#000"}
   };
 
   const board = localStorage.getItem("Board");

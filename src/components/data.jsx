@@ -2735,7 +2735,7 @@ const Data = [
         conceded: 0,
       },
       {
-        name: "Der Dussen",
+        name: "Dussen",
         score: 0,
         balls: 0,
         out: false,

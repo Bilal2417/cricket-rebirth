@@ -28,10 +28,16 @@ export default function Result() {
     wc22: "#d71c59", //de265c
     wc24: "#fa208e",
     ct25: "#02c208",
+    wtc: "#000",
   };
 
   const backColor = {
     wc21: "linear-gradient(to bottom , rgb(113 17 233) , rgb(83 6 189) ) ", //5221ba
+    wtc: "linear-gradient(to bottom , #a99981 , #ece5d3 , #a99981)", //5221ba
+  };
+
+  const textColor = {
+    wtc: "#000",
   };
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -391,7 +397,7 @@ export default function Result() {
                 // fontfamily: "Rubik",
                 fontWeight: 600,
                 textAlign: "center",
-                color: "#FFFFFF",
+                color: textColor[board] || "#FFFFFF",
               }}
               variant="h6"
             >
@@ -410,7 +416,7 @@ export default function Result() {
                 padding: "15px 30px",
                 clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)",
                 justifyContent: "center",
-                color: board == "wc21" ? "#FFFFFF" : "#f6c401",
+                color: textColor[board] || "#dece43",
                 position: "absolute",
                 right: 90,
                 top: -7,
@@ -421,7 +427,7 @@ export default function Result() {
               <GiTwoCoins
                 size={25}
                 style={{
-                  color: board == "wc21" ? "#FFFFFF" : "#f6c401",
+                  color: textColor[board] || "#dece43",
                 }}
               />
               {coinsInc} |
@@ -438,7 +444,7 @@ export default function Result() {
                 padding: "15px 30px",
                 clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)",
                 justifyContent: "center",
-                color: board == "wc21" ? "#FFFFFF" : "#f6c401",
+                color: textColor[board] || "#dece43",
                 position: "absolute",
                 right: 10,
                 top: -7,
@@ -449,7 +455,9 @@ export default function Result() {
               {Math.ceil(trophyInc)}
               <GiTrophy
                 size={25}
-                style={{ color: board == "wc21" ? "#FFFFFF" : "#f6c401" }}
+                style={{
+                  color: textColor[board] || "#dece43",
+                }}
               />
             </Typography>
           </Box>
@@ -948,7 +956,6 @@ export default function Result() {
           >
             <Button
               sx={{
-                // fontfamily: "Rubik",
                 color: "#FFFFFF",
                 background: colors[board] || "rgb(65, 38, 255)",
                 padding: "8px 16px",
@@ -1039,8 +1046,7 @@ export default function Result() {
 
             <Typography
               sx={{
-                // fontfamily: "Rubik",
-                color: board == "wc21" ? "#FFFFFF" : "#dece43",
+                color: textColor[board] || "#dece43",
                 textTransform: "uppercase",
               }}
               variant="h5"
@@ -1059,8 +1065,7 @@ export default function Result() {
             {winnerFirst ? (
               <Typography
                 sx={{
-                  // fontfamily: "Rubik",
-                  color: board == "wc21" ? "#FFFFFF" : "#dece43",
+                  color: textColor[board] || "#dece43",
                   textTransform: "uppercase",
                   ml: "5px",
                   display: winner == "Match Tied" ? "none" : "",
@@ -1075,8 +1080,7 @@ export default function Result() {
             ) : (
               <Typography
                 sx={{
-                  // fontfamily: "Rubik",
-                  color: board == "wc21" ? "#FFFFFF" : "#dece43",
+                  color: textColor[board] || "#dece43",
                   textTransform: "uppercase",
                   ml: "5px",
                   display: winner == "Match Tied" ? "none" : "",

@@ -16,6 +16,7 @@ import PAK from "../components/pak";
 import ENG from "../components/eng";
 import WI from "../components/wi";
 import SA from "../components/sa";
+import Wtc from "../components/wtc";
 
 export default function ScoreBoards() {
   const [active, setActive] = useState();
@@ -77,6 +78,10 @@ export default function ScoreBoards() {
       key: "ct25",
       board: <Ct25 />,
     },
+    {
+      key: "wtc",
+      board: <Wtc />,
+    },
   ];
 
   const Board = localStorage.getItem("Board")
@@ -123,7 +128,11 @@ export default function ScoreBoards() {
                   if (Profile?.unlocked_items?.includes(score.key)) {
                     setActive(index);
                     localStorage.setItem("Board", score.key);
-                  } else {
+                  }
+                  else if (score.key == "wtc") {
+                    toast.error("Unlock by winning world cup!");
+                  } 
+                  else {
                     toast.error("Unlock from Shop!");
                   }
                 }}
