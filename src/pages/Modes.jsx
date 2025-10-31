@@ -273,10 +273,8 @@ export default function Modes() {
               minHeight: { xs: "280px", md: "500px" },
               flexShrink: 0,
               width: Date.now() < start ? 280 : 200,
-              background: !unlocked
-                ? "linear-gradient(to top, #f5214b, #8e0e2f)"
-                : "#f55c73",
-              color: !unlocked ? "#FFFFFF" : "#a0a0a0",
+              background:"linear-gradient(to top, #f5214b, #8e0e2f)",
+              color: "#e1e1e1ff",
               textShadow: `
               -1px -1px 0 #000,  
               1px -1px 0 #000,
@@ -295,9 +293,6 @@ export default function Modes() {
               overflow: "hidden",
               position: "relative",
               border: "2px solid black",
-              ":hover": {
-                cursor: unlocked ? "pointer" : "not-allowed",
-              },
               display: "flex",
               alignItems: "center",
               gap: "10px",
@@ -339,7 +334,7 @@ export default function Modes() {
                     handlePopoverOpen(
                       e,
                       <span>
-                        In Tournament mode, each match is <strong>10</strong>{" "}
+                        In Contest, each match is <strong>10</strong>{" "}
                         overs with <strong>10</strong> wickets.Every Day{" "}
                         <strong>3 Tickets</strong> are given and{" "}
                         <strong>Top 3 </strong> players are rewarded.
