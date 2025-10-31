@@ -388,7 +388,7 @@ export default function Modes() {
                 `,
                   fontSize:
                     Date.now() < start && Date.now() > end ? "1em" : "0.9em",
-                  padding: "0px 30px",
+                  padding: "0px 15px",
                   transform: "skew(-5deg)",
                   mt: "50px",
                   boxShadow: "inset 0px -8px 8px -4px #b7560f",
