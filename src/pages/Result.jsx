@@ -166,6 +166,7 @@ export default function Result() {
     if (!Profile) return;
 
     const overs = localStorage.getItem("Overs");
+    const givenMode = sessionStorage.getItem("mode");
     const wkts = Number(totalWkts) || Number(overs);
 
     let trophyIncrement = 0;
@@ -197,6 +198,24 @@ export default function Result() {
       coinsIncrement = wkts === 100 ? trophyMap[wkts] * 1 : trophyMap[wkts] * 5;
     }
 
+    let collectedPoints = 0;
+    if (givenMode == "CONTEST") {
+      if (winnerFirst) {
+        collectedPoints = userTeam?.score - aiTeam?.score;
+      } else {
+        collectedPoints = (10 - userTeam?.wicket) * 10;
+      }
+      if (aiTeam?.wicket == 10) {
+        collectedPoints += 50;
+      }
+      if (userTeam?.score == 200) {
+        collectedPoints += 100;
+      }
+      if (win) {
+        collectedPoints *= 5;
+      }
+    }
+
     const battleLog = {
       team1: {
         name: battingTeam?.name,
@@ -226,7 +245,7 @@ export default function Result() {
           : matchType == 2
           ? trophyMap[wkts]
           : Math.ceil(trophyMap[wkts] / 2),
-      mode: wkts,
+      mode: givenMode,
       time: new Date().toISOString(),
     };
 
@@ -237,6 +256,7 @@ export default function Result() {
       trophies: Profile.trophies + trophyIncrement,
       coins: Profile.coins + coinsIncrement,
       battle_log: battleLog, // ✅ send it here
+      points : givenMode == "CONTEST" ? Profile.points + collectedPoints : null
     };
 
     console.log(updatedProfile, "Profile that is sending");
@@ -258,6 +278,7 @@ export default function Result() {
         console.log("It runs in result");
         window.dispatchEvent(new Event("profileUpdated"));
         localStorage.setItem("refreshProfiles", "true");
+        localStorage.setItem("refreshContest", "true");
       } else {
         console.error("Failed to update trophies in database");
       }

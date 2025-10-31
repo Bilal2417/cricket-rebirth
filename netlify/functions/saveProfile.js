@@ -18,7 +18,7 @@ export async function handler(event) {
   try {
     await client.connect();
 
-    // ✅ Ensure table exists and includes battle_log
+    // ✅ Ensure profiles table exists
     await client.query(`
       CREATE TABLE IF NOT EXISTS profiles (
         id TEXT PRIMARY KEY,
@@ -35,23 +35,48 @@ export async function handler(event) {
         selected_title TEXT,
         starter BOOLEAN NOT NULL DEFAULT false,
         last_active TIMESTAMP DEFAULT NOW(),
-        battle_log JSONB DEFAULT '[]'::jsonb   -- ✅ added column for logs
+        battle_log JSONB DEFAULT '[]'::jsonb
       )
     `);
 
-    // ✅ Make sure battle_log exists for old rows too
+    // ✅ Ensure battle_log column exists for older rows
     await client.query(`
       ALTER TABLE profiles
       ADD COLUMN IF NOT EXISTS battle_log JSONB DEFAULT '[]'::jsonb
     `);
 
+    // ✅ Create contest table
+await client.query(`
+  CREATE TABLE IF NOT EXISTS contest (
+    id SERIAL PRIMARY KEY,
+    profile_id TEXT REFERENCES profiles(id) ON DELETE CASCADE,
+    points INT DEFAULT 0,
+    tickets INT DEFAULT 0,
+  )
+`);
+
+// ✅ For any existing profile without a contest record
+await client.query(`
+  INSERT INTO contest (profile_id, points, tickets)
+  SELECT id, 0, 0
+  FROM profiles
+  WHERE id NOT IN (SELECT profile_id FROM contest)
+`);
+
+
+    // ✅ Ensure index for quick lookups (optional but recommended)
+    // await client.query(`
+    //   CREATE INDEX IF NOT EXISTS idx_contest_profile_day
+    //   ON contest(profile_id, day);
+    // `);
+
+    // ✅ Get or create profile
     let existing = await client.query(`SELECT * FROM profiles WHERE id=$1`, [
       profileId,
     ]);
 
     let profile;
     if (existing.rows.length === 0) {
-      // ✅ Insert default profile including battle_log
       const result = await client.query(
         `INSERT INTO profiles (
            id, name, tournaments, trophies, victories, coins, img,
@@ -62,17 +87,17 @@ export async function handler(event) {
         [
           profileId,
           "Dummy",
-          0, // tournaments
-          0, // trophies
-          0, // victories
-          0, // coins
-          null, // img
-          JSON.stringify([]), // unlocked_teams
-          JSON.stringify(["starter"]), // unlocked_items
-          JSON.stringify([]), // titles
-          null, // selected_title
-          false, // starter
-          JSON.stringify([]), // battle_log
+          0,
+          0,
+          0,
+          0,
+          null,
+          JSON.stringify([]),
+          JSON.stringify(["starter"]),
+          JSON.stringify([]),
+          null,
+          false,
+          JSON.stringify([]),
         ]
       );
       profile = result.rows[0];

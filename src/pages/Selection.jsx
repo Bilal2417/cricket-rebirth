@@ -92,7 +92,7 @@ export default function Selection() {
               textAlign: "center",
             }}
             onClick={() => {
-             !Profile?.unlocked_teams?.includes(team?.name)
+             Profile?.unlocked_teams?.includes(team?.name)
                 ? AiTeamSelection(team?.name)
                 : toast.error("Unlock team from Packs!");
             }}

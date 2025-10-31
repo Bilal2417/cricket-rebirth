@@ -4,6 +4,7 @@ import OversThreeIcon from "../components/overIcon";
 import { EmojiEventsSharp, Help, Lock } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import {
+  GiExtraTime,
   GiPointySword,
   GiSkullCrossedBones,
   GiTicket,
@@ -53,7 +54,9 @@ export default function Modes() {
   }));
 
   const storedProfile = sessionStorage.getItem("UserProfile");
-  const [Profile] = useState(storedProfile ? JSON.parse(storedProfile) : "");
+  const [Profile, setProfile] = useState(
+    storedProfile ? JSON.parse(storedProfile) : ""
+  );
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverDesc, setPopoverDesc] = useState("");
@@ -84,6 +87,32 @@ export default function Modes() {
     setPopoverDesc("");
   };
 
+  const [timeLeft, setTimeLeft] = useState(null);
+
+  function getTimeRemaining(endTime) {
+    const total = endTime - Date.now();
+    const days = Math.floor(total / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    const seconds = Math.floor((total / 1000) % 60);
+
+    return { total, days, hours, minutes, seconds };
+  }
+  const start = new Date("2025-11-01T12:00:00Z");
+  const end = new Date("2025-11-04T12:00:00Z");
+
+  const remaining = getTimeRemaining(start);
+  useEffect(() => {
+    // Update countdown every second
+    const timer = setInterval(() => {
+      const remainingTime = getTimeRemaining(end);
+      setTimeLeft(remainingTime);
+      if (remainingTime.total <= 0) clearInterval(timer);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   const profileId = localStorage.getItem("MyId");
   useEffect(() => {
     let isMounted = true;
@@ -91,7 +120,7 @@ export default function Modes() {
     const fetchProfiles = async (force = false) => {
       try {
         const cached = JSON.parse(
-          sessionStorage.getItem("profilesData") || "{}"
+          sessionStorage.getItem("contestData") || "{}"
         );
         const now = Date.now();
         const myProfile = JSON.parse(sessionStorage.getItem("UserProfile"));
@@ -109,14 +138,14 @@ export default function Modes() {
           return;
         }
 
-        const res = await fetch("/.netlify/functions/getProfile");
+        const res = await fetch("/.netlify/functions/manageContest");
         const data = await res.json();
 
-        if (isMounted && data?.success && data.profiles) {
-          setProfiles(data.profiles);
+        if (isMounted && data?.success && data.leaderboard) {
+          setProfiles(data.leaderboard);
           sessionStorage.setItem(
-            "profilesData",
-            JSON.stringify({ data: data.profiles, timestamp: now })
+            "contestData",
+            JSON.stringify({ data: data.leaderboard, timestamp: now })
           );
 
           // const matchedProfile = data.profiles.find((p) => p.id === profileId);
@@ -130,7 +159,7 @@ export default function Modes() {
     fetchProfiles(); // initial fetch
 
     const handleStorageChange = (e) => {
-      if (e.key === "refreshProfiles" && e.newValue === "true") {
+      if (e.key === "refreshContest" && e.newValue === "true") {
         console.log("♻️ It runs in home (storage event)");
         fetchProfiles(true);
         localStorage.removeItem("refreshContest"); // reset after use
@@ -153,11 +182,64 @@ export default function Modes() {
     };
   }, [profileId]);
 
+  useEffect(() => {
+    const checkTickets = () => {
+      const now = new Date();
+      const today = now.toISOString().split("T")[0];
+      const lastGiven = localStorage.getItem("lastTicketDate");
+
+      // 🎟️ Only give tickets after 12 PM and not already given
+      if (now.getUTCHours() >= 7 && lastGiven !== today && now < end) {
+        localStorage.setItem("lastTicketDate", today);
+        console.log("🎟️ 3 tickets granted for today!");
+        manageTickets();
+      }
+    };
+
+    // Run immediately and then every minute
+    checkTickets();
+    const interval = setInterval(checkTickets, 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const manageTickets = async () => {
+    if (!Profile) return;
+
+    const updatedProfile = {
+      ...Profile,
+      id: Profile?.id,
+      tickets: 3,
+    };
+
+    setProfile(updatedProfile);
+
+    try {
+      const res = await fetch("/.netlify/functions/updateProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProfile),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setProfile(data.profile);
+        console.log(data.profile, "/mode");
+        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+        window.dispatchEvent(new Event("profileUpdated"));
+        localStorage.setItem("refreshContest", "true");
+      } else {
+        console.error("Failed to update trophies in database");
+      }
+    } catch (err) {
+      console.error("Error updating trophies:", err);
+    }
+  };
+
   return (
     <>
       <Box
         sx={{
-          minHeight: "100vh",
+          maxHeight: "100vh",
           display: "flex",
           alignItems: "stretch",
           gap: 8,
@@ -166,7 +248,7 @@ export default function Modes() {
           scrollBehavior: "smooth",
           scrollSnapType: "x mandatory",
           "& > *": { scrollSnapAlign: "center" },
-          p: { xs : 1 , md : 6},
+          p: { xs: 3, md: 6 },
           "&::-webkit-scrollbar": {
             height: "8px",
           },
@@ -188,8 +270,9 @@ export default function Modes() {
           <Button
             sx={{
               height: "100%",
+              minHeight: { xs: "280px", md: "500px" },
               flexShrink: 0,
-              minWidth: 250,
+              width: Date.now() < start ? 280 : 200,
               background: !unlocked
                 ? "linear-gradient(to top, #f5214b, #8e0e2f)"
                 : "#f55c73",
@@ -202,7 +285,7 @@ export default function Modes() {
             `,
               padding: "10px 40px",
               fontSize: "1.1em",
-              // transform: "skew(-10deg)",
+              transform: "skew(-5deg)",
               boxShadow: `
               inset 0px -8px 8px -4px #262e40,   
               inset 0px 8px 8px -4px rgb(193 193 193)       
@@ -220,7 +303,14 @@ export default function Modes() {
               gap: "10px",
             }}
           >
-            <Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               {/* {!unlocked && (
               <Lock
                 sx={{
@@ -250,15 +340,9 @@ export default function Modes() {
                       e,
                       <span>
                         In Tournament mode, each match is <strong>10</strong>{" "}
-                        overs with <strong>10</strong> wickets.{" "}
-                        <strong>All teams</strong> face each other, and the{" "}
-                        <strong>strongest team</strong> wins the tournament.
-                        <br />
-                        <strong>REQUIRED:</strong> Teams higher than{" "}
-                        <strong>BRONZE</strong> and not{" "}
-                        <strong>NETHERLANDS</strong>
-                        <br />
-                        <strong>REWARD:</strong> <strong>5000</strong> Coins
+                        overs with <strong>10</strong> wickets.Every Day{" "}
+                        <strong>3 Tickets</strong> are given and{" "}
+                        <strong>Top 3 </strong> players are rewarded.
                       </span>
                     )
                   }
@@ -277,14 +361,28 @@ export default function Modes() {
                   <Help sx={{ fontSize: "18px", color: "#FFFFFF" }} />
                 </IconButton>
               </Typography>
-              <Button
-                // onClick={() => {
-                //   navigate("/");
-                //   localStorage.setItem("Overs", 10);
-                //   sessionStorage.setItem("mode", `CONTEST`);
-                // }}
+              <Typography
                 sx={{
-                  // fontfamily: "Rubik",
+                  minWidth: "165px",
+                  fontWeight: 600,
+                  color: "#dcdcdcff",
+                }}
+                variant={saved ? "h3" : "body1"}
+              >
+                10 Overs
+              </Typography>
+              <Button
+                onClick={() => {
+                  if (Date.now() > start && timeLeft.total >= 0) {
+                    navigate("/");
+                    localStorage.setItem("Overs", 10);
+                    sessionStorage.setItem("mode", `CONTEST`);
+                  } else {
+                    localStorage.removeItem("Overs");
+                    sessionStorage.removeItem("mode");
+                  }
+                }}
+                sx={{
                   backgroundColor: "#f6c401",
                   color: "#FFFFFF",
                   textShadow: `
@@ -293,8 +391,10 @@ export default function Modes() {
                   -1px  1px 0 #000,
                    2px  1.5px 0 #000
                 `,
-                  padding: "10px 40px",
-                  fontSize: "1.2em",
+                  fontSize:
+                    Date.now() < start && Date.now() > end ? "1em" : "0.9em",
+                  padding: "0px 30px",
+                  transform: "skew(-5deg)",
                   mt: "50px",
                   boxShadow: "inset 0px -8px 8px -4px #b7560f",
                   borderRadius: "4px",
@@ -305,18 +405,27 @@ export default function Modes() {
                   },
                 }}
               >
-                Play
+                {Date.now() < start
+                  ? `Event starts in :
+                  ${remaining.days}d ${remaining.hours}h ${remaining.minutes}m ${remaining.seconds}s`
+                  : Date.now() > end
+                  ? "Event ended"
+                  : `Play`}
               </Button>
             </Box>
           </Button>
 
-          <Box>
+          <Box
+            sx={{
+              display: Date.now() < start ? "none" : "block",
+            }}
+          >
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "flex-end",
-                padding : "0 20px"
+                padding: "0 20px",
               }}
             >
               <Typography
@@ -328,8 +437,22 @@ export default function Modes() {
                 }}
                 variant="h3"
               >
-                day 1/3
+                {(() => {
+                  const now = Date.now();
+                  const totalDays = 3;
+                  const dayMs = 24 * 60 * 60 * 1000;
+                  const elapsed = now - start;
+
+                  if (elapsed < 0) return `Starts soon`;
+                  const currentDay = Math.min(
+                    Math.floor(elapsed / dayMs) + 1,
+                    totalDays
+                  );
+
+                  return `Day ${currentDay}/${totalDays}`;
+                })()}
               </Typography>
+
               <Box
                 sx={{
                   display: "flex",
@@ -367,7 +490,9 @@ export default function Modes() {
                 gap: "5px",
                 mt: "20px",
                 overflowY: "auto",
-                padding : "0 10px"
+                padding: "0 10px",
+                alignItems: "center",
+                // maxHeight : "200px"
               }}
             >
               {profiles?.map((prof, index) => {
@@ -480,7 +605,7 @@ export default function Modes() {
                         sx={{ minWidth: "30px", textAlign: "center" }}
                         component="span"
                       >
-                        3
+                        {Profile?.tickets}/3
                       </Box>
                     </Typography>
 
@@ -545,12 +670,45 @@ export default function Modes() {
                         sx={{ minWidth: "30px", textAlign: "center" }}
                         component="span"
                       >
-                        30
+                        {Profile?.points}
                       </Box>
                     </Typography>
                   </Box>
                 );
               })}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  sx={{
+                    textTransform: "uppercase",
+                  }}
+                  variant="h6"
+                >
+                  {timeLeft?.days <= 1 ? `Contest Ends:` : `New Tickets In:`}
+                </Typography>
+                <Typography
+                  sx={{
+                    textTransform: "uppercase",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    fontSize: "1em !important",
+                  }}
+                  variant="h6"
+                >
+                  <GiExtraTime style={{ color: "#dfe451" }} size={30} />
+                  {timeLeft
+                    ? timeLeft.total <= 0
+                      ? "Contest Ended"
+                      : `${timeLeft.hours}h ${timeLeft.minutes}m`
+                    : "Loading..."}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -558,7 +716,7 @@ export default function Modes() {
         <Button
           sx={{
             flexShrink: 0,
-            minWidth: 250,
+            minWidth: 150,
             backgroundColor: unlocked ? "#f5214b" : "#f55c73",
             color: unlocked ? "#FFFFFF" : "#a0a0a0",
             textShadow: `
@@ -567,9 +725,9 @@ export default function Modes() {
               -1px  1px 0 #000,
               2px  1.5px 0 #000
             `,
-            padding: "10px 40px",
+            padding: "10px 20px",
             fontSize: "1.1em",
-            transform: "skew(-10deg)",
+            transform: "skew(-5deg)",
             boxShadow: `
               inset 0px -8px 8px -4px #262e40,   
               inset 0px 8px 8px -4px rgb(193 193 193)       
@@ -601,8 +759,8 @@ export default function Modes() {
               <Lock
                 sx={{
                   position: "absolute",
-                  top: "30%",
-                  left: "35%",
+                  top: "10%",
+                  left: "30%",
                   fontSize: 75,
                   color: "#000",
                 }}
@@ -626,8 +784,8 @@ export default function Modes() {
                     e,
                     <span>
                       In Tournament mode, each match is <strong>10</strong>{" "}
-                      overs with <strong>10</strong> wickets.{" "}
-                      <strong>All teams</strong> face each other, and the{" "}
+                      overs with <strong>10</strong> wickets.All{" "}
+                      <strong>teams</strong> face each other, and the{" "}
                       <strong>strongest team</strong> wins the tournament.
                       <br />
                       <strong>REQUIRED:</strong> Teams higher than{" "}
@@ -689,7 +847,8 @@ export default function Modes() {
                   2px  1.5px 0 #000
                 `,
                 overflow: "hidden",
-                maxWidth: "210px",
+                maxWidth: "200px",
+                maxHeight: "60px",
                 fontSize: "1.1em",
                 boxShadow: `
                   inset 0px -8px 8px -4px #262e40,   
@@ -698,7 +857,7 @@ export default function Modes() {
                 borderRadius: "4px",
                 transition: "all 0.3s",
                 border: "2px solid black",
-                transform: "skew(-10deg)",
+                transform: "skew(-5deg)",
                 display: "flex",
                 alignItems: "center",
                 gap: "10px",
@@ -734,7 +893,6 @@ export default function Modes() {
           <Button
             sx={{
               flexShrink: 0,
-              minWidth: 210,
               backgroundColor: "#8237ca",
               color: "#FFFFFF",
               textShadow: `
@@ -743,9 +901,12 @@ export default function Modes() {
               -1px  1px 0 #000,
               2px  1.5px 0 #000
             `,
-              padding: "10px 40px",
+              padding: "0px 20px",
               fontSize: "1.1em",
-              transform: "skew(-10deg)",
+              width: "200px",
+              maxHeight: "60px",
+              transform: "skew(-5deg)",
+              overflow: "hidden",
               boxShadow: `
               inset 0px -8px 8px -4px #262e40,   
               inset 0px 8px 8px -4px rgb(193 193 193)       
@@ -813,7 +974,7 @@ export default function Modes() {
         <Button
           sx={{
             flexShrink: 0,
-            minWidth: 250,
+            minWidth: 150,
             backgroundColor: unlockedKO ? "#f47909" : "#d69153",
             color: unlockedKO ? "#FFFFFF" : "#a0a0a0",
             textShadow: `
@@ -822,9 +983,9 @@ export default function Modes() {
               -1px  1px 0 #000,
               2px  1.5px 0 #000
             `,
-            padding: "10px 40px",
+            padding: "10px 20px",
             fontSize: "1.1em",
-            transform: "skew(-10deg)",
+            transform: "skew(-5deg)",
             boxShadow: `
               inset 0px -8px 8px -4px #262e40,   
               inset 0px 8px 8px -4px rgb(193 193 193)       
@@ -855,8 +1016,8 @@ export default function Modes() {
               <Lock
                 sx={{
                   position: "absolute",
-                  top: "30%",
-                  left: "35%",
+                  top: "10%",
+                  left: "30%",
                   fontSize: 75,
                   color: "#000",
                 }}

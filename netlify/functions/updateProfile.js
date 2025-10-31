@@ -24,7 +24,9 @@ export async function handler(event) {
       selected_title,
       unlocked_items,
       starter,
-      battle_log, // ✅ add this from frontend
+      battle_log,
+      points,   // contest 
+      tickets,  // contest 
     } = body;
 
     if (!id) {
@@ -57,7 +59,7 @@ export async function handler(event) {
 
     const current = existingProfile.rows[0];
 
-    // --- Parse JSON-safe arrays ---
+    // --- Helper for parsing arrays ---
     const parseArray = (data) => {
       if (!data) return [];
       if (Array.isArray(data)) return data;
@@ -68,7 +70,7 @@ export async function handler(event) {
       }
     };
 
-    // --- Merge unlocked_teams ---
+    // --- Merge JSON fields safely ---
     const safeUnlockedTeams =
       unlocked_teams != null
         ? Array.from(
@@ -79,7 +81,6 @@ export async function handler(event) {
           )
         : parseArray(current.unlocked_teams);
 
-    // --- Merge unlocked_items ---
     const safeUnlockedItems =
       unlocked_items != null
         ? Array.from(
@@ -90,11 +91,9 @@ export async function handler(event) {
           )
         : parseArray(current.unlocked_items);
 
-    // Always keep "starter"
     if (!safeUnlockedItems.includes("starter"))
       safeUnlockedItems.push("starter");
 
-    // --- Merge titles ---
     const safeTitles =
       titles != null
         ? Array.from(
@@ -102,30 +101,23 @@ export async function handler(event) {
           )
         : parseArray(current.titles);
 
-    // --- Safe trophies handling ---
-    let safeTrophies =
+    const safeTrophies =
       typeof trophies === "number" ? Math.max(0, trophies) : current.trophies;
 
-    // --- ✅ Handle battle_log ---
+    // --- Handle battle log ---
     const currentBattleLog = parseArray(current.battle_log);
-
     let updatedBattleLog = currentBattleLog;
 
     if (battle_log) {
-      // Ensure we always add plain objects, never arrays
       const newLogs = Array.isArray(battle_log) ? battle_log : [battle_log];
-
-      // Flatten current logs and new ones (prevents nested arrays)
       updatedBattleLog = [...newLogs, ...currentBattleLog].flat();
-
-      // Keep only 10 most recent logs
       if (updatedBattleLog.length > 10) {
         updatedBattleLog = updatedBattleLog.slice(0, 10);
       }
     }
 
-    // --- Update profile ---
-    const result = await client.query(
+    // --- ✅ Update profiles table ---
+    const profileResult = await client.query(
       `UPDATE profiles
        SET name = COALESCE($1, name),
            img = COALESCE($2, img),
@@ -158,13 +150,24 @@ export async function handler(event) {
       ]
     );
 
+    // --- ✅ Update contest table (only if provided) ---
+    if (points != null || tickets != null) {
+      await client.query(
+        `UPDATE contest
+         SET points = COALESCE($1, points),
+             tickets = COALESCE($2, tickets)
+         WHERE id = $3`,
+        [points ?? null, tickets ?? null, id]
+      );
+    }
+
     await client.end();
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        profile: result.rows[0],
+        profile: profileResult.rows[0],
       }),
     };
   } catch (err) {

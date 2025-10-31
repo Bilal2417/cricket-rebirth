@@ -25,21 +25,25 @@ export async function handler(event) {
   try {
     await client.connect();
 
+    // ✅ Join profiles with contest table
     const result = await client.query(
       `
       SELECT 
-        id, 
-        name, 
-        coins,
-        trophies,
-        trophydoubler,
-        unlocked_teams,
-        unlocked_items,
-        victories,
-        titles,
-        starter
-      FROM profiles
-      WHERE id = $1
+        p.id, 
+        p.name, 
+        p.coins,
+        p.trophies,
+        p.trophydoubler,
+        p.unlocked_teams,
+        p.unlocked_items,
+        p.victories,
+        p.titles,
+        p.starter,
+        COALESCE(c.points, 0) AS points,
+        COALESCE(c.tickets, 0) AS tickets
+      FROM profiles p
+      LEFT JOIN contest c ON c.profile_id = p.id
+      WHERE p.id = $1
       `,
       [profileId]
     );
@@ -50,7 +54,7 @@ export async function handler(event) {
       unlocked_items: parseField(row.unlocked_items),
     }));
 
-    console.log("✅ Final profile:", profiles[0]);
+    console.log("✅ Final profile with contest:", profiles[0]);
     return {
       statusCode: 200,
       body: JSON.stringify({

@@ -92,12 +92,14 @@ export default function Toss() {
     };
 
     const penalty = trophyMap[totalWkts];
+    const givenMode = sessionStorage.getItem("mode");
 
     const updatedProfile = {
       ...Profile,
       id: Profile?.id,
       trophies:
         Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
+      tickets : givenMode == "CONTEST" ? Profile.tickets - 1 : null
     };
 
     setProfile(updatedProfile);
