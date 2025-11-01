@@ -263,7 +263,8 @@ export default function Result() {
       trophies: Profile.trophies + trophyIncrement,
       coins: Profile.coins + coinsIncrement,
       battle_log: battleLog, // ✅ send it here
-      points: givenMode == "CONTEST" ? (Profile.points || 0) + collectedPoints : null,
+      points:
+        givenMode == "CONTEST" ? (Profile.points || 0) + collectedPoints : null,
     };
 
     console.log(updatedProfile, "Profile that is sending");
@@ -273,7 +274,10 @@ export default function Result() {
       const res = await fetch("/.netlify/functions/updateProfile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProfile),
+        body: JSON.stringify({
+          ...updatedProfile,
+          source: "result", // 👈 Add this line
+        }),
       });
 
       const data = await res.json();

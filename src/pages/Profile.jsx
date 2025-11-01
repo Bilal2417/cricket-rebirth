@@ -129,7 +129,10 @@ export default function Profile() {
       const res = await fetch("/.netlify/functions/updateProfile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProfile),
+        body: JSON.stringify({
+          ...updatedProfile,
+          source: "profile", // 👈 Add this line
+        }),
       });
       const data = await res.json();
 
@@ -139,7 +142,7 @@ export default function Profile() {
         setName(data.profile.name);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
 
-        sessionStorage.removeItem("UserProfile")
+        sessionStorage.removeItem("UserProfile");
         window.dispatchEvent(new Event("profileUpdated"));
         localStorage.setItem("refreshProfiles", "true");
 
@@ -334,7 +337,7 @@ export default function Profile() {
               backgroundColor: "#0174fe",
               color: "#FFFFFF",
               fontFamily: "sans-serif",
-              marging : "16px auto 0",
+              marging: "16px auto 0",
               width: "80%",
               padding: "5px",
               transform: "skew(-10deg)",

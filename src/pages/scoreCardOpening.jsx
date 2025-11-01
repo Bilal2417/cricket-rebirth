@@ -69,7 +69,6 @@ export default function ScoreCardOpening() {
   const flags =
     updatedflags?.filter((f) => !Profile?.unlocked_items?.includes(f.key)) ||
     [];
-    
 
   // useEffect(() => {
   //   if (flags?.length == 1) {
@@ -174,7 +173,10 @@ export default function ScoreCardOpening() {
       const res = await fetch("/.netlify/functions/updateProfile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProfile),
+        body: JSON.stringify({
+          ...updatedProfile,
+          source: "scoreCardOpening", // 👈 Add this line
+        }),
       });
 
       const data = await res.json();
@@ -192,19 +194,14 @@ export default function ScoreCardOpening() {
         if (lockedFlags.length === 0) {
           console.log("ALL unlocked");
 
-          
-          const existing =
-            JSON.parse(localStorage.getItem("boardData")) || {};
+          const existing = JSON.parse(localStorage.getItem("boardData")) || {};
 
-            
           const existingValues = existing.values || [];
 
-          
           if (!existingValues.includes(val)) {
             existingValues.push(val);
           }
 
-          
           localStorage.setItem(
             "boardData",
             JSON.stringify({

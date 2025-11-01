@@ -145,7 +145,10 @@ export default function Toss() {
       const res = await fetch("/.netlify/functions/updateProfile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProfile),
+        body: JSON.stringify({
+          ...updatedProfile,
+          source: "toss", // 👈 Add this line
+        }),
       });
 
       const data = await res.json();

@@ -131,7 +131,10 @@ export default function Fixtures() {
       const res = await fetch("/.netlify/functions/updateProfile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProfile),
+        body: JSON.stringify({
+          ...updatedProfile,
+          source: "fixtures", // 👈 Add this line
+        }),
       });
 
       const data = await res.json();

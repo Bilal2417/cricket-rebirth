@@ -4,7 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
 import Data from "../components/data";
 import LoadingPage from "../components/loading";
-import { GiCash, GiCoins, GiCoinsPile, GiTrophy, GiTwoCoins } from "react-icons/gi";
+import {
+  GiCash,
+  GiCoins,
+  GiCoinsPile,
+  GiTrophy,
+  GiTwoCoins,
+} from "react-icons/gi";
 
 const team = Data;
 
@@ -347,7 +353,10 @@ export default function CardOpening() {
         const res = await fetch("/.netlify/functions/updateProfile", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedProfile),
+          body: JSON.stringify({
+            ...updatedProfile,
+            source: "opening", // 👈 Add this line
+          }),
         });
 
         const data = await res.json();
@@ -457,19 +466,59 @@ export default function CardOpening() {
 
                   {rewards[currentIndex]?.selectedUnlock?.type == "coins" ? (
                     rewards[currentIndex]?.selectedUnlock?.resource < 450 ? (
-                      <GiTwoCoins size={50} style={{ color: rewards[currentIndex]?.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                      <GiTwoCoins
+                        size={50}
+                        style={{
+                          color:
+                            rewards[currentIndex]?.rarity == "Gold"
+                              ? "#FFFFFF"
+                              : "#f6c401",
+                        }}
+                      />
                     ) : rewards[currentIndex]?.selectedUnlock?.resource <
                       900 ? (
-                      <GiCash size={50} style={{ color: rewards[currentIndex]?.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                      <GiCash
+                        size={50}
+                        style={{
+                          color:
+                            rewards[currentIndex]?.rarity == "Gold"
+                              ? "#FFFFFF"
+                              : "#f6c401",
+                        }}
+                      />
                     ) : rewards[currentIndex]?.selectedUnlock?.resource <
                       1350 ? (
-                      <GiCoins size={50} style={{ color: rewards[currentIndex]?.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                      <GiCoins
+                        size={50}
+                        style={{
+                          color:
+                            rewards[currentIndex]?.rarity == "Gold"
+                              ? "#FFFFFF"
+                              : "#f6c401",
+                        }}
+                      />
                     ) : (
-                      <GiCoinsPile size={50} style={{ color: rewards[currentIndex]?.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                      <GiCoinsPile
+                        size={50}
+                        style={{
+                          color:
+                            rewards[currentIndex]?.rarity == "Gold"
+                              ? "#FFFFFF"
+                              : "#f6c401",
+                        }}
+                      />
                     )
                   ) : rewards[currentIndex]?.selectedUnlock?.type ==
                     "trophy 2x" ? (
-                    <GiTrophy size={50} style={{ color: rewards[currentIndex]?.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                    <GiTrophy
+                      size={50}
+                      style={{
+                        color:
+                          rewards[currentIndex]?.rarity == "Gold"
+                            ? "#FFFFFF"
+                            : "#f6c401",
+                      }}
+                    />
                   ) : (
                     <Box
                       sx={{
@@ -586,18 +635,45 @@ export default function CardOpening() {
                     </Typography>
                     {card?.selectedUnlock?.type == "coins" ? (
                       card?.selectedUnlock?.resource < 450 ? (
-                        <GiTwoCoins size={35} style={{ color: card.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
-                      ) : card?.selectedUnlock?.resource <
-                        900 ? (
-                        <GiCash size={35} style={{ color: card.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
-                      ) : card?.selectedUnlock?.resource <
-                        1350 ? (
-                        <GiCoins size={35} style={{ color: card.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                        <GiTwoCoins
+                          size={35}
+                          style={{
+                            color:
+                              card.rarity == "Gold" ? "#FFFFFF" : "#f6c401",
+                          }}
+                        />
+                      ) : card?.selectedUnlock?.resource < 900 ? (
+                        <GiCash
+                          size={35}
+                          style={{
+                            color:
+                              card.rarity == "Gold" ? "#FFFFFF" : "#f6c401",
+                          }}
+                        />
+                      ) : card?.selectedUnlock?.resource < 1350 ? (
+                        <GiCoins
+                          size={35}
+                          style={{
+                            color:
+                              card.rarity == "Gold" ? "#FFFFFF" : "#f6c401",
+                          }}
+                        />
                       ) : (
-                        <GiCoinsPile size={35} style={{ color: card.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                        <GiCoinsPile
+                          size={35}
+                          style={{
+                            color:
+                              card.rarity == "Gold" ? "#FFFFFF" : "#f6c401",
+                          }}
+                        />
                       )
                     ) : card?.selectedUnlock?.type == "trophy 2x" ? (
-                      <GiTrophy size={35} style={{ color: card.rarity == "Gold" ? "#FFFFFF" : "#f6c401" }} />
+                      <GiTrophy
+                        size={35}
+                        style={{
+                          color: card.rarity == "Gold" ? "#FFFFFF" : "#f6c401",
+                        }}
+                      />
                     ) : (
                       <Box
                         sx={{

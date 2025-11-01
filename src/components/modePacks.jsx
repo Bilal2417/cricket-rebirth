@@ -30,24 +30,27 @@ export default function ModePack({
     storedProfile ? JSON.parse(storedProfile) : ""
   );
 
-  const handleCardClick = async (price, isActive , key ) => {
+  const handleCardClick = async (price, isActive, key) => {
     const profileId = localStorage.getItem("MyId");
     if (isActive && price <= Profile?.coins) {
       const currentItems = Profile.unlocked_items || [];
       const newItem = key;
-      
+
       const updatedProfile = {
         ...Profile,
         id: profileId || Profile?.id,
         coins: Profile.coins - price,
         unlocked_items: [...currentItems, newItem],
       };
-      
+
       try {
         const res = await fetch("/.netlify/functions/updateProfile", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedProfile),
+          body: JSON.stringify({
+            ...updatedProfile,
+            source: "modePack", // 👈 Add this line
+          }),
         });
 
         const data = await res.json();
@@ -131,13 +134,14 @@ export default function ModePack({
           >
             <Box
               sx={{
-                color : Profile?.unlocked_items?.includes(value)
+                color: Profile?.unlocked_items?.includes(value)
                   ? " rgba(255, 255, 255, 0.8)"
                   : "rgba(0, 0, 0, 0.3)",
                 width: "90px",
                 height: "90px",
                 background:
-                  iconGrad || "radial-gradient(circle at center, #fa208e, #8b0ef0)",
+                  iconGrad ||
+                  "radial-gradient(circle at center, #fa208e, #8b0ef0)",
                 borderRadius: "50%",
                 display: "flex",
                 alignItems: "center",
@@ -160,7 +164,9 @@ export default function ModePack({
                 fontWeight: 800,
                 letterSpacing: 1,
                 mb: 1,
-                color: Profile?.unlocked_items?.includes(value) ? "#15daab" : "#fff",
+                color: Profile?.unlocked_items?.includes(value)
+                  ? "#15daab"
+                  : "#fff",
               }}
             >
               {title}
@@ -190,7 +196,11 @@ export default function ModePack({
                     color: "#ffffff",
                     fontWeight: 600,
                   }}
-                  onClick={() => Profile?.unlocked_items?.includes(value) ? null : handleCardClick(price, isActive ,value)}
+                  onClick={() =>
+                    Profile?.unlocked_items?.includes(value)
+                      ? null
+                      : handleCardClick(price, isActive, value)
+                  }
                 >
                   {price} Coins
                 </Button>

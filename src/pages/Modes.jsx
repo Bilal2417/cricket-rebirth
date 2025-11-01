@@ -244,7 +244,10 @@ export default function Modes() {
       const res = await fetch("/.netlify/functions/updateProfile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProfile),
+        body: JSON.stringify({
+          ...updatedProfile,
+          source: "modes", // 👈 Add this line
+        }),
       });
 
       const data = await res.json();
@@ -616,9 +619,12 @@ export default function Modes() {
                       >
                         <Typography
                           sx={{
-                            backgroundColor: index < 3 ? "rgb(223, 228, 81)" : null,
+                            backgroundColor:
+                              index < 3 ? "rgb(223, 228, 81)" : null,
                             color:
-                              prof?.id == profileId || index < 3 ? "#00001d" : "#FFFFFF",
+                              prof?.id == profileId || index < 3
+                                ? "#00001d"
+                                : "#FFFFFF",
                             padding: "4px 12px",
                             fontWeight: 600,
                           }}

@@ -27,6 +27,7 @@ export async function handler(event) {
       battle_log,
       points, // contest
       tickets, // contest
+      source,
     } = body;
 
     if (!id) {
@@ -101,8 +102,20 @@ export async function handler(event) {
           )
         : parseArray(current.titles);
 
-    const safeTrophies =
-      typeof trophies === "number" ? Math.max(0, trophies) : current.trophies;
+    let safeTrophies;
+
+    if (typeof trophies === "number") {
+      if (source === "toss") {
+        // During toss: don't overwrite unless needed
+        safeTrophies = trophies || current.trophies;
+      } else {
+        // During match result: ensure trophies never go below 0
+        safeTrophies = Math.max(0, trophies);
+      }
+    } else {
+      // fallback if trophies is missing or invalid
+      safeTrophies = current.trophies;
+    }
 
     // --- Handle battle log ---
     const currentBattleLog = parseArray(current.battle_log);
@@ -110,7 +123,7 @@ export async function handler(event) {
 
     if (battle_log) {
       const newLogs = Array.isArray(battle_log) ? battle_log : [battle_log];
-      if (!victories) {
+      if (source == "toss") {
         updatedBattleLog = [...newLogs, ...currentBattleLog].flat();
       } else {
         // 👇 Victory case: replace the top-most log with the new one
