@@ -243,7 +243,11 @@ export default function Result() {
           ? "Defeat"
           : "Draw",
       trophies:
-        matchType == 1
+        givenMode == "CONTEST" ||
+        givenMode == "TOURNAMENT" ||
+        givenMode == "KNOCKOUT"
+          ? 0
+          : matchType == 1
           ? 0
           : matchType == 2
           ? trophyMap[wkts]
@@ -259,7 +263,7 @@ export default function Result() {
       trophies: Profile.trophies + trophyIncrement,
       coins: Profile.coins + coinsIncrement,
       battle_log: battleLog, // ✅ send it here
-      points: givenMode == "CONTEST" ? Profile.points + collectedPoints : null,
+      points: givenMode == "CONTEST" ? (Profile.points || 0) + collectedPoints : null,
     };
 
     console.log(updatedProfile, "Profile that is sending");

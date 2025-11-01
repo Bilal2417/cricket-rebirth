@@ -97,7 +97,7 @@ export default function Toss() {
     const givenMode = sessionStorage.getItem("mode");
     const battleLog = {
       team1: {
-        name: userTeam?.name,
+        name: userTeam,
         runs: userTeam?.score,
         wickets: userTeam?.wicket,
         overs: userTeam?.Over,
@@ -105,7 +105,7 @@ export default function Toss() {
         flags: userTeam?.flag,
       },
       team2: {
-        name: aiTeam?.name,
+        name: aiTeam,
         runs: aiTeam?.score,
         wickets: aiTeam?.wicket,
         overs: aiTeam?.Over,
