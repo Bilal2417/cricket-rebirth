@@ -196,7 +196,7 @@ export default function Modes() {
       const lastGiven = localStorage.getItem("lastTicketDate");
 
       // 🎟️ Only give tickets after 12 PM and not already given
-      if (now.getUTCHours() >= 7 && lastGiven !== today && now < end) {
+      if (now.getUTCHours() >= 10 && lastGiven !== today && now < end) {
         localStorage.setItem("lastTicketDate", today);
         console.log("🎟️ 3 tickets granted for today!");
         manageTickets();
@@ -616,9 +616,9 @@ export default function Modes() {
                       >
                         <Typography
                           sx={{
-                            backgroundColor: index < 3 ? "#3aecfa" : null,
+                            backgroundColor: index < 3 ? "rgb(223, 228, 81)" : null,
                             color:
-                              prof?.id == profileId ? "#00001d" : "#FFFFFF",
+                              prof?.id == profileId || index < 3 ? "#00001d" : "#FFFFFF",
                             padding: "4px 12px",
                             fontWeight: 600,
                           }}
