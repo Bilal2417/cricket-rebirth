@@ -291,7 +291,7 @@ export default function Modes() {
         <Box
           sx={{
             display: "flex",
-            gap: "20px",
+            gap: "40px",
           }}
         >
           <Button
@@ -584,7 +584,7 @@ export default function Modes() {
                       sx={{
                         backgroundColor:
                           prof?.id == profileId ? "#eae8fc" : "#00001d",
-                        width: "500",
+                        width: "500px",
                         paddingLeft: "15px",
                         display: "flex",
                         alignContent: "center",
