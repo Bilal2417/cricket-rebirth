@@ -209,10 +209,12 @@ export default function Modes() {
   }, []);
 
   useEffect(() => {
-    if (!saved) {
-      localStorage.removeItem("tournamentData");
+    if (!unlocked) {
+      if (saved) {
+        localStorage.removeItem("tournamentData");
+      }
     }
-  }, []);
+  }, [saved]);
   const manageTickets = async (rewards = false) => {
     if (!Profile) return;
 
