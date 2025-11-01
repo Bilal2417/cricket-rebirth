@@ -106,8 +106,8 @@ export default function Modes() {
 
     return { total, days, hours, minutes, seconds };
   }
-  const start = new Date("2025-11-01T12:00:00Z");
-  const end = new Date("2025-11-04T12:00:00Z");
+  const start = new Date("2025-11-01T10:00:00Z");
+  const end = new Date("2025-11-04T10:00:00Z");
 
   const remaining = getTimeRemaining(start);
   useEffect(() => {
@@ -751,7 +751,7 @@ export default function Modes() {
                   }}
                   variant="h6"
                 >
-                  {timeLeft?.days <= 1 ? `Contest Ends:` : `New Tickets In:`}
+                  {timeLeft?.days <= 1 ? `Contest Ends:` : `New Ticket In:`}
                 </Typography>
                 <Typography
                   sx={{
