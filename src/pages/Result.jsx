@@ -282,6 +282,7 @@ export default function Result() {
 
       const data = await res.json();
       if (data.success) {
+        console.log(data.success, "Profile that came");
         setProfile(data.profile);
         sessionStorage.setItem("Profile", JSON.stringify(data.profile));
         sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));

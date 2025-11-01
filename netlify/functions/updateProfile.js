@@ -179,10 +179,11 @@ export async function handler(event) {
     if (points != null || tickets != null) {
       await client.query(
         `UPDATE contest
-         SET points = COALESCE($1, points),
-             tickets = COALESCE($2, tickets)
-         WHERE profile_id = $3`,
-        [points ?? null, tickets ?? null, id]
+     SET 
+       points = points + COALESCE($1, 0),
+       tickets = COALESCE($2, tickets)
+     WHERE profile_id = $3`,
+        [points, tickets, id]
       );
     }
 
