@@ -136,6 +136,7 @@ export default function Toss() {
           : Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
       tickets: givenMode == "CONTEST" ? Profile.tickets - 1 : null,
       battle_log: battleLog,
+      points : null
     };
 
     setProfile(updatedProfile);

@@ -236,7 +236,7 @@ export default function Modes() {
         : Profile.coins,
       tournaments:
         profiles[0]?.id == profileId
-          ? Profile.tournaments + 1
+          ? Profile.tournaments || 0 + 1
           : Profile.tournaments,
     };
 
