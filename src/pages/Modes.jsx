@@ -208,6 +208,11 @@ export default function Modes() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (!saved) {
+      localStorage.removeItem("tournamentData");
+    }
+  }, []);
   const manageTickets = async (rewards = false) => {
     if (!Profile) return;
 
@@ -488,7 +493,7 @@ export default function Modes() {
                   display: "flex",
                   flexDirection: "column",
                   // gap: "5px",
-                  height : "40px",
+                  height: "40px",
                 }}
               >
                 <Typography
@@ -511,7 +516,7 @@ export default function Modes() {
                     fontWeight: 600,
                     color: "#f6821b",
                     minWidth: "120px",
-                    mt : "-6px",
+                    mt: "-6px",
                     fontSize: {
                       xs: "0.8em",
                       md: "1.2em",
@@ -727,40 +732,40 @@ export default function Modes() {
                   );
                 })}
               </Box>
-                <Box
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
+                    textTransform: "uppercase",
                   }}
+                  variant="h6"
                 >
-                  <Typography
-                    sx={{
-                      textTransform: "uppercase",
-                    }}
-                    variant="h6"
-                  >
-                    {timeLeft?.days <= 1 ? `Contest Ends:` : `New Tickets In:`}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      textTransform: "uppercase",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                      fontSize: "1em !important",
-                      mt : "-5px"
-                    }}
-                    variant="h6"
-                  >
-                    <GiExtraTime style={{ color: "#dfe451" }} size={30} />
-                    {timeLeft
-                      ? timeLeft.total <= 0
-                        ? "Contest Ended"
-                        : `${timeLeft.hours}h ${timeLeft.minutes}m`
-                      : "Loading..."}
-                  </Typography>
-                </Box>
+                  {timeLeft?.days <= 1 ? `Contest Ends:` : `New Tickets In:`}
+                </Typography>
+                <Typography
+                  sx={{
+                    textTransform: "uppercase",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    fontSize: "1em !important",
+                    mt: "-5px",
+                  }}
+                  variant="h6"
+                >
+                  <GiExtraTime style={{ color: "#dfe451" }} size={30} />
+                  {timeLeft
+                    ? timeLeft.total <= 0
+                      ? "Contest Ended"
+                      : `${timeLeft.hours}h ${timeLeft.minutes}m`
+                    : "Loading..."}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </Box>
