@@ -380,7 +380,7 @@ export default function Modes() {
                   fontWeight: 600,
                   color: "#dcdcdcff",
                 }}
-                variant={saved ? "h3" : "body1"}
+                variant="body1"
               >
                 10 Overs
               </Typography>
