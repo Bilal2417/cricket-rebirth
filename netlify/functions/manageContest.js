@@ -11,7 +11,9 @@ export async function handler() {
 
     const result = await client.query(`
       SELECT 
+        p.id,
         p.name,
+        p.img,
         c.points,
         c.tickets
       FROM contest c

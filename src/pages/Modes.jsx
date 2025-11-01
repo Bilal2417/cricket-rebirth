@@ -544,13 +544,37 @@ export default function Modes() {
                     xs: "5px",
                     md: window.innerHeight < 500 ? "5px" : "10px",
                   },
-                  overflowY: "auto",
                   padding: "0 10px",
                   alignItems: "center",
-                  minHeight: {
+                  maxHeight: {
                     xs: "220px",
                     md: window.innerHeight < 500 ? "265px" : "500px",
                   },
+                  overflowY: "scroll",
+                  overflowX: "hidden",
+                  WebkitOverflowScrolling: "touch",
+                  touchAction: "pan-y",
+                  overscrollBehavior: "contain",
+                  position: "relative",
+                  isolation: "isolate",
+                  "&::-webkit-scrollbar": {
+                    width: "8px",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    background: "#f1f1f1",
+                    borderRadius: "10px",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    backgroundColor: "#888",
+                    borderRadius: "10px",
+                    border: "2px solid #f1f1f1",
+                  },
+                  "&::-webkit-scrollbar-thumb:hover": {
+                    backgroundColor: "#555",
+                  },
+
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "#888 #f1f1f1",
                 }}
               >
                 {profiles?.map((prof, index) => {
@@ -559,7 +583,7 @@ export default function Modes() {
                       sx={{
                         backgroundColor:
                           prof?.id == profileId ? "#eae8fc" : "#00001d",
-                        minWidth: "415px",
+                        width: "465px",
                         paddingLeft: "15px",
                         display: "flex",
                         alignContent: "center",
