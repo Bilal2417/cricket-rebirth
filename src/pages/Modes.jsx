@@ -690,7 +690,7 @@ export default function Modes() {
                           sx={{ minWidth: "30px", textAlign: "center" }}
                           component="span"
                         >
-                          {Profile?.tickets}/3
+                          {prof?.tickets}/3
                         </Box>
                       </Typography>
 
@@ -756,7 +756,7 @@ export default function Modes() {
                           sx={{ minWidth: "45px", textAlign: "center" }}
                           component="span"
                         >
-                          {Profile?.points}
+                          {prof?.points}
                         </Box>
                       </Typography>
                     </Box>
