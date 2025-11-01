@@ -33,7 +33,7 @@ let theme = createTheme({
 });
 
 // 2. Make it responsive
-theme = responsiveFontSizes(theme, { factor: 2 });
+theme = responsiveFontSizes(theme);
 
 // 3. Wrap App inside BrowserRouter + ThemeProvider
 const root = ReactDOM.createRoot(document.getElementById("root"));

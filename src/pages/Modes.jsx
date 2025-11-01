@@ -263,7 +263,7 @@ export default function Modes() {
           scrollBehavior: "smooth",
           scrollSnapType: "x mandatory",
           "& > *": { scrollSnapAlign: "center" },
-          p: { xs: 1, md: 6 },
+          p: { xs: 1, md: window.innerHeight < 500 ? "8px 16px" : 6 },
           "&::-webkit-scrollbar": {
             height: "8px",
           },
@@ -285,7 +285,10 @@ export default function Modes() {
           <Button
             sx={{
               height: "100%",
-              minHeight: { xs: "250px", md: "500px" },
+              minHeight: {
+                xs: "250px",
+                md: window.innerHeight < 500 ? "360px" : "500px",
+              },
               flexShrink: 0,
               width: Date.now() < start ? 300 : 200,
               background: "linear-gradient(to top, #f5214b, #8e0e2f)",
@@ -457,6 +460,10 @@ export default function Modes() {
                   color: "#ffffff",
                   fontWeight: 600,
                   minWidth: "120px",
+                  fontSize: {
+                    xs: "1.6em",
+                    md: window.innerHeight < 500 ? "1.6em" : "2em",
+                  },
                 }}
                 variant="h3"
               >
@@ -480,7 +487,8 @@ export default function Modes() {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: "5px",
+                  // gap: "5px",
+                  height : "40px",
                 }}
               >
                 <Typography
@@ -488,6 +496,10 @@ export default function Modes() {
                     textTransform: "uppercase",
                     fontWeight: 600,
                     color: "#dfe451",
+                    fontSize: {
+                      xs: "0.8em",
+                      md: window.innerHeight < 500 ? "0.8em" : "1em",
+                    },
                   }}
                   variant="body1"
                 >
@@ -499,6 +511,11 @@ export default function Modes() {
                     fontWeight: 600,
                     color: "#f6821b",
                     minWidth: "120px",
+                    mt : "-6px",
+                    fontSize: {
+                      xs: "0.8em",
+                      md: "1.2em",
+                    },
                   }}
                   variant="h6"
                 >
@@ -506,232 +523,244 @@ export default function Modes() {
                 </Typography>
               </Box>
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "5px",
-                mt: "20px",
-                overflowY: "auto",
-                padding: "0 10px",
-                alignItems: "center",
-                maxHeight : "250px"
-              }}
-            >
-              {profiles?.map((prof, index) => {
-                return (
-                  <Box
-                    sx={{
-                      backgroundColor:
-                        prof?.id == profileId ? "#eae8fc" : "#00001d",
-                      minWidth: "415px",
-                      paddingLeft: "15px",
-                      display: "flex",
-                      alignContent: "center",
-                      justifyContent: "space-between",
-                      border: "2px solid #000000",
-                      borderRadius: "4px",
-                      boxShadow:
-                        prof?.id == profileId
-                          ? "inset 0px -8px 8px -4px #eae8fc"
-                          : "inset 0px -8px 8px -4px #00001d",
-                      transition: "all 0.3s",
-                      transform: "skew(-5deg)",
-                      "@media (hover: hover)": {
-                        cursor: "pointer",
-                        opacity: 0.9,
-                      },
-                      ":active": {
-                        transform: "scale(0.9)",
-                      },
-                    }}
-                  >
+            <Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "5px",
+                  mt: {
+                    xs: "5px",
+                    md: window.innerHeight < 500 ? "5px" : "10px",
+                  },
+                  overflowY: "auto",
+                  padding: "0 10px",
+                  alignItems: "center",
+                  minHeight: {
+                    xs: "220px",
+                    md: window.innerHeight < 500 ? "265px" : "500px",
+                  },
+                }}
+              >
+                {profiles?.map((prof, index) => {
+                  return (
                     <Box
                       sx={{
+                        backgroundColor:
+                          prof?.id == profileId ? "#eae8fc" : "#00001d",
+                        minWidth: "415px",
+                        paddingLeft: "15px",
                         display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                        position: "relative",
+                        alignContent: "center",
+                        justifyContent: "space-between",
+                        border: "2px solid #000000",
+                        borderRadius: "4px",
+                        boxShadow:
+                          prof?.id == profileId
+                            ? "inset 0px -8px 8px -4px #eae8fc"
+                            : "inset 0px -8px 8px -4px #00001d",
+                        transition: "all 0.3s",
+                        transform: "skew(-5deg)",
+                        "@media (hover: hover)": {
+                          cursor: "pointer",
+                          opacity: 0.9,
+                        },
+                        ":active": {
+                          transform: "scale(0.9)",
+                        },
                       }}
                     >
-                      <Typography
-                        sx={{
-                          backgroundColor: index < 3 ? "#3aecfa" : null,
-                          color: prof?.id == profileId ? "#00001d" : "#FFFFFF",
-                          padding: "4px 12px",
-                          fontWeight: 600,
-                        }}
-                        variant="body1"
-                      >
-                        {index + 1}
-                      </Typography>
-                      <Box
-                        component="img"
-                        src={prof?.img}
-                        alt={prof?.name}
-                        sx={{
-                          width: 45,
-                          height: 45,
-                          border:
-                            prof?.id == profileId
-                              ? "2px solid #000"
-                              : "2px solid #fff",
-                          borderRadius: "4px",
-                          objectFit: "cover",
-                          "&:hover": { cursor: "pointer" },
-                        }}
-                      />
-
                       <Box
                         sx={{
                           display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "flex-start",
+                          alignItems: "center",
+                          gap: "10px",
+                          position: "relative",
                         }}
                       >
                         <Typography
                           sx={{
-                            fontWeight: 600,
+                            backgroundColor: index < 3 ? "#3aecfa" : null,
                             color:
-                              prof?.id == profileId
-                                ? "#00001d"
-                                : "rgb(255 196 107)",
-                            width: "90px",
+                              prof?.id == profileId ? "#00001d" : "#FFFFFF",
+                            padding: "4px 12px",
+                            fontWeight: 600,
                           }}
                           variant="body1"
                         >
-                          {prof?.name}
+                          {index + 1}
                         </Typography>
-                      </Box>
-                    </Box>
+                        <Box
+                          component="img"
+                          src={prof?.img}
+                          alt={prof?.name}
+                          sx={{
+                            width: 45,
+                            height: 45,
+                            border:
+                              prof?.id == profileId
+                                ? "2px solid #000"
+                                : "2px solid #fff",
+                            borderRadius: "4px",
+                            objectFit: "cover",
+                            "&:hover": { cursor: "pointer" },
+                          }}
+                        />
 
-                    <Typography
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        fontWeight: 600,
-                        padding: "15px",
-                        justifyContent: "center",
-                        color: prof?.id == profileId ? "#d72c09ff" : "#FFFFFF",
-                      }}
-                      variant="body1"
-                    >
-                      <GiTicket
-                        size={25}
-                        style={{
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "flex-start",
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontWeight: 600,
+                              color:
+                                prof?.id == profileId
+                                  ? "#00001d"
+                                  : "rgb(255 196 107)",
+                              width: "90px",
+                            }}
+                            variant="body1"
+                          >
+                            {prof?.name}
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      <Typography
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          fontWeight: 600,
+                          padding: "15px",
+                          justifyContent: "center",
                           color:
                             prof?.id == profileId ? "#d72c09ff" : "#FFFFFF",
                         }}
-                      />
-                      <Box
-                        sx={{ minWidth: "30px", textAlign: "center" }}
-                        component="span"
+                        variant="body1"
                       >
-                        {Profile?.tickets}/3
-                      </Box>
-                    </Typography>
+                        <GiTicket
+                          size={25}
+                          style={{
+                            color:
+                              prof?.id == profileId ? "#d72c09ff" : "#FFFFFF",
+                          }}
+                        />
+                        <Box
+                          sx={{ minWidth: "30px", textAlign: "center" }}
+                          component="span"
+                        >
+                          {Profile?.tickets}/3
+                        </Box>
+                      </Typography>
 
-                    <Typography
-                      sx={{
-                        display: index > 2 ? "none" : "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        fontWeight: 600,
-                        padding: "15px 15px 15px 0",
-                        justifyContent: "center",
-                        color:
-                          prof?.id == profileId
-                            ? "#f47909"
-                            : "rgb(255 196 107)",
-                      }}
-                      variant="body1"
-                    >
-                      <GiTwoCoins
-                        size={25}
-                        style={{
+                      <Typography
+                        sx={{
+                          display: index > 2 ? "none" : "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          fontWeight: 600,
+                          padding: "15px 15px 15px 0",
+                          justifyContent: "center",
                           color:
                             prof?.id == profileId
                               ? "#f47909"
                               : "rgb(255 196 107)",
                         }}
-                      />
-                      <Box
-                        sx={{ minWidth: "30px", textAlign: "center" }}
-                        component="span"
+                        variant="body1"
                       >
-                        {index == 0
-                          ? 1000
-                          : index == 1
-                          ? 500
-                          : index == 2
-                          ? 300
-                          : null}
-                      </Box>
-                    </Typography>
+                        <GiTwoCoins
+                          size={25}
+                          style={{
+                            color:
+                              prof?.id == profileId
+                                ? "#f47909"
+                                : "rgb(255 196 107)",
+                          }}
+                        />
+                        <Box
+                          sx={{ minWidth: "30px", textAlign: "center" }}
+                          component="span"
+                        >
+                          {index == 0
+                            ? 1000
+                            : index == 1
+                            ? 500
+                            : index == 2
+                            ? 300
+                            : null}
+                        </Box>
+                      </Typography>
 
-                    <Typography
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        fontWeight: 600,
-                        backgroundColor: "#61616135",
-                        padding: "15px",
-                        justifyContent: "center",
-                        color: prof?.id == profileId ? "#00001d" : "#dfe451",
-                      }}
-                      variant="body1"
-                    >
-                      <GiPointySword
-                        size={25}
-                        style={{
+                      <Typography
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          fontWeight: 600,
+                          backgroundColor: "#61616135",
+                          padding: "15px",
+                          justifyContent: "center",
                           color: prof?.id == profileId ? "#00001d" : "#dfe451",
                         }}
-                      />
-                      <Box
-                        sx={{ minWidth: "30px", textAlign: "center" }}
-                        component="span"
+                        variant="body1"
                       >
-                        {Profile?.points}
-                      </Box>
-                    </Typography>
-                  </Box>
-                );
-              })}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <Typography
-                  sx={{
-                    textTransform: "uppercase",
-                  }}
-                  variant="h6"
-                >
-                  {timeLeft?.days <= 1 ? `Contest Ends:` : `New Tickets In:`}
-                </Typography>
-                <Typography
-                  sx={{
-                    textTransform: "uppercase",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    fontSize: "1em !important",
-                  }}
-                  variant="h6"
-                >
-                  <GiExtraTime style={{ color: "#dfe451" }} size={30} />
-                  {timeLeft
-                    ? timeLeft.total <= 0
-                      ? "Contest Ended"
-                      : `${timeLeft.hours}h ${timeLeft.minutes}m`
-                    : "Loading..."}
-                </Typography>
+                        <GiPointySword
+                          size={25}
+                          style={{
+                            color:
+                              prof?.id == profileId ? "#00001d" : "#dfe451",
+                          }}
+                        />
+                        <Box
+                          sx={{ minWidth: "30px", textAlign: "center" }}
+                          component="span"
+                        >
+                          {Profile?.points}
+                        </Box>
+                      </Typography>
+                    </Box>
+                  );
+                })}
               </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      textTransform: "uppercase",
+                    }}
+                    variant="h6"
+                  >
+                    {timeLeft?.days <= 1 ? `Contest Ends:` : `New Tickets In:`}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      textTransform: "uppercase",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      fontSize: "1em !important",
+                      mt : "-5px"
+                    }}
+                    variant="h6"
+                  >
+                    <GiExtraTime style={{ color: "#dfe451" }} size={30} />
+                    {timeLeft
+                      ? timeLeft.total <= 0
+                        ? "Contest Ended"
+                        : `${timeLeft.hours}h ${timeLeft.minutes}m`
+                      : "Loading..."}
+                  </Typography>
+                </Box>
             </Box>
           </Box>
         </Box>
@@ -739,7 +768,10 @@ export default function Modes() {
         <Button
           sx={{
             flexShrink: 0,
-            minHeight: { xs: "250px", md: "500px" },
+            minHeight: {
+              xs: "250px",
+              md: window.innerHeight < 500 ? "360px" : "500px",
+            },
             minWidth: 150,
             background: unlocked
               ? "linear-gradient(135deg, #0072ff, #00c6ff)"
@@ -1001,7 +1033,10 @@ export default function Modes() {
           sx={{
             flexShrink: 0,
             minWidth: 150,
-            minHeight: { xs: "250px", md: "500px" },
+            minHeight: {
+              xs: "250px",
+              md: window.innerHeight < 500 ? "360px" : "500px",
+            },
             background: unlockedKO
               ? "linear-gradient(135deg, #ff512f, #dd2476)"
               : "#e14189ff",
