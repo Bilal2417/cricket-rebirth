@@ -74,12 +74,14 @@ export default function Toss() {
     const aiTeam = localStorage.getItem("Ai");
     const userTeam = localStorage.getItem("User");
 
-    const updatedMatch = {
-      ...userMatch,
-      winner: aiTeam,
-      loser: userTeam,
-    };
-    sessionStorage.setItem("latestUserMatch", JSON.stringify(updatedMatch));
+    if (userMatch) {
+      const updatedMatch = {
+        ...userMatch,
+        winner: aiTeam,
+        loser: userTeam,
+      };
+      sessionStorage.setItem("latestUserMatch", JSON.stringify(updatedMatch));
+    }
     if (!Profile) return;
 
     const trophyMap = {
@@ -98,8 +100,10 @@ export default function Toss() {
       ...Profile,
       id: Profile?.id,
       trophies:
-        Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
-      tickets : givenMode == "CONTEST" ? Profile.tickets - 1 : null
+        givenMode == "CONTEST"
+          ? Profile.trophies
+          : Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
+      tickets: givenMode == "CONTEST" ? Profile.tickets - 1 : null,
     };
 
     setProfile(updatedProfile);

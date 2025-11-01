@@ -156,7 +156,7 @@ export async function handler(event) {
         `UPDATE contest
          SET points = COALESCE($1, points),
              tickets = COALESCE($2, tickets)
-         WHERE id = $3`,
+         WHERE profile_id = $3`,
         [points ?? null, tickets ?? null, id]
       );
     }

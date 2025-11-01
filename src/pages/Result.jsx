@@ -200,6 +200,8 @@ export default function Result() {
 
     let collectedPoints = 0;
     if (givenMode == "CONTEST") {
+      coinsIncrement = 0;
+      trophyIncrement = 0;
       if (winnerFirst) {
         collectedPoints = userTeam?.score - aiTeam?.score;
       } else {
@@ -213,6 +215,7 @@ export default function Result() {
       }
       if (win) {
         collectedPoints *= 5;
+        coinsIncrement = 100;
       }
     }
 
@@ -256,7 +259,7 @@ export default function Result() {
       trophies: Profile.trophies + trophyIncrement,
       coins: Profile.coins + coinsIncrement,
       battle_log: battleLog, // ✅ send it here
-      points : givenMode == "CONTEST" ? Profile.points + collectedPoints : null
+      points: givenMode == "CONTEST" ? Profile.points + collectedPoints : null,
     };
 
     console.log(updatedProfile, "Profile that is sending");
