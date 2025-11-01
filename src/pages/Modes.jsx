@@ -227,11 +227,11 @@ export default function Modes() {
       tickets: !rewards ? 3 : Profile.tickets,
       coins: rewards
         ? profiles[0]?.id == profileId
-          ? Profile.coins + 1000
+          ? Profile.coins + 3000
           : profiles[1]?.id == profileId
-          ? Profile.coins + 500
+          ? Profile.coins + 1500
           : profiles[2]?.id == profileId
-          ? Profile.coins + 300
+          ? Profile.coins + 1000
           : Profile.coins
         : Profile.coins,
       tournaments:
@@ -731,11 +731,11 @@ export default function Modes() {
                           component="span"
                         >
                           {index == 0
-                            ? 1000
+                            ? 3000
                             : index == 1
-                            ? 500
+                            ? 1500
                             : index == 2
-                            ? 300
+                            ? 1000
                             : null}
                         </Box>
                       </Typography>
