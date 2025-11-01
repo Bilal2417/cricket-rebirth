@@ -37,6 +37,7 @@ export async function handler(event) {
         p.unlocked_teams,
         p.unlocked_items,
         p.victories,
+        p.tournaments,
         p.titles,
         p.starter,
         COALESCE(c.points, 0) AS points,

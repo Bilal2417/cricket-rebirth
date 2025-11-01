@@ -231,6 +231,10 @@ export default function Modes() {
           ? Profile.coins + 300
           : Profile.coins
         : Profile.coins,
+      tournaments:
+        profiles[0]?.id == profileId
+          ? Profile.tournaments + 1
+          : Profile.tournaments,
     };
 
     setProfile(updatedProfile);
