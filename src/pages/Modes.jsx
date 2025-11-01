@@ -135,7 +135,7 @@ export default function Modes() {
         const now = Date.now();
         const myProfile = JSON.parse(sessionStorage.getItem("UserProfile"));
 
-        if (!force && cached.timestamp && now - cached.timestamp < 30 * 1000) {
+        if (!force && cached.timestamp && now - cached.timestamp < 90 * 1000) {
           setProfiles(cached.data);
           setContestLoading(false);
           // const matchedProfile = data.profiles.find((p) => p.id === profileId);

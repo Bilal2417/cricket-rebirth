@@ -154,125 +154,173 @@ export default function Log() {
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "10px 20px",
+                    flexDirection: "column",
+                    gap: "10px",
                   }}
                 >
                   <Box
                     sx={{
                       display: "flex",
-                      // flexDirection : "column",
-                      gap: "30px",
+                      justifyContent: "space-between",
                       alignItems: "center",
-                      width: "320px",
+                      padding: "10px 20px",
                     }}
                   >
                     <Box
                       sx={{
                         display: "flex",
+                        // flexDirection : "column",
+                        gap: "30px",
                         alignItems: "center",
-                        gap: "20px",
+                        width: "320px",
                       }}
                     >
-                      <Typography
-                        sx={{
-                          fontWeight: 600,
-                          textTransform: "uppercase",
-                        }}
-                        variant="h6"
-                      >
-                        {log?.team1?.name}
-                      </Typography>
                       <Box
-                        component="img"
                         sx={{
-                          width: { xs: "45px", md: "60px" },
-                          height: { xs: "30px", md: "40px" },
-                          boxShadow: "3px 3px 8px -2px #000000",
-                          borderRadius: "6px",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "20px",
                         }}
-                        src={log?.team1?.flags}
-                      />
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 600,
+                            textTransform: "uppercase",
+                          }}
+                          variant="h6"
+                        >
+                          {log?.team1?.name}
+                        </Typography>
+                        <Box
+                          component="img"
+                          sx={{
+                            width: { xs: "45px", md: "60px" },
+                            height: { xs: "30px", md: "40px" },
+                            boxShadow: "3px 3px 8px -2px #000000",
+                            borderRadius: "6px",
+                          }}
+                          src={log?.team1?.flags}
+                        />
+                      </Box>
+
+                      <Box>
+                        <Typography variant="h4">
+                          {log?.team1?.runs}{" "}
+                          {log?.team1?.wickets == 10
+                            ? null
+                            : "/" + log?.team1?.wickets}
+                        </Typography>
+                        <Typography variant="body2">
+                          {log?.team1?.overs}.{log?.team1?.balls} overs
+                        </Typography>
+                      </Box>
                     </Box>
 
-                    <Box>
-                      <Typography variant="h4">
-                        {log?.team1?.runs}{" "}
-                        {log?.team1?.wickets == 10
-                          ? null
-                          : "/" + log?.team1?.wickets}
-                      </Typography>
-                      <Typography variant="body2">
-                        {log?.team1?.overs}.{log?.team1?.balls} overs
-                      </Typography>
-                    </Box>
-                  </Box>
-
-                  <Typography
-                    sx={{
-                      fontWeight: 900,
-                      textTransform: "uppercase",
-                      textShadow: `
+                    <Typography
+                      sx={{
+                        fontWeight: 900,
+                        textTransform: "uppercase",
+                        textShadow: `
       -1px -1px 0 #000,
        1px -1px 0 #000,
       -1px  1px 0 #000,
        2px  4px 0 #000
     `,
-                    }}
-                    variant="h1"
-                  >
-                    vs
-                  </Typography>
+                      }}
+                      variant="h1"
+                    >
+                      vs
+                    </Typography>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        // flexDirection : "column",
+                        gap: "30px",
+                        alignItems: "center",
+                        width: "320px",
+                        justifyContent: "end",
+                      }}
+                    >
+                      <Box>
+                        <Typography variant="h4">
+                          {log?.team2?.runs}{" "}
+                          {log?.team2?.wickets == 10
+                            ? null
+                            : "/" + log?.team2?.wickets}
+                        </Typography>
+                        <Typography variant="body2">
+                          {log?.team2?.overs}.{log?.team2?.balls} overs
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "20px",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 600,
+                            textTransform: "uppercase",
+                          }}
+                          variant="h6"
+                        >
+                          {log?.team2?.name}
+                        </Typography>
+                        <Box
+                          component="img"
+                          sx={{
+                            width: { xs: "45px", md: "60px" },
+                            height: { xs: "30px", md: "40px" },
+                            boxShadow: "3px 3px 8px -2px #000000",
+                            borderRadius: "6px",
+                          }}
+                          src={log?.team2?.flags}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
 
                   <Box
                     sx={{
                       display: "flex",
-                      // flexDirection : "column",
-                      gap: "30px",
                       alignItems: "center",
-                      width: "320px",
-                      justifyContent: "end",
+                      justifyContent: "center",
                     }}
                   >
-                    <Box>
-                      <Typography variant="h4">
-                        {log?.team2?.runs}{" "}
-                        {log?.team2?.wickets == 10
-                          ? null
-                          : "/" + log?.team2?.wickets}
-                      </Typography>
-                      <Typography variant="body2">
-                        {log?.team2?.overs}.{log?.team2?.balls} overs
-                      </Typography>
-                    </Box>
-                    <Box
+                    <Typography
                       sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "20px",
+                        textTransform: "uppercase",
+                        color: "#FFFFFF",
                       }}
+                      variant="h6"
                     >
-                      <Typography
-                        sx={{
-                          fontWeight: 600,
-                          textTransform: "uppercase",
-                        }}
-                        variant="h6"
-                      >
-                        {log?.team2?.name}
-                      </Typography>
-                      <Box
-                        component="img"
-                        sx={{
-                          width: { xs: "45px", md: "60px" },
-                          height: { xs: "30px", md: "40px" },
-                          boxShadow: "3px 3px 8px -2px #000000",
-                          borderRadius: "6px",
-                        }}
-                        src={log?.team2?.flags}
-                      />
-                    </Box>
+                      {log?.team1?.runs > log?.team2?.runs
+                        ? log?.team1?.name
+                        : log?.team2?.name}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textTransform: "uppercase",
+                        color: "#FFFFFF",
+                      }}
+                      variant="body1"
+                    >
+                      won by
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textTransform: "uppercase",
+                        color: "#FFFFFF",
+                      }}
+                      variant="h6"
+                    >
+                      {log?.team1?.runs > log?.team2?.runs
+                        ? log?.team1?.runs - log?.team2?.runs + `runs`
+                        : log?.totalWickets - log?.team2?.wickets + `wickets`}
+                    </Typography>
                   </Box>
                 </Box>
               </Box>

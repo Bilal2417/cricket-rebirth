@@ -253,6 +253,7 @@ export default function Result() {
           ? trophyMap[wkts]
           : Math.ceil(trophyMap[wkts] / 2),
       mode: givenMode,
+      totalWickets: totalWkts == 100 ? 1 : totalWkts == 20 || totalWkts == 10 ? 10 : totalWkts,
       time: new Date().toISOString(),
     };
 
