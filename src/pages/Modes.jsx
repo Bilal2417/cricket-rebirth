@@ -19,6 +19,7 @@ import {
   GiTwoCoins,
 } from "react-icons/gi";
 import { keyframes } from "@emotion/react";
+import avatar from "/img/dummy.png";
 
 export default function Modes() {
   const navigate = useNavigate();
@@ -301,7 +302,7 @@ export default function Modes() {
                 md: window.innerHeight < 500 ? "360px" : "500px",
               },
               flexShrink: 0,
-              width: Date.now() < start ? 300 : 200,
+              width: Date.now() < start ? 300 : 250,
               background: "linear-gradient(to top, #f5214b, #8e0e2f)",
               color: "#e1e1e1ff",
               textShadow: `
@@ -583,7 +584,7 @@ export default function Modes() {
                       sx={{
                         backgroundColor:
                           prof?.id == profileId ? "#eae8fc" : "#00001d",
-                        width: "465px",
+                        width: "500",
                         paddingLeft: "15px",
                         display: "flex",
                         alignContent: "center",
@@ -627,7 +628,7 @@ export default function Modes() {
                         </Typography>
                         <Box
                           component="img"
-                          src={prof?.img}
+                          src={prof?.img || avatar}
                           alt={prof?.name}
                           sx={{
                             width: 45,
@@ -735,7 +736,7 @@ export default function Modes() {
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          gap: "5px",
+                          gap: "15px",
                           fontWeight: 600,
                           backgroundColor: "#61616135",
                           padding: "15px",
@@ -752,7 +753,7 @@ export default function Modes() {
                           }}
                         />
                         <Box
-                          sx={{ minWidth: "30px", textAlign: "center" }}
+                          sx={{ minWidth: "45px", textAlign: "center" }}
                           component="span"
                         >
                           {Profile?.points}
@@ -775,7 +776,7 @@ export default function Modes() {
                   }}
                   variant="h6"
                 >
-                  {timeLeft?.days <= 1 ? `Contest Ends:` : `New Ticket In:`}
+                  {timeLeft?.days <= 1 ? `Contest Ends In:` : `New Tickets In:`}
                 </Typography>
                 <Typography
                   sx={{
