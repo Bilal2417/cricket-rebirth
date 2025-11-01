@@ -95,15 +95,47 @@ export default function Toss() {
 
     const penalty = trophyMap[totalWkts];
     const givenMode = sessionStorage.getItem("mode");
+    const battleLog = {
+      team1: {
+        name: userTeam?.name,
+        runs: userTeam?.score,
+        wickets: userTeam?.wicket,
+        overs: userTeam?.Over,
+        balls: userTeam?.Ball,
+        flags: userTeam?.flag,
+      },
+      team2: {
+        name: aiTeam?.name,
+        runs: aiTeam?.score,
+        wickets: aiTeam?.wicket,
+        overs: aiTeam?.Over,
+        balls: aiTeam?.Ball,
+        flags: aiTeam?.flag,
+      },
+      result: "Defeat",
+      trophies:
+        givenMode == "CONTEST" ||
+        givenMode == "TOURNAMENT" ||
+        givenMode == "KNOCKOUT"
+          ? 0
+          : totalWkts == 100
+          ? 5
+          : Math.ceil(penalty / 2),
+      mode: givenMode,
+      time: new Date().toISOString(),
+    };
 
     const updatedProfile = {
       ...Profile,
       id: Profile?.id,
       trophies:
-        givenMode == "CONTEST"
+        givenMode == "CONTEST" ||
+        givenMode == "TOURNAMENT" ||
+        givenMode == "KNOCKOUT"
           ? Profile.trophies
           : Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
       tickets: givenMode == "CONTEST" ? Profile.tickets - 1 : null,
+      battle_log: battleLog,
     };
 
     setProfile(updatedProfile);

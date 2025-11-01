@@ -25,8 +25,8 @@ export async function handler(event) {
       unlocked_items,
       starter,
       battle_log,
-      points,   // contest 
-      tickets,  // contest 
+      points, // contest
+      tickets, // contest
     } = body;
 
     if (!id) {
@@ -110,7 +110,19 @@ export async function handler(event) {
 
     if (battle_log) {
       const newLogs = Array.isArray(battle_log) ? battle_log : [battle_log];
-      updatedBattleLog = [...newLogs, ...currentBattleLog].flat();
+      if (!victories) {
+        updatedBattleLog = [...newLogs, ...currentBattleLog].flat();
+      } else {
+        // 👇 Victory case: replace the top-most log with the new one
+        updatedBattleLog = [...currentBattleLog];
+        if (updatedBattleLog.length > 0) {
+          // replace first log
+          updatedBattleLog[0] = newLogs[0];
+        } else {
+          // if log was empty, just add new log
+          updatedBattleLog = [...newLogs];
+        }
+      }
       if (updatedBattleLog.length > 10) {
         updatedBattleLog = updatedBattleLog.slice(0, 10);
       }
