@@ -254,9 +254,12 @@ export default function Modes() {
 
       const data = await res.json();
       if (data.success) {
-        setProfile(data.profile);
-        console.log(data.profile, "/mode");
-        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+        setProfile((prev) => {
+          const merged = { ...prev, ...data.profile };
+          sessionStorage.setItem("UserProfile", JSON.stringify(merged));
+          return merged;
+        });
+
         window.dispatchEvent(new Event("profileUpdated"));
         localStorage.setItem("refreshContest", "true");
       } else {

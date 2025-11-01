@@ -726,8 +726,11 @@ export default function Tournament() {
 
       const data = await res.json();
       if (data.success) {
-        setProfile(data.profile);
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        setProfile((prev) => {
+          const merged = { ...prev, ...data.profile };
+          sessionStorage.setItem("Profile", JSON.stringify(merged));
+          return merged;
+        });
       } else {
         console.error("Failed to update trophies in database");
       }

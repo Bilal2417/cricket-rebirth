@@ -210,7 +210,7 @@ export default function Result() {
       if (aiTeam?.wicket == 10) {
         collectedPoints += 50;
       }
-      if (userTeam?.score == 200) {
+      if (userTeam?.score >= 200) {
         collectedPoints += 100;
       }
       if (win) {
@@ -253,7 +253,12 @@ export default function Result() {
           ? trophyMap[wkts]
           : Math.ceil(trophyMap[wkts] / 2),
       mode: givenMode,
-      totalWickets: totalWkts == 100 ? 1 : totalWkts == 20 || totalWkts == 10 ? 10 : totalWkts,
+      totalWickets:
+        totalWkts == 100
+          ? 1
+          : totalWkts == 20 || totalWkts == 10
+          ? 10
+          : totalWkts,
       time: new Date().toISOString(),
     };
 
@@ -265,7 +270,7 @@ export default function Result() {
       coins: Profile.coins + coinsIncrement,
       battle_log: battleLog, // ✅ send it here
       points:
-        givenMode == "CONTEST" ? (Profile.points || 0) + collectedPoints : null,
+        givenMode == "CONTEST" ? (Profile.points || 0) + collectedPoints : Profile.points,
     };
 
     console.log(updatedProfile, "Profile that is sending");
@@ -284,9 +289,12 @@ export default function Result() {
       const data = await res.json();
       if (data.success) {
         console.log(data.success, "Profile that came");
-        setProfile(data.profile);
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
-        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+        setProfile((prev) => {
+          const merged = { ...prev, ...data.profile };
+          sessionStorage.setItem("UserProfile", JSON.stringify(merged));
+          console.log(merged,"merged")
+          return merged;
+        });
 
         console.log("It runs in result");
         window.dispatchEvent(new Event("profileUpdated"));

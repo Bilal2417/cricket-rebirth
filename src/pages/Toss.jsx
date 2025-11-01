@@ -136,7 +136,7 @@ export default function Toss() {
           : Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
       tickets: givenMode == "CONTEST" ? Profile.tickets - 1 : null,
       battle_log: battleLog,
-      points : null
+      // points: null,
     };
 
     setProfile(updatedProfile);
@@ -154,9 +154,12 @@ export default function Toss() {
 
       const data = await res.json();
       if (data.success) {
-        setProfile(data.profile);
-        console.log(data.profile, "/toss");
-        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+        setProfile((prev) => {
+          const merged = { ...prev, ...data.profile };
+          sessionStorage.setItem("UserProfile", JSON.stringify(merged));
+          return merged;
+        });
+
         window.dispatchEvent(new Event("profileUpdated"));
       } else {
         console.error("Failed to update trophies in database");

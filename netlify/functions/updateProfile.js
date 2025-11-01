@@ -180,7 +180,7 @@ export async function handler(event) {
       await client.query(
         `UPDATE contest
      SET 
-       points = points + COALESCE($1, 0),
+       points =  COALESCE($1, points),
        tickets = COALESCE($2, tickets)
      WHERE profile_id = $3`,
         [points, tickets, id]

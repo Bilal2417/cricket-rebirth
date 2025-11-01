@@ -181,9 +181,11 @@ export default function ScoreCardOpening() {
 
       const data = await res.json();
       if (data.success) {
-        // setProfile(data.profile);
-        console.log(data.profile);
-        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+        setProfile((prev) => {
+          const merged = { ...prev, ...data.profile };
+          sessionStorage.setItem("UserProfile", JSON.stringify(merged));
+          return merged;
+        });
 
         const val = sessionStorage.getItem("value");
 

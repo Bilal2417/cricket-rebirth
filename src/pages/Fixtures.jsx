@@ -139,9 +139,12 @@ export default function Fixtures() {
 
       const data = await res.json();
       if (data.success) {
-        setProfile(data.profile);
-        console.log(data.profile);
-        sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+        setProfile((prev) => {
+          const merged = { ...prev, ...data.profile };
+          sessionStorage.setItem("UserProfile", JSON.stringify(merged));
+          return merged;
+        });
+
         window.dispatchEvent(new Event("profileUpdated"));
       } else {
         console.error("Failed to update tournaments in database:", data.error);
