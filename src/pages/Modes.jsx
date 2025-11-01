@@ -1,4 +1,11 @@
-import { Box, Button, IconButton, Popover, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Popover,
+  Typography,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import OversThreeIcon from "../components/overIcon";
 import { EmojiEventsSharp, Help, Lock } from "@mui/icons-material";
@@ -57,7 +64,8 @@ export default function Modes() {
   const [Profile, setProfile] = useState(
     storedProfile ? JSON.parse(storedProfile) : ""
   );
-
+  const [giveRewards, setGiveRewards] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverDesc, setPopoverDesc] = useState("");
 
@@ -125,11 +133,7 @@ export default function Modes() {
         const now = Date.now();
         const myProfile = JSON.parse(sessionStorage.getItem("UserProfile"));
 
-        if (
-          !force &&
-          cached.timestamp &&
-          now - cached.timestamp < 2 * 60 * 1000
-        ) {
+        if (!force && cached.timestamp && now - cached.timestamp < 30 * 1000) {
           setProfiles(cached.data);
 
           // const matchedProfile = data.profiles.find((p) => p.id === profileId);
@@ -147,6 +151,8 @@ export default function Modes() {
             "contestData",
             JSON.stringify({ data: data.leaderboard, timestamp: now })
           );
+          setGiveRewards(true);
+          setLoading(false);
 
           // const matchedProfile = data.profiles.find((p) => p.id === profileId);
           // if (myProfile) setUserProfile(myProfile);
@@ -202,13 +208,22 @@ export default function Modes() {
     return () => clearInterval(interval);
   }, []);
 
-  const manageTickets = async () => {
+  const manageTickets = async (rewards = false) => {
     if (!Profile) return;
 
     const updatedProfile = {
       ...Profile,
       id: Profile?.id,
-      tickets: 3,
+      tickets: !rewards ? 3 : Profile.tickets,
+      coins: rewards
+        ? profiles[0]?.id == profileId
+          ? Profile.coins + 1000
+          : profiles[1]?.id == profileId
+          ? Profile.coins + 500
+          : profiles[2]?.id == profileId
+          ? Profile.coins + 300
+          : Profile.coins
+        : Profile.coins,
     };
 
     setProfile(updatedProfile);
@@ -248,7 +263,7 @@ export default function Modes() {
           scrollBehavior: "smooth",
           scrollSnapType: "x mandatory",
           "& > *": { scrollSnapAlign: "center" },
-          p: { xs: 3, md: 6 },
+          p: { xs: 1, md: 6 },
           "&::-webkit-scrollbar": {
             height: "8px",
           },
@@ -270,10 +285,10 @@ export default function Modes() {
           <Button
             sx={{
               height: "100%",
-              minHeight: { xs: "280px", md: "500px" },
+              minHeight: { xs: "250px", md: "500px" },
               flexShrink: 0,
-              width: Date.now() < start ? 280 : 200,
-              background:"linear-gradient(to top, #f5214b, #8e0e2f)",
+              width: Date.now() < start ? 300 : 200,
+              background: "linear-gradient(to top, #f5214b, #8e0e2f)",
               color: "#e1e1e1ff",
               textShadow: `
               -1px -1px 0 #000,  
@@ -285,8 +300,8 @@ export default function Modes() {
               fontSize: "1.1em",
               transform: "skew(-5deg)",
               boxShadow: `
-              inset 0px -8px 8px -4px #262e40,   
-              inset 0px 8px 8px -4px rgb(193 193 193)       
+              inset -10px -12px 20px -4px #8e0e2f,   
+              inset 0px 8px 20px -4px #f5214b       
             `,
               borderRadius: "4px",
               transition: "all 0.3s",
@@ -334,8 +349,8 @@ export default function Modes() {
                     handlePopoverOpen(
                       e,
                       <span>
-                        In Contest, each match is <strong>10</strong>{" "}
-                        overs with <strong>10</strong> wickets.Every Day{" "}
+                        In Contest, each match is <strong>10</strong> overs with{" "}
+                        <strong>10</strong> wickets.Every Day{" "}
                         <strong>3 Tickets</strong> are given and{" "}
                         <strong>Top 3 </strong> players are rewarded.
                       </span>
@@ -368,13 +383,22 @@ export default function Modes() {
               </Typography>
               <Button
                 onClick={() => {
-                  if (Date.now() > start && timeLeft.total >= 0) {
-                    navigate("/");
-                    localStorage.setItem("Overs", 10);
-                    sessionStorage.setItem("mode", `CONTEST`);
-                  } else {
-                    localStorage.removeItem("Overs");
-                    sessionStorage.removeItem("mode");
+                  if (!loading) {
+                    if (Date.now() > start && timeLeft.total >= 0) {
+                      navigate("/");
+                      localStorage.setItem("Overs", 10);
+                      sessionStorage.setItem("mode", `CONTEST`);
+                    } else if (timeLeft?.total <= 0) {
+                      if (!giveRewards) {
+                        setLoading(true);
+                        localStorage.setItem("refreshContest", "true");
+                      } else {
+                        manageTickets(true);
+                      }
+                    } else {
+                      localStorage.removeItem("Overs");
+                      sessionStorage.removeItem("mode");
+                    }
                   }
                 }}
                 sx={{
@@ -388,7 +412,7 @@ export default function Modes() {
                 `,
                   fontSize:
                     Date.now() < start && Date.now() > end ? "1em" : "0.9em",
-                  padding: "0px 15px",
+                  padding: "10px 30px",
                   transform: "skew(-5deg)",
                   mt: "50px",
                   boxShadow: "inset 0px -8px 8px -4px #b7560f",
@@ -400,12 +424,16 @@ export default function Modes() {
                   },
                 }}
               >
-                {Date.now() < start
-                  ? `Event starts in :
+                {loading ? (
+                  <CircularProgress size={20} sx={{ color: "#fff" }} />
+                ) : Date.now() < start ? (
+                  `Event starts in :
                   ${remaining.days}d ${remaining.hours}h ${remaining.minutes}m ${remaining.seconds}s`
-                  : Date.now() > end
-                  ? "Event ended"
-                  : `Play`}
+                ) : Date.now() > end ? (
+                  "Event ended"
+                ) : (
+                  `Play`
+                )}
               </Button>
             </Box>
           </Button>
@@ -487,7 +515,7 @@ export default function Modes() {
                 overflowY: "auto",
                 padding: "0 10px",
                 alignItems: "center",
-                // maxHeight : "200px"
+                maxHeight : "250px"
               }}
             >
               {profiles?.map((prof, index) => {
@@ -711,8 +739,11 @@ export default function Modes() {
         <Button
           sx={{
             flexShrink: 0,
+            minHeight: { xs: "250px", md: "500px" },
             minWidth: 150,
-            backgroundColor: unlocked ? "#f5214b" : "#f55c73",
+            background: unlocked
+              ? "linear-gradient(135deg, #0072ff, #00c6ff)"
+              : "#2066baff",
             color: unlocked ? "#FFFFFF" : "#a0a0a0",
             textShadow: `
               -1px -1px 0 #000,  
@@ -833,7 +864,7 @@ export default function Modes() {
             <Button
               key={index}
               sx={{
-                background: "linear-gradient(#60da01 , #90e100)",
+                background: "linear-gradient( #60da01 , #90e100)",
                 color: "#FFFFFF",
                 textShadow: `
                   -1px -1px 0 #000,  
@@ -846,7 +877,7 @@ export default function Modes() {
                 maxHeight: "60px",
                 fontSize: "1.1em",
                 boxShadow: `
-                  inset 0px -8px 8px -4px #262e40,   
+                  inset 0px -8px 8px -4px #36551eff,   
                   inset 0px 8px 8px -4px rgb(193 193 193)       
                 `,
                 borderRadius: "4px",
@@ -903,7 +934,7 @@ export default function Modes() {
               transform: "skew(-5deg)",
               overflow: "hidden",
               boxShadow: `
-              inset 0px -8px 8px -4px #262e40,   
+              inset 0px -8px 8px -4px #3f2657ff,   
               inset 0px 8px 8px -4px rgb(193 193 193)       
             `,
               borderRadius: "4px",
@@ -970,7 +1001,10 @@ export default function Modes() {
           sx={{
             flexShrink: 0,
             minWidth: 150,
-            backgroundColor: unlockedKO ? "#f47909" : "#d69153",
+            minHeight: { xs: "250px", md: "500px" },
+            background: unlockedKO
+              ? "linear-gradient(135deg, #ff512f, #dd2476)"
+              : "#e14189ff",
             color: unlockedKO ? "#FFFFFF" : "#a0a0a0",
             textShadow: `
               -1px -1px 0 #000,  

@@ -59,8 +59,8 @@ export default function Shop({ profile }) {
           value="worldcup"
           price={10000}
           icon={<GiWorld size={40} style={{ color: "#fff" }} />}
-          iconGrad="radial-gradient(circle at center, #00b894, #55efc4)"
-          gradient="linear-gradient(135deg, #00b894, #55efc4)"
+          iconGrad="radial-gradient(circle at center, #0072ff, #00c6ff)"
+          gradient="linear-gradient(135deg, #0072ff, #00c6ff)"
           isFocused={focused === "world"}
           onClick={() => setFocused(focused === "world" ? null : "world")}
           description="Unlock the exclusive World Cup Mode — face 10 teams in the grand tournament."
@@ -71,8 +71,8 @@ export default function Shop({ profile }) {
           value="knockout"
           price={5000}
           icon={<GiTrophy size={40} style={{ color: "#fff" }} />}
-          iconGrad="radial-gradient(circle at center, #ff6b6b, #f06595)"
-          gradient="linear-gradient(135deg, #ff6b6b, #f06595)"
+          iconGrad="radial-gradient(circle at center, #ff512f, #dd2476)"
+          gradient="linear-gradient(135deg, #ff512f, #dd2476)"
           isFocused={focused === "knockout"}
           onClick={() => setFocused(focused === "knockout" ? null : "knockout")}
           description="Unlock the Knockout Mode — play quarterfinals to finals for massive rewards!"
