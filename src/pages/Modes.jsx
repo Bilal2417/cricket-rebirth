@@ -67,6 +67,7 @@ export default function Modes() {
   );
   const [giveRewards, setGiveRewards] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [contestLoading, setContestLoading] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const [popoverDesc, setPopoverDesc] = useState("");
 
@@ -136,7 +137,7 @@ export default function Modes() {
 
         if (!force && cached.timestamp && now - cached.timestamp < 30 * 1000) {
           setProfiles(cached.data);
-
+          setContestLoading(false);
           // const matchedProfile = data.profiles.find((p) => p.id === profileId);
           // if (myProfile) setUserProfile(myProfile);
 
@@ -152,6 +153,7 @@ export default function Modes() {
             "contestData",
             JSON.stringify({ data: data.leaderboard, timestamp: now })
           );
+          setContestLoading(false);
           setGiveRewards(true);
           setLoading(false);
 
@@ -768,6 +770,101 @@ export default function Modes() {
                     </Box>
                   );
                 })}
+                {contestLoading
+                  ? ["1", "2", "3", "4", "5", "6", "7", "8"].map((index) => {
+                      return (
+                        <Box
+                          key={index}
+                          sx={{
+                            backgroundColor: "#00001d",
+                            width: "415px",
+                            paddingLeft: "15px",
+                            display: "flex",
+                            alignContent: "center",
+                            justifyContent: "space-between",
+                            border: "2px solid #000000",
+                            borderRadius: "4px",
+                            boxShadow: "inset 0px -8px 8px -4px #00001d",
+                            transform: "skew(-5deg)",
+                            position: "relative",
+                            overflow: "hidden",
+                            "&::after": {
+                              content: '""',
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              height: "100%",
+                              width: "100%",
+                              background:
+                                "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%)",
+                              animation: `${shimmer} 1.5s infinite`,
+                            },
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                // fontfamily: "Rubik",
+                                backgroundColor: "rgb(255 196 107)",
+                                color: "#aa9ca9",
+                                padding: "4px 12px",
+                                fontWeight: 600,
+                                minWidth: "6px",
+                                minHeight: "17px",
+                              }}
+                              variant="body1"
+                            ></Typography>
+                            <Typography
+                              sx={{
+                                backgroundColor: "rgb(255 196 107)",
+                                fontWeight: 600,
+                                // fontfamily: "Rubik",
+                                textTransform: "uppercase",
+                                color: "#f7bb1e",
+                                minWidth: "200px",
+                                minHeight: "25px",
+                              }}
+                              variant="body1"
+                            ></Typography>
+                          </Box>
+                          <Typography
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "5px",
+                              fontWeight: 600,
+                              backgroundColor: "#61616135",
+                              padding: "10px 30px",
+                              justifyContent: "center",
+                              color: "#897689",
+                            }}
+                            variant="body1"
+                          >
+                            <GiPointySword
+                              size={20}
+                              style={{
+                                color: "rgb(255 196 107)",
+                              }}
+                            />
+                            <Box
+                              sx={{
+                                minHeight: "25px",
+                                minWidth: "50px",
+                                backgroundColor: "rgb(255 196 107)",
+                              }}
+                              component="span"
+                            ></Box>
+                          </Typography>
+                        </Box>
+                      );
+                    })
+                  : null}
               </Box>
               <Box
                 sx={{
