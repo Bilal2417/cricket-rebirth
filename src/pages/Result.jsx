@@ -209,12 +209,16 @@ export default function Result() {
         collectedPoints += 100;
       }
       if (win) {
+        let winPoints;
         if (winnerFirst) {
-          collectedPoints = userTeam?.score - aiTeam?.score;
+          winPoints = userTeam?.score - aiTeam?.score;
         } else {
-          collectedPoints = (10 - userTeam?.wicket) * 10;
+          winPoints = (10 - userTeam?.wicket) * 10;
         }
-        collectedPoints *= 5;
+        winPoints += (60 - (userTeam?.Over * 6 + userTeam?.Ball)) * 10;
+        winPoints += (60 - (aiTeam?.Over * 6 + aiTeam?.Ball)) * 10;
+        winPoints *= 5;
+        collectedPoints += winPoints; // ✅ Add instead of overwrite
         coinsIncrement = 100;
       }
     }
@@ -271,8 +275,8 @@ export default function Result() {
       battle_log: battleLog, // ✅ send it here
       points:
         givenMode == "CONTEST"
-          ? (Profile.points || 0) + collectedPoints
-          : Profile.points,
+          ? Number(Profile.points || 0) + collectedPoints
+          : Number(Profile.points),
     };
 
     console.log(updatedProfile, "Profile that is sending");
@@ -290,7 +294,7 @@ export default function Result() {
 
       const data = await res.json();
       if (data.success) {
-        console.log(data.success, "Profile that came");
+        console.log(data.profile, "Profile that came");
         setProfile((prev) => {
           const merged = { ...prev, ...data.profile };
           sessionStorage.setItem("UserProfile", JSON.stringify(merged));

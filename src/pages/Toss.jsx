@@ -134,7 +134,10 @@ export default function Toss() {
         givenMode == "KNOCKOUT"
           ? Profile.trophies
           : Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
-      tickets: givenMode == "CONTEST" ? Profile.tickets - 1 : null,
+      tickets:
+        givenMode == "CONTEST"
+          ? Math.max(0, Number(Profile.tickets || 0) - 1)
+          : Number(Profile.tickets || 0),
       battle_log: battleLog,
       // points: null,
     };
