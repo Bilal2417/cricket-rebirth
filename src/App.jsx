@@ -33,6 +33,7 @@ import ScorecardWheel from "./pages/scoreCardOpening";
 import useDisableBackButton from "./components/disableBack";
 import Log from "./pages/Log";
 import Balatro from "./components/Balatro";
+import Coins from "./pages/Coins";
 
 function App() {
   useDisableBackButton();
@@ -169,6 +170,7 @@ function App() {
         )}
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/increment" element={<Coins />} />
           <Route path="/battle-log" element={<Log />} />
           <Route path="/scoreBoardOpening" element={<ScorecardWheel />} />
           <Route path="/shop" element={<Shop profile={profile} />} />

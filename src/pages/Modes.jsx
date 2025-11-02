@@ -202,7 +202,7 @@ export default function Modes() {
       if (now.getUTCHours() >= 10 && lastGiven !== today && now < end) {
         localStorage.setItem("lastTicketDate", today);
         console.log("🎟️ 3 tickets granted for today!");
-        manageTickets();
+        manageTickets(false);
       }
     };
 
@@ -222,25 +222,24 @@ export default function Modes() {
   const manageTickets = async (rewards = false) => {
     if (!Profile) return;
 
+    const increment =
+      profiles[0]?.id == profileId
+        ? 3000
+        : profiles[1]?.id == profileId
+        ? 1500
+        : profiles[2]?.id == profileId
+        ? 1000
+        : 0;
     const updatedProfile = {
       ...Profile,
       id: Profile?.id,
       tickets: !rewards ? 3 : Profile.tickets,
-      coins: rewards
-        ? profiles[0]?.id == profileId
-          ? Profile.coins + 3000
-          : profiles[1]?.id == profileId
-          ? Profile.coins + 1500
-          : profiles[2]?.id == profileId
-          ? Profile.coins + 1000
-          : Profile.coins
-        : Profile.coins,
+      coins: rewards ? Profile.coins + increment : Profile.coins,
       tournaments:
         profiles[0]?.id == profileId
           ? Profile.tournaments || 0 + 1
           : Profile.tournaments,
     };
-
     setProfile(updatedProfile);
 
     try {
@@ -260,6 +259,9 @@ export default function Modes() {
           sessionStorage.setItem("UserProfile", JSON.stringify(merged));
           return merged;
         });
+        sessionStorage.setItem("Coins", increment);
+        localStorage.setItem("ContestOver", true);      
+        navigate("/increment")
 
         window.dispatchEvent(new Event("profileUpdated"));
         localStorage.setItem("refreshContest", "true");
@@ -783,7 +785,7 @@ export default function Modes() {
                           sx={{
                             backgroundColor: "#00001d",
                             width: "500px",
-                            height : "55px",
+                            height: "55px",
                             paddingLeft: "15px",
                             display: "flex",
                             alignContent: "center",

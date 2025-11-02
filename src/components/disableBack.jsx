@@ -15,7 +15,8 @@ export default function useDisableBackButton() {
       "/shop",
       "/knockout",
       "/open-pack",
-      "/tournament"
+      "/tournament",
+      "/increment"
     ];
 
     const isRestricted =
