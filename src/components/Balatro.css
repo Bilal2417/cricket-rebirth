@@ -1,0 +1,10 @@
+.balatro-container {
+  position: fixed;         /* Stay fixed behind everything */
+  top: 0;
+  left: 0;
+  width: 100vw;            /* Full width */
+  height: 100vh;           /* Full height */
+  z-index: -1;             /* Behind all other elements */
+  overflow: hidden;        /* Hide overflow */
+  pointer-events: none;    /* Allow clicks to pass through */
+}

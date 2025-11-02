@@ -32,9 +32,10 @@ import Wc22 from "./components/wc22";
 import ScorecardWheel from "./pages/scoreCardOpening";
 import useDisableBackButton from "./components/disableBack";
 import Log from "./pages/Log";
+import Balatro from "./components/Balatro";
 
 function App() {
-  useDisableBackButton()
+  useDisableBackButton();
   useEffect(() => {
     const profileId = localStorage.getItem("MyId");
     if (!profileId) return;
@@ -57,6 +58,7 @@ function App() {
   const location = useLocation();
 
   const [finalist, setFinalist] = useState(sessionStorage.getItem("Finalist"));
+  const [background, setBackground] = useState(sessionStorage.getItem("mode"));
 
   useEffect(() => {
     const handleBackUpdate = () => {
@@ -70,7 +72,19 @@ function App() {
     return () => window.removeEventListener("BackUpdated", handleBackUpdate);
   }, [location.pathname, finalist]);
 
-  
+  useEffect(() => {
+    const handleBackground = () => {
+      const mode = sessionStorage.getItem("mode");
+      if (mode == "CONTEST") {
+        setBackground(true);
+      }
+    };
+    handleBackground();
+    window.addEventListener("contestBackground", handleBackground);
+    return () =>
+      window.removeEventListener("contestBackground", handleBackground);
+  }, [location.pathname, finalist]);
+
   const [profile, setProfile] = useState(null);
   useEffect(() => {
     const profileId = localStorage.getItem("MyId");
@@ -101,7 +115,7 @@ function App() {
 
     return () =>
       window.removeEventListener("profileUpdated", handleProfileUpdate);
-}, [localStorage.getItem("MyId")]);
+  }, [localStorage.getItem("MyId")]);
 
   useEffect(() => {
     const handleFinalistUpdate = () =>
@@ -124,15 +138,31 @@ function App() {
           maxWidth: "100vw",
         }}
       >
-        <MovingBallsBackground
-          color={finalist ? "#111" : "white"}
-          background={
-            finalist
-              ? "radial-gradient(circle, #b51c22,  #111 120%)"
-              : "radial-gradient(circle, #1164ee 0%, #381daa 100%)"
-          }
-          speed={finalist ? 4 : 7}
-        />
+        {(setBackground && location.pathname == "/gamePlay") ||
+        location.pathname == "/score" ||
+        location.pathname == "/result" ||
+        location.pathname == "/team" ||
+        location.pathname == "/toss" ? (
+          <Balatro
+            spinRotation={-2.0}
+            spinSpeed={7.0}
+            color1="#8e0e2f"
+            color2="#f5214b"
+            color3="#000000"
+            isRotate={true}
+            mouseInteraction={true}
+          />
+        ) : (
+          <MovingBallsBackground
+            color={finalist ? "#111" : "white"}
+            background={
+              finalist
+                ? "radial-gradient(circle, #b51c22,  #111 120%)"
+                : "radial-gradient(circle, #1164ee 0%, #381daa 100%)"
+            }
+            speed={finalist ? 4 : 7}
+          />
+        )}
         <DisablePullToRefresh />
         {(location.pathname === "/" || location.pathname === "/shop") && (
           <Navbar profile={profile} />
@@ -146,7 +176,7 @@ function App() {
           <Route path="/open-pack/:packKey" element={<CardOpening />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/scoreboards" element={<ScoreBoards />} />
-          <Route path="/profileData" element={<ProfileData/>} />
+          <Route path="/profileData" element={<ProfileData />} />
           <Route path="/modes" element={<Modes />} />
           <Route path="/knockout" element={<Knockout />} />
           <Route path="/fixtures" element={<Fixtures />} />

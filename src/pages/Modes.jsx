@@ -819,10 +819,10 @@ export default function Modes() {
                                 // fontfamily: "Rubik",
                                 backgroundColor: "rgb(255 196 107)",
                                 color: "#aa9ca9",
-                                padding: "4px 12px",
+                                padding: "4px 14px",
                                 fontWeight: 600,
-                                minWidth: "6px",
-                                minHeight: "17px",
+                                minWidth: "20px",
+                                minHeight: "30px",
                               }}
                               variant="body1"
                             ></Typography>
@@ -833,8 +833,8 @@ export default function Modes() {
                                 // fontfamily: "Rubik",
                                 textTransform: "uppercase",
                                 color: "#f7bb1e",
-                                minWidth: "300px",
-                                minHeight: "40px",
+                                minWidth: "250px",
+                                minHeight: "30px",
                               }}
                               variant="body1"
                             ></Typography>
@@ -843,7 +843,7 @@ export default function Modes() {
                             sx={{
                               display: "flex",
                               alignItems: "center",
-                              gap: "5px",
+                              gap: "15px",
                               fontWeight: 600,
                               backgroundColor: "#61616135",
                               padding: "10px 30px",
@@ -860,8 +860,8 @@ export default function Modes() {
                             />
                             <Box
                               sx={{
-                                minHeight: "25px",
-                                minWidth: "50px",
+                                minHeight: "30px",
+                                minWidth: "80px",
                                 backgroundColor: "rgb(255 196 107)",
                               }}
                               component="span"
