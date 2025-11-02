@@ -189,8 +189,9 @@ export default function Modes() {
       isMounted = false;
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, [profileId]);
+  }, [profileId, refreshAgain]);
 
+  const [refreshAgain, setRefreshAgain] = useState(false);
   useEffect(() => {
     const checkTickets = () => {
       const now = new Date();
@@ -262,6 +263,7 @@ export default function Modes() {
 
         window.dispatchEvent(new Event("profileUpdated"));
         localStorage.setItem("refreshContest", "true");
+        setRefreshAgain(true);
       } else {
         console.error("Failed to update trophies in database");
       }
