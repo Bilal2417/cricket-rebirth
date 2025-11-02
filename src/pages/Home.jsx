@@ -731,11 +731,12 @@ export default function Home() {
                 setScoreBoard(true);
                 return;
               }
-              if (userProfile?.tickets == 0) {
-                showDescToast("Not Enough Tickets!");
-                return;
+              if (mode == "CONTEST") {
+                if (userProfile?.tickets == 0) {
+                  showDescToast("Not Enough Tickets!");
+                  return;
+                }
               }
-
               if (save && mode == "TOURNAMENT") {
                 navigate("/tournament");
               } else {

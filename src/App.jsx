@@ -145,12 +145,12 @@ function App() {
         location.pathname == "/toss" ? (
           <Balatro
             spinRotation={-2.0}
-            spinSpeed={7.0}
+            spinSpeed={10.0}
             color1="#8e0e2f"
             color2="#f5214b"
             color3="#000000"
             isRotate={true}
-            mouseInteraction={true}
+            mouseInteraction={false}
           />
         ) : (
           <MovingBallsBackground
