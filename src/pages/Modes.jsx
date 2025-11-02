@@ -124,6 +124,7 @@ export default function Modes() {
   }, []);
 
   const profileId = localStorage.getItem("MyId");
+  const [refreshAgain, setRefreshAgain] = useState(false);
   useEffect(() => {
     let isMounted = true;
 
@@ -191,7 +192,6 @@ export default function Modes() {
     };
   }, [profileId, refreshAgain]);
 
-  const [refreshAgain, setRefreshAgain] = useState(false);
   useEffect(() => {
     const checkTickets = () => {
       const now = new Date();
@@ -782,7 +782,8 @@ export default function Modes() {
                           key={index}
                           sx={{
                             backgroundColor: "#00001d",
-                            width: "415px",
+                            width: "500px",
+                            height : "55px",
                             paddingLeft: "15px",
                             display: "flex",
                             alignContent: "center",
@@ -832,8 +833,8 @@ export default function Modes() {
                                 // fontfamily: "Rubik",
                                 textTransform: "uppercase",
                                 color: "#f7bb1e",
-                                minWidth: "200px",
-                                minHeight: "25px",
+                                minWidth: "300px",
+                                minHeight: "40px",
                               }}
                               variant="body1"
                             ></Typography>
