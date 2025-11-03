@@ -177,14 +177,18 @@ export async function handler(event) {
 
     // --- ✅ Update contest table (only if provided) ---
     // --- ✅ Update contest table (only if provided) ---
-    if (points != null || tickets != null) {
+    if (points !== undefined || tickets !== undefined) {
       await client.query(
         `UPDATE contest
      SET 
        points = COALESCE($1, points),
        tickets = COALESCE($2, tickets)
      WHERE profile_id = $3`,
-        [points, tickets !== undefined ? tickets : null, id]
+        [
+          points !== undefined && points !== null ? points : null,
+          tickets !== undefined && tickets !== null ? tickets : null,
+          id,
+        ]
       );
     }
 
