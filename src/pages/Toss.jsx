@@ -1,6 +1,7 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Data from "../components/data";
 
 export default function Toss() {
   const [result, setResult] = useState(null);
@@ -11,6 +12,7 @@ export default function Toss() {
 
   const board = localStorage.getItem("Board");
   const navigate = useNavigate();
+  const Teams = Data
 
   const colors = {
     // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
@@ -71,14 +73,14 @@ export default function Toss() {
 
   const decrementTrophies = async () => {
     const userMatch = JSON.parse(sessionStorage.getItem("latestUserMatch"));
-    const aiTeam = localStorage.getItem("Ai");
-    const userTeam = localStorage.getItem("User");
+    const ai = localStorage.getItem("Ai");
+    const user = localStorage.getItem("User");
 
     if (userMatch) {
       const updatedMatch = {
         ...userMatch,
-        winner: aiTeam,
-        loser: userTeam,
+        winner: ai,
+        loser: user,
       };
       sessionStorage.setItem("latestUserMatch", JSON.stringify(updatedMatch));
     }
@@ -95,9 +97,11 @@ export default function Toss() {
 
     const penalty = trophyMap[totalWkts];
     const givenMode = sessionStorage.getItem("mode");
+    const userTeam = Data.find(( team ) => team.name == user)
+    const aiTeam = Data.find(( team ) => team.name == ai)
     const battleLog = {
       team1: {
-        name: userTeam,
+        name: userTeam?.name,
         runs: userTeam?.score,
         wickets: userTeam?.wicket,
         overs: userTeam?.Over,
@@ -105,7 +109,7 @@ export default function Toss() {
         flags: userTeam?.flag,
       },
       team2: {
-        name: aiTeam,
+        name: aiTeam?.name,
         runs: aiTeam?.score,
         wickets: aiTeam?.wicket,
         overs: aiTeam?.Over,

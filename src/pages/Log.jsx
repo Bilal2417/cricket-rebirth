@@ -122,6 +122,8 @@ export default function Log() {
       -1px  1px 0 #000,
        2px  2px 0 #000
     `,
+                      ml: "25px",
+                      width: "95px",
                     }}
                     variant="h5"
                   >
@@ -254,7 +256,7 @@ export default function Log() {
                     >
                       <Box>
                         <Typography minWidth={100} variant="h4">
-                          {log?.team2?.runs}{" "}
+                          {log?.team2?.runs}
                           {log?.team2?.wickets == 10
                             ? null
                             : "/" + log?.team2?.wickets}
@@ -275,6 +277,7 @@ export default function Log() {
                             fontWeight: 600,
                             textTransform: "uppercase",
                             minWidth: "140px",
+                            textAlign: "end",
                           }}
                           variant="h6"
                         >
@@ -297,9 +300,9 @@ export default function Log() {
                   <Box
                     sx={{
                       display: "flex",
-                      alignItems: "flex-end",
+                      alignItems: "baseline",
                       justifyContent: "center",
-                      gap: "10px",
+                      gap: "5px",
                     }}
                   >
                     <Typography
@@ -334,15 +337,15 @@ export default function Log() {
                           log?.team2?.runs +
                           `${
                             log?.team1?.runs - log?.team2?.runs <= 1
-                              ? `run`
-                              : ` runs`
+                              ? ` run`
+                              : `  runs`
                           }`
                         : log?.totalWickets -
                           log?.team2?.wickets +
                           `${
                             log?.totalWickets - log?.team2?.wickets <= 1
-                              ? `wicket`
-                              : `wickets`
+                              ? ` wicket`
+                              : ` wickets`
                           }`}
                     </Typography>
                   </Box>
