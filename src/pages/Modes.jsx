@@ -98,6 +98,7 @@ export default function Modes() {
   };
 
   const [timeLeft, setTimeLeft] = useState(null);
+  const [isContestOver, setIsContestOver] = useState(false);
 
   function getTimeRemaining(endTime) {
     const total = endTime - Date.now();
@@ -203,6 +204,11 @@ export default function Modes() {
         localStorage.setItem("lastTicketDate", today);
         console.log("🎟️ 3 tickets granted for today!");
         manageTickets(false);
+      } else if (now > end) {
+        const check = localStorage.getItem("ContestIsOver");
+        if (check === "true") {
+          setIsContestOver(true);
+        }
       }
     };
 
@@ -259,13 +265,15 @@ export default function Modes() {
           sessionStorage.setItem("UserProfile", JSON.stringify(merged));
           return merged;
         });
-        sessionStorage.setItem("Coins", increment);
-        localStorage.setItem("ContestOver", true);      
-        navigate("/increment")
+        if (rewards) {
+          sessionStorage.setItem("Coins", increment);
+          localStorage.setItem("ContestIsOver", true);
+          navigate("/increment");
+          setRefreshAgain(true);
+        }
 
         window.dispatchEvent(new Event("profileUpdated"));
         localStorage.setItem("refreshContest", "true");
-        setRefreshAgain(true);
       } else {
         console.error("Failed to update trophies in database");
       }
@@ -302,7 +310,7 @@ export default function Modes() {
       >
         <Box
           sx={{
-            display: "flex",
+            display: isContestOver ? "none" : "flex",
             gap: "40px",
           }}
         >

@@ -54,6 +54,7 @@ export default function Home() {
       "Innings",
       "currentInnings",
       "winner",
+      "ContestOver",
     ];
     keysToClearLocally.forEach((key) => localStorage.removeItem(key));
 
