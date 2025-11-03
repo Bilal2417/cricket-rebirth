@@ -132,11 +132,19 @@ export default function Log() {
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      gap: "5px",
-                      width: "120px",
+                      gap: "10px",
+                      minWidth: "150px",
                       justifyContent: "end",
                     }}
                   >
+                    {log?.mode == "CONTEST" ? (
+                      <GiPointySword
+                        size={30}
+                        style={{ color: "#f6c401", transform: "rotate(85deg)" }}
+                      />
+                    ) : (
+                      <GiTrophy size={30} style={{ color: "#f6c401" }} />
+                    )}
                     <Typography
                       sx={{
                         fontWeight: 600,
@@ -149,11 +157,6 @@ export default function Log() {
                         : "-"}
                       {log?.trophies}
                     </Typography>
-                    {log?.mode == "CONTEST" ? (
-                      <GiPointySword size={30} style={{ color: "#f6c401" }} />
-                    ) : (
-                      <GiTrophy size={30} style={{ color: "#f6c401" }} />
-                    )}
                   </Box>
                 </Box>
 
@@ -192,6 +195,7 @@ export default function Log() {
                           sx={{
                             fontWeight: 600,
                             textTransform: "uppercase",
+                            minWidth: "140px",
                           }}
                           variant="h6"
                         >
@@ -210,8 +214,8 @@ export default function Log() {
                       </Box>
 
                       <Box>
-                        <Typography variant="h4">
-                          {log?.team1?.runs}{" "}
+                        <Typography minWidth={100} variant="h4">
+                          {log?.team1?.runs}
                           {log?.team1?.wickets == 10
                             ? null
                             : "/" + log?.team1?.wickets}
@@ -249,7 +253,7 @@ export default function Log() {
                       }}
                     >
                       <Box>
-                        <Typography variant="h4">
+                        <Typography minWidth={100} variant="h4">
                           {log?.team2?.runs}{" "}
                           {log?.team2?.wickets == 10
                             ? null
@@ -270,6 +274,7 @@ export default function Log() {
                           sx={{
                             fontWeight: 600,
                             textTransform: "uppercase",
+                            minWidth: "140px",
                           }}
                           variant="h6"
                         >
@@ -292,7 +297,7 @@ export default function Log() {
                   <Box
                     sx={{
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: "flex-end",
                       justifyContent: "center",
                       gap: "10px",
                     }}
@@ -325,8 +330,20 @@ export default function Log() {
                       variant="h6"
                     >
                       {log?.team1?.runs > log?.team2?.runs
-                        ? log?.team1?.runs - log?.team2?.runs + ` runs`
-                        : log?.totalWickets - log?.team2?.wickets + ` wickets`}
+                        ? log?.team1?.runs -
+                          log?.team2?.runs +
+                          `${
+                            log?.team1?.runs - log?.team2?.runs <= 1
+                              ? `run`
+                              : ` runs`
+                          }`
+                        : log?.totalWickets -
+                          log?.team2?.wickets +
+                          `${
+                            log?.totalWickets - log?.team2?.wickets <= 1
+                              ? `wicket`
+                              : `wickets`
+                          }`}
                     </Typography>
                   </Box>
                 </Box>
