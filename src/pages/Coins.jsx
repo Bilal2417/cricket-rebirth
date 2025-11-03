@@ -9,13 +9,14 @@ export default function Coins() {
   const coins = sessionStorage.getItem("Coins");
   const navigate = useNavigate();
   useEffect(() => {
-    if (!coins) navigate("/");
+    const check = sessionStorage.getItem("Coins");
+    if (!(check && coins)) navigate("/");
   }, [coins]);
   return (
     <>
       <Box
         onClick={() => {
-          navigate("/home");
+          navigate("/");
           sessionStorage.removeItem("Coins");
         }}
         sx={{

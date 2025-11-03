@@ -17,6 +17,16 @@ export default function AUS({
   isSix,
   randomBowler,
 }) {
+  function getInitials(name) {
+    if (!name) return "";
+    const words = name.trim().split(" ").filter(Boolean);
+
+    if (words.length === 1) {
+      return name;
+    }
+
+    return (words[0][0] + words[1][0]).toUpperCase();
+  }
   const colors = {
     6: batting ? userTeam?.primary : aiTeam?.primary,
     W: !batting ? userTeam?.primary : aiTeam?.primary,
@@ -77,7 +87,9 @@ export default function AUS({
             }}
           >
             <Typography textTransform="uppercase" variant="h6">
-              {batting ? userTeam?.name || "Team1" : aiTeam?.name || "Team2"}
+              {batting
+                ? getInitials(userTeam?.name) || "Team1"
+                : getInitials(aiTeam?.name) || "Team2"}
             </Typography>
             <Typography
               sx={{
@@ -312,7 +324,9 @@ export default function AUS({
             }}
           >
             <Typography textTransform="uppercase" variant="h6">
-              {!batting ? userTeam?.name || "Team1" : aiTeam?.name || "Team2"}
+              {!batting
+                ? getInitials(userTeam?.name) || "Team1"
+                : getInitials(aiTeam?.name) || "Team2"}
             </Typography>
 
             <Box

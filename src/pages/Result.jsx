@@ -247,9 +247,9 @@ export default function Result() {
           ? "Defeat"
           : "Draw",
       trophies:
-        givenMode == "CONTEST" ||
-        givenMode == "TOURNAMENT" ||
-        givenMode == "KNOCKOUT"
+        givenMode == "CONTEST" 
+          ? collectedPoints
+          : givenMode == "TOURNAMENT" || givenMode == "KNOCKOUT"
           ? 0
           : matchType == 1
           ? 0

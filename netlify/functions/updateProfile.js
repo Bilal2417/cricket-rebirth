@@ -176,24 +176,34 @@ export async function handler(event) {
     );
 
     // --- ✅ Update contest table (only if provided) ---
+    // --- ✅ Update contest table (only if provided) ---
     if (points != null || tickets != null) {
       await client.query(
         `UPDATE contest
      SET 
-       points =  COALESCE($1, points),
+       points = COALESCE($1, points),
        tickets = COALESCE($2, tickets)
      WHERE profile_id = $3`,
-        [points, tickets, id]
+        [points, tickets !== undefined ? tickets : null, id]
       );
     }
 
+    // --- 🧩 Fetch merged data (profile + contest) ---
+    const {
+      rows: [updatedProfile],
+    } = await client.query(`SELECT * FROM profiles WHERE id = $1`, [id]);
+    const {
+      rows: [contestData],
+    } = await client.query(`SELECT * FROM contest WHERE profile_id = $1`, [id]);
+
     await client.end();
 
+    // --- ✅ Return both merged ---
     return {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        profile: profileResult.rows[0],
+        profile: { ...updatedProfile, ...contestData }, // 👈 merged result
       }),
     };
   } catch (err) {

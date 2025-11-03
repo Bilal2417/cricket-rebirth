@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { GiTrophy } from "react-icons/gi";
+import { GiPointySword, GiTrophy } from "react-icons/gi";
 import bat from "/img/pak.png";
 import { useEffect, useState } from "react";
 export default function Log() {
@@ -144,10 +144,16 @@ export default function Log() {
                       }}
                       variant="h6"
                     >
-                      {log?.result == "Victory" ? "+" : "-"}
+                      {log?.result == "Victory" || log?.mode == "CONTEST"
+                        ? "+"
+                        : "-"}
                       {log?.trophies}
                     </Typography>
-                    <GiTrophy size={30} style={{ color: "#f6c401" }} />
+                    {log?.mode == "CONTEST" ? (
+                      <GiPointySword size={30} style={{ color: "#f6c401" }} />
+                    ) : (
+                      <GiTrophy size={30} style={{ color: "#f6c401" }} />
+                    )}
                   </Box>
                 </Box>
 
@@ -288,6 +294,7 @@ export default function Log() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      gap: "10px",
                     }}
                   >
                     <Typography
@@ -318,8 +325,8 @@ export default function Log() {
                       variant="h6"
                     >
                       {log?.team1?.runs > log?.team2?.runs
-                        ? log?.team1?.runs - log?.team2?.runs + `runs`
-                        : log?.totalWickets - log?.team2?.wickets + `wickets`}
+                        ? log?.team1?.runs - log?.team2?.runs + ` runs`
+                        : log?.totalWickets - log?.team2?.wickets + ` wickets`}
                     </Typography>
                   </Box>
                 </Box>
