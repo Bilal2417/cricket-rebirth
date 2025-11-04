@@ -10,7 +10,7 @@ export default function Coins() {
   const navigate = useNavigate();
   useEffect(() => {
     const check = sessionStorage.getItem("Coins");
-    if (!(check && coins)) navigate("/");
+    if (!check) navigate("/");
   }, [coins]);
   return (
     <>

@@ -301,12 +301,12 @@ export default function Result() {
           console.log(merged, "merged");
           return merged;
         });
-        sessionStorage.setItem("Coins", coinsIncrement);
-        navigate("/increment");
         console.log("It runs in result");
         window.dispatchEvent(new Event("profileUpdated"));
         localStorage.setItem("refreshProfiles", "true");
         localStorage.setItem("refreshContest", "true");
+        sessionStorage.setItem("Coins", coinsIncrement);
+        navigate("/increment");
       } else {
         console.error("Failed to update trophies in database");
       }
