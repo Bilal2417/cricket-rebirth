@@ -12,7 +12,7 @@ export default function Toss() {
 
   const board = localStorage.getItem("Board");
   const navigate = useNavigate();
-  const Teams = Data
+  const Teams = Data;
 
   const colors = {
     // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
@@ -97,8 +97,8 @@ export default function Toss() {
 
     const penalty = trophyMap[totalWkts];
     const givenMode = sessionStorage.getItem("mode");
-    const userTeam = Data.find(( team ) => team.name == user)
-    const aiTeam = Data.find(( team ) => team.name == ai)
+    const userTeam = Data.find((team) => team.name == user);
+    const aiTeam = Data.find((team) => team.name == ai);
     const battleLog = {
       team1: {
         name: userTeam?.name,
@@ -164,6 +164,7 @@ export default function Toss() {
         setProfile((prev) => {
           const merged = { ...prev, ...data.profile };
           sessionStorage.setItem("UserProfile", JSON.stringify(merged));
+          console.log(merged, "merged toss");
           return merged;
         });
 

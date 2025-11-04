@@ -101,6 +101,7 @@ function App() {
           //   localStorage.setItem("FirstVisit", true)
           // }
           sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
+          console.log(data.profile, "updated app from userProfile");
         }
       })
       .catch((err) => console.error("Error fetching profile:", err));
@@ -109,6 +110,7 @@ function App() {
       const updated = sessionStorage.getItem("UserProfile");
       if (updated) {
         setProfile(JSON.parse(updated));
+        console.log(updated, "updated app from session");
       }
     };
 
