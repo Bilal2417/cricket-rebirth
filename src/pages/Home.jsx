@@ -390,7 +390,7 @@ export default function Home() {
                 },
 
                 scrollbarWidth: "thin",
-                scrollbarColor: "#888 #f1f1f1",
+                scrollbarColor: "rgb(137, 118, 137) rgb(102, 89, 99)",
               }}
             >
               {profiles?.map((profile, index) => {

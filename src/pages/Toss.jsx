@@ -59,10 +59,10 @@ export default function Toss() {
     // window.location.reload();
   };
 
-  const storedProfile = sessionStorage.getItem("UserProfile");
-  const [Profile, setProfile] = useState(
-    storedProfile ? JSON.parse(storedProfile) : ""
-  );
+  const [Profile, setProfile] = useState(() => {
+    const storedProfile = sessionStorage.getItem("UserProfile");
+    return storedProfile ? JSON.parse(storedProfile) : "";
+  });
 
   const [totalWkts, setTotalWkts] = useState(null);
 

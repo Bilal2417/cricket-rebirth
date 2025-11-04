@@ -101,7 +101,7 @@ function App() {
           //   localStorage.setItem("FirstVisit", true)
           // }
           sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
-          console.log(data.profile, "updated app from userProfile");
+          console.log(JSON.stringify(data.profile), "updated app from userProfile");
         }
       })
       .catch((err) => console.error("Error fetching profile:", err));

@@ -595,7 +595,7 @@ export default function Modes() {
                   },
 
                   scrollbarWidth: "thin",
-                  scrollbarColor: "#888 #f1f1f1",
+                  scrollbarColor: " rgb(255 196 107) rgb(0, 0, 29)",
                 }}
               >
                 {profiles?.map((prof, index) => {
