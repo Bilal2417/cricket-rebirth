@@ -232,11 +232,11 @@ export default function Modes() {
 
     const increment =
       profiles[0]?.id == profileId
-        ? 3000
-        : profiles[1]?.id == profileId
-        ? 1500
-        : profiles[2]?.id == profileId
         ? 1000
+        : profiles[1]?.id == profileId
+        ? 500
+        : profiles[2]?.id == profileId
+        ? 300
         : 0;
     const updatedProfile = {
       ...Profile,
@@ -748,11 +748,11 @@ export default function Modes() {
                           component="span"
                         >
                           {index == 0
-                            ? 3000
-                            : index == 1
-                            ? 1500
-                            : index == 2
                             ? 1000
+                            : index == 1
+                            ? 500
+                            : index == 2
+                            ? 300
                             : null}
                         </Box>
                       </Typography>
