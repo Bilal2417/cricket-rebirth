@@ -43,6 +43,12 @@ export default function Selection() {
 
   useEffect(() => {
     localStorage.removeItem("cricketData");
+    Object.keys(localStorage).forEach((key) => {
+      if (key !== "MyId" && key !== "FirstVisit" && key !== "boardData") {
+        localStorage.removeItem(key);
+      }
+    });
+    sessionStorage.clear()
   }, []);
 
   const getCardBackground = (rarity) => {
@@ -70,7 +76,7 @@ export default function Selection() {
         justifyContent: "center",
         alignItems: "center",
         gap: 2,
-        padding : "20px 0"
+        padding: "20px 0",
       }}
     >
       <Grid container spacing={2} justifyContent="center">
@@ -92,7 +98,7 @@ export default function Selection() {
               textAlign: "center",
             }}
             onClick={() => {
-             Profile?.unlocked_teams?.includes(team?.name)
+              Profile?.unlocked_teams?.includes(team?.name)
                 ? AiTeamSelection(team?.name)
                 : toast.error("Unlock team from Packs!");
             }}
