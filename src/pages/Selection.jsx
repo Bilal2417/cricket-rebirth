@@ -43,12 +43,12 @@ export default function Selection() {
 
   useEffect(() => {
     localStorage.removeItem("cricketData");
-    Object.keys(localStorage).forEach((key) => {
-      if (key !== "MyId" && key !== "FirstVisit" && key !== "boardData") {
-        localStorage.removeItem(key);
-      }
-    });
-    sessionStorage.clear()
+    // Object.keys(localStorage).forEach((key) => {
+    //   if (key !== "MyId" && key !== "FirstVisit" && key !== "boardData") {
+    //     localStorage.removeItem(key);
+    //   }
+    // });
+    // sessionStorage.clear()
   }, []);
 
   const getCardBackground = (rarity) => {
