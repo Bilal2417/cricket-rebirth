@@ -99,6 +99,8 @@ export default function Toss() {
     const givenMode = sessionStorage.getItem("mode");
     const userTeam = Data.find((team) => team.name == user);
     const aiTeam = Data.find((team) => team.name == ai);
+    const decrementTickets = givenMode === "CONTEST" ? 1 : 0;
+
     const battleLog = {
       team1: {
         name: userTeam?.name,
@@ -138,10 +140,7 @@ export default function Toss() {
         givenMode == "KNOCKOUT"
           ? Profile.trophies
           : Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
-      tickets:
-        givenMode == "CONTEST"
-          ? Math.max(0, Number(Profile.tickets || 0) - 1)
-          : Number(Profile.tickets || 0),
+      tickets: Profile.tickets - decrementTickets,
       battle_log: battleLog,
       // points: null,
     };
@@ -167,7 +166,7 @@ export default function Toss() {
           console.log(merged, "merged toss");
           return merged;
         });
-
+        localStorage.setItem("refreshContest", "true");
         window.dispatchEvent(new Event("profileUpdated"));
       } else {
         console.error("Failed to update trophies in database");

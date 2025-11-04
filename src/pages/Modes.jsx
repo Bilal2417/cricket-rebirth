@@ -61,10 +61,11 @@ export default function Modes() {
     ),
   }));
 
-  const storedProfile = sessionStorage.getItem("UserProfile");
-  const [Profile, setProfile] = useState(
-    storedProfile ? JSON.parse(storedProfile) : ""
-  );
+  const [Profile, setProfile] = useState(() => {
+    const storedProfile = sessionStorage.getItem("UserProfile");
+    return storedProfile ? JSON.parse(storedProfile) : "";
+  });
+
   const [giveRewards, setGiveRewards] = useState(false);
   const [loading, setLoading] = useState(false);
   const [contestLoading, setContestLoading] = useState(true);
@@ -199,7 +200,7 @@ export default function Modes() {
       const today = now.toISOString().split("T")[0];
       const lastGiven = localStorage.getItem("lastTicketDate");
 
-      // 🎟️ Only give tickets after 12 PM and not already given
+      // 🎟️ Only give tickets after 3 PM and not already given
       if (now.getUTCHours() >= 10 && lastGiven !== today && now < end) {
         localStorage.setItem("lastTicketDate", today);
         console.log("🎟️ 3 tickets granted for today!");
@@ -225,6 +226,7 @@ export default function Modes() {
       }
     }
   }, [saved]);
+
   const manageTickets = async (rewards = false) => {
     if (!Profile) return;
 
@@ -422,7 +424,7 @@ export default function Modes() {
                     if (Date.now() > start && timeLeft.total >= 0) {
                       navigate("/");
                       localStorage.setItem("Overs", 10);
-                      sessionStorage.setItem("mode", `CONTEST`);
+                      sessionStorage.setItem("mode", "CONTEST");
                     } else if (timeLeft?.total <= 0) {
                       if (!giveRewards) {
                         setLoading(true);
