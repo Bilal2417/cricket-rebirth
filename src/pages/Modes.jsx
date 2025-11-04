@@ -241,7 +241,8 @@ export default function Modes() {
     const updatedProfile = {
       ...Profile,
       id: Profile?.id,
-      tickets: !rewards ? 3 : Profile.tickets,
+      tickets: !rewards ? 3 : 0,
+      points: !rewards ? Profile.points : 0,
       coins: rewards ? Profile.coins + increment : Profile.coins,
       tournaments:
         profiles[0]?.id == profileId
