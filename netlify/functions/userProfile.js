@@ -29,22 +29,21 @@ export async function handler(event) {
     const result = await client.query(
       `
       SELECT 
-        p.id, 
-        p.name, 
-        p.coins,
-        p.trophies,
-        p.trophydoubler,
-        p.unlocked_teams,
-        p.unlocked_items,
-        p.victories,
-        p.tournaments,
-        p.titles,
-        p.starter,
-        COALESCE(c.points, 0) AS points,
-        COALESCE(c.tickets, 0) AS tickets
-      FROM profiles p
-      LEFT JOIN contest c ON c.profile_id = p.id
-      WHERE p.id = $1
+        id, 
+        name, 
+        coins,
+        trophies,
+        trophydoubler,
+        unlocked_teams,
+        unlocked_items,
+        victories,
+        tournaments,
+        titles,
+        starter,
+        points,
+        tickets
+      FROM profiles 
+      WHERE id = $1
       `,
       [profileId]
     );

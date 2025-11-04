@@ -11,14 +11,13 @@ export async function handler() {
 
     const result = await client.query(`
       SELECT 
-        p.id,
-        p.name,
-        p.img,
-        c.points,
-        c.tickets
-      FROM contest c
-      JOIN profiles p ON c.profile_id = p.id
-      ORDER BY c.points DESC;
+        id,
+        name,
+        img,
+        points,
+        tickets
+      FROM profiles
+      ORDER BY points DESC;
     `);
 
     await client.end();

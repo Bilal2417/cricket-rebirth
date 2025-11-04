@@ -155,8 +155,10 @@ export async function handler(event) {
            selected_title = COALESCE($9, selected_title),
            unlocked_items = COALESCE($10::jsonb, unlocked_items),
            starter = COALESCE($11, starter),
-           battle_log = COALESCE($12::jsonb, battle_log)
-       WHERE id = $13
+           battle_log = COALESCE($12::jsonb, battle_log),
+                  points = COALESCE($13, points),
+       tickets = COALESCE($14, tickets)
+       WHERE id = $15
        RETURNING *`,
       [
         name ?? null,
@@ -171,34 +173,17 @@ export async function handler(event) {
         JSON.stringify(safeUnlockedItems),
         starter ?? current.starter,
         JSON.stringify(updatedBattleLog),
+        points ?? null,
+        tickets ?? null,
         id,
       ]
     );
 
-    // --- ✅ Update contest table (only if provided) ---
-    // --- ✅ Update contest table (only if provided) ---
-    if (points !== undefined || tickets !== undefined) {
-      await client.query(
-        `UPDATE contest
-     SET 
-       points = COALESCE($1, points),
-       tickets = COALESCE($2, tickets)
-     WHERE profile_id = $3`,
-        [
-          points !== undefined && points !== null ? points : null,
-          tickets !== undefined && tickets !== null ? tickets : null,
-          id,
-        ]
-      );
-    }
 
     // --- 🧩 Fetch merged data (profile + contest) ---
     const {
       rows: [updatedProfile],
     } = await client.query(`SELECT * FROM profiles WHERE id = $1`, [id]);
-    const {
-      rows: [contestData],
-    } = await client.query(`SELECT * FROM contest WHERE profile_id = $1`, [id]);
 
     await client.end();
 
@@ -207,7 +192,7 @@ export async function handler(event) {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        profile: { ...updatedProfile, ...contestData }, // 👈 merged result
+        profile: { ...updatedProfile }, // 👈 merged result
       }),
     };
   } catch (err) {

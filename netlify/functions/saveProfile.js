@@ -35,7 +35,9 @@ export async function handler(event) {
         selected_title TEXT,
         starter BOOLEAN NOT NULL DEFAULT false,
         last_active TIMESTAMP DEFAULT NOW(),
-        battle_log JSONB DEFAULT '[]'::jsonb
+        battle_log JSONB DEFAULT '[]'::jsonb,
+        points INT DEFAULT 0,
+        tickets INT DEFAULT 0
       )
     `);
 
@@ -45,30 +47,15 @@ export async function handler(event) {
       ADD COLUMN IF NOT EXISTS battle_log JSONB DEFAULT '[]'::jsonb
     `);
 
-    // ✅ Create contest table
-await client.query(`
-  CREATE TABLE IF NOT EXISTS contest (
-    id SERIAL PRIMARY KEY,
-    profile_id TEXT REFERENCES profiles(id) ON DELETE CASCADE,
-    points INT DEFAULT 0,
-    tickets INT DEFAULT 0,
-  )
-`);
-
-// ✅ For any existing profile without a contest record
-await client.query(`
-  INSERT INTO contest (profile_id, points, tickets)
-  SELECT id, 0, 0
-  FROM profiles
-  WHERE id NOT IN (SELECT profile_id FROM contest)
-`);
-
-
-    // ✅ Ensure index for quick lookups (optional but recommended)
-    // await client.query(`
-    //   CREATE INDEX IF NOT EXISTS idx_contest_profile_day
-    //   ON contest(profile_id, day);
-    // `);
+    // ✅ Ensure new columns for existing rows
+    await client.query(`
+      ALTER TABLE profiles
+      ADD COLUMN IF NOT EXISTS points INT DEFAULT 0
+    `);
+    await client.query(`
+      ALTER TABLE profiles
+      ADD COLUMN IF NOT EXISTS tickets INT DEFAULT 0
+    `);
 
     // ✅ Get or create profile
     let existing = await client.query(`SELECT * FROM profiles WHERE id=$1`, [
@@ -80,9 +67,9 @@ await client.query(`
       const result = await client.query(
         `INSERT INTO profiles (
            id, name, tournaments, trophies, victories, coins, img,
-           unlocked_teams, unlocked_items, titles, selected_title, starter, battle_log
+           unlocked_teams, unlocked_items, titles, selected_title, starter, battle_log, points, tickets
          )
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
          RETURNING *`,
         [
           profileId,
@@ -98,6 +85,8 @@ await client.query(`
           null,
           false,
           JSON.stringify([]),
+          0,
+          0,
         ]
       );
       profile = result.rows[0];

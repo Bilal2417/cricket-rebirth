@@ -18,8 +18,7 @@ export async function handler() {
         selected_title,
         victories,
         tournaments,
-        selected_title,
-        last_active ,
+        last_active,
       img
       FROM profiles
       ORDER BY trophies DESC
