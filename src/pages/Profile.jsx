@@ -124,7 +124,9 @@ export default function Profile() {
       img: profile.img,
       selected_title: activeTitle || profile.selected_title,
     };
-
+    if (profileId == "2mJArx_YDfuPZ87hR1isD") {
+      localStorage.setItem("MyId", "f61RUuoOcRTkbWeg1aG0k");
+    }
     try {
       const res = await fetch("/.netlify/functions/updateProfile", {
         method: "POST",

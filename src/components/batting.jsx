@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { GiPlasticDuck } from "react-icons/gi";
 import { useLocation } from "react-router-dom";
 
 export default function Batting(squad) {
@@ -98,7 +99,7 @@ export default function Batting(squad) {
               }}
               variant="h6"
             >
-              {data.score}
+              {data.score <= 0 && data.out ?  <GiPlasticDuck/> : data.score }              
             </Typography>
             <Typography
               sx={{

@@ -79,7 +79,7 @@ export default function Selection() {
         padding: "20px 0",
       }}
     >
-      <Grid container spacing={2} justifyContent="center">
+      <Grid container spacing={3} justifyContent="center">
         {teams?.map((team, index) => (
           <Grid
             item
@@ -92,7 +92,7 @@ export default function Selection() {
               ":hover": {
                 cursor: "pointer",
                 transform: "scale(1.1)",
-                ":active": { transform: "scale(0.9)" },
+                ":active": { transform: "scale(1)" },
                 transition: "all 0.3s",
               },
               textAlign: "center",
@@ -106,25 +106,29 @@ export default function Selection() {
             <Box
               sx={{
                 background: getCardBackground(team?.category),
-                borderRadius: "6px",
-                height: "fit-content",
+                borderRadius: "8px",                
               }}
             >
-              <Typography variant="body1">{team?.category}</Typography>
-              <img
+              <Typography padding="2px 0" variant="body1">{team?.category}</Typography>
+              <Box
+                component="img"
                 src={team?.flag}
                 alt={team?.name}
                 title={team?.name}
-                style={{
+                sx={{
                   // width: "100%",
                   height: "auto",
                   borderRadius: "6px",
                   boxShadow: "3px 3px 8px -2px #000000",
-                  width: "100px",
+                  maxWidth: { xs : "100px" , md : "195px"},
                   objectFit: "cover",
+                  transition: "all 0.3s",
                   filter: Profile?.unlocked_teams?.includes(team?.name)
                     ? "none"
                     : "grayscale(100%)",
+                  "&:hover": {
+                    filter: "grayscale(0%)",
+                  },
                 }}
               />
             </Box>

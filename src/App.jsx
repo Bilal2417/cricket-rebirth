@@ -59,7 +59,7 @@ function App() {
   const location = useLocation();
 
   const [finalist, setFinalist] = useState(sessionStorage.getItem("Finalist"));
-  const [background, setBackground] = useState(sessionStorage.getItem("mode"));
+  const [background, setBackground] = useState(false);
 
   useEffect(() => {
     const handleBackUpdate = () => {
@@ -101,7 +101,10 @@ function App() {
           //   localStorage.setItem("FirstVisit", true)
           // }
           sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
-          console.log(JSON.stringify(data.profile), "updated app from userProfile");
+          console.log(
+            JSON.stringify(data.profile),
+            "updated app from userProfile"
+          );
         }
       })
       .catch((err) => console.error("Error fetching profile:", err));
@@ -128,6 +131,13 @@ function App() {
       window.removeEventListener("finalistUpdated", handleFinalistUpdate);
   }, []);
 
+  const applyBackground =
+    location.pathname == "/gamePlay" ||
+    location.pathname == "/score" ||
+    location.pathname == "/result" ||
+    location.pathname == "/team" ||
+    location.pathname == "/toss";
+    
   return (
     <Container
       sx={{
@@ -141,11 +151,7 @@ function App() {
           maxWidth: "100vw",
         }}
       >
-        {(setBackground && location.pathname == "/gamePlay") ||
-        location.pathname == "/score" ||
-        location.pathname == "/result" ||
-        location.pathname == "/team" ||
-        location.pathname == "/toss" ? (
+        {background && applyBackground ? (
           <Balatro
             spinRotation={-2.0}
             spinSpeed={10.0}

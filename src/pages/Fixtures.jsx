@@ -146,6 +146,8 @@ export default function Fixtures() {
         });
 
         window.dispatchEvent(new Event("profileUpdated"));
+        sessionStorage.setItem("Coins", 1500);
+        navigate("/increment");
       } else {
         console.error("Failed to update tournaments in database:", data.error);
       }

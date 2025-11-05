@@ -11,8 +11,8 @@ export default function Falling({ color, background, speed }) {
     const generatedBalls = Array.from({ length: ballCount }).map(() => ({
       size: 35, // 5-15px
       left: Math.random() * 100, // % from left
-      duration: 3, // 5-10s
-      delay: Math.random() * 5, // staggered start
+      duration: Math.random() * 8 + speed, // 5-10s
+      delay: Math.random() * 2, // staggered start
     }));
     setBalls(generatedBalls);
   }, []);

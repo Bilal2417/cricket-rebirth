@@ -731,6 +731,12 @@ export default function Tournament() {
           sessionStorage.setItem("Profile", JSON.stringify(merged));
           return merged;
         });
+
+        window.dispatchEvent(new Event("profileUpdated"));
+        if (winner == userTeam) {
+          sessionStorage.setItem("Coins", coinsIncrement);
+          navigate("/increment");
+        }
       } else {
         console.error("Failed to update trophies in database");
       }

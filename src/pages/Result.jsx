@@ -5,7 +5,7 @@ import Batting from "../components/batting";
 import Bowling from "../components/bowling";
 import { useNavigate } from "react-router-dom";
 import { EmojiEventsTwoTone } from "@mui/icons-material";
-import { GiTrophy, GiTwoCoins } from "react-icons/gi";
+import { GiPlasticDuck, GiTrophy, GiTwoCoins } from "react-icons/gi";
 
 export default function Result() {
   const [winner, setWinner] = useState(null);
@@ -613,7 +613,7 @@ export default function Result() {
                           }}
                           variant="h6"
                         >
-                          {data.score}
+                          {data.score <= 0 && data.out ?  <GiPlasticDuck/> : data.score }
                           {data.notout ? "*" : null}
                         </Typography>
                         <Typography
@@ -732,7 +732,7 @@ export default function Result() {
                           }}
                           variant="h6"
                         >
-                          {data.score}
+                          {data.score <= 0 && data.out ?  <GiPlasticDuck/> : data.score }
                           {data.notout ? "*" : null}
                         </Typography>
                         <Typography
