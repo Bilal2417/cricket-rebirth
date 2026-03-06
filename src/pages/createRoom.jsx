@@ -1,6 +1,6 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { colors } from "../App";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -31,10 +31,10 @@ export default function CreateRoom() {
     } while (newCode < 100000);
 
     setCreatedCode(newCode);
-    saveJoinCode(newCode , 1);
+    saveJoinCode(newCode, 1);
   };
 
-  const saveJoinCode = async (newCode , playerNum) => {
+  const saveJoinCode = async (newCode, playerNum) => {
     const { error } = await supabase
       .from("profiles")
       .update({
@@ -50,6 +50,37 @@ export default function CreateRoom() {
       return;
     }
   };
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("onlineConnection")
+      .on(
+        "postgres_changes",
+        {
+          event: "*", // listen to ALL events for testing
+          schema: "public",
+          table: "profiles",
+        },
+        (payload) => {
+          console.log("🔥 REALTIME EVENT:", payload);
+
+          // update picked players live
+          // setPickedNames((prev) => {
+
+          if (payload.new.id === profileId) return;
+          if (payload.new.player == 2) {
+            navigate("/selection");
+          }
+        },
+      )
+      .subscribe((status) => {
+        console.log("Realtime status:", status);
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const getStoredCode = async () => {
     const { data, error } = await supabase
@@ -68,14 +99,14 @@ export default function CreateRoom() {
     const matches = storedCode?.filter(
       (item) => String(item.code) === String(joinCode),
     );
-
+    console.log(matches, "l");
     if (matches?.length !== 1) {
       toast.error("Invalid Code");
     } else if (matches[0].id === profileId) {
       toast.error("Cannot join your own room");
     } else {
       toast.success("Room Joined");
-      saveJoinCode(joinCode,2);
+      saveJoinCode(joinCode, 2);
       navigate("/selection");
     }
   };
