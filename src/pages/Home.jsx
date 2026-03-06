@@ -67,7 +67,7 @@ export default function Home() {
   }, []);
 
   const [overs, setOvers] = useState(() =>
-    Number(localStorage.getItem("Overs"))
+    Number(localStorage.getItem("Overs")),
   );
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export default function Home() {
     const fetchProfiles = async (force = false) => {
       try {
         const cached = JSON.parse(
-          sessionStorage.getItem("profilesData") || "{}"
+          sessionStorage.getItem("profilesData") || "{}",
         );
         const now = Date.now();
         const myProfile = JSON.parse(localStorage.getItem("UserProfile"));
@@ -163,7 +163,7 @@ export default function Home() {
             setProfiles(data);
             sessionStorage.setItem(
               "profilesData",
-              JSON.stringify({ data: data, timestamp: now })
+              JSON.stringify({ data: data, timestamp: now }),
             );
             if (myProfile) setUserProfile(myProfile);
           }
@@ -183,7 +183,7 @@ export default function Home() {
             (payload) => {
               console.log("🏆 Trophies changed:", payload);
               getData();
-            }
+            },
           )
           .subscribe();
 
@@ -191,7 +191,7 @@ export default function Home() {
         return () => {
           supabase.removeChannel(channel);
         };
-        
+
         // const res = await fetch("/.netlify/functions/getProfile");
         // const data = await res.json();
 
@@ -779,6 +779,8 @@ export default function Home() {
               }
               if (save && mode == "TOURNAMENT") {
                 navigate("/tournament");
+              } else if (mode == "ONLINE") {
+                navigate("/createRoom");
               } else {
                 navigate("/team");
               }
