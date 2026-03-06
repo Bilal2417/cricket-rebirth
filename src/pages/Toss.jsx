@@ -259,7 +259,7 @@ export default function Toss() {
           gap: 2,
         }}
       >
-        {(Profile?.player == 1 && mode == "ONLINE" && !tossWin) ||
+        {(Profile?.player == 1 && mode == "ONLINE" && tossWin) ||
         mode !== "ONLINE" ? (
           !tossWin ? (
             <Grid
