@@ -192,17 +192,15 @@ export default function Selection() {
             }}
             onClick={() => {
               if (isDisable) {
-                toast.error("Aleady Selected!");
+                toast.error("Already Selected!");
+              } else if (opposition?.name == team?.name) {
+                toast.error("Opponent already selected this team!");
+              } else if (!Profile?.unlocked_teams?.includes(team?.name)) {
+                AiTeamSelection(team?.name);
+                setIsDisable(true); // only disable on successful selection
               } else {
-                if (opposition.name == team?.name) {
-                  toast.error("Opponent select this team already !");
-                } else {
-                  !Profile?.unlocked_teams?.includes(team?.name)
-                    ? AiTeamSelection(team?.name)
-                    : toast.error("Unlock team from Packs!");
-                }
+                toast.error("Unlock team from Packs!");
               }
-              setIsDisable(true);
             }}
           >
             <Box
