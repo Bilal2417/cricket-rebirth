@@ -69,7 +69,7 @@ export default function CreateRoom() {
 
           if (payload.new.id === profileId) return;
           if (payload.new.player == 2) {
-            navigate("/selection");
+            navigate("/team");
           }
         },
       )
@@ -107,7 +107,7 @@ export default function CreateRoom() {
     } else {
       toast.success("Room Joined");
       saveJoinCode(joinCode, 2);
-      navigate("/selection");
+      navigate("/team");
     }
   };
 
