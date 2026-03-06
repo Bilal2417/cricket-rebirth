@@ -1,4 +1,4 @@
-import { Box, Grow, Typography } from "@mui/material";
+import { Box,  Grow, Typography } from "@mui/material";
 import Data from "../components/data";
 import { useEffect, useState } from "react";
 import Batting from "../components/batting";
@@ -6,6 +6,8 @@ import Bowling from "../components/bowling";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { useNavigate } from "react-router-dom";
+import { colors } from "../App";
+
 
 export default function Scorecard() {
   const storedData = localStorage.getItem("cricketData");
@@ -28,16 +30,7 @@ export default function Scorecard() {
   const user = localStorage.getItem("User");
   const ai = localStorage.getItem("Ai");
 
-  const colors = {
-    // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
-    wc19: "#222589  ",
-    wc21: "linear-gradient(to bottom , rgb(215 21 73) , rgb(233 25 85) )",
-    wc22: "#d71c59", //de265c
-    wc24: "#fa208e",
-    ct25: "#02c208",
-    // wtc:  `linear-gradient(to bottom , ${Innings == 1 || Innings == 4 ? !batting ?  userTeam?.secondary : aiTeam?.secondary : batting ?  userTeam?.secondary : aiTeam?.secondary} , ${Innings == 1 || Innings == 4 ? !batting ?  userTeam?.primary : aiTeam?.primary : batting ?  userTeam?.primary : aiTeam?.primary} )` ,
-    wtc: "#000",
-  };
+
   const backColor = {
     wc21: "linear-gradient(to bottom , rgb(113 17 233) , rgb(83 6 189) ) ", //5221ba
     wtc: "linear-gradient(to bottom , #a99981 , #ece5d3 , #a99981)", //5221ba

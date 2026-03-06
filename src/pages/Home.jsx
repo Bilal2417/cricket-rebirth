@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { keyframes } from "@emotion/react";
 import { GiCardboardBox, GiShoppingCart, GiTrophy } from "react-icons/gi";
 import avatar from "/img/dummy.png";
+import { supabase } from "../supabaseClient";
 
 export default function Home() {
   const shimmer = keyframes`
@@ -110,7 +111,7 @@ export default function Home() {
 
   //         if (matchedProfile) {
   //           setUserProfile(matchedProfile);
-  //           sessionStorage.setItem("Profile", JSON.stringify(matchedProfile));
+  //           localStorage.setItem("Profile", JSON.stringify(matchedProfile));
   //         }
   //       }
   //     } catch (err) {
@@ -139,35 +140,71 @@ export default function Home() {
           sessionStorage.getItem("profilesData") || "{}"
         );
         const now = Date.now();
-        const myProfile = JSON.parse(sessionStorage.getItem("UserProfile"));
+        const myProfile = JSON.parse(localStorage.getItem("UserProfile"));
 
-        if (
-          !force &&
-          cached.timestamp &&
-          now - cached.timestamp < 5 * 60 * 1000
-        ) {
-          setProfiles(cached.data);
+        // if (
+        //   !force &&
+        //   cached.timestamp &&
+        //   now - cached.timestamp < 5 * 60 * 1000
+        // ) {
+        //   setProfiles(cached.data);
 
-          // const matchedProfile = data.profiles.find((p) => p.id === profileId);
-          if (myProfile) setUserProfile(myProfile);
+        //   // const matchedProfile = data.profiles.find((p) => p.id === profileId);
+        //   if (myProfile) setUserProfile(myProfile);
 
-          setLoading(false);
-          return;
-        }
+        //   setLoading(false);
+        //   return;
+        // }
 
-        const res = await fetch("/.netlify/functions/getProfile");
-        const data = await res.json();
+        const getData = async () => {
+          const { data, error } = await supabase.from("profiles").select("*");
+          console.log(data);
+          if (!error) {
+            setProfiles(data);
+            sessionStorage.setItem(
+              "profilesData",
+              JSON.stringify({ data: data, timestamp: now })
+            );
+            if (myProfile) setUserProfile(myProfile);
+          }
+        };
 
-        if (isMounted && data?.success && data.profiles) {
-          setProfiles(data.profiles);
-          sessionStorage.setItem(
-            "profilesData",
-            JSON.stringify({ data: data.profiles, timestamp: now })
-          );
+        getData();
 
-          // const matchedProfile = data.profiles.find((p) => p.id === profileId);
-          if (myProfile) setUserProfile(myProfile);
-        }
+        const channel = supabase
+          .channel("trophies-changes")
+          .on(
+            "postgres_changes",
+            {
+              event: "UPDATE",
+              schema: "public",
+              table: "profiles",
+            },
+            (payload) => {
+              console.log("🏆 Trophies changed:", payload);
+              getData();
+            }
+          )
+          .subscribe();
+
+        // Cleanup
+        return () => {
+          supabase.removeChannel(channel);
+        };
+        
+        // const res = await fetch("/.netlify/functions/getProfile");
+        // const data = await res.json();
+
+        // if (isMounted && data?.success && data.profiles) {
+        //   setProfiles(data.profiles);
+        //   sessionStorage.setItem(
+        //     "profilesData",
+        //     JSON.stringify({ data: data.profiles, timestamp: now })
+        //   );
+
+        //   // const matchedProfile = data.profiles.find((p) => p.id === profileId);
+        //   if (myProfile) setUserProfile(myProfile);
+        // }
       } catch (err) {
         console.error("Error fetching profiles:", err);
       } finally {
@@ -393,171 +430,6 @@ export default function Home() {
                 scrollbarColor: "rgb(137, 118, 137) rgb(102, 89, 99)",
               }}
             >
-              {profiles?.map((profile, index) => {
-                return (
-                  <Box
-                    key={profile?.id}
-                    onClick={() =>
-                      navigate("/ProfileData", { state: { profile } })
-                    }
-                    sx={{
-                      backgroundColor:
-                        profile?.id == profileId ? "#ef7627" : "#897689",
-                      width: "415px",
-                      paddingLeft: "15px",
-                      display: "flex",
-                      alignContent: "center",
-                      justifyContent: "space-between",
-                      border: "2px solid #000000",
-                      borderRadius: "4px",
-                      boxShadow:
-                        profile?.id == profileId
-                          ? "inset 0px -8px 8px -4px #c16a2f"
-                          : "inset 0px -8px 8px -4px #655b67",
-                      transition: "all 0.3s",
-                      transform: "skew(-5deg)",
-                      "@media (hover: hover)": {
-                        cursor: "pointer",
-                        opacity: 0.9,
-                      },
-                      ":active": {
-                        transform: "scale(0.9)",
-                      },
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                        position: "relative",
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          // fontfamily: "Rubik",
-                          backgroundColor:
-                            profile?.id == profileId
-                              ? "rgb(255 168 0)"
-                              : "#6e606d",
-                          color:
-                            profile?.id == profileId
-                              ? "rgb(255 196 107)"
-                              : "#aa9ca9",
-                          padding: "4px 12px",
-                          fontWeight: 600,
-                        }}
-                        variant="body1"
-                      >
-                        {index + 1}
-                      </Typography>
-                      <Box
-                        component="img"
-                        src={profile?.img || avatar}
-                        alt={profile?.name}
-                        sx={{
-                          width: 45,
-                          height: 45,
-                          border: "2px solid #000",
-                          borderRadius: "4px",
-                          objectFit: "cover",
-                          "&:hover": { cursor: "pointer" },
-                        }}
-                        // onClick={handleImageClick}
-                      />
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "flex-start",
-                        }}
-                      >
-                        <Typography
-                          sx={{
-                            fontWeight: 600,
-                            // fontfamily: "Rubik",
-                            color: "rgb(255 196 107)",
-                          }}
-                          variant="body1"
-                        >
-                          {profile?.name}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontWeight: 600,
-                            color: "rgb(255 196 107)",
-                            fontSize: "0.7em",
-                          }}
-                          variant="body2"
-                        >
-                          {profile?.selected_title}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontWeight: 600,
-                            display:
-                              timeAgo(profile?.last_active) !== "just now" &&
-                              profile?.id !== profileId
-                                ? "block"
-                                : "none",
-                            color: "rgb(202 186 186)",
-                            fontSize: "0.7em",
-                          }}
-                          variant="body2"
-                        >
-                          Last Online {timeAgo(profile?.last_active)}
-                        </Typography>
-                      </Box>
-                      <span
-                        style={{
-                          display: "inline-block",
-                          width: "10px",
-                          height: "10px",
-                          backgroundColor:
-                            timeAgo(profile?.last_active) == "just now" ||
-                            profile?.id == profileId
-                              ? "green"
-                              : "#514e4e",
-                          borderRadius: "50%",
-                          position: "absolute",
-                          top: 7,
-                          left: 25,
-                        }}
-                      />
-                    </Box>
-                    <Typography
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        // fontfamily: "Rubik",
-                        fontWeight: 600,
-                        backgroundColor:
-                          profile?.id == profileId ? "#dc5425" : "#665963",
-                        padding: "15px 30px",
-                        justifyContent: "center",
-                        color: "rgb(255 196 107)",
-                      }}
-                      variant="body1"
-                    >
-                      <GiTrophy
-                        size={25}
-                        style={{
-                          color: "rgb(255 196 107)",
-                        }}
-                      />
-                      <Box
-                        sx={{ minWidth: "30px", textAlign: "center" }}
-                        component="span"
-                      >
-                        {Math.max(profile?.trophies, 0)}
-                      </Box>
-                    </Typography>
-                  </Box>
-                );
-              })}
-
               {loading
                 ? ["1", "2", "3", "4", "5"].map((index) => {
                     return (
@@ -652,7 +524,174 @@ export default function Home() {
                       </Box>
                     );
                   })
-                : null}
+                : profiles
+                    ?.sort((a, b) => b.trophies - a.trophies)
+                    ?.map((profile, index) => {
+                      return (
+                        <Box
+                          key={profile?.id}
+                          onClick={() =>
+                            navigate("/ProfileData", { state: { profile } })
+                          }
+                          sx={{
+                            backgroundColor:
+                              profile?.id == profileId ? "#ef7627" : "#897689",
+                            width: "415px",
+                            paddingLeft: "15px",
+                            display: "flex",
+                            alignContent: "center",
+                            justifyContent: "space-between",
+                            border: "2px solid #000000",
+                            borderRadius: "4px",
+                            boxShadow:
+                              profile?.id == profileId
+                                ? "inset 0px -8px 8px -4px #c16a2f"
+                                : "inset 0px -8px 8px -4px #655b67",
+                            transition: "all 0.3s",
+                            transform: "skew(-5deg)",
+                            "@media (hover: hover)": {
+                              cursor: "pointer",
+                              opacity: 0.9,
+                            },
+                            ":active": {
+                              transform: "scale(0.9)",
+                            },
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              position: "relative",
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                // fontfamily: "Rubik",
+                                backgroundColor:
+                                  profile?.id == profileId
+                                    ? "rgb(255 168 0)"
+                                    : "#6e606d",
+                                color:
+                                  profile?.id == profileId
+                                    ? "rgb(255 196 107)"
+                                    : "#aa9ca9",
+                                padding: "4px 12px",
+                                fontWeight: 600,
+                              }}
+                              variant="body1"
+                            >
+                              {index + 1}
+                            </Typography>
+                            <Box
+                              component="img"
+                              src={profile?.img || avatar}
+                              alt={profile?.name}
+                              sx={{
+                                width: 45,
+                                height: 45,
+                                border: "2px solid #000",
+                                borderRadius: "4px",
+                                objectFit: "cover",
+                                "&:hover": { cursor: "pointer" },
+                              }}
+                              // onClick={handleImageClick}
+                            />
+
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "flex-start",
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  fontWeight: 600,
+                                  // fontfamily: "Rubik",
+                                  color: "rgb(255 196 107)",
+                                }}
+                                variant="body1"
+                              >
+                                {profile?.name}
+                              </Typography>
+                              <Typography
+                                sx={{
+                                  fontWeight: 600,
+                                  color: "rgb(255 196 107)",
+                                  fontSize: "0.7em",
+                                }}
+                                variant="body2"
+                              >
+                                {profile?.selected_title}
+                              </Typography>
+                              <Typography
+                                sx={{
+                                  fontWeight: 600,
+                                  display:
+                                    timeAgo(profile?.last_active) !==
+                                      "just now" && profile?.id !== profileId
+                                      ? "block"
+                                      : "none",
+                                  color: "rgb(202 186 186)",
+                                  fontSize: "0.7em",
+                                }}
+                                variant="body2"
+                              >
+                                Last Online {timeAgo(profile?.last_active)}
+                              </Typography>
+                            </Box>
+                            <span
+                              style={{
+                                display: "inline-block",
+                                width: "10px",
+                                height: "10px",
+                                backgroundColor:
+                                  timeAgo(profile?.last_active) == "just now" ||
+                                  profile?.id == profileId
+                                    ? "green"
+                                    : "#514e4e",
+                                borderRadius: "50%",
+                                position: "absolute",
+                                top: 7,
+                                left: 25,
+                              }}
+                            />
+                          </Box>
+                          <Typography
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "5px",
+                              // fontfamily: "Rubik",
+                              fontWeight: 600,
+                              backgroundColor:
+                                profile?.id == profileId
+                                  ? "#dc5425"
+                                  : "#665963",
+                              padding: "15px 30px",
+                              justifyContent: "center",
+                              color: "rgb(255 196 107)",
+                            }}
+                            variant="body1"
+                          >
+                            <GiTrophy
+                              size={25}
+                              style={{
+                                color: "rgb(255 196 107)",
+                              }}
+                            />
+                            <Box
+                              sx={{ minWidth: "30px", textAlign: "center" }}
+                              component="span"
+                            >
+                              {Math.max(profile?.trophies, 0)}
+                            </Box>
+                          </Typography>
+                        </Box>
+                      );
+                    })}
             </Box>
           </Box>
         </Box>

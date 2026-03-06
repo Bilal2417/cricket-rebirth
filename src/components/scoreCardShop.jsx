@@ -47,7 +47,7 @@ export default function ScoreCardShop() {
   ];
 
   const [Profile, setProfile] = useState(() => {
-    const storedProfile = sessionStorage.getItem("UserProfile");
+    const storedProfile = localStorage.getItem("UserProfile");
     return storedProfile
       ? JSON.parse(storedProfile)
       : { coins: 500, unlocked_items: [] };

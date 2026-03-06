@@ -34,7 +34,19 @@ import useDisableBackButton from "./components/disableBack";
 import Log from "./pages/Log";
 import Balatro from "./components/Balatro";
 import Coins from "./pages/Coins";
+import { supabase } from "./supabaseClient";
+import CreateRoom from "./pages/createRoom";
 
+export const colors = {
+  // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
+  wc19: "#222589  ",
+  wc21: "linear-gradient(to bottom , rgb(215 21 73) , rgb(233 25 85) ) ",
+  wc22: "#d71c59", //de265c
+  wc24: "#fa208e", //de265c
+  ct25: "#02c208",
+  // wtc: `linear-gradient(to bottom , ${batting?.secondary} , ${batting?.primary} )`,
+  wtc: "#000",
+};
 function App() {
   useDisableBackButton();
   useEffect(() => {
@@ -91,29 +103,23 @@ function App() {
     const profileId = localStorage.getItem("MyId");
     if (!profileId) return;
 
-    // initial fetch
-    fetch(`/.netlify/functions/userProfile?profileId=${profileId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && data.profile) {
-          setProfile(data.profile);
-          // if(data.profile.name == "Billy" || data.profile.name == "Bilal" || data.profile.name == "Arsal 84" || data.profile.name == "Pak|Frozen"){
-          //   localStorage.setItem("FirstVisit", true)
-          // }
-          sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
-          console.log(
-            JSON.stringify(data.profile),
-            "updated app from userProfile"
-          );
-        }
-      })
-      .catch((err) => console.error("Error fetching profile:", err));
+    const getProfile = async (userId) => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
+
+      if (error) console.error(error);
+      else setProfile(data);
+    };
+    getProfile(profileId);
 
     const handleProfileUpdate = () => {
-      const updated = sessionStorage.getItem("UserProfile");
+      const updated = localStorage.getItem("UserProfile");
       if (updated) {
         setProfile(JSON.parse(updated));
-        console.log(updated, "updated app from session");
+        getProfile(profileId);
       }
     };
 
@@ -137,7 +143,7 @@ function App() {
     location.pathname == "/result" ||
     location.pathname == "/team" ||
     location.pathname == "/toss";
-    
+
   return (
     <Container
       sx={{
@@ -179,6 +185,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/increment" element={<Coins />} />
+          <Route path="/createRoom" element={<CreateRoom />} />
           <Route path="/battle-log" element={<Log />} />
           <Route path="/scoreBoardOpening" element={<ScorecardWheel />} />
           <Route path="/shop" element={<Shop profile={profile} />} />

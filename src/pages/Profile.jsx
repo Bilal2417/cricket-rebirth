@@ -24,6 +24,7 @@ import LoadingPage from "../components/loading";
 import imageCompression from "browser-image-compression";
 import { GiAchievement, GiStarMedal, GiTrophy } from "react-icons/gi";
 import avatar from "/img/dummy.png";
+import { supabase } from "../supabaseClient";
 
 export default function Profile() {
   const location = useLocation();
@@ -41,34 +42,51 @@ export default function Profile() {
   const [showLoadingPage, setShowLoadingPage] = useState(true);
 
   // Generate ID if not exists
+
   let profileId = localStorage.getItem("MyId");
   if (!profileId) {
     profileId = nanoid();
     localStorage.setItem("MyId", profileId);
   }
-
   useEffect(() => {
     const isFirstVisit = localStorage.getItem("FirstVisit");
-    fetch(`/.netlify/functions/saveProfile?profileId=${profileId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          const profileData = {
-            ...data.profile,
-            img: data.profile.img,
-          };
-          setProfile(profileData);
-          setName(profileData.name);
-          setTitles(profileData.titles);
-          if (!isFirstVisit) {
-            toast.success("Profile Created Successfully !!");
-            localStorage.setItem("FirstVisit", true);
-            localStorage.setItem("collectedStarter", true);
-          }
+
+    const getProfile = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", profileId)
+          .single();
+
+        if (error) {
+          console.error("Error fetching profile:", error);
+          return;
         }
-      })
-      .catch((err) => console.error("Error fetching profile:", err))
-      .finally(() => setLoading(false));
+
+        const profileData = {
+          ...data,
+          img: data.img,
+        };
+
+        setProfile(profileData);
+        localStorage.setItem("UserProfile",JSON.stringify(profileData))
+        setName(profileData.name);
+        setTitles(profileData.titles);
+
+        if (!isFirstVisit) {
+          toast.success("Profile Created Successfully !!");
+          localStorage.setItem("FirstVisit", true);
+          localStorage.setItem("collectedStarter", true);
+        }
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getProfile();
   }, []);
 
   const handleOpen = () => {
@@ -124,34 +142,32 @@ export default function Profile() {
       img: profile.img,
       selected_title: activeTitle || profile.selected_title,
     };
-    if (profileId == "2mJArx_YDfuPZ87hR1isD") {
-      localStorage.setItem("MyId", "f61RUuoOcRTkbWeg1aG0k");
-    }
     try {
-      const res = await fetch("/.netlify/functions/updateProfile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...updatedProfile,
-          source: "profile", // 👈 Add this line
-        }),
-      });
-      const data = await res.json();
+      const { updatedData, error } = await supabase
+        .from("profiles")
+        .update({
+          name: updatedProfile.name,
+          selected_title: updatedProfile.selected_title,
+          img: updatedProfile.img,
+        })
+        .eq("id", updatedProfile.id)
+        .select() // return the updated row
+        .single();
 
-      if (data.success) {
+      if (!error) {
         setSave(false);
-        setProfile(data.profile);
-        setName(data.profile.name);
-        sessionStorage.setItem("Profile", JSON.stringify(data.profile));
+        setProfile(updatedData);
+        setName(updatedData.name);
+        localStorage.setItem("Profile", JSON.stringify(updatedData));
 
-        sessionStorage.removeItem("UserProfile");
+        // sessionStorage.removeItem("UserProfile");
         window.dispatchEvent(new Event("profileUpdated"));
         localStorage.setItem("refreshProfiles", "true");
 
         toast.success("Profile Updated Successfully!");
         setOpen(false);
       } else {
-        toast.error(data.error || "Failed to update profile");
+        toast.error(error || "Failed to update profile");
       }
     } catch (err) {
       console.error("Error updating profile:", err);

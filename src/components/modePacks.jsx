@@ -2,6 +2,7 @@ import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { supabase } from "../supabaseClient";
 
 export default function ModePack({
   title,
@@ -25,7 +26,7 @@ export default function ModePack({
 
   const handleClose = () => setActiveCard(null);
 
-  const storedProfile = sessionStorage.getItem("UserProfile");
+  const storedProfile = localStorage.getItem("UserProfile");
   const [Profile, setProfile] = useState(
     storedProfile ? JSON.parse(storedProfile) : ""
   );
@@ -44,27 +45,19 @@ export default function ModePack({
       };
 
       try {
-        const res = await fetch("/.netlify/functions/updateProfile", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...updatedProfile,
-            source: "modePack", // 👈 Add this line
-          }),
-        });
+        const { error } = await supabase
+          .from("profiles")
+          .update({
+            coins: updatedProfile.coins,
+            unlocked_items: updatedProfile.unlocked_items,
+          })
+          .eq("id", updatedProfile.id);
 
-        const data = await res.json();
-        if (data.success) {
-          setProfile(data.profile);
-          console.log(data.profile);
-          sessionStorage.setItem("UserProfile", JSON.stringify(data.profile));
-
-          window.dispatchEvent(new Event("profileUpdated"));
+        if (error) {
+          console.error("Failed to update tournaments in database:", error);
         } else {
-          console.error(
-            "Failed to update tournaments in database:",
-            data.error
-          );
+          console.log("Profile updated ✅");
+          window.dispatchEvent(new Event("profileUpdated"));
         }
       } catch (err) {
         console.error("Error updating tournaments:", err);

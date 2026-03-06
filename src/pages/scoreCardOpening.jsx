@@ -58,7 +58,7 @@ export default function ScoreCardOpening() {
     setGroupValue(Number(val));
   }, []);
 
-  const storedProfile = sessionStorage.getItem("UserProfile");
+  const storedProfile = localStorage.getItem("UserProfile");
   const [Profile, setProfile] = useState(
     storedProfile ? JSON.parse(storedProfile) : ""
   );
@@ -183,7 +183,7 @@ export default function ScoreCardOpening() {
       if (data.success) {
         setProfile((prev) => {
           const merged = { ...prev, ...data.profile };
-          sessionStorage.setItem("UserProfile", JSON.stringify(merged));
+          localStorage.setItem("UserProfile", JSON.stringify(merged));
           return merged;
         });
 

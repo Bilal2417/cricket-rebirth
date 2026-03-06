@@ -1,20 +1,10 @@
-import { Box, Typography } from "@mui/material";
+import { Box,  Typography } from "@mui/material";
+import { colors } from "../App";
 
 export default function Bowling(squad) {
   const bowling = squad.data;
 
-  const colors = {
-    wc19: { bg: "#222589", text: "#222589" },
-    wc21: {
-      bg: "linear-gradient(to bottom, rgb(215, 21, 73), rgb(233, 25, 85))",
-      text: "#f83059",
-    },
-    wc22: { bg: "#d71c59", text: "#d71c59" },
-    wc24: { bg: "#fa208e", text: "#fa208e" },
-    ct25: { bg: "#02c208", text: "#02c208" },
-    // wtc: { bg: bowling?.primary, text: bowling?.primary },
-    wtc : { bg : "#000" , text : "#000"}
-  };
+
 
   const board = localStorage.getItem("Board");
 

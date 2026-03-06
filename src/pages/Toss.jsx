@@ -2,6 +2,8 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Data from "../components/data";
+import { supabase } from "../supabaseClient";
+import { colors } from "../App";
 
 export default function Toss() {
   const [result, setResult] = useState(null);
@@ -13,16 +15,6 @@ export default function Toss() {
   const board = localStorage.getItem("Board");
   const navigate = useNavigate();
   const Teams = Data;
-
-  const colors = {
-    // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
-    wc19: "#222589  ",
-    wc21: "#f83059 ", //f83059
-    wc22: "#d71c59", //de265c
-    wc24: "#fa208e",
-    ct25: "#02c208",
-    wtc: "#000",
-  };
 
   const backColor = {
     wc21: "linear-gradient(to bottom , rgb(113 17 233) , rgb(83 6 189) ) ", //5221ba
@@ -52,15 +44,101 @@ export default function Toss() {
     }
   };
 
-  const handleInnings = (choice) => {
+  const handleTossOnline = async (choice) => {
+    const coinFlip = Math.random() < 0.5 ? "Heads" : "Tails";
+    const winner = coinFlip === choice ? "user" : "opponent";
+
+    setResult(winner);
+    console.log(`Coin: ${coinFlip}, Winner: ${winner}`);
+
+    if (winner === "opponent") {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          choice: "lost",
+        })
+        .eq("id", Profile.id)
+        .select()
+        .maybeSingle();
+
+      if (error) {
+        console.error("Failed to update toss decision:", error);
+        return;
+      }
+
+      // const innings = Math.random() < 0.5 ? "Bat" : "Ball";
+      // localStorage.setItem("Innings", innings);
+      // localStorage.setItem("currentInnings", 1);
+      // setInningsChoice(innings);
+      navigate("/gamePlay");
+    } else {
+      setTossWin(true);
+    }
+  };
+
+  const handleInnings = async (choice) => {
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        choice: choice,
+      })
+      .eq("id", Profile.id)
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      console.error("Failed to update toss decision:", error);
+      return;
+    }
+
     localStorage.setItem("Innings", choice);
     localStorage.setItem("currentInnings", 1);
     navigate("/gamePlay");
     // window.location.reload();
   };
 
+  useEffect(() => {
+    const channel = supabase
+      .channel("onlineSelection")
+      .on(
+        "postgres_changes",
+        {
+          event: "*", // listen to ALL events for testing
+          schema: "public",
+          table: "profiles",
+        },
+        (payload) => {
+          console.log("🔥 REALTIME EVENT:", payload);
+
+          // update picked players live
+          // setPickedNames((prev) => {
+
+          if (payload.new.id === Profile?.id) return;
+          if (payload.new.choice == "lost") {
+            setTossWin(true);
+            console.log(payload);
+          } else if (payload.new.choice == "Bat") {
+            localStorage.setItem("Innings", "Ball");
+            localStorage.setItem("currentInnings", 1);
+            navigate("/gamePlay");
+          } else {
+            localStorage.setItem("Innings", "Bat");
+            localStorage.setItem("currentInnings", 1);
+            navigate("/gamePlay");
+          }
+        },
+      )
+      .subscribe((status) => {
+        console.log("Realtime status:", status);
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   const [Profile, setProfile] = useState(() => {
-    const storedProfile = sessionStorage.getItem("UserProfile");
+    const storedProfile = localStorage.getItem("UserProfile");
     return storedProfile ? JSON.parse(storedProfile) : "";
   });
 
@@ -77,29 +155,23 @@ export default function Toss() {
     const user = localStorage.getItem("User");
 
     if (userMatch) {
-      const updatedMatch = {
-        ...userMatch,
-        winner: ai,
-        loser: user,
-      };
+      const updatedMatch = { ...userMatch, winner: ai, loser: user };
       sessionStorage.setItem("latestUserMatch", JSON.stringify(updatedMatch));
     }
+
     if (!Profile) return;
 
-    const trophyMap = {
-      1: 1,
-      3: 3,
-      5: 5,
-      10: 10,
-      20: 15,
-      100: 5,
-    };
-
+    const trophyMap = { 1: 1, 3: 3, 5: 5, 10: 10, 20: 15, 100: 5 };
     const penalty = trophyMap[totalWkts];
     const givenMode = sessionStorage.getItem("mode");
     const userTeam = Data.find((team) => team.name == user);
     const aiTeam = Data.find((team) => team.name == ai);
     const decrementTickets = givenMode === "CONTEST" ? 1 : 0;
+
+    const isContestMode =
+      givenMode == "CONTEST" ||
+      givenMode == "TOURNAMENT" ||
+      givenMode == "KNOCKOUT";
 
     const battleLog = {
       team1: {
@@ -119,12 +191,9 @@ export default function Toss() {
         flags: aiTeam?.flag,
       },
       result: "Defeat",
-      trophies:
-        givenMode == "CONTEST" ||
-        givenMode == "TOURNAMENT" ||
-        givenMode == "KNOCKOUT"
-          ? 0
-          : totalWkts == 100
+      trophies: isContestMode
+        ? 0
+        : totalWkts == 100
           ? 5
           : Math.ceil(penalty / 2),
       mode: givenMode,
@@ -134,48 +203,49 @@ export default function Toss() {
     const updatedProfile = {
       ...Profile,
       id: Profile?.id,
-      trophies:
-        givenMode == "CONTEST" ||
-        givenMode == "TOURNAMENT" ||
-        givenMode == "KNOCKOUT"
-          ? Profile.trophies
-          : Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
+      trophies: isContestMode
+        ? Profile.trophies
+        : Profile.trophies - (totalWkts == 100 ? 5 : Math.ceil(penalty / 2)),
       tickets: Profile.tickets - decrementTickets,
-      battle_log: battleLog,
-      // points: null,
+      battle_log: [battleLog, ...(Profile.battle_log || [])],
     };
 
     setProfile(updatedProfile);
-    console.log(updatedProfile, "/toss before");
 
     try {
-      const res = await fetch("/.netlify/functions/updateProfile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...updatedProfile,
-          source: "toss", // 👈 Add this line
-        }),
+      const { data, error } = await supabase
+        .from("profiles")
+        .update({
+          trophies: updatedProfile.trophies,
+          tickets: updatedProfile.tickets,
+          battle_log: updatedProfile.battle_log,
+        })
+        .eq("id", Profile.id)
+        .select()
+        .maybeSingle();
+
+      if (error) {
+        console.error("Failed to update trophies:", error);
+        return;
+      }
+
+      console.log("raw data from supabase:", data); // is this null?
+      console.log("Profile.id:", Profile.id); // is this correct?
+      setProfile((prev) => {
+        const merged = { ...prev, ...data };
+        localStorage.setItem("UserProfile", JSON.stringify(merged));
+        console.log(merged, "merged toss");
+        return merged;
       });
 
-      const data = await res.json();
-      if (data.success) {
-        setProfile((prev) => {
-          const merged = { ...prev, ...data.profile };
-          sessionStorage.setItem("UserProfile", JSON.stringify(merged));
-          console.log(merged, "merged toss");
-          return merged;
-        });
-        localStorage.setItem("refreshContest", "true");
-        window.dispatchEvent(new Event("profileUpdated"));
-      } else {
-        console.error("Failed to update trophies in database");
-      }
+      localStorage.setItem("refreshContest", "true");
+      window.dispatchEvent(new Event("profileUpdated"));
     } catch (err) {
       console.error("Error updating trophies:", err);
     }
   };
 
+  const mode = sessionStorage.getItem("mode");
   return (
     <>
       <Box
@@ -189,84 +259,95 @@ export default function Toss() {
           gap: 2,
         }}
       >
-        {!tossWin ? (
-          <Grid
-            container
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-            sx={{ mt: 4 }}
-          >
-            {["Heads", "Tails"].map((choice, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Button
-                  fullWidth
-                  sx={{
-                    color: board == "wtc" ? "#000000" : "#FFFFFF",
-                    background: backColor[board] || "#0f0648",
-                    borderBottom: `4px solid ${
-                      colors[board] || "rgb(65, 38, 255)"
-                    }`,
-                    borderRight: `4px solid ${
-                      colors[board] || "rgb(65, 38, 255)"
-                    }`,
-                    borderRadius: "12px",
-                    transform: "skew(-5deg)",
-                    width: "120px",
-                    fontWeight: 600,
-                    padding: "12px 16px",
-                    fontSize: { xs: "14px", sm: "16px", md: "18px" },
-                    ":hover": {
-                      transform: "scale(1.05)",
-                      transition: "all 0.3s",
-                    },
-                  }}
-                  onClick={() => handleToss(choice)}
-                >
-                  {choice}
-                </Button>
-              </Grid>
-            ))}
-          </Grid>
+        {(Profile?.player == 1 && mode == "ONLINE" && !tossWin) ||
+        mode !== "ONLINE" ? (
+          !tossWin ? (
+            <Grid
+              container
+              spacing={2}
+              justifyContent="center"
+              alignItems="center"
+              sx={{ mt: 4 }}
+            >
+              {["Heads", "Tails"].map((choice, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Button
+                    fullWidth
+                    sx={{
+                      color: board == "wtc" ? "#000000" : "#FFFFFF",
+                      background: backColor[board] || "#0f0648",
+                      borderBottom: `4px solid ${
+                        colors[board] || "rgb(65, 38, 255)"
+                      }`,
+                      borderRight: `4px solid ${
+                        colors[board] || "rgb(65, 38, 255)"
+                      }`,
+                      borderRadius: "12px",
+                      transform: "skew(-5deg)",
+                      width: "120px",
+                      fontWeight: 600,
+                      padding: "12px 16px",
+                      fontSize: { xs: "14px", sm: "16px", md: "18px" },
+                      ":hover": {
+                        transform: "scale(1.05)",
+                        transition: "all 0.3s",
+                      },
+                    }}
+                    onClick={() => {
+                      mode == "ONLINE"
+                        ? handleTossOnline(choice)
+                        : handleToss(choice);
+                    }}
+                  >
+                    {choice}
+                  </Button>
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Grid
+              container
+              spacing={2}
+              justifyContent="center"
+              alignItems="center"
+              sx={{ mt: 4 }}
+            >
+              {["Bat", "Ball"].map((choice, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Button
+                    fullWidth
+                    sx={{
+                      color: board == "wtc" ? "#000000" : "#FFFFFF",
+                      background: backColor[board] || "#0f0648",
+                      borderBottom: `4px solid ${
+                        colors[board] || "rgb(65, 38, 255)"
+                      }`,
+                      borderRight: `4px solid ${
+                        colors[board] || "rgb(65, 38, 255)"
+                      }`,
+                      borderRadius: "12px",
+                      width: "120px",
+                      transform: "skew(-5deg)",
+                      fontWeight: 600,
+                      padding: "12px 16px",
+                      fontSize: { xs: "14px", sm: "16px", md: "18px" },
+                      ":hover": {
+                        transform: "scale(1.05)",
+                        transition: "all 0.3s",
+                      },
+                    }}
+                    onClick={() => handleInnings(choice)}
+                  >
+                    {choice}
+                  </Button>
+                </Grid>
+              ))}
+            </Grid>
+          )
         ) : (
-          <Grid
-            container
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-            sx={{ mt: 4 }}
-          >
-            {["Bat", "Ball"].map((choice, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Button
-                  fullWidth
-                  sx={{
-                    color: board == "wtc" ? "#000000" : "#FFFFFF",
-                    background: backColor[board] || "#0f0648",
-                    borderBottom: `4px solid ${
-                      colors[board] || "rgb(65, 38, 255)"
-                    }`,
-                    borderRight: `4px solid ${
-                      colors[board] || "rgb(65, 38, 255)"
-                    }`,
-                    borderRadius: "12px",
-                    width: "120px",
-                    transform: "skew(-5deg)",
-                    fontWeight: 600,
-                    padding: "12px 16px",
-                    fontSize: { xs: "14px", sm: "16px", md: "18px" },
-                    ":hover": {
-                      transform: "scale(1.05)",
-                      transition: "all 0.3s",
-                    },
-                  }}
-                  onClick={() => handleInnings(choice)}
-                >
-                  {choice}
-                </Button>
-              </Grid>
-            ))}
-          </Grid>
+          <Typography variant="h2">
+            Waiting for Opponent to Decide ...
+          </Typography>
         )}
       </Box>
     </>

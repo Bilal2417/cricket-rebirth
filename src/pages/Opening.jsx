@@ -159,7 +159,7 @@ export default function CardOpening() {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
-  const storedProfile = sessionStorage.getItem("UserProfile");
+  const storedProfile = localStorage.getItem("UserProfile");
   const [Profile, setProfile] = useState(
     storedProfile ? JSON.parse(storedProfile) : ""
   );
@@ -363,7 +363,7 @@ export default function CardOpening() {
         if (data.success) {
           setProfile((prev) => {
             const merged = { ...prev, ...data.profile };
-            sessionStorage.setItem("UserProfile", JSON.stringify(merged));
+            localStorage.setItem("UserProfile", JSON.stringify(merged));
             return merged;
           });
 

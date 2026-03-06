@@ -1,4 +1,10 @@
-import { Box, Button, CircularProgress, Grow, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grow,
+  Typography,
+} from "@mui/material";
 import Data from "../components/data";
 import { useEffect, useState } from "react";
 import Batting from "../components/batting";
@@ -6,6 +12,8 @@ import Bowling from "../components/bowling";
 import { useNavigate } from "react-router-dom";
 import { EmojiEventsTwoTone } from "@mui/icons-material";
 import { GiPlasticDuck, GiTrophy, GiTwoCoins } from "react-icons/gi";
+import { supabase } from "../supabaseClient";
+import { colors } from "../App";
 
 export default function Result() {
   const [winner, setWinner] = useState(null);
@@ -20,16 +28,6 @@ export default function Result() {
 
   const board = localStorage.getItem("Board");
   const navigate = useNavigate();
-
-  const colors = {
-    // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
-    wc19: "#222589  ",
-    wc21: "linear-gradient(to bottom , rgb(215 21 73) , rgb(233 25 85) )",
-    wc22: "#d71c59", //de265c
-    wc24: "#fa208e",
-    ct25: "#02c208",
-    wtc: "#000",
-  };
 
   const backColor = {
     wc21: "linear-gradient(to bottom , rgb(113 17 233) , rgb(83 6 189) ) ", //5221ba
@@ -48,7 +46,7 @@ export default function Result() {
   });
 
   const [Profile, setProfile] = useState(() => {
-    const storedProfile = sessionStorage.getItem("UserProfile");
+    const storedProfile = localStorage.getItem("UserProfile");
     return storedProfile ? JSON.parse(storedProfile) : "";
   });
 
@@ -173,17 +171,16 @@ export default function Result() {
     let coinsIncrement = 0;
 
     const trophyMap = {
-      1: 1, // 15 :10 : 5
-      3: 3, //45 :30 : 15
-      5: 5, //75 :50 : 25
-      10: 10, //150 :100 : 50
-      20: 15, //225 :150 : 75
-      100: 5, //15 : 10 : 5
+      1: 1,
+      3: 3,
+      5: 5,
+      10: 10,
+      20: 15,
+      100: 5,
     };
 
     if (win && !isKO) {
       trophyIncrement = trophyMap[wkts];
-      // trophyIncrement = wkts === 100 ? 5 : Math.ceil(wkts / 2);
       if (matchType === 2) {
         trophyIncrement = Math.ceil(trophyIncrement * (wkts === 100 ? 2 : 1.5));
         coinsIncrement =
@@ -202,12 +199,8 @@ export default function Result() {
     if (givenMode == "CONTEST") {
       coinsIncrement = 0;
       trophyIncrement = 0;
-      if (aiTeam?.wicket == 10) {
-        collectedPoints += 50;
-      }
-      if (userTeam?.score >= 200) {
-        collectedPoints += 100;
-      }
+      if (aiTeam?.wicket == 10) collectedPoints += 50;
+      if (userTeam?.score >= 200) collectedPoints += 100;
       if (win) {
         let winPoints;
         if (winnerFirst) {
@@ -218,7 +211,7 @@ export default function Result() {
         winPoints += (60 - (userTeam?.Over * 6 + userTeam?.Ball)) * 10;
         winPoints += (60 - (aiTeam?.Over * 6 + aiTeam?.Ball)) * 10;
         winPoints *= 5;
-        collectedPoints += winPoints; // ✅ Add instead of overwrite
+        collectedPoints += winPoints;
         coinsIncrement = 100;
       }
     }
@@ -244,25 +237,25 @@ export default function Result() {
         winner == userTeam?.name
           ? "Victory"
           : winner == aiTeam?.name
-          ? "Defeat"
-          : "Draw",
+            ? "Defeat"
+            : "Draw",
       trophies:
-        givenMode == "CONTEST" 
+        givenMode == "CONTEST"
           ? collectedPoints
           : givenMode == "TOURNAMENT" || givenMode == "KNOCKOUT"
-          ? 0
-          : matchType == 1
-          ? 0
-          : matchType == 2
-          ? trophyMap[wkts]
-          : Math.ceil(trophyMap[wkts] / 2),
+            ? 0
+            : matchType == 1
+              ? 0
+              : matchType == 2
+                ? trophyMap[wkts]
+                : Math.ceil(trophyMap[wkts] / 2),
       mode: givenMode,
       totalWickets:
         totalWkts == 100
           ? 1
           : totalWkts == 20 || totalWkts == 10
-          ? 10
-          : totalWkts,
+            ? 10
+            : totalWkts,
       time: new Date().toISOString(),
     };
 
@@ -270,9 +263,12 @@ export default function Result() {
       ...Profile,
       id: profileId || Profile?.id,
       victories: win ? Profile.victories + 1 : Profile.victories,
-      trophies: Profile.trophies + trophyIncrement,
+      trophies: Math.max(0, Profile.trophies + trophyIncrement),
       coins: Profile.coins + coinsIncrement,
-      battle_log: battleLog, // ✅ send it here
+      battle_log: [battleLog, ...(Profile.battle_log || []).slice(1)].slice(
+        0,
+        15,
+      ),
       points:
         givenMode == "CONTEST"
           ? Number(Profile.points || 0) + collectedPoints
@@ -283,33 +279,38 @@ export default function Result() {
     setProfile(updatedProfile);
 
     try {
-      const res = await fetch("/.netlify/functions/updateProfile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...updatedProfile,
-          source: "result", // 👈 Add this line
-        }),
+      const { data, error } = await supabase
+        .from("profiles")
+        .update({
+          victories: updatedProfile.victories,
+          trophies: updatedProfile.trophies,
+          coins: updatedProfile.coins,
+          battle_log: updatedProfile.battle_log,
+          points: updatedProfile.points,
+        })
+        .eq("id", updatedProfile.id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Failed to update trophies:", error);
+        return;
+      }
+
+      console.log(data, "Profile that came");
+      setProfile((prev) => {
+        const merged = { ...prev, ...data };
+        localStorage.setItem("UserProfile", JSON.stringify(merged));
+        console.log(merged, "merged");
+        return merged;
       });
 
-      const data = await res.json();
-      if (data.success) {
-        console.log(data.profile, "Profile that came");
-        setProfile((prev) => {
-          const merged = { ...prev, ...data.profile };
-          sessionStorage.setItem("UserProfile", JSON.stringify(merged));
-          console.log(merged, "merged");
-          return merged;
-        });
-        console.log("It runs in result");
-        window.dispatchEvent(new Event("profileUpdated"));
-        localStorage.setItem("refreshProfiles", "true");
-        localStorage.setItem("refreshContest", "true");
-        sessionStorage.setItem("Coins", coinsIncrement);
-        navigate("/increment");
-      } else {
-        console.error("Failed to update trophies in database");
-      }
+      console.log("It runs in result");
+      window.dispatchEvent(new Event("profileUpdated"));
+      localStorage.setItem("refreshProfiles", "true");
+      localStorage.setItem("refreshContest", "true");
+      sessionStorage.setItem("Coins", coinsIncrement);
+      navigate("/increment");
     } catch (err) {
       console.error("Error updating trophies:", err);
     }
@@ -613,7 +614,11 @@ export default function Result() {
                           }}
                           variant="h6"
                         >
-                          {data.score <= 0 && data.out ?  <GiPlasticDuck/> : data.score }
+                          {data.score <= 0 && data.out ? (
+                            <GiPlasticDuck />
+                          ) : (
+                            data.score
+                          )}
                           {data.notout ? "*" : null}
                         </Typography>
                         <Typography
@@ -732,7 +737,11 @@ export default function Result() {
                           }}
                           variant="h6"
                         >
-                          {data.score <= 0 && data.out ?  <GiPlasticDuck/> : data.score }
+                          {data.score <= 0 && data.out ? (
+                            <GiPlasticDuck />
+                          ) : (
+                            data.score
+                          )}
                           {data.notout ? "*" : null}
                         </Typography>
                         <Typography
@@ -1050,13 +1059,13 @@ export default function Result() {
                     winner: tie
                       ? tieBreaker
                       : userWon
-                      ? userTeam.name
-                      : aiTeam.name,
+                        ? userTeam.name
+                        : aiTeam.name,
                     loser: tie ? looser : userWon ? aiTeam.name : userTeam.name,
                   };
                   sessionStorage.setItem(
                     "latestUserMatch",
-                    JSON.stringify(updatedMatch)
+                    JSON.stringify(updatedMatch),
                   );
 
                   navigate("/tournament");
@@ -1069,7 +1078,7 @@ export default function Result() {
                   } else {
                     sessionStorage.setItem(
                       id,
-                      userWon ? userTeam?.name : aiTeam?.name
+                      userWon ? userTeam?.name : aiTeam?.name,
                     );
                   }
                   navigate("/fixtures");
@@ -1139,17 +1148,17 @@ export default function Result() {
                 {totalWkts == 100
                   ? null
                   : batting
-                  ? (totalWkts == 20 ? 10 : totalWkts) - userTeam?.wicket
-                  : (totalWkts == 20 ? 10 : totalWkts) - aiTeam?.wicket}{" "}
+                    ? (totalWkts == 20 ? 10 : totalWkts) - userTeam?.wicket
+                    : (totalWkts == 20 ? 10 : totalWkts) - aiTeam?.wicket}{" "}
                 {totalWkts == 100
                   ? "1 wicket"
                   : batting
-                  ? (totalWkts == 20 ? 10 : totalWkts) - userTeam?.wicket == 1
-                    ? "wicket"
-                    : "wickets"
-                  : (totalWkts == 20 ? 10 : totalWkts) - aiTeam?.wicket == 1
-                  ? "wicket"
-                  : "wickets"}
+                    ? (totalWkts == 20 ? 10 : totalWkts) - userTeam?.wicket == 1
+                      ? "wicket"
+                      : "wickets"
+                    : (totalWkts == 20 ? 10 : totalWkts) - aiTeam?.wicket == 1
+                      ? "wicket"
+                      : "wickets"}
               </Typography>
             )}
           </Box>

@@ -13,7 +13,7 @@ export default function CardPacksShop() {
   const cardRefs = useRef([]);
   const navigate = useNavigate();
 
-  const storedProfile = sessionStorage.getItem("UserProfile");
+  const storedProfile = localStorage.getItem("UserProfile");
   const [Profile, setProfile] = useState(
     storedProfile ? JSON.parse(storedProfile) : ""
   );
@@ -115,7 +115,7 @@ export default function CardPacksShop() {
 
         // setProfile(updatedProfile);
         // // console.log(updatedProfile);
-        // sessionStorage.setItem("UserProfile", JSON.stringify(updatedProfile));
+        // localStorage.setItem("UserProfile", JSON.stringify(updatedProfile));
 
         navigate(`/open-pack/${packKey}`);
         localStorage.removeItem("collectedStarter");

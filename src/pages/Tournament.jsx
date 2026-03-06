@@ -25,9 +25,6 @@ import {
 } from "@mui/material";
 import Data from "../components/data"; // your Data with flag URLs
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import Home from "./Home";
-import { GiHouse } from "react-icons/gi";
 import { HomeFilled } from "@mui/icons-material";
 
 const teamsData = Data.filter(
@@ -678,8 +675,10 @@ export default function Tournament() {
     navigate("/");
   };
 
+  
+
   const [Profile, setProfile] = useState(() => {
-    const storedProfile = sessionStorage.getItem("Profile");
+    const storedProfile = localStorage.getItem("Profile");
     return storedProfile ? JSON.parse(storedProfile) : "";
   });
 
@@ -728,7 +727,7 @@ export default function Tournament() {
       if (data.success) {
         setProfile((prev) => {
           const merged = { ...prev, ...data.profile };
-          sessionStorage.setItem("Profile", JSON.stringify(merged));
+          localStorage.setItem("Profile", JSON.stringify(merged));
           return merged;
         });
 

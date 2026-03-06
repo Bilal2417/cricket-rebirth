@@ -62,7 +62,7 @@ export default function Modes() {
   }));
 
   const [Profile, setProfile] = useState(() => {
-    const storedProfile = sessionStorage.getItem("UserProfile");
+    const storedProfile = localStorage.getItem("UserProfile");
     return storedProfile ? JSON.parse(storedProfile) : "";
   });
 
@@ -73,11 +73,11 @@ export default function Modes() {
   const [popoverDesc, setPopoverDesc] = useState("");
 
   const [unlocked] = useState(
-    () => !!Profile?.unlocked_items?.includes("worldcup")
+    () => !!Profile?.unlocked_items?.includes("worldcup"),
   );
 
   const [unlockedKO] = useState(
-    () => !!Profile?.unlocked_items?.includes("knockout")
+    () => !!Profile?.unlocked_items?.includes("knockout"),
   );
 
   const [saved] = useState(() => {
@@ -133,10 +133,10 @@ export default function Modes() {
     const fetchProfiles = async (force = false) => {
       try {
         const cached = JSON.parse(
-          sessionStorage.getItem("contestData") || "{}"
+          sessionStorage.getItem("contestData") || "{}",
         );
         const now = Date.now();
-        const myProfile = JSON.parse(sessionStorage.getItem("UserProfile"));
+        const myProfile = JSON.parse(localStorage.getItem("UserProfile"));
 
         if (!force && cached.timestamp && now - cached.timestamp < 90 * 1000) {
           setProfiles(cached.data);
@@ -154,7 +154,7 @@ export default function Modes() {
           setProfiles(data.leaderboard);
           sessionStorage.setItem(
             "contestData",
-            JSON.stringify({ data: data.leaderboard, timestamp: now })
+            JSON.stringify({ data: data.leaderboard, timestamp: now }),
           );
           setContestLoading(false);
           setGiveRewards(true);
@@ -234,10 +234,10 @@ export default function Modes() {
       profiles[0]?.id == profileId
         ? 1000
         : profiles[1]?.id == profileId
-        ? 500
-        : profiles[2]?.id == profileId
-        ? 300
-        : 0;
+          ? 500
+          : profiles[2]?.id == profileId
+            ? 300
+            : 0;
     const updatedProfile = {
       ...Profile,
       id: Profile?.id,
@@ -265,7 +265,7 @@ export default function Modes() {
       if (data.success) {
         setProfile((prev) => {
           const merged = { ...prev, ...data.profile };
-          sessionStorage.setItem("UserProfile", JSON.stringify(merged));
+          localStorage.setItem("UserProfile", JSON.stringify(merged));
           return merged;
         });
         if (rewards) {
@@ -391,7 +391,7 @@ export default function Modes() {
                         <strong>10</strong> wickets.Every Day{" "}
                         <strong>3 Tickets</strong> are given and{" "}
                         <strong>Top 3 </strong> players are rewarded.
-                      </span>
+                      </span>,
                     )
                   }
                   sx={{
@@ -511,7 +511,7 @@ export default function Modes() {
                   if (elapsed < 0) return `Starts soon`;
                   const currentDay = Math.min(
                     Math.floor(elapsed / dayMs) + 1,
-                    totalDays
+                    totalDays,
                   );
 
                   return `Day ${currentDay}/${totalDays}`;
@@ -751,10 +751,10 @@ export default function Modes() {
                           {index == 0
                             ? 1000
                             : index == 1
-                            ? 500
-                            : index == 2
-                            ? 300
-                            : null}
+                              ? 500
+                              : index == 2
+                                ? 300
+                                : null}
                         </Box>
                       </Typography>
 
@@ -1009,7 +1009,7 @@ export default function Modes() {
                       <strong>NETHERLANDS</strong>
                       <br />
                       <strong>REWARD:</strong> <strong>5000</strong> Coins
-                    </span>
+                    </span>,
                   )
                 }
                 sx={{
@@ -1043,53 +1043,127 @@ export default function Modes() {
         {/* Overs Modes */}
         <Box
           sx={{
-            display: "grid",
-            gridTemplateColumns: { xs: "repeat(2,1fr)", md: "repeat(3,1fr)" },
-            gap: "15px",
-            flexShrink: 0,
-            minWidth: "fit-content",
+            display: "flex",
+            flexDirection: "column",
+            minWidth: { xs : "500px" , md : "1000px"},
+            gap : "50px",
+            justifyContent : "center"
           }}
         >
-          {overs.map((over, index) => (
-            <Button
-              key={index}
-              sx={{
-                background: "linear-gradient( #60da01 , #90e100)",
-                color: "#FFFFFF",
-                textShadow: `
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "repeat(2,1fr)", md: "repeat(2,1fr)" },
+              gap: "15px",
+              flexShrink: 0,
+              minWidth: "fit-content",
+            }}
+          >
+            {overs.map((over, index) => (
+              <Button
+                key={index}
+                sx={{
+                  background: "linear-gradient( #60da01 , #90e100)",
+                  color: "#FFFFFF",
+                  textShadow: `
                   -1px -1px 0 #000,  
                   1px -1px 0 #000,
                   -1px  1px 0 #000,
                   2px  1.5px 0 #000
                 `,
-                overflow: "hidden",
-                maxWidth: "200px",
-                maxHeight: "60px",
-                fontSize: "1.1em",
-                boxShadow: `
+                  overflow: "hidden",
+                  // maxWidth: "200px",
+                  maxHeight: "60px",
+                  fontSize: "1.1em",
+                  boxShadow: `
                   inset 0px -8px 8px -4px #36551eff,   
                   inset 0px 8px 8px -4px rgb(193 193 193)       
                 `,
+                  borderRadius: "4px",
+                  transition: "all 0.3s",
+                  border: "2px solid black",
+                  transform: "skew(-5deg)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  flexShrink: 0,
+                }}
+                onClick={() => {
+                  navigate("/");
+                  localStorage.setItem("Overs", over.value);
+                  sessionStorage.setItem("mode", `${over.value} OVERS`);
+                }}
+              >
+                <OversThreeIcon value={over.value} />
+                Overs
+                <IconButton
+                  type="button"
+                  onClick={(e) => handlePopoverOpen(e, overs[index].desc)}
+                  sx={{
+                    position: "absolute",
+                    top: -4,
+                    right: -4,
+                    width: 32,
+                    height: 32,
+                    backgroundColor: "#fa208e",
+                    color: "#fff",
+                    "&:hover": { backgroundColor: "#ff4eb0" },
+                    boxShadow: "0px 2px 5px rgba(0,0,0,0.3)",
+                  }}
+                >
+                  <Help sx={{ fontSize: "18px", color: "#FFFFFF" }} />
+                </IconButton>
+              </Button>
+            ))}
+            <Button
+              sx={{
+                flexShrink: 0,
+                backgroundColor: "#8237ca",
+                color: "#FFFFFF",
+                textShadow: `
+              -1px -1px 0 #000,  
+              1px -1px 0 #000,
+              -1px  1px 0 #000,
+              2px  1.5px 0 #000
+            `,
+                  flexGrow: 1,
+                padding: "0px 20px",
+                fontSize: "1.1em",
+                // width: "200px",
+                maxHeight: "60px",
+                transform: "skew(-5deg)",
+                overflow: "hidden",
+                boxShadow: `
+              inset 0px -8px 8px -4px #3f2657ff,   
+              inset 0px 8px 8px -4px rgb(193 193 193)       
+            `,
                 borderRadius: "4px",
                 transition: "all 0.3s",
                 border: "2px solid black",
-                transform: "skew(-5deg)",
                 display: "flex",
                 alignItems: "center",
                 gap: "10px",
-                flexShrink: 0,
               }}
               onClick={() => {
                 navigate("/");
-                localStorage.setItem("Overs", over.value);
-                sessionStorage.setItem("mode", `${over.value} OVERS`);
+                localStorage.setItem("Overs", 100);
+                sessionStorage.setItem("mode", `SURVIVAL`);
               }}
             >
-              <OversThreeIcon value={over.value} />
-              Overs
+              <GiSkullCrossedBones size={30} color="white" />
+              Survival
               <IconButton
                 type="button"
-                onClick={(e) => handlePopoverOpen(e, overs[index].desc)}
+                onClick={(e) =>
+                  handlePopoverOpen(
+                    e,
+                    <span>
+                      This mode allows only<strong>1</strong> wicket in{" "}
+                      <strong>unlimited</strong> overs, with <strong>5</strong>{" "}
+                      trophies gained or lost per game.
+                    </span>,
+                  )
+                }
                 sx={{
                   position: "absolute",
                   top: -4,
@@ -1105,21 +1179,21 @@ export default function Modes() {
                 <Help sx={{ fontSize: "18px", color: "#FFFFFF" }} />
               </IconButton>
             </Button>
-          ))}
+          </Box>
           <Button
             sx={{
               flexShrink: 0,
-              backgroundColor: "#8237ca",
-              color: "#FFFFFF",
+              backgroundColor: "#ece829",
+              color: "#000000",
               textShadow: `
-              -1px -1px 0 #000,  
-              1px -1px 0 #000,
-              -1px  1px 0 #000,
-              2px  1.5px 0 #000
+              -1px -1px 0 #fff,  
+              1px -1px 0 #fff,
+              -1px  1px 0 #fff,
+              2px  1.5px 0 #fff
             `,
-              padding: "0px 20px",
+              padding: "10px 20px",
               fontSize: "1.1em",
-              width: "200px",
+              width: "100%",
               maxHeight: "60px",
               transform: "skew(-5deg)",
               overflow: "hidden",
@@ -1136,12 +1210,12 @@ export default function Modes() {
             }}
             onClick={() => {
               navigate("/");
-              localStorage.setItem("Overs", 100);
-              sessionStorage.setItem("mode", `SURVIVAL`);
+              localStorage.setItem("Overs", 20);
+              sessionStorage.setItem("mode", `ONLINE`);
             }}
           >
-            <GiSkullCrossedBones size={30} color="white" />
-            Survival
+            <GiSkullCrossedBones size={30} color="black" />
+            Online Mode
             <IconButton
               type="button"
               onClick={(e) =>
@@ -1151,7 +1225,7 @@ export default function Modes() {
                     This mode allows only<strong>1</strong> wicket in{" "}
                     <strong>unlimited</strong> overs, with <strong>5</strong>{" "}
                     trophies gained or lost per game.
-                  </span>
+                  </span>,
                 )
               }
               sx={{
@@ -1271,7 +1345,7 @@ export default function Modes() {
                       <strong>BRONZE</strong>
                       <br />
                       <strong>REWARD:</strong> <strong>1500</strong> Coins
-                    </span>
+                    </span>,
                   )
                 }
                 sx={{

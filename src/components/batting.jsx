@@ -1,19 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import { GiPlasticDuck } from "react-icons/gi";
 import { useLocation } from "react-router-dom";
+import { colors } from "../App";
 
 export default function Batting(squad) {
   const batting = squad.data;
-  const colors = {
-    // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
-    wc19: "#222589  ",
-    wc21: "linear-gradient(to bottom , rgb(215 21 73) , rgb(233 25 85) ) ",
-    wc22: "#d71c59", //de265c
-    wc24: "#fa208e", //de265c
-    ct25: "#02c208",
-    // wtc: `linear-gradient(to bottom , ${batting?.secondary} , ${batting?.primary} )`,
-  wtc : "#000"  
-  };
 
   const board = localStorage.getItem("Board");
   const location = useLocation();

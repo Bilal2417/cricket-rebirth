@@ -85,7 +85,7 @@ export default function ScoreBoards() {
   ];
 
   const Board = localStorage.getItem("Board")
-  const storedProfile = sessionStorage.getItem("UserProfile");
+  const storedProfile = localStorage.getItem("UserProfile");
   const [Profile, setProfile] = useState(
     storedProfile ? JSON.parse(storedProfile) : ""
   );

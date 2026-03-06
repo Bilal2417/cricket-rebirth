@@ -1,4 +1,5 @@
 import { Box, Fade, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 
 export default function Wc24({
   batting,
@@ -19,7 +20,7 @@ export default function Wc24({
   randomBowler,
 }) {
   const colors = {
-    6: "#fa208e",
+    6: "#e7d58d",
     W: "#fa208e",
     4: "#15daab",
   };
@@ -33,6 +34,21 @@ export default function Wc24({
 
     return (words[0][0] + words[1][0]).toUpperCase();
   }
+
+  const [reqRuns, setReqRuns] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setReqRuns((prev) => (prev + 1) % 5);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const totalBallsRemaining =
+    totalOvers * 6 -
+    (batting
+      ? userTeam?.Over * 6 + userTeam?.Ball
+      : aiTeam?.Over * 6 + aiTeam?.Ball);
 
   return (
     <>
@@ -68,10 +84,17 @@ export default function Wc24({
           sx={{
             backgroundColor: "#0f0648",
             borderLeft: "10px solid #bd2f7f",
-            borderRight: "10px solid #bd2f7f",
-            width: "220px",
+            width: firstInnings == 2 && reqRuns > 2 ? 0 : "220px",
             minHeight: "40px",
-            padding: "10px 15px",
+            display: "flex",
+            padding: firstInnings == 2 && reqRuns > 2 ? 0 : "0 20px",
+            flexDirection: "column",
+            justifyContent: "center",
+            flexGrow: firstInnings == 2 && reqRuns > 2 ? 0 : 1,
+            opacity: firstInnings == 2 && reqRuns > 2 ? 0 : 1,
+            overflow: "hidden",
+            transition:
+              "flex-grow 0.6s ease, opacity 0.6s ease, width 0.6s ease",
           }}
         >
           <Box
@@ -114,7 +137,7 @@ export default function Wc24({
             >
               <Typography
                 sx={{
-                  color: "#e7d58d",
+                  color: "#edca3e",
                   fontWeight: 600,
                 }}
                 variant="body1"
@@ -123,7 +146,7 @@ export default function Wc24({
               </Typography>
               <Typography
                 sx={{
-                  color: "#e7d58d",
+                  color: "#edca3e",
                   fontSize: "0.75em",
                 }}
                 variant="body1"
@@ -163,7 +186,7 @@ export default function Wc24({
             >
               <Typography
                 sx={{
-                  color: "#e7d58d",
+                  color: "#edca3e",
                   fontWeight: 600,
                 }}
                 variant="body1"
@@ -172,7 +195,7 @@ export default function Wc24({
               </Typography>
               <Typography
                 sx={{
-                  color: "#e7d58d",
+                  color: "#edca3e",
                   fontSize: "0.75em",
                 }}
                 variant="body1"
@@ -188,6 +211,10 @@ export default function Wc24({
             backgroundColor: "#f2f0f6",
             padding: " 4px 8px",
             minWidth: "300px",
+            borderLeft: "10px solid #bd2f7f",
+            borderRight: "10px solid #bd2f7f",
+            flexGrow: firstInnings == 2 && reqRuns > 2 ? 0.3 : 1.5,
+            transition: "flex-grow 0.6s ease",
           }}
         >
           <Box
@@ -361,12 +388,12 @@ export default function Wc24({
                 {firstInnings == 2
                   ? `Target : ${target}`
                   : totalOvers !== 100
-                  ? `Projected Score : ${(
-                      ((batting ? userTeam?.score : aiTeam?.score) /
-                        (over + balls / 6)) *
-                      totalOvers
-                    ).toFixed(0)}`
-                  : null}
+                    ? `Projected Score : ${(
+                        ((batting ? userTeam?.score : aiTeam?.score) /
+                          (over + balls / 6)) *
+                        totalOvers
+                      ).toFixed(0)}`
+                    : null}
               </Typography>
             </Fade>
           </Box>
@@ -375,157 +402,208 @@ export default function Wc24({
         <Box
           sx={{
             backgroundColor: "#0f0648",
-            borderLeft: "10px solid #bd2f7f",
             borderRight: "10px solid #bd2f7f",
             width: "220px",
             minHeight: "40px",
-            padding: "10px 15px",
+            padding: "0px 15px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
             position: "relative",
+            flexGrow: firstInnings == 2 && reqRuns > 2 ? 3 : 1,
+            transition: "flex-grow 0.6s ease",
           }}
         >
-          <Typography
-            variant="body1"
-            sx={{
-              color: "#e7d58d",
-              textTransform: "uppercase",
-              // fontFamily: "Poppins ,sans-serif , Rubik",
-              position: "absolute",
-              top: "-50px",
-              left: 0,
-              fontSize: "0.8em",
-              backgroundColor: "#0f0648",
-              padding: "10px 20px",
-              borderRadius: "12px",
-            }}
-          >
-            wkt % :{" "}
-            {{
-              0: "Normal",
-              1: "High",
-              2: "Higher",
-              3: "Extreme",
-              4: "Massive",
-              5: "Legendary",
-            }[isSix] || ""}
-          </Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: "5px",
-            }}
-          >
-            <Typography
-              sx={{
-                textTransform: "uppercase",
-                color: "#e4dff9",
-                fontSize: "0.9em",
-                // fontfamily: "Rubik",
-              }}
-              variant="body1"
-            >
-              {randomBowler?.name || "Bot3"}
-            </Typography>
+          {firstInnings == 2 && reqRuns > 2 ? (
             <Box
               sx={{
+                alignItems: "center",
+                gap: "20px",
+                justifyContent: "center",
+                opacity: firstInnings == 2 && reqRuns > 2 ? 1 : 0,
+                visibility:
+                  firstInnings == 2 && reqRuns > 2 ? "visible" : "hidden",
+                transition: "opacity 0.6s ease, visibility 0.6s ease",
                 display: "flex",
-                alignItems: "baseline",
-                gap: "10px",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  bgcolor: "#bd2f7f",
+                  padding: "5px 40px",
+                  borderRadius: "8px",
+                  mr: "20px",
+                }}
+              >
+                <Typography sx={{textTransform : "uppercase"}} variant="body1">{batting ? userTeam?.name : aiTeam?.name}</Typography>
+                <Typography sx={{textTransform : "uppercase"}} variant="body1">need</Typography>
+              </Box>
+              <Typography sx={{ color: "#edca3e" }} variant="h2">
+                {target - (batting ? userTeam?.score : aiTeam?.score)}
+              </Typography>
+              <Typography sx={{textTransform : "uppercase"}} variant="body1">from</Typography>
+              <Typography sx={{ color: "#edca3e" }} variant="h2">
+                {totalBallsRemaining}
+              </Typography>
+              <Typography sx={{textTransform : "uppercase"}} variant="body1">balls</Typography>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                opacity: firstInnings == 2 && reqRuns > 2 ? 0 : 1,
+                visibility:
+                  firstInnings == 2 && reqRuns > 2 ? "hidden" : "visible",
+                transition: "opacity 0.6s ease, visibility 0.6s ease",
               }}
             >
               <Typography
+                variant="body1"
                 sx={{
                   color: "#e7d58d",
-                  // fontfamily: "Rubik",
-                  width: "50px",
-                  textAlign: "center",
+                  textTransform: "uppercase",
+                  // fontFamily: "Poppins ,sans-serif , Rubik",
+                  position: "absolute",
+                  top: "-50px",
+                  left: 0,
+                  fontSize: "0.8em",
+                  backgroundColor: "#0f0648",
+                  padding: "10px 20px",
+                  borderRadius: "12px",
                 }}
-                variant="body1"
               >
-                {randomBowler?.wickets || 0}-{randomBowler?.conceded || 0}
+                wkt % :{" "}
+                {{
+                  0: "Normal",
+                  1: "High",
+                  2: "Higher",
+                  3: "Extreme",
+                  4: "Massive",
+                  5: "Legendary",
+                }[isSix] || ""}
               </Typography>
-              <Typography
-                sx={{
-                  color: "#e7d58d",
-                  fontSize: "0.75em",
-                  // fontfamily: "Rubik",
-                }}
-                variant="body1"
-              >
-                {randomBowler?.overs || 0}.{randomBowler?.bowled || 0}
-              </Typography>
-            </Box>
-          </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            {Array.from({ length: 6 }).map((_, index) => (
               <Box
-                key={index}
                 sx={{
-                  width: "15px",
-                  height: "15px",
-                  outline: batting
-                    ? userTeam?.ballHistory[index] > 3 ||
-                      userTeam?.ballHistory[index] == "W"
-                      ? `2px solid ${
-                          colors[
-                            batting
-                              ? userTeam?.ballHistory[index]
-                              : aiTeam?.ballHistory[index]
-                          ]
-                        }`
-                      : "2px solid #FFFFFF"
-                    : aiTeam?.ballHistory[index] > 3 ||
-                      aiTeam?.ballHistory[index] == "W"
-                    ? `2px solid ${
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: "5px",
+                }}
+              >
+                <Typography
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "#e4dff9",
+                    fontSize: "0.9em",
+                    // fontfamily: "Rubik",
+                  }}
+                  variant="body1"
+                >
+                  {randomBowler?.name || "Bot3"}
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: "10px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: "#e7d58d",
+                      // fontfamily: "Rubik",
+                      width: "50px",
+                      textAlign: "center",
+                    }}
+                    variant="body1"
+                  >
+                    {randomBowler?.wickets || 0}-{randomBowler?.conceded || 0}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#e7d58d",
+                      fontSize: "0.75em",
+                      // fontfamily: "Rubik",
+                    }}
+                    variant="body1"
+                  >
+                    {randomBowler?.overs || 0}.{randomBowler?.bowled || 0}
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      width: "15px",
+                      height: "15px",
+                      outline: batting
+                        ? userTeam?.ballHistory[index] > 3 ||
+                          userTeam?.ballHistory[index] == "W"
+                          ? `2px solid ${
+                              colors[
+                                batting
+                                  ? userTeam?.ballHistory[index]
+                                  : aiTeam?.ballHistory[index]
+                              ]
+                            }`
+                          : "2px solid #FFFFFF"
+                        : aiTeam?.ballHistory[index] > 3 ||
+                            aiTeam?.ballHistory[index] == "W"
+                          ? `2px solid ${
+                              colors[
+                                batting
+                                  ? userTeam?.ballHistory[index]
+                                  : aiTeam?.ballHistory[index]
+                              ]
+                            }`
+                          : "2px solid #FFFFFF",
+
+                      color: batting
+                        ? userTeam?.ballHistory[index] > 3 ||
+                          userTeam?.ballHistory[index] == "W"
+                          ? "#0f0648"
+                          : "#FFFFFF"
+                        : aiTeam?.ballHistory[index] > 3 ||
+                            aiTeam?.ballHistory[index] == "W"
+                          ? "#0f0648"
+                          : "#FFFFFF",
+
+                      borderRadius: "50%",
+                      padding: "2px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.9em",
+                      fontWeight: 900,
+                      backgroundColor:
                         colors[
                           batting
                             ? userTeam?.ballHistory[index]
                             : aiTeam?.ballHistory[index]
-                        ]
-                      }`
-                    : "2px solid #FFFFFF",
-
-                  color: batting
-                    ? userTeam?.ballHistory[index] > 3 ||
-                      userTeam?.ballHistory[index] == "W"
-                      ? "#0f0648"
-                      : "#FFFFFF"
-                    : aiTeam?.ballHistory[index] > 3 ||
-                      aiTeam?.ballHistory[index] == "W"
-                    ? "#0f0648"
-                    : "#FFFFFF",
-
-                  borderRadius: "50%",
-                  padding: "2px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "0.9em",
-                  fontWeight: 900,
-                  backgroundColor:
-                    colors[
-                      batting
-                        ? userTeam?.ballHistory[index]
-                        : aiTeam?.ballHistory[index]
-                    ] || "#0f0648",
-                }}
-              >
-                {/* {ballHistory[index] ?? ""} */}
-                {batting
-                  ? userTeam?.ballHistory[index]
-                  : aiTeam?.ballHistory[index]}
+                        ] || "#0f0648",
+                    }}
+                  >
+                    {/* {ballHistory[index] ?? ""} */}
+                    {batting
+                      ? userTeam?.ballHistory[index]
+                      : aiTeam?.ballHistory[index]}
+                  </Box>
+                ))}
               </Box>
-            ))}
-          </Box>
+            </Box>
+          )}
         </Box>
 
         <Box
