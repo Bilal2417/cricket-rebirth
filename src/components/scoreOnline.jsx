@@ -122,6 +122,10 @@ export default function ScoreCardOnline() {
   };
 
   const [userProfile, setUserProfile] = useState([]);
+  const userProfileRef = useRef(userProfile);
+  useEffect(() => {
+    userProfileRef.current = userProfile;
+  }, [userProfile]);
   const profileId = localStorage.getItem("MyId");
   const opponentId = sessionStorage.getItem("OpponentId");
 
@@ -269,7 +273,7 @@ export default function ScoreCardOnline() {
           if (payload.new.id === profileId) return;
           if (
             payload.new.onlineScore &&
-            payload.new.code == userProfile?.code
+            payload.new.code == userProfileRef.current?.code
           ) {
             setOpponentChoice(payload.new.choice);
             pendingBallData.current = {
@@ -296,6 +300,9 @@ export default function ScoreCardOnline() {
 
   const isFirstRender = useRef(true);
   const [ballCompleted, setBallCompleted] = useState(0);
+
+  const [isBtnDisabled, setIsBtnDisabled] = useState(false);
+  
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
@@ -309,7 +316,7 @@ export default function ScoreCardOnline() {
       const { userRun, opponentRun } = pendingBallData.current;
       const isWicket = userRun == opponentRun;
       scoreDecision(userRun, isWicket, opponentRun);
-
+      setIsBtnDisabled(false);
       pendingBallData.current = null;
     }
   }, [ballCompleted]);
@@ -337,6 +344,7 @@ export default function ScoreCardOnline() {
   };
 
   const scoreDecision = (userRun, isWicket, opponentRun) => {
+    console.log(userRun, isWicket, opponentRun, "loopoop");
     // if (balls == 5) {
     //   setIsSix(0);
     //   sessionStorage.setItem("Boundary", 0);
@@ -1011,7 +1019,9 @@ export default function ScoreCardOnline() {
                     },
                   }}
                   key={index}
+                  disabled={isBtnDisabled}
                   onClick={async () => {
+                    setIsBtnDisabled(true);
                     pendingBallData.current = {
                       ...pendingBallData.current,
                       userRun: opt.value,
@@ -1033,6 +1043,7 @@ export default function ScoreCardOnline() {
 
                     if (error) {
                       console.error("Failed to update choice:", error);
+                      setIsBtnDisabled(false);
                       return;
                     }
                   }}
