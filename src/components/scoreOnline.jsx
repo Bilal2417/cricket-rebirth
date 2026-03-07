@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import Data from "./data";
 import { useNavigate } from "react-router-dom";
@@ -22,16 +22,18 @@ import Wtc from "./wtc";
 import { supabase } from "../supabaseClient";
 
 export default function ScoreCardOnline() {
+  const profileId = localStorage.getItem("MyId");
+  const user = localStorage.getItem("User");
+  const ai = localStorage.getItem("Opponent");
+  const board = localStorage.getItem("Board");
+
+  // ── Teams ─────────────────────────────────────────────────────────────────
   const storedData = localStorage.getItem("cricketData");
   const [Teams, setTeams] = useState(storedData ? JSON.parse(storedData) : Data);
   const teamsRef = useRef(Teams);
   useEffect(() => { teamsRef.current = Teams; }, [Teams]);
 
-  const user = localStorage.getItem("User");
-  const ai = localStorage.getItem("Opponent");
-  const profileId = localStorage.getItem("MyId");
-  const board = localStorage.getItem("Board");
-
+  // ── Team states + refs ────────────────────────────────────────────────────
   const [userTeam, setUserTeam] = useState(null);
   const [aiTeam, setAiTeam] = useState(null);
   const userTeamRef = useRef(null);
@@ -39,16 +41,17 @@ export default function ScoreCardOnline() {
   useEffect(() => { userTeamRef.current = userTeam; }, [userTeam]);
   useEffect(() => { aiTeamRef.current = aiTeam; }, [aiTeam]);
 
-  const [over, setOver] = useState(0);
-  const overRef = useRef(0);
-  useEffect(() => { overRef.current = over; }, [over]);
-
-  const [totalOvers] = useState(() => Number(localStorage.getItem("Overs")) || 10);
-
+  // ── Batting + refs ────────────────────────────────────────────────────────
   const [batting, setBatting] = useState(null);
   const battingRef = useRef(null);
   useEffect(() => { battingRef.current = batting; }, [batting]);
 
+  // ── Over + refs ───────────────────────────────────────────────────────────
+  const [over, setOver] = useState(0);
+  const overRef = useRef(0);
+  useEffect(() => { overRef.current = over; }, [over]);
+
+  // ── Innings + target + refs ───────────────────────────────────────────────
   const [firstInnings, setFirstInnings] = useState(() => Number(localStorage.getItem("currentInnings")) || 1);
   const firstInningsRef = useRef(firstInnings);
   useEffect(() => { firstInningsRef.current = firstInnings; }, [firstInnings]);
@@ -57,6 +60,26 @@ export default function ScoreCardOnline() {
   const targetRef = useRef(target);
   useEffect(() => { targetRef.current = target; }, [target]);
 
+  // ── Striker / nonStriker + refs ───────────────────────────────────────────
+  const [striker, setStriker] = useState(null);
+  const [nonStriker, setNonStriker] = useState(null);
+  const strikerRef = useRef(null);
+  const nonStrikerRef = useRef(null);
+  useEffect(() => { strikerRef.current = striker; }, [striker]);
+  useEffect(() => { nonStrikerRef.current = nonStriker; }, [nonStriker]);
+
+  // ── Bowler + refs ─────────────────────────────────────────────────────────
+  const [randomBowler, setRandomBowler] = useState(null);
+  const randomBowlerRef = useRef(null);
+  useEffect(() => { randomBowlerRef.current = randomBowler; }, [randomBowler]);
+
+  // ── User profile + refs ───────────────────────────────────────────────────
+  const [userProfile, setUserProfile] = useState(null);
+  const userProfileRef = useRef(null);
+  useEffect(() => { userProfileRef.current = userProfile; }, [userProfile]);
+
+  // ── Other state ───────────────────────────────────────────────────────────
+  const [totalOvers] = useState(() => Number(localStorage.getItem("Overs")) || 10);
   const [balls, setBalls] = useState(0);
   const [ballHistory, setBallHistory] = useState([]);
   const [show, setShow] = useState(0);
@@ -68,21 +91,7 @@ export default function ScoreCardOnline() {
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showLoadingPage, setShowLoadingPage] = useState(true);
-
-  const [striker, setStriker] = useState(null);
-  const [nonStriker, setNonStriker] = useState(null);
-  const strikerRef = useRef(null);
-  const nonStrikerRef = useRef(null);
-  useEffect(() => { strikerRef.current = striker; }, [striker]);
-  useEffect(() => { nonStrikerRef.current = nonStriker; }, [nonStriker]);
-
-  const [randomBowler, setRandomBowler] = useState(null);
-  const randomBowlerRef = useRef(null);
-  useEffect(() => { randomBowlerRef.current = randomBowler; }, [randomBowler]);
-
-  const [userProfile, setUserProfile] = useState(null);
-  const userProfileRef = useRef(null);
-  useEffect(() => { userProfileRef.current = userProfile; }, [userProfile]);
+  const isProcessing = useRef(false);
 
   const navigate = useNavigate();
 
@@ -113,7 +122,7 @@ export default function ScoreCardOnline() {
     sri: "black", nz: "#c00050", wi: "#e04b7f", sa: "#1a528c", wtc: "#000",
   };
 
-  // ── fetch user profile ────────────────────────────────────────────────────
+  // ── Fetch user profile ────────────────────────────────────────────────────
   useEffect(() => {
     const getUserProfile = async () => {
       const { data, error } = await supabase
@@ -124,7 +133,7 @@ export default function ScoreCardOnline() {
     getUserProfile();
   }, []);
 
-  // ── sound ─────────────────────────────────────────────────────────────────
+  // ── Sound ─────────────────────────────────────────────────────────────────
   let clickSound = null;
   const playSound = (sound) => {
     if (clickSound && clickSound.playing()) clickSound.stop();
@@ -132,7 +141,7 @@ export default function ScoreCardOnline() {
     clickSound.play();
   };
 
-  // ── end innings ───────────────────────────────────────────────────────────
+  // ── End innings ───────────────────────────────────────────────────────────
   const endInnings = (finalScore) => {
     setPartnership(0);
     setPartnershipBalls(0);
@@ -149,26 +158,32 @@ export default function ScoreCardOnline() {
     }
   };
 
-  // ── bowler select ─────────────────────────────────────────────────────────
+  // ── Bowler select ─────────────────────────────────────────────────────────
   const bowlerSelect = () => {
     const currentBatting = battingRef.current;
     const currentUserTeam = userTeamRef.current;
     const currentAiTeam = aiTeamRef.current;
     const currentBowler = randomBowlerRef.current;
+
     const bowlersList = !currentBatting
       ? currentUserTeam?.players.filter((p) => p.isBowler)
       : currentAiTeam?.players.filter((p) => p.isBowler);
+
     if (!bowlersList?.length) return;
+
     let chosen = null, attempts = 0;
     while (attempts < 10) {
       const candidate = bowlersList[Math.floor(Math.random() * bowlersList.length)];
-      if (candidate.name !== currentBowler?.name && candidate.overs < totalOvers / 5) { chosen = candidate; break; }
+      if (candidate.name !== currentBowler?.name && candidate.overs < totalOvers / 5) {
+        chosen = candidate; break;
+      }
       attempts++;
     }
     if (chosen) { setRandomBowler(chosen); localStorage.setItem("CurrentBowler", chosen.name); }
+    else console.warn("⚠️ No valid bowler found, keeping current:", currentBowler);
   };
 
-  // ── update team (player 1 only) ───────────────────────────────────────────
+  // ── Update team (player 1 only) ───────────────────────────────────────────
   const updateTeam = async (bowlingTeam, battingTeam, bowler, run, overso, ballo, isOverComplete = false, Wicket = false) => {
     const currentBatting = battingRef.current;
     const currentStriker = strikerRef.current;
@@ -186,7 +201,9 @@ export default function ScoreCardOnline() {
         if (team?.name === bowlingTeam) {
           return {
             ...team,
-            fow: Wicket ? [...(team?.fow || []), currentBatting ? currentUserTeam?.score : currentAiTeam?.score] : team?.fow,
+            fow: Wicket
+              ? [...(team?.fow || []), currentBatting ? currentUserTeam?.score : currentAiTeam?.score]
+              : team?.fow,
             players: team?.players.map((player) => {
               if (player.name !== bowler?.name) return player;
               const newConceded = player.conceded + Number(run);
@@ -194,7 +211,10 @@ export default function ScoreCardOnline() {
               const newBowled = isOverComplete ? 0 : player.bowled + 1;
               const oversDecimal = (newOvers * 6 + newBowled) / 6;
               return {
-                ...player, conceded: newConceded, overs: newOvers, bowled: newBowled,
+                ...player,
+                conceded: newConceded,
+                overs: newOvers,
+                bowled: newBowled,
                 wickets: Wicket ? player.wickets + 1 : player.wickets,
                 dot: Number(run) == 0 ? player.dot + 1 : player.dot,
                 economy: oversDecimal > 0 ? (newConceded / oversDecimal).toFixed(2) : "0.00",
@@ -202,12 +222,14 @@ export default function ScoreCardOnline() {
             }),
           };
         }
+
         if (team?.name === battingTeam) {
           return {
             ...team,
             score: team?.score + Number(run),
             wicket: Wicket ? team?.wicket + 1 : team?.wicket,
-            Over: overso, Ball: ballo,
+            Over: overso,
+            Ball: ballo,
             ballHistory: Wicket
               ? (team?.ballHistory?.length || 0) === 6 ? ["W"] : [...(team?.ballHistory || []), "W"]
               : (team?.ballHistory?.length || 0) === 6 ? [Number(run)] : [...(team?.ballHistory || []), Number(run)],
@@ -217,7 +239,7 @@ export default function ScoreCardOnline() {
                 ...player,
                 score: player.score + Number(run),
                 balls: player.balls + 1,
-                out: Wicket ? true : player.out,
+                out: Wicket ? true : player.out,   // fixed: don't reset non-striker out
                 notout: Wicket ? false : true,
                 striker: Wicket ? false : player.striker,
                 bowler: Wicket ? bowler?.name : null,
@@ -225,6 +247,7 @@ export default function ScoreCardOnline() {
             }),
           };
         }
+
         return team;
       });
 
@@ -234,15 +257,18 @@ export default function ScoreCardOnline() {
     const newUserTeam = updatedTeams.find((t) => t.name === user) || null;
     const newAiTeam = updatedTeams.find((t) => t.name === ai) || null;
 
-    if (!newUserTeam) { console.error("newUserTeam is null, skipping DB save"); return; }
+    if (!newUserTeam) {
+      console.error("newUserTeam is null, skipping DB save");
+      return;
+    }
 
     setUserTeam(newUserTeam);
     setAiTeam(newAiTeam);
 
-    // save to DB — player 2 will mirror via realtime
+    // player 1 saves — player 2 mirrors via realtime
     const { error } = await supabase
       .from("profiles").update({ onlineScore: newUserTeam }).eq("id", profileId).select().single();
-    if (error) console.error("Failed to update user team data:", error);
+    if (error) console.error("Failed to update onlineScore:", error);
 
     const teamBatting = currentBatting ? newUserTeam : newAiTeam;
     if (teamBatting) {
@@ -250,14 +276,20 @@ export default function ScoreCardOnline() {
       setNonStriker(teamBatting.players.find((p) => p.name === currentNonStriker?.name));
     }
 
-    const updatedBowler = updatedTeams.find((t) => t.name === bowlingTeam)?.players.find((p) => p?.name === bowler?.name) || null;
-    if (updatedBowler) { setRandomBowler(updatedBowler); localStorage.setItem("CurrentBowler", updatedBowler.name); }
+    const updatedBowler = updatedTeams
+      .find((t) => t.name === bowlingTeam)
+      ?.players.find((p) => p?.name === bowler?.name) || null;
+    if (updatedBowler) {
+      setRandomBowler(updatedBowler);
+      localStorage.setItem("CurrentBowler", updatedBowler.name);
+    }
 
     if (Wicket) {
       const teamBattingUpdated = updatedTeams.find((t) => t.name === battingTeam);
       const nextBatterIndex = teamBattingUpdated.wicket + 1;
       setPartnership(0);
       setPartnershipBalls(0);
+
       const totalWickets = totalOvers == 100 ? 1 : totalOvers == 20 ? 10 : totalOvers;
       if (teamBattingUpdated?.wicket + 1 <= totalWickets) {
         setStriker(teamBattingUpdated.players[nextBatterIndex]);
@@ -268,7 +300,7 @@ export default function ScoreCardOnline() {
     }
   };
 
-  // ── handle ball (player 1 only) ───────────────────────────────────────────
+  // ── Handle ball (player 1 only) ───────────────────────────────────────────
   const handleBall = (run, Wkt = false, aiRun) => {
     setBalls((prevBalls) => {
       const isOverComplete = prevBalls === 5;
@@ -289,11 +321,16 @@ export default function ScoreCardOnline() {
           nextOver, nextBalls, isOverComplete, Wkt,
         );
 
+        // strike rotation
         if (!Wkt || (Wkt && isOverComplete)) {
           const currentRun = currentBatting ? run : aiRun;
           if (!(currentRun % 2 === 1 && isOverComplete)) {
             if (currentRun % 2 === 1 || isOverComplete) {
-              setStriker((prevS) => { const temp = nonStrikerRef.current; setNonStriker(prevS); return temp; });
+              setStriker((prevS) => {
+                const temp = nonStrikerRef.current;
+                setNonStriker(prevS);
+                return temp;
+              });
             }
           }
         }
@@ -336,7 +373,7 @@ export default function ScoreCardOnline() {
     });
   };
 
-  // ── score decision (player 1 only) ────────────────────────────────────────
+  // ── Score decision (player 1 only) ────────────────────────────────────────
   const scoreDecision = (userRun, isWicket, opponentRun) => {
     const currentBatting = battingRef.current;
     if (!isWicket) {
@@ -348,8 +385,7 @@ export default function ScoreCardOnline() {
     handleBall(userRun, isWicket, opponentRun);
   };
 
-  // ── check both choices (player 1 only) ───────────────────────────────────
-  const isProcessing = useRef(false);
+  // ── Check both choices (player 1 only) ───────────────────────────────────
   const checkBothChoices = async () => {
     if (userProfileRef.current?.player !== 1) return;
     if (isProcessing.current) return;
@@ -381,7 +417,7 @@ export default function ScoreCardOnline() {
     isProcessing.current = false;
   };
 
-  // ── realtime ──────────────────────────────────────────────────────────────
+  // ── Realtime ──────────────────────────────────────────────────────────────
   useEffect(() => {
     const channel = supabase
       .channel("onlineGameplay")
@@ -393,10 +429,10 @@ export default function ScoreCardOnline() {
           const player = userProfileRef.current?.player;
 
           if (player === 1) {
-            // player 1: opponent chose, check if both ready
+            // player 1: opponent chose → check if both ready
             await checkBothChoices();
           } else {
-            // player 2: mirror player 1's onlineScore to local state
+            // player 2: mirror player 1's onlineScore
             if (payload.new.onlineScore) {
               const updatedTeam = payload.new.onlineScore;
               const updatedTeams = teamsRef.current.map((t) =>
@@ -411,12 +447,12 @@ export default function ScoreCardOnline() {
           }
         }
       )
-      .subscribe();
+      .subscribe((status) => console.log("Realtime status:", status));
 
     return () => supabase.removeChannel(channel);
   }, []);
 
-  // ── misc effects ──────────────────────────────────────────────────────────
+  // ── Misc effects ──────────────────────────────────────────────────────────
   useEffect(() => {
     const interval = setInterval(() => setShow((prev) => (prev + 1) % 3), 3000);
     const Inning = localStorage.getItem("Innings");
@@ -464,7 +500,7 @@ export default function ScoreCardOnline() {
     return () => clearTimeout(timer);
   }, []);
 
-  // ── board components ──────────────────────────────────────────────────────
+  // ── Board components ──────────────────────────────────────────────────────
   const boardComponents = {
     wc24: Wc24, starter: StarterScoreboard, aus: AUS, ban: BAN, wc19: Wc19,
     sri: SRI, eng: ENG, nz: NZ, sa: SA, wi: WI, pak: PAK,
@@ -482,9 +518,12 @@ export default function ScoreCardOnline() {
       {showLoadingPage && (
         <LoadingPage loading={loading} onFinish={() => setShowLoadingPage(false)} />
       )}
+
       {!showLoadingPage && (
         <Box sx={{ width: "100%", height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 2 }}>
+
           {BoardComponent && <BoardComponent {...boardProps} />}
+
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px", justifyContent: "center", margin: "50px", padding: { xs: "0 600px", md: "0" } }}>
             {choice.map((opt, index) => (
               <Button
@@ -497,7 +536,13 @@ export default function ScoreCardOnline() {
                   borderRadius: "50%", fontWeight: 600, fontSize: "1em",
                   borderBottom: `4px solid ${borderColors[board]}`,
                   borderRight: `4px solid ${borderColors[board]}`,
-                  ":hover": { backgroundColor: colors[board], transform: "scale(1.05)", borderBottom: `4px solid ${borderColors[board]}`, borderRight: `3px solid ${borderColors[board]}`, transition: "all 0.3s" },
+                  ":hover": {
+                    backgroundColor: colors[board],
+                    transform: "scale(1.05)",
+                    borderBottom: `4px solid ${borderColors[board]}`,
+                    borderRight: `3px solid ${borderColors[board]}`,
+                    transition: "all 0.3s",
+                  },
                   ":focus": { outline: "none" },
                 }}
                 onClick={async () => {
