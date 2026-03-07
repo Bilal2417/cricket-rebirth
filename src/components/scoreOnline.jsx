@@ -121,14 +121,6 @@ export default function ScoreCardOnline() {
     wtc: "#000",
   };
 
-  const [userProfile, setUserProfile] = useState([]);
-  const userProfileRef = useRef(userProfile);
-  useEffect(() => {
-    userProfileRef.current = userProfile;
-  }, [userProfile]);
-  const profileId = localStorage.getItem("MyId");
-  const opponentId = sessionStorage.getItem("OpponentId");
-
   useEffect(() => {
     const getUserProfile = async () => {
       const { data, error } = await supabase
@@ -146,6 +138,14 @@ export default function ScoreCardOnline() {
     };
     getUserProfile();
   }, []);
+  const [userProfile, setUserProfile] = useState([]);
+  const userProfileRef = useRef(userProfile);
+  useEffect(() => {
+    userProfileRef.current = userProfile;
+  }, [userProfile]);
+  const profileId = localStorage.getItem("MyId");
+  const opponentId = sessionStorage.getItem("OpponentId");
+
 
   const handleBall = (run, Wkt = false, aiRun) => {
     setBalls((prevBalls) => {
@@ -266,6 +266,7 @@ export default function ScoreCardOnline() {
         },
         (payload) => {
           console.log("🔥 REALTIME EVENT:", payload);
+          console.log("🔥 REALTIME ref:", userProfileRef);
 
           // update picked players live
           // setPickedNames((prev) => {
@@ -393,13 +394,13 @@ export default function ScoreCardOnline() {
     isOverComplete = false,
     Wicket = false,
   ) => {
-    if (run == 0 && !Wicket) {
+    if (Number(run) == 0 && !Wicket) {
       const sounds = ["tip", "tip2"];
       playSound(sounds[Math.floor(Math.random() * sounds.length)]);
-    } else if (run == 4) {
+    } else if (Number(run) == 4) {
       const sounds = ["four", "four1"];
       playSound(sounds[Math.floor(Math.random() * sounds.length)]);
-    } else if (run == 6) {
+    } else if (Number(run) == 6) {
       const sounds = ["six", "six1"];
       playSound(sounds[Math.floor(Math.random() * sounds.length)]);
     }
@@ -415,7 +416,7 @@ export default function ScoreCardOnline() {
           players: team.players.map((player) => {
             if (player.name === randomBowler?.name) {
               // update stats first
-              const newConceded = player.conceded + run;
+              const newConceded = player.conceded + Number(run);
               const newOvers = isOverComplete ? player.overs + 1 : player.overs;
               const newBowled = isOverComplete ? 0 : player.bowled + 1;
 
@@ -428,7 +429,7 @@ export default function ScoreCardOnline() {
                 overs: newOvers,
                 bowled: newBowled,
                 wickets: Wicket ? player.wickets + 1 : player.wickets,
-                dot: run == 0 ? player.dot + 1 : player.dot,
+                dot: Number(run) == 0 ? player.dot + 1 : player.dot,
                 economy:
                   oversDecimal > 0
                     ? (newConceded / oversDecimal).toFixed(2)
@@ -444,7 +445,7 @@ export default function ScoreCardOnline() {
       if (team.name === battingTeam) {
         return {
           ...team,
-          score: team.score + run,
+          score: team.score + Number(run),
           wicket: Wicket ? team.wicket + 1 : team.wicket,
           Over: overso,
           Ball: ballo,
@@ -453,14 +454,14 @@ export default function ScoreCardOnline() {
               ? ["W"]
               : [...(team.ballHistory || []), "W"]
             : (team.ballHistory?.length || 0) === 6
-              ? [run]
-              : [...(team.ballHistory || []), run],
+              ? [Number(run)]
+              : [...(team.ballHistory || []), Number(run)],
 
           players: team.players.map((player) => {
             if (player.name === striker.name) {
               return {
                 ...player,
-                score: player.score + run,
+                score: player.score + Number(run),
                 balls: player.balls + 1,
                 out: Wicket ? true : false,
                 notout: Wicket ? false : true,
@@ -494,19 +495,19 @@ export default function ScoreCardOnline() {
         return;
       }
 
-      const { error: anyError } = await supabase
-        .from("profiles")
-        .update({
-          onlineScore: opponentTeamScore,
-        })
-        .eq("id", opponentId)
-        .select()
-        .single();
+    //   const { error: anyError } = await supabase
+    //     .from("profiles")
+    //     .update({
+    //       onlineScore: opponentTeamScore,
+    //     })
+    //     .eq("id", opponentId)
+    //     .select()
+    //     .single();
 
-      if (anyError) {
-        console.error("Failed to update opponent team data:", anyError);
-        return;
-      }
+    //   if (anyError) {
+    //     console.error("Failed to update opponent team data:", anyError);
+    //     return;
+    //   }
     };
 
     const newUserTeam = updatedTeams.find((t) => t.name === user) || null;
@@ -550,8 +551,8 @@ export default function ScoreCardOnline() {
 
         teamBatting.players = updatedPlayers;
       } else {
-        const latestBattingTeam = batting ? userTeam : aiTeam;
-        const updatedScore = latestBattingTeam?.score + (Wicket ? 0 : run);
+        const latestBattingTeam = batting ? newUserTeam : newAiTeam;
+        const updatedScore = latestBattingTeam?.score + (Wicket ? 0 : Number(run));
 
         endInnings(updatedScore); // all out
       }

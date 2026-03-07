@@ -78,7 +78,7 @@ export default function Wc24({
               height: "40px",
               boxShadow: "3px 3px 8px -2px #000000",
               outline: showOutline
-                ? `3px solid ${batting ? "blue" : "red"}`
+                ? `3px solid ${batting ? "#379349" : "#d24343"}`
                 : "none",
             }}
             src={!batting ? aiTeam?.flag : userTeam?.flag}
@@ -632,7 +632,7 @@ export default function Wc24({
               height: "40px",
               boxShadow: "3px 3px 8px -2px #000000",
               outline: showOutline
-                ? `3px solid ${!batting ? "blue" : "red"}`
+                ? `3px solid ${!batting ? "#379349" : "#d24343"}`
                 : "none",
             }}
             src={batting ? aiTeam?.flag : userTeam?.flag}
