@@ -280,14 +280,13 @@ export default function ScoreCardOnline() {
     const opponentRun = Number(opponent.choice);
     const isWicket = userRun == opponentRun;
 
+    scoreDecision(userRun, isWicket, opponentRun);
+    setIsBtnDisabled(false);
     // clear choices first to prevent double firing
     await supabase
       .from("profiles")
       .update({ choice: null })
       .eq("id", profileId);
-
-    scoreDecision(userRun, isWicket, opponentRun);
-    setIsBtnDisabled(false);
   };
 
   useEffect(() => {
@@ -300,6 +299,7 @@ export default function ScoreCardOnline() {
           if (payload.new.id === profileId) return;
           if (payload.new.code == userProfileRef.current?.code) {
             await checkBothChoices();
+            console.log(payload.new, userProfileRef.current, "yaar");
           }
         },
       )
@@ -413,78 +413,83 @@ export default function ScoreCardOnline() {
       const sounds = ["six", "six1"];
       playSound(sounds[Math.floor(Math.random() * sounds.length)]);
     }
-    const updatedTeams = teamsRef.current.filter(
-      (team) => team?.name == battingTeam || team?.name == bowlingTeam,
-    ).map((team) => {
-      if (team?.name === bowlingTeam) {
-        return {
-          ...team,
-          fow: Wicket
-            ? [...(team?.fow || []), batting ? userTeam?.score : aiTeam?.score]
-            : team?.fow,
-          players: team?.players.map((player) => {
-            if (player.name === randomBowler?.name) {
-              // update stats first
-              const newConceded = player.conceded + Number(run);
-              const newOvers = isOverComplete ? player.overs + 1 : player.overs;
-              const newBowled = isOverComplete ? 0 : player.bowled + 1;
+    const updatedTeams = teamsRef.current
+      .filter((team) => team?.name == battingTeam || team?.name == bowlingTeam)
+      .map((team) => {
+        if (team?.name === bowlingTeam) {
+          return {
+            ...team,
+            fow: Wicket
+              ? [
+                  ...(team?.fow || []),
+                  batting ? userTeam?.score : aiTeam?.score,
+                ]
+              : team?.fow,
+            players: team?.players.map((player) => {
+              if (player.name === randomBowler?.name) {
+                // update stats first
+                const newConceded = player.conceded + Number(run);
+                const newOvers = isOverComplete
+                  ? player.overs + 1
+                  : player.overs;
+                const newBowled = isOverComplete ? 0 : player.bowled + 1;
 
-              const totalBalls = newOvers * 6 + newBowled;
-              const oversDecimal = totalBalls / 6;
+                const totalBalls = newOvers * 6 + newBowled;
+                const oversDecimal = totalBalls / 6;
 
-              return {
-                ...player,
-                conceded: newConceded,
-                overs: newOvers,
-                bowled: newBowled,
-                wickets: Wicket ? player.wickets + 1 : player.wickets,
-                dot: Number(run) == 0 ? player.dot + 1 : player.dot,
-                economy:
-                  oversDecimal > 0
-                    ? (newConceded / oversDecimal).toFixed(2)
-                    : "0.00",
-              };
-            }
+                return {
+                  ...player,
+                  conceded: newConceded,
+                  overs: newOvers,
+                  bowled: newBowled,
+                  wickets: Wicket ? player.wickets + 1 : player.wickets,
+                  dot: Number(run) == 0 ? player.dot + 1 : player.dot,
+                  economy:
+                    oversDecimal > 0
+                      ? (newConceded / oversDecimal).toFixed(2)
+                      : "0.00",
+                };
+              }
 
-            return player;
-          }),
-        };
-      }
+              return player;
+            }),
+          };
+        }
 
-      if (team?.name === battingTeam) {
-        return {
-          ...team,
-          score: team?.score + Number(run),
-          wicket: Wicket ? team?.wicket + 1 : team?.wicket,
-          Over: overso,
-          Ball: ballo,
-          ballHistory: Wicket
-            ? (team?.ballHistory?.length || 0) === 6
-              ? ["W"]
-              : [...(team?.ballHistory || []), "W"]
-            : (team?.ballHistory?.length || 0) === 6
-              ? [Number(run)]
-              : [...(team?.ballHistory || []), Number(run)],
+        if (team?.name === battingTeam) {
+          return {
+            ...team,
+            score: team?.score + Number(run),
+            wicket: Wicket ? team?.wicket + 1 : team?.wicket,
+            Over: overso,
+            Ball: ballo,
+            ballHistory: Wicket
+              ? (team?.ballHistory?.length || 0) === 6
+                ? ["W"]
+                : [...(team?.ballHistory || []), "W"]
+              : (team?.ballHistory?.length || 0) === 6
+                ? [Number(run)]
+                : [...(team?.ballHistory || []), Number(run)],
 
-          players: team?.players.map((player) => {
-            if (player.name === striker.name) {
-              return {
-                ...player,
-                score: player.score + Number(run),
-                balls: player.balls + 1,
-                out: Wicket ? true : false,
-                notout: Wicket ? false : true,
-                striker: Wicket ? false : player.striker,
-                bowler: Wicket ? randomBowler.name : null,
-              };
-            }
-            return player;
-          }),
-        };
-      }
+            players: team?.players.map((player) => {
+              if (player.name === striker.name) {
+                return {
+                  ...player,
+                  score: player.score + Number(run),
+                  balls: player.balls + 1,
+                  out: Wicket ? true : false,
+                  notout: Wicket ? false : true,
+                  striker: Wicket ? false : player.striker,
+                  bowler: Wicket ? randomBowler.name : null,
+                };
+              }
+              return player;
+            }),
+          };
+        }
 
-      return team;
-    });
+        return team;
+      });
 
     setTeams(updatedTeams);
     localStorage.setItem("cricketData", JSON.stringify(updatedTeams));
