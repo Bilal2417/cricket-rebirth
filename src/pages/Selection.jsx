@@ -84,6 +84,26 @@ export default function Selection() {
     // sessionStorage.clear()
   }, []);
 
+  const [userProfile, setUserProfile] = useState([]);
+
+  useEffect(() => {
+    const getUserProfile = async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", profileId)
+        .single();
+
+      if (error) {
+        console.error("Error fetching profile:", error);
+        return;
+      }
+      setUserProfile(data);
+      console.log(data, "laa");
+    };
+    getUserProfile();
+  }, []);
+
   const [opposition, setOpposition] = useState([]);
 
   useEffect(() => {
@@ -103,8 +123,13 @@ export default function Selection() {
           // setPickedNames((prev) => {
 
           if (payload.new.id === profileId) return;
-          if (payload.new.onlineScore) {
+          if (
+            payload.new.onlineScore &&
+            payload.new.code == userProfile?.code
+          ) {
+            sessionStorage.setItem("OpponentId", payload.new.id);
             setOpposition(payload.new.onlineScore);
+             localStorage.setItem("Opponent", payload.new.onlineScore.name);
             setNextPage((prev) => {
               const next = prev + 1;
               if (next == 2) {

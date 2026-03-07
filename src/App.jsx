@@ -36,6 +36,7 @@ import Balatro from "./components/Balatro";
 import Coins from "./pages/Coins";
 import { supabase } from "./supabaseClient";
 import CreateRoom from "./pages/createRoom";
+import ScoreCardOnline from "./components/scoreOnline";
 
 export const colors = {
   // wc19: "linear-gradient(to right , #e00244 20%, #222589 70%)",
@@ -199,6 +200,7 @@ function App() {
           <Route path="/fixtures" element={<Fixtures />} />
           <Route path="/team" element={<Selection />} />
           <Route path="/gamePlay" element={<ScoreCard />} />
+          <Route path="/gamePlayOnline" element={<ScoreCardOnline />} />
           <Route path="/toss" element={<Toss />} />
           <Route path="/score" element={<Scorecard />} />
           <Route path="/result" element={<Result />} />

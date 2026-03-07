@@ -93,7 +93,7 @@ export default function Toss() {
 
     localStorage.setItem("Innings", choice);
     localStorage.setItem("currentInnings", 1);
-    navigate("/gamePlay");
+    navigate("/gamePlayOnline");
     // window.location.reload();
   };
 
@@ -120,11 +120,11 @@ export default function Toss() {
           } else if (payload.new.choice == "Bat") {
             localStorage.setItem("Innings", "Ball");
             localStorage.setItem("currentInnings", 1);
-            navigate("/gamePlay");
+            navigate("/gamePlayOnline");
           } else {
             localStorage.setItem("Innings", "Bat");
             localStorage.setItem("currentInnings", 1);
-            navigate("/gamePlay");
+            navigate("/gamePlayOnline");
           }
         },
       )
@@ -248,7 +248,7 @@ export default function Toss() {
   const mode = sessionStorage.getItem("mode");
   return (
     <>
-      {/* <Box
+      <Box
         sx={{
           width: "100%",
           height: "100vh",
@@ -259,8 +259,7 @@ export default function Toss() {
           gap: 2,
         }}
       >
-        {(Profile?.player == 1 && mode == "ONLINE") ||
-        mode !== "ONLINE" ? (
+        {/* {(Profile?.player == 1 && mode == "ONLINE") || mode !== "ONLINE" ? (
           !tossWin ? (
             <Grid
               container
@@ -348,10 +347,128 @@ export default function Toss() {
           <Typography variant="h2">
             Waiting for Opponent to Decide ...
           </Typography>
-        )}
-      </Box> */}
-      {mode == "ONLINE" ? (
-        tossWin ? (
+        )} */}
+        {mode == "ONLINE" ? (
+          tossWin ? (
+            // Bat / Ball - for both players when toss won
+            <Grid
+              container
+              spacing={2}
+              justifyContent="center"
+              alignItems="center"
+              sx={{ mt: 4 }}
+            >
+              {["Bat", "Ball"].map((choice, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Button
+                    fullWidth
+                    sx={{
+                      color: board == "wtc" ? "#000000" : "#FFFFFF",
+                      background: backColor[board] || "#0f0648",
+                      borderBottom: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
+                      borderRight: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
+                      borderRadius: "12px",
+                      width: "120px",
+                      transform: "skew(-5deg)",
+                      fontWeight: 600,
+                      padding: "12px 16px",
+                      fontSize: { xs: "14px", sm: "16px", md: "18px" },
+                      ":hover": {
+                        transform: "scale(1.05)",
+                        transition: "all 0.3s",
+                      },
+                    }}
+                    onClick={() => handleInnings(choice)}
+                  >
+                    {choice}
+                  </Button>
+                </Grid>
+              ))}
+            </Grid>
+          ) : tossLost ? (
+            // toss lost - waiting for opponent to decide
+            <Typography variant="h2">
+              Waiting for Opponent to Decide ...
+            </Typography>
+          ) : Profile?.player == 1 ? (
+            // toss not happened, player 1 - show Heads/Tails
+            <Grid
+              container
+              spacing={2}
+              justifyContent="center"
+              alignItems="center"
+              sx={{ mt: 4 }}
+            >
+              {["Heads", "Tails"].map((choice, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Button
+                    fullWidth
+                    sx={{
+                      color: board == "wtc" ? "#000000" : "#FFFFFF",
+                      background: backColor[board] || "#0f0648",
+                      borderBottom: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
+                      borderRight: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
+                      borderRadius: "12px",
+                      transform: "skew(-5deg)",
+                      width: "120px",
+                      fontWeight: 600,
+                      padding: "12px 16px",
+                      fontSize: { xs: "14px", sm: "16px", md: "18px" },
+                      ":hover": {
+                        transform: "scale(1.05)",
+                        transition: "all 0.3s",
+                      },
+                    }}
+                    onClick={() => handleTossOnline(choice)}
+                  >
+                    {choice}
+                  </Button>
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            // toss not happened, player 2 - waiting
+            <Typography variant="h2">
+              Waiting for Opponent to Decide ...
+            </Typography>
+          )
+        ) : // offline
+        !tossWin ? (
+          <Grid
+            container
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
+            sx={{ mt: 4 }}
+          >
+            {["Heads", "Tails"].map((choice, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Button
+                  fullWidth
+                  sx={{
+                    color: board == "wtc" ? "#000000" : "#FFFFFF",
+                    background: backColor[board] || "#0f0648",
+                    borderBottom: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
+                    borderRight: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
+                    borderRadius: "12px",
+                    transform: "skew(-5deg)",
+                    width: "120px",
+                    fontWeight: 600,
+                    padding: "12px 16px",
+                    fontSize: { xs: "14px", sm: "16px", md: "18px" },
+                    ":hover": {
+                      transform: "scale(1.05)",
+                      transition: "all 0.3s",
+                    },
+                  }}
+                  onClick={() => handleToss(choice)}
+                >
+                  {choice}
+                </Button>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
           <Grid
             container
             spacing={2}
@@ -386,117 +503,8 @@ export default function Toss() {
               </Grid>
             ))}
           </Grid>
-        ) : Profile?.player == 1 ? (
-          <Grid
-            container
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-            sx={{ mt: 4 }}
-          >
-            {["Heads", "Tails"].map((choice, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Button
-                  fullWidth
-                  sx={{
-                    color: board == "wtc" ? "#000000" : "#FFFFFF",
-                    background: backColor[board] || "#0f0648",
-                    borderBottom: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
-                    borderRight: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
-                    borderRadius: "12px",
-                    transform: "skew(-5deg)",
-                    width: "120px",
-                    fontWeight: 600,
-                    padding: "12px 16px",
-                    fontSize: { xs: "14px", sm: "16px", md: "18px" },
-                    ":hover": {
-                      transform: "scale(1.05)",
-                      transition: "all 0.3s",
-                    },
-                  }}
-                  onClick={() => handleTossOnline(choice)}
-                >
-                  {choice}
-                </Button>
-              </Grid>
-            ))}
-          </Grid>
-        ) : (
-          <Typography variant="h2">
-            Waiting for Opponent to Decide ...
-          </Typography>
-        )
-      ) : !tossWin ? (
-        <Grid
-          container
-          spacing={2}
-          justifyContent="center"
-          alignItems="center"
-          sx={{ mt: 4 }}
-        >
-          {["Heads", "Tails"].map((choice, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Button
-                fullWidth
-                sx={{
-                  color: board == "wtc" ? "#000000" : "#FFFFFF",
-                  background: backColor[board] || "#0f0648",
-                  borderBottom: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
-                  borderRight: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
-                  borderRadius: "12px",
-                  transform: "skew(-5deg)",
-                  width: "120px",
-                  fontWeight: 600,
-                  padding: "12px 16px",
-                  fontSize: { xs: "14px", sm: "16px", md: "18px" },
-                  ":hover": {
-                    transform: "scale(1.05)",
-                    transition: "all 0.3s",
-                  },
-                }}
-                onClick={() => handleToss(choice)}
-              >
-                {choice}
-              </Button>
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Grid
-          container
-          spacing={2}
-          justifyContent="center"
-          alignItems="center"
-          sx={{ mt: 4 }}
-        >
-          {["Bat", "Ball"].map((choice, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Button
-                fullWidth
-                sx={{
-                  color: board == "wtc" ? "#000000" : "#FFFFFF",
-                  background: backColor[board] || "#0f0648",
-                  borderBottom: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
-                  borderRight: `4px solid ${colors[board] || "rgb(65, 38, 255)"}`,
-                  borderRadius: "12px",
-                  width: "120px",
-                  transform: "skew(-5deg)",
-                  fontWeight: 600,
-                  padding: "12px 16px",
-                  fontSize: { xs: "14px", sm: "16px", md: "18px" },
-                  ":hover": {
-                    transform: "scale(1.05)",
-                    transition: "all 0.3s",
-                  },
-                }}
-                onClick={() => handleInnings(choice)}
-              >
-                {choice}
-              </Button>
-            </Grid>
-          ))}
-        </Grid>
-      )}
+        )}
+      </Box>
     </>
   );
 }
