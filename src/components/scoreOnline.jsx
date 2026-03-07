@@ -158,8 +158,8 @@ export default function ScoreCardOnline() {
         const newHistory = [...prev, run];
 
         updateTeam(
-          batting ? aiteam?.name : userteam?.name,
-          batting ? userteam?.name : aiteam?.name,
+          batting ? aiTeam?.name : userTeam?.name,
+          batting ? userTeam?.name : aiTeam?.name,
           randomBowler,
           Wkt ? 0 : batting ? run : aiRun,
           nextOver, //  pass updated over
@@ -608,8 +608,8 @@ export default function ScoreCardOnline() {
 
   const bowlerSelect = () => {
     const bowlersList = !batting
-      ? userteam?.players.filter((player) => player.isBowler)
-      : aiteam?.players.filter((player) => player.isBowler);
+      ? userTeam?.players.filter((player) => player.isBowler)
+      : aiTeam?.players.filter((player) => player.isBowler);
 
     if (!bowlersList.length) return;
 
