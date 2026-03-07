@@ -140,11 +140,9 @@ export default function ScoreCardOnline() {
   }, []);
   const [userProfile, setUserProfile] = useState([]);
   const userProfileRef = useRef(userProfile);
-
   useEffect(() => {
     userProfileRef.current = userProfile;
   }, [userProfile]);
-
   const profileId = localStorage.getItem("MyId");
   const opponentId = sessionStorage.getItem("OpponentId");
 
@@ -254,15 +252,14 @@ export default function ScoreCardOnline() {
     }
   };
   const pendingBallData = useRef(null);
-  const lastProcessedTimestamp = useRef(null);
 
   const checkBothChoices = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("profiles")
       .select("id, choice")
       .eq("code", userProfileRef.current?.code);
 
-    if (!data || data.length < 2) return;
+    if (error || !data || data.length < 2) return;
 
     const me = data.find((d) => d.id === profileId);
     const opponent = data.find((d) => d.id !== profileId);
@@ -275,19 +272,18 @@ export default function ScoreCardOnline() {
     )
       return;
 
-    // both have chosen
     const userRun = Number(me.choice);
     const opponentRun = Number(opponent.choice);
     const isWicket = userRun == opponentRun;
 
-    scoreDecision(userRun, isWicket, opponentRun);
-    setIsBtnDisabled(false);
-
-    // clear choices for next ball
+    // clear choices first to prevent double firing
     await supabase
       .from("profiles")
       .update({ choice: null })
       .eq("id", profileId);
+
+    scoreDecision(userRun, isWicket, opponentRun);
+    setIsBtnDisabled(false);
   };
 
   useEffect(() => {
@@ -295,52 +291,17 @@ export default function ScoreCardOnline() {
       .channel("onlineGameplay")
       .on(
         "postgres_changes",
-        {
-          event: "*", // listen to ALL events for testing
-          schema: "public",
-          table: "profiles",
-        },
-        (payload) => {
-          console.log("🔥 REALTIME EVENT:", payload);
-          console.log("🔥 REALTIME ref:", userProfileRef);
-
-          // update picked players live
-          // setPickedNames((prev) => {
-
-          // if (
-          //   payload.new.id !== profileId &&
-          //   payload.new.code == userProfileRef.current?.code &&
-          //   payload.commit_timestamp !== lastProcessedTimestamp.current
-          // ) {
-          //   lastProcessedTimestamp.current = payload.commit_timestamp;
-
-          //   setOpponentChoice(payload.new.choice);
-          //   pendingBallData.current = {
-          //     ...pendingBallData.current,
-          //     opponentRun: Number(payload.new.choice),
-          //   };
-          //   setBallCompleted((prev) => {
-          //     const temp = prev + 1;
-          //     return temp == 2 ? 0 : temp;
-          //   });
-
-          //   console.log(payload);
-          // }
-          if (
-            payload.new.id !== profileId &&
-            payload.new.code == userProfileRef.current?.code
-          ) {
-            checkBothChoices();
+        { event: "UPDATE", schema: "public", table: "profiles" },
+        async (payload) => {
+          if (payload.new.id === profileId) return;
+          if (payload.new.code == userProfileRef.current?.code) {
+            await checkBothChoices();
           }
         },
       )
-      .subscribe((status) => {
-        console.log("Realtime status:", status);
-      });
+      .subscribe();
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    return () => supabase.removeChannel(channel);
   }, []);
 
   const isFirstRender = useRef(true);
@@ -348,24 +309,24 @@ export default function ScoreCardOnline() {
 
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
 
-  // useEffect(() => {
-  //   if (isFirstRender.current) {
-  //     isFirstRender.current = false;
-  //     return;
-  //   }
-  //   if (
-  //     // ballCompleted === 0 &&
-  //     pendingBallData.current?.userRun !== undefined &&
-  //     pendingBallData.current?.opponentRun !== undefined
-  //   ) {
-  //     const { userRun, opponentRun } = pendingBallData.current;
-  //     const isWicket = userRun == opponentRun;
-  //     scoreDecision(Number(userRun), isWicket, Number(opponentRun));
-  //     setIsBtnDisabled(false);
-  //     pendingBallData.current = null;
-  //     console.log(pendingBallData.current, "pending Data");
-  //   }
-  // }, [opponentChoice, userChoice]);
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (
+      // ballCompleted === 0 &&
+      pendingBallData.current?.userRun !== undefined &&
+      pendingBallData.current?.opponentRun !== undefined
+    ) {
+      const { userRun, opponentRun } = pendingBallData.current;
+      const isWicket = userRun == opponentRun;
+      scoreDecision(Number(userRun), isWicket, Number(opponentRun));
+      setIsBtnDisabled(false);
+      pendingBallData.current = null;
+      console.log(pendingBallData.current, "pending Data");
+    }
+  }, [opponentChoice, userChoice]);
 
   const [isSix, setIsSix] = useState(() => {
     return Number(localStorage.getItem("Boundary")) || 0;
@@ -1067,42 +1028,19 @@ export default function ScoreCardOnline() {
                   }}
                   key={index}
                   disabled={isBtnDisabled}
-                  // onClick={async () => {
-                  //   setIsBtnDisabled(true);
-                  //   pendingBallData.current = {
-                  //     ...pendingBallData.current,
-                  //     userRun: Number(opt.value),
-                  //   };
-                  //   setUserChoice(opt.value);
-                  //   setBallCompleted((prev) => {
-                  //     const temp = prev + 1;
-                  //     return temp == 2 ? 0 : temp;
-                  //   });
-
-                  //   const { error } = await supabase
-                  //     .from("profiles")
-                  //     .update({
-                  //       choice: Number(opt.value),
-                  //     })
-                  //     .eq("id", profileId)
-                  //     .select()
-                  //     .single();
-
-                  //   if (error) {
-                  //     console.error("Failed to update choice:", error);
-                  //     setIsBtnDisabled(false);
-                  //     return;
-                  //   }
-                  // }}
                   onClick={async () => {
                     setIsBtnDisabled(true);
-
-                    await supabase
+                    const { error } = await supabase
                       .from("profiles")
-                      .update({ choice: opt.value })
+                      .update({ choice: Number(opt.value) })
                       .eq("id", profileId);
 
-                    checkBothChoices();
+                    if (error) {
+                      console.error("Failed to update choice:", error);
+                      setIsBtnDisabled(false);
+                      return;
+                    }
+                    await checkBothChoices();
                   }}
                 >
                   {opt.value}
