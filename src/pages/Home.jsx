@@ -161,6 +161,7 @@ export default function Home() {
           console.log(data);
           if (!error) {
             setProfiles(data);
+            setLoading(false)
             sessionStorage.setItem(
               "profilesData",
               JSON.stringify({ data: data, timestamp: now }),
@@ -207,9 +208,10 @@ export default function Home() {
         // }
       } catch (err) {
         console.error("Error fetching profiles:", err);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
+      } 
+      // finally {
+      //   if (isMounted) ;
+      // }
     };
 
     fetchProfiles(); // initial fetch
