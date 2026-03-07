@@ -323,7 +323,7 @@ export default function ScoreCardOnline() {
       pendingBallData.current = null;
       console.log(pendingBallData.current, "pending Data");
     }
-  }, [ pendingBallData]);
+  }, [opponentChoice , userChoice]);
 
   const [isSix, setIsSix] = useState(() => {
     return Number(localStorage.getItem("Boundary")) || 0;

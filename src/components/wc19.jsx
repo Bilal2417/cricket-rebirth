@@ -35,11 +35,13 @@ export default function Wc19({
     return (words[0][0] + words[1][0]).toUpperCase();
   }
 
+  const mode = sessionStorage.getItem("mode");
+  const showOutline = mode == "ONLINE";
   return (
     <>
       <Box
         sx={{
-          width: { xs : "auto" , md : "100%"},
+          width: { xs: "auto", md: "100%" },
           //   backgroundColor: "#faf8fb",
           minHeight: "50px",
           display: "flex",
@@ -60,6 +62,9 @@ export default function Wc19({
               width: "60px",
               height: "40px",
               boxShadow: "3px 3px 8px -2px #12174c",
+              outline: showOutline
+                ? `3px solid ${batting ? "#379349" : "#d24343"}`
+                : "none",
             }}
             src={!batting ? aiTeam?.flag : userTeam?.flag}
             alt={!batting ? aiTeam?.name : userTeam?.name}
@@ -322,7 +327,7 @@ export default function Wc19({
                     fontSize: "0.7em",
                     fontWeight: 400,
                     color: "#faf8fb",
-                    minWidth : "65px",
+                    minWidth: "65px",
                   }}
                   component="span"
                 >
@@ -390,12 +395,12 @@ export default function Wc19({
                   {firstInnings == 2
                     ? `Target : ${target}`
                     : totalOvers !== 100
-                    ? `Projected Score : ${(
-                        ((batting ? userTeam?.score : aiTeam?.score) /
-                          (over + balls / 6)) *
-                        totalOvers
-                      ).toFixed(0)}`
-                    : null}
+                      ? `Projected Score : ${(
+                          ((batting ? userTeam?.score : aiTeam?.score) /
+                            (over + balls / 6)) *
+                          totalOvers
+                        ).toFixed(0)}`
+                      : null}
                 </Typography>
               </Fade>
             </Box>
@@ -511,15 +516,15 @@ export default function Wc19({
                           }`
                         : "2px solid #12174c"
                       : aiTeam?.ballHistory[index] > 3 ||
-                        aiTeam?.ballHistory[index] == "W"
-                      ? `2px solid ${
-                          colors[
-                            batting
-                              ? userTeam?.ballHistory[index]
-                              : aiTeam?.ballHistory[index]
-                          ]
-                        }`
-                      : "2px solid #12174c",
+                          aiTeam?.ballHistory[index] == "W"
+                        ? `2px solid ${
+                            colors[
+                              batting
+                                ? userTeam?.ballHistory[index]
+                                : aiTeam?.ballHistory[index]
+                            ]
+                          }`
+                        : "2px solid #12174c",
 
                     color: batting
                       ? userTeam?.ballHistory[index] > 3 ||
@@ -527,9 +532,9 @@ export default function Wc19({
                         ? "#FFFFFF"
                         : "#12174c"
                       : aiTeam?.ballHistory[index] > 3 ||
-                        aiTeam?.ballHistory[index] == "W"
-                      ? "#FFFFFF"
-                      : "#12174c",
+                          aiTeam?.ballHistory[index] == "W"
+                        ? "#FFFFFF"
+                        : "#12174c",
 
                     borderRadius: "50%",
                     padding: "2px",
@@ -553,7 +558,6 @@ export default function Wc19({
                 </Box>
               ))}
             </Box>
-            
           </Box>
         </Box>
 
@@ -570,6 +574,9 @@ export default function Wc19({
               width: "60px",
               height: "40px",
               boxShadow: "3px 3px 8px -2px #12174c",
+              outline: showOutline
+                ? `3px solid ${!batting ? "#379349" : "#d24343"}`
+                : "none",
             }}
             src={batting ? aiTeam?.flag : userTeam?.flag}
           />
