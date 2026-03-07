@@ -146,7 +146,6 @@ export default function ScoreCardOnline() {
   const profileId = localStorage.getItem("MyId");
   const opponentId = sessionStorage.getItem("OpponentId");
 
-
   const handleBall = (run, Wkt = false, aiRun) => {
     setBalls((prevBalls) => {
       const isOverComplete = prevBalls === 5;
@@ -253,6 +252,7 @@ export default function ScoreCardOnline() {
     }
   };
   const pendingBallData = useRef(null);
+  const lastProcessedTimestamp = useRef(null);
 
   useEffect(() => {
     const channel = supabase
@@ -271,15 +271,17 @@ export default function ScoreCardOnline() {
           // update picked players live
           // setPickedNames((prev) => {
 
-          if (payload.new.id === profileId) return;
           if (
-            payload.new.choice !== undefined &&
-            payload.new.code == userProfileRef.current?.code
+            payload.new.id !== profileId &&
+            payload.new.code == userProfileRef.current?.code &&
+            payload.commit_timestamp !== lastProcessedTimestamp.current
           ) {
+            lastProcessedTimestamp.current = payload.commit_timestamp;
+
             setOpponentChoice(payload.new.choice);
             pendingBallData.current = {
               ...pendingBallData.current,
-              opponentRun: payload.new.choice,
+              opponentRun: Number(payload.new.choice),
             };
             setBallCompleted((prev) => {
               const temp = prev + 1;
@@ -316,10 +318,10 @@ export default function ScoreCardOnline() {
     ) {
       const { userRun, opponentRun } = pendingBallData.current;
       const isWicket = userRun == opponentRun;
-      scoreDecision(userRun, isWicket, opponentRun);
+      scoreDecision(Number(userRun), isWicket, Number(opponentRun));
       setIsBtnDisabled(false);
       pendingBallData.current = null;
-      console.log(pendingBallData,"pending Data")
+      console.log(pendingBallData, "pending Data");
     }
   }, [ballCompleted]);
 
@@ -495,19 +497,19 @@ export default function ScoreCardOnline() {
         return;
       }
 
-    //   const { error: anyError } = await supabase
-    //     .from("profiles")
-    //     .update({
-    //       onlineScore: opponentTeamScore,
-    //     })
-    //     .eq("id", opponentId)
-    //     .select()
-    //     .single();
+      //   const { error: anyError } = await supabase
+      //     .from("profiles")
+      //     .update({
+      //       onlineScore: opponentTeamScore,
+      //     })
+      //     .eq("id", opponentId)
+      //     .select()
+      //     .single();
 
-    //   if (anyError) {
-    //     console.error("Failed to update opponent team data:", anyError);
-    //     return;
-    //   }
+      //   if (anyError) {
+      //     console.error("Failed to update opponent team data:", anyError);
+      //     return;
+      //   }
     };
 
     const newUserTeam = updatedTeams.find((t) => t.name === user) || null;
@@ -552,7 +554,8 @@ export default function ScoreCardOnline() {
         teamBatting.players = updatedPlayers;
       } else {
         const latestBattingTeam = batting ? newUserTeam : newAiTeam;
-        const updatedScore = latestBattingTeam?.score + (Wicket ? 0 : Number(run));
+        const updatedScore =
+          latestBattingTeam?.score + (Wicket ? 0 : Number(run));
 
         endInnings(updatedScore); // all out
       }
@@ -1026,7 +1029,7 @@ export default function ScoreCardOnline() {
                     setIsBtnDisabled(true);
                     pendingBallData.current = {
                       ...pendingBallData.current,
-                      userRun: opt.value,
+                      userRun: Number(opt.value),
                     };
                     setUserChoice(opt.value);
                     setBallCompleted((prev) => {
@@ -1037,7 +1040,7 @@ export default function ScoreCardOnline() {
                     const { error } = await supabase
                       .from("profiles")
                       .update({
-                        choice: opt.value,
+                        choice: Number(opt.value),
                       })
                       .eq("id", profileId)
                       .select()
