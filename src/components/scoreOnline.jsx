@@ -312,7 +312,7 @@ export default function ScoreCardOnline() {
       return;
     }
     if (
-      ballCompleted === 0 &&
+      // ballCompleted === 0 &&
       pendingBallData.current?.userRun !== undefined &&
       pendingBallData.current?.opponentRun !== undefined
     ) {
@@ -321,9 +321,9 @@ export default function ScoreCardOnline() {
       scoreDecision(Number(userRun), isWicket, Number(opponentRun));
       setIsBtnDisabled(false);
       pendingBallData.current = null;
-      console.log(pendingBallData, "pending Data");
+      console.log(pendingBallData.current, "pending Data");
     }
-  }, [ballCompleted]);
+  }, [ pendingBallData]);
 
   const [isSix, setIsSix] = useState(() => {
     return Number(localStorage.getItem("Boundary")) || 0;
