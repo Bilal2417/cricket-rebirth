@@ -302,7 +302,7 @@ export default function ScoreCardOnline() {
   const [ballCompleted, setBallCompleted] = useState(0);
 
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
-  
+
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
@@ -318,6 +318,7 @@ export default function ScoreCardOnline() {
       scoreDecision(userRun, isWicket, opponentRun);
       setIsBtnDisabled(false);
       pendingBallData.current = null;
+      console.log(pendingBallData,"pending Data")
     }
   }, [ballCompleted]);
 

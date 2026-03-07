@@ -50,6 +50,9 @@ export default function Wc24({
       ? userTeam?.Over * 6 + userTeam?.Ball
       : aiTeam?.Over * 6 + aiTeam?.Ball);
 
+  const mode = sessionStorage.getItem("mode");
+  const showOutline = mode == "ONLINE";
+
   return (
     <>
       <Box
@@ -74,6 +77,9 @@ export default function Wc24({
               width: "60px",
               height: "40px",
               boxShadow: "3px 3px 8px -2px #000000",
+              outline: showOutline
+                ? `3px solid ${batting ? "blue" : "red"}`
+                : "none",
             }}
             src={!batting ? aiTeam?.flag : userTeam?.flag}
             alt={!batting ? aiTeam?.name : userTeam?.name}
@@ -438,17 +444,25 @@ export default function Wc24({
                   mr: "20px",
                 }}
               >
-                <Typography sx={{textTransform : "uppercase"}} variant="body1">{batting ? userTeam?.name : aiTeam?.name}</Typography>
-                <Typography sx={{textTransform : "uppercase"}} variant="body1">need</Typography>
+                <Typography sx={{ textTransform: "uppercase" }} variant="body1">
+                  {batting ? userTeam?.name : aiTeam?.name}
+                </Typography>
+                <Typography sx={{ textTransform: "uppercase" }} variant="body1">
+                  need
+                </Typography>
               </Box>
               <Typography sx={{ color: "#edca3e" }} variant="h2">
                 {target - (batting ? userTeam?.score : aiTeam?.score)}
               </Typography>
-              <Typography sx={{textTransform : "uppercase"}} variant="body1">from</Typography>
+              <Typography sx={{ textTransform: "uppercase" }} variant="body1">
+                from
+              </Typography>
               <Typography sx={{ color: "#edca3e" }} variant="h2">
                 {totalBallsRemaining}
               </Typography>
-              <Typography sx={{textTransform : "uppercase"}} variant="body1">balls</Typography>
+              <Typography sx={{ textTransform: "uppercase" }} variant="body1">
+                balls
+              </Typography>
             </Box>
           ) : (
             <Box
@@ -617,6 +631,9 @@ export default function Wc24({
               width: "60px",
               height: "40px",
               boxShadow: "3px 3px 8px -2px #000000",
+              outline: showOutline
+                ? `3px solid ${!batting ? "blue" : "red"}`
+                : "none",
             }}
             src={batting ? aiTeam?.flag : userTeam?.flag}
           />
