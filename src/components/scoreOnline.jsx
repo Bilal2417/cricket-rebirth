@@ -23,6 +23,7 @@ import { supabase } from "../supabaseClient";
 
 export default function ScoreCardOnline() {
   const profileId = localStorage.getItem("MyId");
+  const opponentId = sessionStorage.getItem("OpponentId");
   const user = localStorage.getItem("User");
   const ai = localStorage.getItem("Opponent");
   const board = localStorage.getItem("Board");
@@ -180,7 +181,7 @@ export default function ScoreCardOnline() {
       attempts++;
     }
     if (chosen) { setRandomBowler(chosen); localStorage.setItem("CurrentBowler", chosen.name); }
-    else console.warn("⚠️ No valid bowler found, keeping current:", currentBowler);
+    else console.warn("⚠️ No valid bowler found, keeping:", currentBowler);
   };
 
   // ── Update team (player 1 only) ───────────────────────────────────────────
@@ -195,61 +196,60 @@ export default function ScoreCardOnline() {
     else if (Number(run) == 4) playSound(["four", "four1"][Math.floor(Math.random() * 2)]);
     else if (Number(run) == 6) playSound(["six", "six1"][Math.floor(Math.random() * 2)]);
 
-    const updatedTeams = teamsRef.current
-      .filter((t) => t?.name == battingTeam || t?.name == bowlingTeam)
-      .map((team) => {
-        if (team?.name === bowlingTeam) {
-          return {
-            ...team,
-            fow: Wicket
-              ? [...(team?.fow || []), currentBatting ? currentUserTeam?.score : currentAiTeam?.score]
-              : team?.fow,
-            players: team?.players.map((player) => {
-              if (player.name !== bowler?.name) return player;
-              const newConceded = player.conceded + Number(run);
-              const newOvers = isOverComplete ? player.overs + 1 : player.overs;
-              const newBowled = isOverComplete ? 0 : player.bowled + 1;
-              const oversDecimal = (newOvers * 6 + newBowled) / 6;
-              return {
-                ...player,
-                conceded: newConceded,
-                overs: newOvers,
-                bowled: newBowled,
-                wickets: Wicket ? player.wickets + 1 : player.wickets,
-                dot: Number(run) == 0 ? player.dot + 1 : player.dot,
-                economy: oversDecimal > 0 ? (newConceded / oversDecimal).toFixed(2) : "0.00",
-              };
-            }),
-          };
-        }
+    // FIX 1: use map on ALL teams (not filter+map) so no teams are lost
+    const updatedTeams = teamsRef.current.map((team) => {
+      if (team?.name === bowlingTeam) {
+        return {
+          ...team,
+          fow: Wicket
+            ? [...(team?.fow || []), currentBatting ? currentUserTeam?.score : currentAiTeam?.score]
+            : team?.fow,
+          players: team?.players.map((player) => {
+            if (player.name !== bowler?.name) return player;
+            const newConceded = player.conceded + Number(run);
+            const newOvers = isOverComplete ? player.overs + 1 : player.overs;
+            const newBowled = isOverComplete ? 0 : player.bowled + 1;
+            const oversDecimal = (newOvers * 6 + newBowled) / 6;
+            return {
+              ...player,
+              conceded: newConceded,
+              overs: newOvers,
+              bowled: newBowled,
+              wickets: Wicket ? player.wickets + 1 : player.wickets,
+              dot: Number(run) == 0 ? player.dot + 1 : player.dot,
+              economy: oversDecimal > 0 ? (newConceded / oversDecimal).toFixed(2) : "0.00",
+            };
+          }),
+        };
+      }
 
-        if (team?.name === battingTeam) {
-          return {
-            ...team,
-            score: team?.score + Number(run),
-            wicket: Wicket ? team?.wicket + 1 : team?.wicket,
-            Over: overso,
-            Ball: ballo,
-            ballHistory: Wicket
-              ? (team?.ballHistory?.length || 0) === 6 ? ["W"] : [...(team?.ballHistory || []), "W"]
-              : (team?.ballHistory?.length || 0) === 6 ? [Number(run)] : [...(team?.ballHistory || []), Number(run)],
-            players: team?.players.map((player) => {
-              if (player.name !== currentStriker?.name) return player;
-              return {
-                ...player,
-                score: player.score + Number(run),
-                balls: player.balls + 1,
-                out: Wicket ? true : player.out,   // fixed: don't reset non-striker out
-                notout: Wicket ? false : true,
-                striker: Wicket ? false : player.striker,
-                bowler: Wicket ? bowler?.name : null,
-              };
-            }),
-          };
-        }
+      if (team?.name === battingTeam) {
+        return {
+          ...team,
+          score: team?.score + Number(run),
+          wicket: Wicket ? team?.wicket + 1 : team?.wicket,
+          Over: overso,
+          Ball: ballo,
+          ballHistory: Wicket
+            ? (team?.ballHistory?.length || 0) === 6 ? ["W"] : [...(team?.ballHistory || []), "W"]
+            : (team?.ballHistory?.length || 0) === 6 ? [Number(run)] : [...(team?.ballHistory || []), Number(run)],
+          players: team?.players.map((player) => {
+            if (player.name !== currentStriker?.name) return player;
+            return {
+              ...player,
+              score: player.score + Number(run),
+              balls: player.balls + 1,
+              out: Wicket ? true : player.out,  // fixed: don't reset other players' out
+              notout: Wicket ? false : true,
+              striker: Wicket ? false : player.striker,
+              bowler: Wicket ? bowler?.name : null,
+            };
+          }),
+        };
+      }
 
-        return team;
-      });
+      return team; // keep all other teams unchanged
+    });
 
     setTeams(updatedTeams);
     localStorage.setItem("cricketData", JSON.stringify(updatedTeams));
@@ -257,18 +257,18 @@ export default function ScoreCardOnline() {
     const newUserTeam = updatedTeams.find((t) => t.name === user) || null;
     const newAiTeam = updatedTeams.find((t) => t.name === ai) || null;
 
-    if (!newUserTeam) {
-      console.error("newUserTeam is null, skipping DB save");
-      return;
-    }
+    if (!newUserTeam) { console.error("newUserTeam is null, skipping DB save"); return; }
 
     setUserTeam(newUserTeam);
     setAiTeam(newAiTeam);
 
-    // player 1 saves — player 2 mirrors via realtime
-    const { error } = await supabase
-      .from("profiles").update({ onlineScore: newUserTeam }).eq("id", profileId).select().single();
-    if (error) console.error("Failed to update onlineScore:", error);
+    // FIX 2: player 1 saves BOTH teams so player 2 gets updated bowling team too
+    const [{ error: e1 }, { error: e2 }] = await Promise.all([
+      supabase.from("profiles").update({ onlineScore: newUserTeam }).eq("id", profileId).select().single(),
+      supabase.from("profiles").update({ onlineScore: newAiTeam }).eq("id", opponentId).select().single(),
+    ]);
+    if (e1) console.error("Failed to update user team:", e1);
+    if (e2) console.error("Failed to update opponent team:", e2);
 
     const teamBatting = currentBatting ? newUserTeam : newAiTeam;
     if (teamBatting) {
@@ -286,13 +286,19 @@ export default function ScoreCardOnline() {
 
     if (Wicket) {
       const teamBattingUpdated = updatedTeams.find((t) => t.name === battingTeam);
-      const nextBatterIndex = teamBattingUpdated.wicket + 1;
+      // teamBattingUpdated.wicket is already incremented in the map above
+      // so nextBatterIndex = wicket (not wicket+1)
+      const nextBatterIndex = teamBattingUpdated.wicket;
+
       setPartnership(0);
       setPartnershipBalls(0);
 
       const totalWickets = totalOvers == 100 ? 1 : totalOvers == 20 ? 10 : totalOvers;
-      if (teamBattingUpdated?.wicket + 1 <= totalWickets) {
-        setStriker(teamBattingUpdated.players[nextBatterIndex]);
+
+      // FIX 3: wicket already incremented, so check directly
+      if (teamBattingUpdated.wicket <= totalWickets) {
+        const nextBatter = teamBattingUpdated.players[nextBatterIndex];
+        if (nextBatter) setStriker(nextBatter);
       } else {
         const latestBattingTeam = currentBatting ? newUserTeam : newAiTeam;
         endInnings(latestBattingTeam?.score + (Wicket ? 0 : Number(run)));
@@ -432,9 +438,10 @@ export default function ScoreCardOnline() {
             // player 1: opponent chose → check if both ready
             await checkBothChoices();
           } else {
-            // player 2: mirror player 1's onlineScore
+            // player 2: mirror onlineScore from player 1's update
             if (payload.new.onlineScore) {
               const updatedTeam = payload.new.onlineScore;
+              // update matching team in full Teams array
               const updatedTeams = teamsRef.current.map((t) =>
                 t.name === updatedTeam.name ? updatedTeam : t
               );
@@ -447,7 +454,7 @@ export default function ScoreCardOnline() {
           }
         }
       )
-      .subscribe((status) => console.log("Realtime status:", status));
+      .subscribe((status) => console.log("Realtime:", status));
 
     return () => supabase.removeChannel(channel);
   }, []);
@@ -537,8 +544,7 @@ export default function ScoreCardOnline() {
                   borderBottom: `4px solid ${borderColors[board]}`,
                   borderRight: `4px solid ${borderColors[board]}`,
                   ":hover": {
-                    backgroundColor: colors[board],
-                    transform: "scale(1.05)",
+                    backgroundColor: colors[board], transform: "scale(1.05)",
                     borderBottom: `4px solid ${borderColors[board]}`,
                     borderRight: `3px solid ${borderColors[board]}`,
                     transition: "all 0.3s",
