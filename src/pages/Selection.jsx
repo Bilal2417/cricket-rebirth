@@ -69,7 +69,7 @@ export default function Selection() {
       navigate("/knockout");
     } else if (page === "TOURNAMENT") {
       navigate("/tournament");
-    } else if (page !== "ONLINE") {
+    } else if (page == "ONLINE") {
       navigate("/toss");
     }
   };
