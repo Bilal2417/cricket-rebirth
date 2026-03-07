@@ -27,7 +27,9 @@ export default function ScoreCardOnline() {
     storedData ? JSON.parse(storedData) : Data,
   );
   const teamsRef = useRef(Teams);
-  useEffect(() => { teamsRef.current = Teams; }, [Teams]);
+  useEffect(() => {
+    teamsRef.current = Teams;
+  }, [Teams]);
 
   const user = localStorage.getItem("User");
   const ai = localStorage.getItem("Opponent");
@@ -36,8 +38,12 @@ export default function ScoreCardOnline() {
   const [aiTeam, setAiTeam] = useState(null);
   const userTeamRef = useRef(userTeam);
   const aiTeamRef = useRef(aiTeam);
-  useEffect(() => { userTeamRef.current = userTeam; }, [userTeam]);
-  useEffect(() => { aiTeamRef.current = aiTeam; }, [aiTeam]);
+  useEffect(() => {
+    userTeamRef.current = userTeam;
+  }, [userTeam]);
+  useEffect(() => {
+    aiTeamRef.current = aiTeam;
+  }, [aiTeam]);
 
   const [userChoice, setUserChoice] = useState(0);
   const [opponentChoice, setOpponentChoice] = useState(0);
@@ -54,7 +60,9 @@ export default function ScoreCardOnline() {
 
   const [over, setOver] = useState(0);
   const overRef = useRef(over);
-  useEffect(() => { overRef.current = over; }, [over]);
+  useEffect(() => {
+    overRef.current = over;
+  }, [over]);
 
   const [totalOvers, setTotalOvers] = useState(() => {
     const fixedOvers = localStorage.getItem("Overs");
@@ -70,21 +78,27 @@ export default function ScoreCardOnline() {
   const [show, setShow] = useState(0);
   const [batting, setBatting] = useState(null);
   const battingRef = useRef(batting);
-  useEffect(() => { battingRef.current = batting; }, [batting]);
+  useEffect(() => {
+    battingRef.current = batting;
+  }, [batting]);
 
   const [battingWicket, setBattingWicket] = useState(0);
   const [firstInnings, setFirstInnings] = useState(() => {
     return Number(localStorage.getItem("currentInnings")) || 1;
   });
   const firstInningsRef = useRef(firstInnings);
-  useEffect(() => { firstInningsRef.current = firstInnings; }, [firstInnings]);
+  useEffect(() => {
+    firstInningsRef.current = firstInnings;
+  }, [firstInnings]);
 
   const [balls, setBalls] = useState(0);
   const [target, setTarget] = useState(() => {
     return Number(localStorage.getItem("target")) || 0;
   });
   const targetRef = useRef(target);
-  useEffect(() => { targetRef.current = target; }, [target]);
+  useEffect(() => {
+    targetRef.current = target;
+  }, [target]);
 
   const [partnership, setPartnership] = useState(0);
   const [partnershipBalls, setPartnershipBalls] = useState(0);
@@ -129,7 +143,9 @@ export default function ScoreCardOnline() {
 
   const [userProfile, setUserProfile] = useState([]);
   const userProfileRef = useRef(userProfile);
-  useEffect(() => { userProfileRef.current = userProfile; }, [userProfile]);
+  useEffect(() => {
+    userProfileRef.current = userProfile;
+  }, [userProfile]);
 
   const profileId = localStorage.getItem("MyId");
   const opponentId = sessionStorage.getItem("OpponentId");
@@ -156,12 +172,18 @@ export default function ScoreCardOnline() {
   const [nonStriker, setNonStriker] = useState(null);
   const strikerRef = useRef(striker);
   const nonStrikerRef = useRef(nonStriker);
-  useEffect(() => { strikerRef.current = striker; }, [striker]);
-  useEffect(() => { nonStrikerRef.current = nonStriker; }, [nonStriker]);
+  useEffect(() => {
+    strikerRef.current = striker;
+  }, [striker]);
+  useEffect(() => {
+    nonStrikerRef.current = nonStriker;
+  }, [nonStriker]);
 
   const [randomBowler, setRandomBowler] = useState(null);
   const randomBowlerRef = useRef(randomBowler);
-  useEffect(() => { randomBowlerRef.current = randomBowler; }, [randomBowler]);
+  useEffect(() => {
+    randomBowlerRef.current = randomBowler;
+  }, [randomBowler]);
 
   const [isBtnDisabled, setIsBtnDisabled] = useState(false);
   const [isSix, setIsSix] = useState(() => {
@@ -177,7 +199,9 @@ export default function ScoreCardOnline() {
     clickSound = new Howl({
       src: [`/sound/${sound}.mp3`],
       volume: 1,
-      onend: () => { clickSound = null; },
+      onend: () => {
+        clickSound = null;
+      },
     });
     clickSound.play();
   };
@@ -234,12 +258,19 @@ export default function ScoreCardOnline() {
           return {
             ...team,
             fow: Wicket
-              ? [...(team?.fow || []), currentBatting ? currentUserTeam?.score : currentAiTeam?.score]
+              ? [
+                  ...(team?.fow || []),
+                  currentBatting
+                    ? currentUserTeam?.score
+                    : currentAiTeam?.score,
+                ]
               : team?.fow,
             players: team?.players.map((player) => {
               if (player.name === bowler?.name) {
                 const newConceded = player.conceded + Number(run);
-                const newOvers = isOverComplete ? player.overs + 1 : player.overs;
+                const newOvers = isOverComplete
+                  ? player.overs + 1
+                  : player.overs;
                 const newBowled = isOverComplete ? 0 : player.bowled + 1;
                 const totalBalls = newOvers * 6 + newBowled;
                 const oversDecimal = totalBalls / 6;
@@ -250,7 +281,10 @@ export default function ScoreCardOnline() {
                   bowled: newBowled,
                   wickets: Wicket ? player.wickets + 1 : player.wickets,
                   dot: Number(run) == 0 ? player.dot + 1 : player.dot,
-                  economy: oversDecimal > 0 ? (newConceded / oversDecimal).toFixed(2) : "0.00",
+                  economy:
+                    oversDecimal > 0
+                      ? (newConceded / oversDecimal).toFixed(2)
+                      : "0.00",
                 };
               }
               return player;
@@ -266,8 +300,12 @@ export default function ScoreCardOnline() {
             Over: overso,
             Ball: ballo,
             ballHistory: Wicket
-              ? (team?.ballHistory?.length || 0) === 6 ? ["W"] : [...(team?.ballHistory || []), "W"]
-              : (team?.ballHistory?.length || 0) === 6 ? [Number(run)] : [...(team?.ballHistory || []), Number(run)],
+              ? (team?.ballHistory?.length || 0) === 6
+                ? ["W"]
+                : [...(team?.ballHistory || []), "W"]
+              : (team?.ballHistory?.length || 0) === 6
+                ? [Number(run)]
+                : [...(team?.ballHistory || []), Number(run)],
             players: team?.players.map((player) => {
               if (player.name === currentStriker?.name) {
                 return {
@@ -314,32 +352,42 @@ export default function ScoreCardOnline() {
 
     const teamBatting = currentBatting ? newUserTeam : newAiTeam;
     if (teamBatting) {
-      setStriker(teamBatting.players.find((p) => p.name === currentStriker?.name));
-      setNonStriker(teamBatting.players.find((p) => p.name === currentNonStriker?.name));
+      setStriker(
+        teamBatting.players.find((p) => p.name === currentStriker?.name),
+      );
+      setNonStriker(
+        teamBatting.players.find((p) => p.name === currentNonStriker?.name),
+      );
     }
 
     const updatedBowler =
-      updatedTeams.find((t) => t.name === bowlingTeam)?.players.find((p) => p?.name === bowler?.name) || null;
+      updatedTeams
+        .find((t) => t.name === bowlingTeam)
+        ?.players.find((p) => p?.name === bowler?.name) || null;
     if (updatedBowler) {
       setRandomBowler(updatedBowler);
       localStorage.setItem("CurrentBowler", updatedBowler.name);
     }
 
     if (Wicket) {
-      const teamBattingUpdated = updatedTeams.find((t) => t.name === battingTeam);
+      const teamBattingUpdated = updatedTeams.find(
+        (t) => t.name === battingTeam,
+      );
       const nextBatterIndex = teamBattingUpdated.wicket + 1;
 
       setPartnership(0);
       setPartnershipBalls(0);
 
-      const totalWickets = totalOvers == 100 ? 1 : totalOvers == 20 ? 10 : totalOvers;
+      const totalWickets =
+        totalOvers == 100 ? 1 : totalOvers == 20 ? 10 : totalOvers;
 
       if (teamBattingUpdated?.wicket + 1 <= totalWickets) {
         const nextBatter = teamBattingUpdated.players[nextBatterIndex];
         setStriker(nextBatter);
       } else {
         const latestBattingTeam = currentBatting ? newUserTeam : newAiTeam;
-        const updatedScore = latestBattingTeam?.score + (Wicket ? 0 : Number(run));
+        const updatedScore =
+          latestBattingTeam?.score + (Wicket ? 0 : Number(run));
         endInnings(updatedScore);
       }
     }
@@ -387,8 +435,12 @@ export default function ScoreCardOnline() {
         if (isOverComplete) {
           bowlerSelect();
           if (nextOver >= totalOvers) {
-            const latestBattingTeam = currentBatting ? currentUserTeam : currentAiTeam;
-            const updatedScore = latestBattingTeam?.score + (Wkt ? 0 : currentBatting ? run : aiRun);
+            const latestBattingTeam = currentBatting
+              ? currentUserTeam
+              : currentAiTeam;
+            const updatedScore =
+              latestBattingTeam?.score +
+              (Wkt ? 0 : currentBatting ? run : aiRun);
             endInnings(updatedScore);
           } else {
             setOver(nextOver);
@@ -396,7 +448,8 @@ export default function ScoreCardOnline() {
         }
 
         const battingTeam = currentBatting ? currentUserTeam : currentAiTeam;
-        const potentialScore = battingTeam?.score + (Wkt ? 0 : currentBatting ? run : aiRun);
+        const potentialScore =
+          battingTeam?.score + (Wkt ? 0 : currentBatting ? run : aiRun);
         const potentialOvers = nextOver;
 
         if (firstInningsRef.current == 2) {
@@ -409,7 +462,8 @@ export default function ScoreCardOnline() {
 
           if (
             potentialOvers >= totalOvers ||
-            battingTeam?.wicket + (Wkt ? 1 : 0) >= (totalOvers == 100 ? 1 : totalOvers == 20 ? 10 : totalOvers)
+            battingTeam?.wicket + (Wkt ? 1 : 0) >=
+              (totalOvers == 100 ? 1 : totalOvers == 20 ? 10 : totalOvers)
           ) {
             localStorage.setItem("winner", 1);
             endInnings(potentialScore);
@@ -440,7 +494,7 @@ export default function ScoreCardOnline() {
     handleBall(userRun, isWicket, opponentRun);
   };
 
-  const checkBothChoices = async () => {
+  const checkBothChoices = async (retries = 5, delay = 300) => {
     const { data, error } = await supabase
       .from("profiles")
       .select("id, choice")
@@ -456,7 +510,13 @@ export default function ScoreCardOnline() {
       opponent?.choice == null ||
       isNaN(Number(me.choice)) ||
       isNaN(Number(opponent.choice))
-    ) return;
+    ) {
+      // opponent not ready yet - retry
+      if (retries > 0) {
+        setTimeout(() => checkBothChoices(retries - 1, delay), delay);
+      }
+      return;
+    }
 
     const userRun = Number(me.choice);
     const opponentRun = Number(opponent.choice);
@@ -465,8 +525,10 @@ export default function ScoreCardOnline() {
     scoreDecision(userRun, isWicket, opponentRun);
     setIsBtnDisabled(false);
 
-    // clear after scoreDecision so both devices can read first
-    await supabase.from("profiles").update({ choice: null }).eq("id", profileId);
+    await supabase
+      .from("profiles")
+      .update({ choice: null })
+      .eq("id", profileId);
   };
 
   useEffect(() => {
@@ -503,8 +565,12 @@ export default function ScoreCardOnline() {
     let attempts = 0;
 
     while (attempts < 10) {
-      const candidate = bowlersList[Math.floor(Math.random() * bowlersList.length)];
-      if (candidate.name !== currentBowler?.name && candidate.overs < totalOvers / 5) {
+      const candidate =
+        bowlersList[Math.floor(Math.random() * bowlersList.length)];
+      if (
+        candidate.name !== currentBowler?.name &&
+        candidate.overs < totalOvers / 5
+      ) {
         chosen = candidate;
         break;
       }
@@ -532,7 +598,9 @@ export default function ScoreCardOnline() {
       const currentBowler = localStorage.getItem("CurrentBowler");
       const bowlingTeam = batting ? aiTeam : userTeam;
       if (currentBowler) {
-        const selectBowler = bowlingTeam?.players.find((player) => player.name === currentBowler);
+        const selectBowler = bowlingTeam?.players.find(
+          (player) => player.name === currentBowler,
+        );
         if (selectBowler) {
           setRandomBowler(selectBowler);
         } else {
@@ -621,7 +689,10 @@ export default function ScoreCardOnline() {
   return (
     <>
       {showLoadingPage && (
-        <LoadingPage loading={loading} onFinish={() => setShowLoadingPage(false)} />
+        <LoadingPage
+          loading={loading}
+          onFinish={() => setShowLoadingPage(false)}
+        />
       )}
 
       {!showLoadingPage && (
@@ -652,7 +723,8 @@ export default function ScoreCardOnline() {
               <Button
                 sx={{
                   background: colors[board],
-                  color: board == "starter" || board == "pak" ? "#000" : "#FFFFFF",
+                  color:
+                    board == "starter" || board == "pak" ? "#000" : "#FFFFFF",
                   width: "60px",
                   height: "60px",
                   padding: "4px 8px",
