@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
 import Data from "../components/data";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Person } from "@mui/icons-material";
@@ -69,7 +69,7 @@ export default function Selection() {
       navigate("/knockout");
     } else if (page === "TOURNAMENT") {
       navigate("/tournament");
-    } else if (page == "ONLINE") {
+    } else if (page !== "ONLINE") {
       navigate("/toss");
     }
   };
@@ -85,6 +85,12 @@ export default function Selection() {
   }, []);
 
   const [userProfile, setUserProfile] = useState([]);
+  const userProfileRef = useRef(userProfile);
+  useEffect(() => {
+    userProfileRef.current = userProfile;
+  }, [userProfile]);
+
+  // then inside the realtime callback:
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -125,11 +131,11 @@ export default function Selection() {
           if (payload.new.id === profileId) return;
           if (
             payload.new.onlineScore &&
-            payload.new.code == userProfile?.code
+            payload.new.code == userProfileRef.current?.code
           ) {
             sessionStorage.setItem("OpponentId", payload.new.id);
             setOpposition(payload.new.onlineScore);
-             localStorage.setItem("Opponent", payload.new.onlineScore.name);
+            localStorage.setItem("Opponent", payload.new.onlineScore.name);
             setNextPage((prev) => {
               const next = prev + 1;
               if (next == 2) {
@@ -137,7 +143,7 @@ export default function Selection() {
               }
               return next;
             });
-            console.log(payload);
+            console.log(payload, "check");
             // if (payload.new.myid == rowId) {
             //   setPlayerData(payload.new);
             //   localStorage.setItem("MyTeam", JSON.stringify(payload.new));

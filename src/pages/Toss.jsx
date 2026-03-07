@@ -44,6 +44,8 @@ export default function Toss() {
     }
   };
 
+  const [tossLost, setTossLost] = useState(false);
+
   const handleTossOnline = async (choice) => {
     const coinFlip = Math.random() < 0.5 ? "Heads" : "Tails";
     const winner = coinFlip === choice ? "user" : "opponent";
@@ -61,6 +63,7 @@ export default function Toss() {
         .select()
         .maybeSingle();
 
+      setTossLost(true);
       if (error) {
         console.error("Failed to update toss decision:", error);
         return;
@@ -99,7 +102,7 @@ export default function Toss() {
 
   useEffect(() => {
     const channel = supabase
-      .channel("onlineSelection")
+      .channel("onlineToss")
       .on(
         "postgres_changes",
         {

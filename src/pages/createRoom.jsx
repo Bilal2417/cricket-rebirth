@@ -70,6 +70,8 @@ export default function CreateRoom() {
           if (payload.new.id === profileId) return;
           if (payload.new.player == 2) {
             navigate("/team");
+          } else if (payload.new.player == 1) {
+            getStoredCode();
           }
         },
       )
@@ -100,6 +102,8 @@ export default function CreateRoom() {
       (item) => String(item.code) === String(joinCode),
     );
     console.log(matches, "l");
+    console.log(joinCode, "laa");
+    console.log(storedCode, "laa");
     if (matches?.length !== 1) {
       toast.error("Invalid Code");
     } else if (matches[0].id === profileId) {
