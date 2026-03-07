@@ -26,6 +26,10 @@ export default function ScoreCardOnline() {
   const [Teams, setTeams] = useState(
     storedData ? JSON.parse(storedData) : Data,
   );
+  const teamsRef = useRef(Teams);
+  useEffect(() => {
+    teamsRef.current = Teams;
+  }, [Teams]);
 
   const user = localStorage.getItem("User");
   const ai = localStorage.getItem("Opponent");
@@ -265,8 +269,8 @@ export default function ScoreCardOnline() {
     const opponent = data.find((d) => d.id !== profileId);
 
     if (
-      !me?.choice ||
-      !opponent?.choice ||
+      me?.choice == null ||
+      opponent?.choice == null ||
       isNaN(Number(me.choice)) ||
       isNaN(Number(opponent.choice))
     )
@@ -409,7 +413,7 @@ export default function ScoreCardOnline() {
       const sounds = ["six", "six1"];
       playSound(sounds[Math.floor(Math.random() * sounds.length)]);
     }
-    const updatedTeams = Teams.filter(
+    const updatedTeams = teamsRef.current.filter(
       (team) => team?.name == battingTeam || team?.name == bowlingTeam,
     ).map((team) => {
       if (team?.name === bowlingTeam) {
