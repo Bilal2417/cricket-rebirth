@@ -494,42 +494,46 @@ export default function ScoreCardOnline() {
     handleBall(userRun, isWicket, opponentRun);
   };
 
-  const checkBothChoices = async (retries = 5, delay = 300) => {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("id, choice")
-      .eq("code", userProfileRef.current?.code);
+const isProcessing = useRef(false);
 
-    if (error || !data || data.length < 2) return;
+const checkBothChoices = async (retries = 5, delay = 300) => {
+  if (isProcessing.current) return; // prevent double firing
 
-    const me = data.find((d) => d.id === profileId);
-    const opponent = data.find((d) => d.id !== profileId);
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, choice")
+    .eq("code", userProfileRef.current?.code);
 
-    if (
-      me?.choice == null ||
-      opponent?.choice == null ||
-      isNaN(Number(me.choice)) ||
-      isNaN(Number(opponent.choice))
-    ) {
-      // opponent not ready yet - retry
-      if (retries > 0) {
-        setTimeout(() => checkBothChoices(retries - 1, delay), delay);
-      }
-      return;
+  if (error || !data || data.length < 2) return;
+
+  const me = data.find((d) => d.id === profileId);
+  const opponent = data.find((d) => d.id !== profileId);
+
+  if (
+    me?.choice == null ||
+    opponent?.choice == null ||
+    isNaN(Number(me.choice)) ||
+    isNaN(Number(opponent.choice))
+  ) {
+    if (retries > 0) {
+      setTimeout(() => checkBothChoices(retries - 1, delay), delay);
     }
+    return;
+  }
 
-    const userRun = Number(me.choice);
-    const opponentRun = Number(opponent.choice);
-    const isWicket = userRun == opponentRun;
+  isProcessing.current = true; // lock
 
-    scoreDecision(userRun, isWicket, opponentRun);
-    setIsBtnDisabled(false);
+  const userRun = Number(me.choice);
+  const opponentRun = Number(opponent.choice);
+  const isWicket = userRun == opponentRun;
 
-    await supabase
-      .from("profiles")
-      .update({ choice: null })
-      .eq("id", profileId);
-  };
+  scoreDecision(userRun, isWicket, opponentRun);
+  setIsBtnDisabled(false);
+
+  await supabase.from("profiles").update({ choice: null }).eq("id", profileId);
+
+  isProcessing.current = false; // unlock
+};
 
   useEffect(() => {
     const channel = supabase

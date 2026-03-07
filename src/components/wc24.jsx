@@ -39,7 +39,7 @@ export default function Wc24({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setReqRuns((prev) => (prev + 1) % 5);
+      setReqRuns((prev) => (prev + 1) % 6);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -90,14 +90,14 @@ export default function Wc24({
           sx={{
             backgroundColor: "#0f0648",
             borderLeft: "10px solid #bd2f7f",
-            width: firstInnings == 2 && reqRuns > 2 ? 0 : "220px",
+            width: firstInnings == 2 && reqRuns > 3 ? 0 : "220px",
             minHeight: "40px",
             display: "flex",
-            padding: firstInnings == 2 && reqRuns > 2 ? 0 : "0 20px",
+            padding: firstInnings == 2 && reqRuns > 3 ? 0 : "0 20px",
             flexDirection: "column",
             justifyContent: "center",
-            flexGrow: firstInnings == 2 && reqRuns > 2 ? 0 : 1,
-            opacity: firstInnings == 2 && reqRuns > 2 ? 0 : 1,
+            flexGrow: firstInnings == 2 && reqRuns > 3 ? 0 : 1,
+            opacity: firstInnings == 2 && reqRuns > 3 ? 0 : 1,
             overflow: "hidden",
             transition:
               "flex-grow 0.6s ease, opacity 0.6s ease, width 0.6s ease",
@@ -219,7 +219,7 @@ export default function Wc24({
             minWidth: "300px",
             borderLeft: "10px solid #bd2f7f",
             borderRight: "10px solid #bd2f7f",
-            flexGrow: firstInnings == 2 && reqRuns > 2 ? 0.3 : 1.5,
+            flexGrow: firstInnings == 2 && reqRuns > 3 ? 0.3 : 1.5,
             transition: "flex-grow 0.6s ease",
           }}
         >
@@ -416,19 +416,19 @@ export default function Wc24({
             flexDirection: "column",
             justifyContent: "center",
             position: "relative",
-            flexGrow: firstInnings == 2 && reqRuns > 2 ? 3 : 1,
+            flexGrow: firstInnings == 2 && reqRuns > 3 ? 3 : 1,
             transition: "flex-grow 0.6s ease",
           }}
         >
-          {firstInnings == 2 && reqRuns > 2 ? (
+          {firstInnings == 2 && reqRuns > 3 ? (
             <Box
               sx={{
                 alignItems: "center",
                 gap: "20px",
                 justifyContent: "center",
-                opacity: firstInnings == 2 && reqRuns > 2 ? 1 : 0,
+                opacity: firstInnings == 2 && reqRuns > 3 ? 1 : 0,
                 visibility:
-                  firstInnings == 2 && reqRuns > 2 ? "visible" : "hidden",
+                  firstInnings == 2 && reqRuns > 3 ? "visible" : "hidden",
                 transition: "opacity 0.6s ease, visibility 0.6s ease",
                 display: "flex",
               }}
@@ -467,9 +467,9 @@ export default function Wc24({
           ) : (
             <Box
               sx={{
-                opacity: firstInnings == 2 && reqRuns > 2 ? 0 : 1,
+                opacity: firstInnings == 2 && reqRuns > 3 ? 0 : 1,
                 visibility:
-                  firstInnings == 2 && reqRuns > 2 ? "hidden" : "visible",
+                  firstInnings == 2 && reqRuns > 3 ? "hidden" : "visible",
                 transition: "opacity 0.6s ease, visibility 0.6s ease",
               }}
             >
