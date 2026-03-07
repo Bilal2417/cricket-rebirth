@@ -273,7 +273,7 @@ export default function ScoreCardOnline() {
 
           if (payload.new.id === profileId) return;
           if (
-            payload.new.onlineScore &&
+            payload.new.choice !== undefined &&
             payload.new.code == userProfileRef.current?.code
           ) {
             setOpponentChoice(payload.new.choice);
