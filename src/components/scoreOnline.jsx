@@ -144,7 +144,7 @@ export default function ScoreCardOnline() {
   useEffect(() => {
     userProfileRef.current = userProfile;
   }, [userProfile]);
-  
+
   const profileId = localStorage.getItem("MyId");
   const opponentId = sessionStorage.getItem("OpponentId");
 
@@ -158,8 +158,8 @@ export default function ScoreCardOnline() {
         const newHistory = [...prev, run];
 
         updateTeam(
-          batting ? aiTeam.name : userTeam.name,
-          batting ? userTeam.name : aiTeam.name,
+          batting ? aiteam?.name : userteam?.name,
+          batting ? userteam?.name : aiteam?.name,
           randomBowler,
           Wkt ? 0 : batting ? run : aiRun,
           nextOver, //  pass updated over
@@ -267,7 +267,13 @@ export default function ScoreCardOnline() {
     const me = data.find((d) => d.id === profileId);
     const opponent = data.find((d) => d.id !== profileId);
 
-    if (me?.choice == null || opponent?.choice == null) return;
+    if (
+      !me?.choice ||
+      !opponent?.choice ||
+      isNaN(Number(me.choice)) ||
+      isNaN(Number(opponent.choice))
+    )
+      return;
 
     // both have chosen
     const userRun = Number(me.choice);
@@ -443,15 +449,15 @@ export default function ScoreCardOnline() {
       playSound(sounds[Math.floor(Math.random() * sounds.length)]);
     }
     const updatedTeams = Teams.filter(
-      (team) => team.name == battingTeam || team.name == bowlingTeam,
+      (team) => team?.name == battingTeam || team?.name == bowlingTeam,
     ).map((team) => {
-      if (team.name === bowlingTeam) {
+      if (team?.name === bowlingTeam) {
         return {
           ...team,
           fow: Wicket
-            ? [...(team.fow || []), batting ? userTeam?.score : aiTeam?.score]
-            : team.fow,
-          players: team.players.map((player) => {
+            ? [...(team?.fow || []), batting ? userTeam?.score : aiTeam?.score]
+            : team?.fow,
+          players: team?.players.map((player) => {
             if (player.name === randomBowler?.name) {
               // update stats first
               const newConceded = player.conceded + Number(run);
@@ -480,22 +486,22 @@ export default function ScoreCardOnline() {
         };
       }
 
-      if (team.name === battingTeam) {
+      if (team?.name === battingTeam) {
         return {
           ...team,
-          score: team.score + Number(run),
-          wicket: Wicket ? team.wicket + 1 : team.wicket,
+          score: team?.score + Number(run),
+          wicket: Wicket ? team?.wicket + 1 : team?.wicket,
           Over: overso,
           Ball: ballo,
           ballHistory: Wicket
-            ? (team.ballHistory?.length || 0) === 6
+            ? (team?.ballHistory?.length || 0) === 6
               ? ["W"]
-              : [...(team.ballHistory || []), "W"]
-            : (team.ballHistory?.length || 0) === 6
+              : [...(team?.ballHistory || []), "W"]
+            : (team?.ballHistory?.length || 0) === 6
               ? [Number(run)]
-              : [...(team.ballHistory || []), Number(run)],
+              : [...(team?.ballHistory || []), Number(run)],
 
-          players: team.players.map((player) => {
+          players: team?.players.map((player) => {
             if (player.name === striker.name) {
               return {
                 ...player,
@@ -602,8 +608,8 @@ export default function ScoreCardOnline() {
 
   const bowlerSelect = () => {
     const bowlersList = !batting
-      ? userTeam.players.filter((player) => player.isBowler)
-      : aiTeam.players.filter((player) => player.isBowler);
+      ? userteam?.players.filter((player) => player.isBowler)
+      : aiteam?.players.filter((player) => player.isBowler);
 
     if (!bowlersList.length) return;
 
@@ -676,8 +682,8 @@ export default function ScoreCardOnline() {
     console.log("Updated Teams:", newTeams);
     setTeams(newTeams);
 
-    setUserTeam(newTeams.find((team) => team.name === user) || null);
-    setAiTeam(newTeams.find((team) => team.name === ai) || null);
+    setUserTeam(newTeams.find((team) => team?.name === user) || null);
+    setAiTeam(newTeams.find((team) => team?.name === ai) || null);
   }, [balls, user, ai]);
 
   useEffect(() => {
@@ -686,7 +692,7 @@ export default function ScoreCardOnline() {
     if (balls === 0 && over === 0) {
       const team = batting ? userTeam : aiTeam;
 
-      const available = team.players.filter((p) => !p.out);
+      const available = team?.players.filter((p) => !p.out);
 
       if (available.length >= 2) {
         setStriker(available[0]);
